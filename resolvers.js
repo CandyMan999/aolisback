@@ -62,7 +62,7 @@ module.exports = {
           });
           return ticket.getPayload();
         } catch (err) {
-          console.err(`Error verifying auth token`, err);
+          console.error(`Error verifying auth token`, err);
         }
       };
 
@@ -174,7 +174,7 @@ module.exports = {
             });
             return ticket.getPayload();
           } catch (err) {
-            console.err(`Error verifying auth token`, err);
+            console.error(`Error verifying auth token`, err);
           }
         };
 

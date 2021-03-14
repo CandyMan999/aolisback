@@ -18,7 +18,7 @@ const verifyAuthToken = async (idToken) => {
     });
     return ticket.getPayload();
   } catch (err) {
-    console.err(`Error verifying auth token`, err);
+    console.error(`Error verifying auth token`, err);
   }
 };
 
