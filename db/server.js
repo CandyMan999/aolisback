@@ -21,6 +21,8 @@ const startServer = async () => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    introspection: true,
+    playground: true,
     context: async ({ req, connection }) => {
       if (connection) {
         // check connection for metadata
