@@ -1,10 +1,10 @@
 {
     "version": 2,
-    "name": "AOLisBack",
+    "name": "aol-is-back",
     "builds": [
         {
             "src": "package.json",
-            "use": "@now/static-build",
+            "use": "@vercel/static-build",
             "config": {"distDir": "build"}
         }
     ],
