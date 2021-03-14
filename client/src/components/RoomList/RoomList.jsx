@@ -4,7 +4,7 @@ import { COLORS } from "../../constants";
 
 class RoomList extends React.Component {
   render() {
-    const { rooms, roomId } = this.props;
+    const { rooms, roomId, currentUser } = this.props;
 
     return (
       <div className="rooms-list">

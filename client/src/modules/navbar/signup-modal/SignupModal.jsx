@@ -104,6 +104,8 @@ const SignupModal = ({ onClose }) => {
         err.password = "Must contain an lowercase letter";
     }
 
+    if (values.username.length > 10)
+      err.username = "Max length is 10 characters";
     if (!values.email) err.email = "Required";
     if (!values.username) err.username = "Required";
     if (!values.password) err.password = "Required";
