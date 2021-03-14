@@ -20,7 +20,10 @@ import { SubscriptionClient } from "subscriptions-transport-ws";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { getToken } from "./utils/helpers";
 
-const WS_URL = `ws://localhost:4000/graphql`;
+export const WS_URL =
+  process.env.NODE_ENV === "production"
+    ? `wss://aol-is-back.herokuapp.com/graphql`
+    : `ws://localhost:4000/graphql`;
 
 const wsLink = new WebSocketLink({
   uri: WS_URL,
