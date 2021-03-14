@@ -1,0 +1,149 @@
+.App {
+  text-align: center;
+}
+:root {
+  --main-color: #5ea3d0;
+  --secondary-color: white;
+  --main-text-color: #3e5869;
+  --secondary-text-color: #b0c7d6;
+  --send-message-form: #f5f5f5;
+}
+
+.wrapper {
+  grid-area: c;
+  display: grid;
+  height: 100%;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 60px;
+  grid-template-areas:
+    "m m m m m r r"
+    "m m m m m r r"
+    "m m m m m r r"
+    "m m m m m r r"
+    "m m m m m r r"
+    "f f f f f n n";
+}
+
+.wrapper:hover {
+  border: solid 3px gold;
+}
+
+.new-room-form {
+  grid-area: n;
+}
+.rooms-list {
+  grid-area: r;
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: var(--main-color);
+  overflow: scroll;
+  height: 100%;
+}
+.rooms-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+.rooms-list li {
+  margin: 10px 0;
+}
+
+.rooms-list h3 {
+  margin: 5px 0;
+  color: var(--secondary-color);
+}
+
+.rooms-list .room a {
+  color: var(--secondary-text-color);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.rooms-list .room.active a {
+  color: var(--secondary-color);
+}
+
+.message-list {
+  grid-area: m;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.send-message-form {
+  grid-area: f;
+  width: 100%;
+}
+.send-message-form input {
+  grid-area: f;
+  width: -webkit-fill-available;
+  height: 60px;
+  font-size: 15px;
+  border: 1px solid #69ffb4;
+  padding-left: 5%;
+}
+
+.new-room-form {
+  background: var(--secondary-color);
+  color: var(--main-text-color);
+  height: 100%;
+}
+
+.new-room-form form {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.new-room-form form input {
+  height: 60px;
+  width: 100%;
+  font-size: 10px;
+  border: 1px solid #69ffb4;
+}
+
+#create-room-btn {
+  color: #69ffb4;
+  background: gainsboro;
+  height: 64px;
+  border: 2px double;
+}
+
+#create-room-btn:hover {
+  cursor: pointer;
+  text-shadow: 1px 1px white;
+}
+.join-a-room {
+  margin-top: 10%;
+  margin-left: 5%;
+  font-size: 70px;
+}
+.message-text {
+  padding: 2px;
+  background-color: var(--main-color);
+  width: fit-content;
+  color: white;
+  display: -webkit-inline-box;
+  font-size: 10px;
+  border-radius: 5px 5px 0 5px;
+}
+.others-message-text {
+  padding: 2px;
+  background-color: #cccccc;
+  width: fit-content;
+  color: black;
+  display: -webkit-inline-box;
+  font-size: 10px;
+  border-radius: 5px 5px 5px 0;
+}
+.message-username {
+  font-size: 10px;
+  margin-left: 5%;
+  padding: 1%;
+  color: orange;
+  font-weight: 500;
+  display: -webkit-inline-box;
+}
+.message-username:hover {
+  cursor: pointer;
+  text-shadow: 2px 2px #6bccf9;
+}
