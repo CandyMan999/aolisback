@@ -66,8 +66,7 @@ module.exports = {
         }
       };
 
-      const data = await verifyAuthToken(idToken);
-      console.log("google signup: ", data);
+      const { email, name, picture } = await verifyAuthToken(idToken);
 
       const checkIfUserExists = async (email, username) => {
         const user = await User.findOne({ email });

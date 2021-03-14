@@ -136,7 +136,11 @@ const Message = ({
             >
               {text}
             </Text>
-            <Text fontSize={FONT_SIZES.X_SMALL} color={COLORS.darkGrey}>
+            <Text
+              paddingLeft={4}
+              fontSize={FONT_SIZES.X_SMALL}
+              color={COLORS.darkGrey}
+            >
               {formatDistanceToNow(Number(createdAt))} ago
             </Text>
           </Box>
