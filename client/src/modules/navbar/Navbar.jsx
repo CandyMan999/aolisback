@@ -44,17 +44,25 @@ const Navbar = ({}) => {
           AOLisBack
         </Text>
       </NavLink>
-      <Box justifyContent="flex-end" center flex={1}>
+      <Box justifyContent="flex-end">
         {currentUser ? (
-          <Box flexWrap="wrap" textAlign="center" color={COLORS.orange}>
-            {" "}
-            <div>
-              <Text> Welcome, {currentUser.username}</Text>
-            </div>
+          <Box
+            flexWrap="wrap"
+            textAlign="center"
+            alignItems="center"
+            column
+            color={COLORS.orange}
+          >
+            <Text margin={2} fontSize={FONT_SIZES.SMALL}>
+              {" "}
+              Welcome, {currentUser.username}
+            </Text>
+
             {!!currentUser.pictures && currentUser.pictures[0] && (
               <img
                 style={{
-                  height: "40px",
+                  height: "30px",
+                  width: "30px",
                   borderRadius: "90%",
                   border: `dotted 2px ${COLORS.vividBlue}`,
                 }}

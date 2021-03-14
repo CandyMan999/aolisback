@@ -27,16 +27,6 @@ const Message = ({
           flexWrap="wrap"
           paddingTop={10}
         >
-          <Text
-            marginRight={45}
-            position="absolute"
-            bottom={"0px"}
-            fontSize={FONT_SIZES.X_SMALL}
-            color={COLORS.darkGrey}
-            style={{ zIndex: 100 }}
-          >
-            {formatDistanceToNow(Number(createdAt))} ago
-          </Text>
           <Box
             flexWrap="wrap"
             height={"fit-content"}
@@ -51,6 +41,14 @@ const Message = ({
               fontSize={FONT_SIZES.SMALL}
             >
               {text}
+              {""}
+              <Text
+                style={{ display: "flex", justifyContent: "flex-end" }}
+                fontSize={FONT_SIZES.X_SMALL}
+                color={COLORS.darkGrey}
+              >
+                {formatDistanceToNow(Number(createdAt))} ago
+              </Text>
             </Text>
           </Box>
 
@@ -122,16 +120,7 @@ const Message = ({
               {username}
             </Text>
           </Box>
-          {/* <Text
-            marginLeft={45}
-            position="absolute"
-            bottom={"0px"}
-            fontSize={FONT_SIZES.X_SMALL}
-            color={COLORS.darkGrey}
-            style={{ zIndex: 100 }}
-          >
-            {formatDistanceToNow(Number(createdAt))} ago
-          </Text> */}
+
           <Box
             flexWrap="wrap"
             height={"fit-content"}

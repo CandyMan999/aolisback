@@ -53,7 +53,7 @@ module.exports = {
   Mutation: {
     googleSignup: async (root, args, ctx) => {
       const { username, idToken } = args;
-
+      console.log("did I get a token: ", username, idToken);
       const verifyAuthToken = async (idToken) => {
         try {
           const ticket = await client.verifyIdToken({
@@ -66,7 +66,8 @@ module.exports = {
         }
       };
 
-      const { name, email, picture } = await verifyAuthToken(idToken);
+      const data = await verifyAuthToken(idToken);
+      console.log("google signup: ", data);
 
       const checkIfUserExists = async (email, username) => {
         const user = await User.findOne({ email });
