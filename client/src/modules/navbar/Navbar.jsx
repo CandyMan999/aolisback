@@ -33,7 +33,6 @@ const Navbar = ({}) => {
 
   return (
     <div className={navbar}>
-      {console.log(currentUser)}
       {showSignupModal && (
         <SignupModal onClose={() => setShowSignupModal(false)} />
       )}
