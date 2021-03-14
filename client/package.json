@@ -33,7 +33,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "now-build": "react-scripts build",
+    "now-build": "CI='' yarn build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
