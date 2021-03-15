@@ -25,10 +25,7 @@ class RoomList extends React.Component {
                 >
                   <Text
                     color={active ? COLORS.themeGreen : COLORS.lightGrey}
-                    textShadow={
-                      active &&
-                      `3px 3px 0 ${COLORS.vividBlue}, -1px -1px 0 ${COLORS.vividBlue}, 1px -1px 0 ${COLORS.vividBlue}, -1px 1px 0 ${COLORS.vividBlue}, 1px 1px 0 ${COLORS.vividBlue}`
-                    }
+                    textShadow={active && `-2px 2px 3px ${COLORS.textRed}`}
                     className="userNumber"
                   >
                     {room.name}: Online {numberOfUsers}
