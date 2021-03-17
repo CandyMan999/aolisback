@@ -11,7 +11,9 @@ class Icon extends React.Component {
     return (
       <Box center justifyContent="center">
         <Box
-          padding={this.props.clickable || this.props.onClick ? 8 : undefined}
+          padding={
+            this.props.clickable || this.props.onClick ? this.props.padding : 8
+          }
           borderRadius="100%"
           onClick={this.props.onClick}
           background={this.props.active ? COLORS.lightGrey : undefined}

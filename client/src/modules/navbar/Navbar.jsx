@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 
-import { Box, Button, FONT_SIZES, Text } from "../../components";
+import { Box, Button, FONT_SIZES, Text, NavGuide } from "../../components";
 
 import { navText, navbar } from "../../styles/classes";
 import SignupModal from "./signup-modal";
@@ -39,11 +39,20 @@ const Navbar = ({}) => {
       {showLoginModal && (
         <LoginModal onClose={() => setShowLoginModal(false)} />
       )}
-      <NavLink to="/" style={{ textDecoration: "none" }}>
-        <Text color={COLORS.white} fontSize={FONT_SIZES.X_LARGE} bold>
-          AOLisBack
-        </Text>
-      </NavLink>
+      <Box flexWrap="wrap" column display="flex">
+        <NavGuide />
+        <NavLink style={{ textDecoration: "none" }} to="/">
+          <Text
+            margin={0}
+            color={COLORS.white}
+            fontSize={FONT_SIZES.X_LARGE}
+            bold
+          >
+            AOLisBack
+          </Text>
+        </NavLink>
+      </Box>
+
       <Box justifyContent="flex-end">
         {currentUser ? (
           <Box
@@ -54,7 +63,6 @@ const Navbar = ({}) => {
             color={COLORS.orange}
           >
             <Text margin={2} fontSize={FONT_SIZES.SMALL}>
-              {" "}
               Welcome, {currentUser.username}
             </Text>
 

@@ -19,6 +19,7 @@ import { WebSocketLink } from "apollo-link-ws";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { getToken } from "./utils/helpers";
+import Navbar from "./modules/navbar/Navbar";
 
 export const WS_URL =
   process.env.NODE_ENV === "production"

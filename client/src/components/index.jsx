@@ -14,3 +14,5 @@ export { default as CreateRoom } from "./CreateRoom";
 export { default as SendMessage } from "./SendMessage";
 export { default as Drawer } from "./Drawer";
 export { default as BackDrop } from "./BackDrop";
+export { default as WithOutsideClickHandler } from "./WithOutsideClickHandler";
+export { default as NavGuide } from "./NavGuide";
