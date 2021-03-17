@@ -1,7 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+import Speech from "react-speech";
 
 const CreateProfile = ({}) => {
-  return <div> Create Profile</div>;
+  return (
+    <Fragment>
+      <div> Create Profile</div>
+    </Fragment>
+  );
 };
 
 export default CreateProfile;

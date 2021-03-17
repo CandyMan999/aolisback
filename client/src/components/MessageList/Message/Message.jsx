@@ -2,6 +2,8 @@ import React, { Fragment } from "react";
 import { Box, Text, FONT_SIZES } from "../../../components";
 import { COLORS } from "../../../constants";
 import { formatDistanceToNow } from "date-fns";
+import Speech from "react-speech";
+import { Icon, ICON_SIZES } from "../../../components";
 
 const Message = ({
   username,
@@ -40,8 +42,10 @@ const Message = ({
               margin={"auto"}
               fontSize={FONT_SIZES.SMALL}
             >
+              <Speech text={text} />
+
               {text}
-              {""}
+
               <Text
                 style={{ display: "flex", justifyContent: "flex-end" }}
                 fontSize={FONT_SIZES.X_SMALL}
@@ -134,7 +138,7 @@ const Message = ({
               margin={"auto"}
               fontSize={FONT_SIZES.SMALL}
             >
-              {text}
+              {text} <Speech text={text} />
             </Text>
             <Text
               paddingLeft={4}

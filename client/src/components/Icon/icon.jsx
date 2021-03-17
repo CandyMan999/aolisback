@@ -37,6 +37,7 @@ class Icon extends React.Component {
               d={icons[this.props.name].path}
             />
           </svg>
+          {this.props.children}
         </Box>
       </Box>
     );

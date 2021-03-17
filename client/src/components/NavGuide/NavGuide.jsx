@@ -6,7 +6,7 @@ import { FONT_SIZES } from "../Text";
 
 class NavGuide extends React.PureComponent {
   state = {
-    isExpanded: true,
+    isExpanded: false,
     options: [
       { label: "Create Profile", route: "profile" },
       { label: "Video Chat", route: "video" },

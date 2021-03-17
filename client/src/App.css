@@ -147,3 +147,7 @@
   cursor: pointer;
   text-shadow: 2px 2px #6bccf9;
 }
+
+button.rs-play{
+  background-color: "red";
+}
