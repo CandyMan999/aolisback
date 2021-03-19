@@ -22,12 +22,12 @@ const Navbar = ({}) => {
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const [showSignupModal, setShowSignupModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
+
   const { currentUser } = state;
   useEffect(() => {
     if (currentUser) {
       setShowSignupModal(false);
-      setShowLoginModal(false);
+      dispatch({ type: "TOGGLE_LOGIN", payload: false });
     }
   }, [currentUser]);
 
@@ -36,8 +36,10 @@ const Navbar = ({}) => {
       {showSignupModal && (
         <SignupModal onClose={() => setShowSignupModal(false)} />
       )}
-      {showLoginModal && (
-        <LoginModal onClose={() => setShowLoginModal(false)} />
+      {state.isLogin && (
+        <LoginModal
+          onClose={() => dispatch({ type: "TOGGLE_LOGIN", payload: false })}
+        />
       )}
       <Box flexWrap="wrap" column display="flex">
         <NavGuide />
@@ -48,7 +50,7 @@ const Navbar = ({}) => {
             fontSize={FONT_SIZES.X_LARGE}
             bold
           >
-            AOLisBack
+            SoberTalk
           </Text>
         </NavLink>
       </Box>
@@ -83,7 +85,9 @@ const Navbar = ({}) => {
           <Fragment>
             <Box paddingRight={25}>
               <Text
-                onClick={() => setShowLoginModal(true)}
+                onClick={() =>
+                  dispatch({ type: "TOGGLE_LOGIN", payload: true })
+                }
                 color={COLORS.white}
                 fontSize={FONT_SIZES.X_LARGE}
                 bold

@@ -55,18 +55,30 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  drink: {
-    type: String,
-    enum: ["yes", "socially", "never"],
+  sobrietyTime: {
+    type: Date,
+    default: null,
   },
-  smoke: {
-    type: String,
-    enum: ["yes", "socially", "never"],
+  sponsor: {
+    type: Boolean,
+    default: false,
   },
-  marijuana: {
-    type: String,
-    enum: ["friendly", "unfriendly"],
+  sponsee: {
+    type: Boolean,
+    default: false,
   },
+  // drink: {
+  //   type: String,
+  //   enum: ["yes", "socially", "never"],
+  // },
+  // smoke: {
+  //   type: String,
+  //   enum: ["yes", "socially", "never"],
+  // },
+  // marijuana: {
+  //   type: String,
+  //   enum: ["friendly", "unfriendly"],
+  // },
   kids: {
     type: Boolean,
     default: false,

@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 
 import { Route, Switch } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
 
 import Navbar from "./modules/navbar";
 import HomeContainer from "./modules/home";
@@ -14,7 +15,7 @@ const App = () => {
       <Navbar />
       <Switch>
         <Route exact path="/" component={HomeContainer} />
-        <Route path="/profile" component={CreateProfile} />
+        <ProtectedRoute path="/profile" component={CreateProfile} />
       </Switch>
     </Fragment>
   );

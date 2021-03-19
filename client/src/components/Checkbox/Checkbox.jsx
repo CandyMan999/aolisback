@@ -45,6 +45,11 @@ class Checkbox extends React.PureComponent {
 
     return (
       <Box onClick={this.handleChange} marginY={12} center>
+        {label && (
+          <Box paddingY={8}>
+            <p>{label}</p>
+          </Box>
+        )}
         <input
           checked={
             withoutFormik
@@ -56,11 +61,6 @@ class Checkbox extends React.PureComponent {
           type="checkbox"
           readOnly
         />
-        {label && (
-          <Box paddingX={8}>
-            <p>{label}</p>
-          </Box>
-        )}
       </Box>
     );
   }

@@ -2,12 +2,24 @@ const { gql } = require("apollo-server");
 
 module.exports = gql`
   type User {
-    _id: ID
+    _id: ID!
     name: String
     username: String!
     email: String
     pictures: [Picture]
     comments: [Comment]
+    intro: String
+    age: String
+    sex: Sex
+    kids: Boolean
+    occupation: String
+    sobrietyTime: String
+    sponsor: Boolean
+    sponsee: Boolean
+  }
+  enum Sex {
+    male
+    female
   }
 
   type Comment {
@@ -58,6 +70,17 @@ module.exports = gql`
     createRoom(name: String!, _id: ID): Room
     changeRoom(roomId: ID!, userId: ID!): Room
     createComment(text: String!, userId: ID!, roomId: ID!): Comment
+    createProfile(
+      _id: ID!
+      intro: String!
+      age: String!
+      sex: Sex!
+      occupation: String
+      sobrietyTime: String
+      sponsor: Boolean
+      sponsee: Boolean
+      kids: Boolean
+    ): User
   }
 
   type Subscription {

@@ -367,6 +367,31 @@ module.exports = {
         throw new AuthenticationError(err.message);
       }
     },
+    createProfile: async (root, args, ctx) => {
+      const {
+        intro,
+        age,
+        sex,
+        occupation,
+        sobrietyTime,
+        sponsor,
+        sponsee,
+        kids,
+        _id,
+      } = args;
+      try {
+        const profile = await User.findByIdAndUpdate(
+          { _id },
+          { intro, age, sex, occupation, sobrietyTime, sponsor, sponsee, kids },
+          { new: true }
+        );
+        console.log(moment(profile.sobrietyTime).format("MM-DD-YYYY"));
+
+        return profile;
+      } catch (err) {
+        throw new AuthenticationError(err.message);
+      }
+    },
   },
   Subscription: {
     roomCreatedOrUpdated: {
