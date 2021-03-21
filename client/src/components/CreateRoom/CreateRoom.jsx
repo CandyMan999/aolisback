@@ -29,7 +29,7 @@ class CreateRoom extends Component {
             value={this.state.roomName}
             onChange={this.handleChange}
             type="text"
-            placeholder="Create New Room"
+            placeholder="Create Room"
             required
           />
           <button id="create-room-btn" type="submit">

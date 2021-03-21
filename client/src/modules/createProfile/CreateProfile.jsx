@@ -80,7 +80,7 @@ const CreateProfile = ({}) => {
 
   const handleValidation = (values) => {
     const err = {};
-
+    if (!values.age.length) err.age = "required";
     if (values.age) {
       if (!(Number(values.age) > 0.5)) err.age = "Age Must be a number";
     }
@@ -88,7 +88,7 @@ const CreateProfile = ({}) => {
       err.intro = "Tell us about you loser";
     }
     if (!values.occupation.length)
-      err.occupation = "If you aint got a job, then lie to me";
+      err.occupation = "If you aint got a job, then lie";
 
     return err;
   };
@@ -118,7 +118,7 @@ const CreateProfile = ({}) => {
           >
             <h3>Create Profile</h3>
             {profile.sobrietyTime && (
-              <Text color={COLORS.themeGreen}>
+              <Text color={COLORS.themeGreen} margin={0}>
                 Sober Since {profile.sobrietyTime}
               </Text>
             )}
@@ -134,8 +134,6 @@ const CreateProfile = ({}) => {
               />
             </label>
 
-            <br />
-            <br />
             <label htmlFor="sex">
               Gender:{" "}
               <select
@@ -149,8 +147,6 @@ const CreateProfile = ({}) => {
               </select>
             </label>
 
-            <br />
-            <br />
             <label htmlFor="kids">
               I Have Kids:{" "}
               <select
@@ -205,6 +201,7 @@ const CreateProfile = ({}) => {
                       type="input"
                     />{" "}
                     <Input
+                      marginBottom={15}
                       name="occupation"
                       type="input"
                       placeholder="occupation"

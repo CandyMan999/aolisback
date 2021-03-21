@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext, Fragment } from "react";
 import { Jutsu, useJitsi } from "react-jutsu";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 import { Loading } from "..";
 import {
   Redirect,
@@ -19,6 +21,7 @@ const Video = () => {
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const [spinner, setSpinner] = useState(false);
+  const mobile = useMediaQuery("(max-width: 650px)");
 
   let history = useHistory();
 
@@ -35,6 +38,10 @@ const Video = () => {
         <Fragment>
           <Banner channelOwner={state.userChannel} />
           <Jutsu
+            containerStyles={{
+              width: mobile ? "375px" : "1200px",
+              height: mobile ? "400px" : "800px",
+            }}
             roomName={process.env.REACT_APP_ROOM + state.userChannel}
             displayName={state.currentUser.username}
             onMeetingEnd={() => history.push("/")}
@@ -47,6 +54,10 @@ const Video = () => {
           <Banner channelOwner={state.currentUser.username} />
           {spinner && <Loading />}
           <Jutsu
+            containerStyles={{
+              width: mobile ? "375px" : "1200px",
+              height: mobile ? "400px" : "800px",
+            }}
             roomName={process.env.REACT_APP_ROOM + state.currentUser.username}
             displayName={state.currentUser.username}
             onMeetingEnd={() => history.push("/")}

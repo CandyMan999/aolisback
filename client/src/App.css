@@ -135,7 +135,10 @@
 .join-a-room {
   margin-top: 10%;
   margin-left: 5%;
-  font-size: 70px;
+  font-size: 40px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 }
 .message-text {
   padding: 2px;

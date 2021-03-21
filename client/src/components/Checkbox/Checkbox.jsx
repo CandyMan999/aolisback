@@ -11,6 +11,8 @@ class Checkbox extends React.PureComponent {
       value,
       onChange,
       withoutFormik,
+      margin,
+      padding,
     } = this.props;
 
     if (!!onChange && withoutFormik) {
@@ -41,13 +43,15 @@ class Checkbox extends React.PureComponent {
       value,
       formik: { values, touched, errors, setFieldValue, ...rest },
       withoutFormik,
+      margin,
+      padding,
     } = this.props;
 
     return (
-      <Box onClick={this.handleChange} marginY={12} center>
+      <Box onClick={this.handleChange} marginY={12} margin={margin} center>
         {label && (
-          <Box paddingY={8}>
-            <p>{label}</p>
+          <Box paddingY={8} padding={padding}>
+            <p style={{ margin: "0px" }}>{label}</p>
           </Box>
         )}
         <input

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Message from "./Message";
 import ReactDOM from "react-dom";
+import { Text } from "../../components";
 
 class MessageList extends Component {
   componentWillUpdate() {
@@ -20,7 +21,16 @@ class MessageList extends Component {
     if (!this.props.roomId) {
       return (
         <div className="message-list">
-          <div className="join-a-room"> Join a Room! &rarr;</div>
+          <div className="join-a-room">
+            Join a Room!{" "}
+            <span
+              style={{
+                fontSize: "100px",
+              }}
+            >
+              &rarr;
+            </span>
+          </div>
         </div>
       );
     }
