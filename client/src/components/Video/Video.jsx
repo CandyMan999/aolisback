@@ -35,10 +35,9 @@ const Video = () => {
         <Fragment>
           <Banner channelOwner={state.userChannel} />
           <Jutsu
-            containerStyles={{ width: "375px", height: "400px" }}
             roomName={process.env.REACT_APP_ROOM + state.userChannel}
             displayName={state.currentUser.username}
-            onMeetingEnd={() => history.push("/profile")}
+            onMeetingEnd={() => history.push("/")}
             loadingComponent={<p>Loading...</p>}
             errorComponent={<p>Oops, something went wrong</p>}
           />
@@ -48,10 +47,9 @@ const Video = () => {
           <Banner channelOwner={state.currentUser.username} />
           {spinner && <Loading />}
           <Jutsu
-            containerStyles={{ width: "375px", height: "400px" }}
             roomName={process.env.REACT_APP_ROOM + state.currentUser.username}
             displayName={state.currentUser.username}
-            onMeetingEnd={() => history.push("/profile")}
+            onMeetingEnd={() => history.push("/")}
             loadingComponent={<Loading />}
             errorComponent={<p>Oops, something went wrong</p>}
           />

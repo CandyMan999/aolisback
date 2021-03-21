@@ -10,9 +10,8 @@ const Banner = ({ channelOwner }) => {
     <div>
       <Text center className="videoTitle">
         {alert && (
-          <Text>
-            If you don't see the webCam Click
-            <span style={{ color: "red" }}>LAUNCH IN WEB</span> button
+          <Text color={"red"}>
+            DOWNLOAD THE APP ITS FREE IF YOU ARE ON MOBILE
           </Text>
         )}
         {!!channelOwner
