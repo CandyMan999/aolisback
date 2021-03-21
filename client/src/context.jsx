@@ -6,6 +6,7 @@ const Context = createContext({
   rooms: ["Main"],
   isProfile: false,
   isLogin: false,
+  userChannel: null,
 });
 
 export default Context;

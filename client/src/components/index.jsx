@@ -19,3 +19,4 @@ export { default as BackDrop } from "./BackDrop";
 export { default as WithOutsideClickHandler } from "./WithOutsideClickHandler";
 export { default as NavGuide } from "./NavGuide";
 export { default as Select } from "./Select";
+export { default as Video } from "./Video";

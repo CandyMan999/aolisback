@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Box, Text } from "../../components";
 import { COLORS } from "../../constants";
 import ChatBox from "../chatBox";
+import Video from "../../components/Video";
 
 const HomeLayout = ({}) => {
   return (

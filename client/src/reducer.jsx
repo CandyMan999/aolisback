@@ -20,6 +20,11 @@ export default function reducer(state, { type, payload }) {
         ...state,
         currentUser: payload,
       };
+    case "JOIN_CHANNEL":
+      return {
+        ...state,
+        userChannel: payload,
+      };
 
     default:
       return state;

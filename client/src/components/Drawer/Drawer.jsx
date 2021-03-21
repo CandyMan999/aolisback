@@ -6,7 +6,7 @@ import { Box, Text, BackDrop, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
 import { isWidthUp } from "@material-ui/core";
 
-const Drawer = ({ isOpen, onClose, title }, ...props) => {
+const Drawer = ({ isOpen, onClose, title, children }) => {
   const mobile = useMediaQuery("(max-width: 650px)");
 
   return (
@@ -44,10 +44,10 @@ const Drawer = ({ isOpen, onClose, title }, ...props) => {
             width="100%"
             justifyContent="center"
           >
-            <Text color={COLORS.white} bold>
+            <Text center color={COLORS.white} bold>
               {title}
             </Text>
-            {props.children}
+            {children}
           </Box>
         )}
       </motion.div>

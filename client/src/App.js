@@ -6,6 +6,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Navbar from "./modules/navbar";
 import HomeContainer from "./modules/home";
 import CreateProfile from "./modules/createProfile";
+import { Video } from "./components";
 
 import "./App.css";
 
@@ -16,6 +17,7 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={HomeContainer} />
         <ProtectedRoute path="/profile" component={CreateProfile} />
+        <ProtectedRoute path="/video" component={Video} />
       </Switch>
     </Fragment>
   );
