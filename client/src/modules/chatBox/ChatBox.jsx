@@ -14,7 +14,11 @@ import {
   CHANGE_ROOM_MUTATION,
   CREATE_COMMENT_MUTATION,
 } from "../../graphql/mutations";
-import { GET_ROOMS_QUERY, GET_COMMENTS_QUERY } from "../../graphql/queries";
+import {
+  GET_ROOMS_QUERY,
+  GET_COMMENTS_QUERY,
+  FIND_USER_QUERY,
+} from "../../graphql/queries";
 import {
   ROOM_CREATED_OR_UPDATED_SUBSCRIPTION,
   CREATE_COMMENT_SUBSCRIPTION,
@@ -90,11 +94,16 @@ const ChatBox = ({}) => {
     }
   };
 
-  const usernameClick = (username) => {
-    //need to get entire user off _id or username
-    console.log("this is my user: ", username);
-    setUserClicked(username);
-    dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
+  const usernameClick = async (authorId) => {
+    const variables = { _id: authorId };
+
+    try {
+      dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
+      const { findUser } = await client.request(FIND_USER_QUERY, variables);
+      setUserClicked(findUser);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   const createRoom = async (variables) => {
@@ -147,7 +156,7 @@ const ChatBox = ({}) => {
         subscription={ROOM_CREATED_OR_UPDATED_SUBSCRIPTION}
         onSubscriptionData={({ subscriptionData }) => {
           const { roomCreatedOrUpdated } = subscriptionData.data;
-          console.log("subscription: ", roomCreatedOrUpdated);
+
           setRooms([...roomCreatedOrUpdated]);
         }}
       />

@@ -64,7 +64,7 @@ const Message = ({
               height={35}
               textAlign={"center"}
               justifyContent={"center"}
-              onClick={() => usernameClick(username)}
+              onClick={() => usernameClick(authorId)}
             >
               {!!picture && (
                 <img
@@ -103,7 +103,7 @@ const Message = ({
               flexWrap="wrap"
               textAlign={"center"}
               justifyContent={"center"}
-              onClick={() => usernameClick(username)}
+              onClick={() => usernameClick(authorId)}
             >
               {!!picture && (
                 <img

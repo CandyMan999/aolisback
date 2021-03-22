@@ -41,11 +41,6 @@ const CreateProfile = ({}) => {
   const [spinner, setSpinner] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
-    console.log(moment(Number(currentUser.sobrietyTime)).format("MM/DD/YYYY"));
-    console.log(profile.sobrietyTime);
-  }, []);
-
   const handleSubmit = async ({ intro, occupation, age, sponsor, sponsee }) => {
     const { sex, sobrietyTime, kids } = profile;
 
@@ -66,7 +61,7 @@ const CreateProfile = ({}) => {
         CREATE_PROFILE_MUTATION,
         variables
       );
-      console.log(createProfile);
+
       if (createProfile) {
         setSpinner(false);
         setSuccess(true);
@@ -100,7 +95,6 @@ const CreateProfile = ({}) => {
     }
 
     setProfile({ ...profile, [e.target.name]: updatedValue });
-    console.log(profile);
   };
 
   return (

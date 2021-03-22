@@ -49,7 +49,7 @@ const LoginModal = ({ onClose }) => {
         GOOGLE_LOGIN_MUTATION,
         variables
       );
-      console.log("WTF", googleLogin);
+
       dispatch({ type: "LOGIN_USER", payload: googleLogin });
     } catch (err) {
       setSpinner(false);

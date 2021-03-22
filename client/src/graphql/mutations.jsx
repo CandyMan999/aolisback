@@ -23,7 +23,14 @@ export const GOOGLE_LOGIN_MUTATION = `
                 url
             }
             email
-            
+            intro
+            sex
+            age
+            occupation
+            sobrietyTime
+            sponsor
+            sponsee 
+            kids
         }
     }
 `;
@@ -47,7 +54,14 @@ mutation($username: String!, $password: String! ){
         pictures{
             url
         }
-     
+        intro
+        sex
+        age
+        occupation
+        sobrietyTime
+        sponsor
+        sponsee 
+        kids
     }
 }`;
 
@@ -101,6 +115,9 @@ mutation($_id: ID!, $intro: String!, $age: String!, $sex: Sex!, $occupation: Str
     createProfile(_id: $_id, intro: $intro, age: $age, sex: $sex, occupation: $occupation, sobrietyTime: $sobrietyTime, sponsor: $sponsor, sponsee: $sponsee, kids: $kids){
       _id
       username
+      pictures{
+        url
+    }
       intro
       sex
       age

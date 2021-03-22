@@ -39,7 +39,6 @@ const SignupModal = ({ onClose }) => {
   const { currentUser } = state;
 
   const handleGoogle = async (googleUser) => {
-    console.log("my google user: ", googleUser);
     try {
       const idToken = googleUser.getAuthResponse().id_token;
       setToken(idToken);

@@ -60,6 +60,7 @@ module.exports = gql`
     me: User
     getRooms: [Room]
     getComments(roomId: ID!): [Comment]
+    findUser(_id: ID!): User
   }
 
   type Mutation {

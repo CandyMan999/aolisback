@@ -37,3 +37,24 @@ query($roomId: ID!){
   }
 }
 `;
+
+export const FIND_USER_QUERY = `
+query($_id: ID!){
+  findUser(_id: $_id){
+    _id
+    username
+    email
+    pictures{
+        url
+    }
+    intro
+    sex
+    age
+    occupation
+    sobrietyTime
+    sponsor
+    sponsee 
+    kids
+  }
+}
+`;

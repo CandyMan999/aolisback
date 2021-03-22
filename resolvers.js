@@ -49,11 +49,21 @@ module.exports = {
         throw new AuthenticationError(err.message);
       }
     },
+    findUser: async (root, args, ctx) => {
+      const { _id } = args;
+      try {
+        const user = await User.findById({ _id }).populate("pictures");
+
+        return user;
+      } catch (err) {
+        throw new AuthenticationError(err.message);
+      }
+    },
   },
   Mutation: {
     googleSignup: async (root, args, ctx) => {
       const { username, idToken } = args;
-      console.log("did I get a token: ", username, idToken);
+
       const verifyAuthToken = async (idToken) => {
         try {
           const ticket = await client.verifyIdToken({
@@ -145,7 +155,9 @@ module.exports = {
       const { username, password } = args;
 
       try {
-        const user = await User.findOne({ username }).populate("pictures");
+        const user = await User.findOne({ username })
+          .populate("pictures")
+          .populate("comments");
         if (!user) {
           return new AuthenticationError("Username Doesn't Exsist");
         }
@@ -241,6 +253,10 @@ module.exports = {
               );
               if (isAfterHour) {
                 await Room.updateMany({ $pull: { users: user._id } });
+                await User.updateOne(
+                  { _id: user._id },
+                  { $set: { comments: [] } }
+                );
               }
             });
           })
@@ -312,6 +328,10 @@ module.exports = {
               );
               if (isAfterHour) {
                 await Room.updateMany({ $pull: { users: user._id } });
+                await User.updateOne(
+                  { _id: user._id },
+                  { $set: { comments: [] } }
+                );
               }
             });
           })
@@ -384,8 +404,7 @@ module.exports = {
           { _id },
           { intro, age, sex, occupation, sobrietyTime, sponsor, sponsee, kids },
           { new: true }
-        );
-        console.log(moment(profile.sobrietyTime).format("MM-DD-YYYY"));
+        ).populate("pictures");
 
         return profile;
       } catch (err) {
