@@ -55,12 +55,12 @@ const Map = ({}) => {
   };
 
   return (
-    <Box>
+    <Fragment>
       <ReactMapGL
         width="100vw"
         height="calc(100vh - 64px)"
         mapStyle="mapbox://styles/mapbox/streets-v9"
-        mapboxApiAccessToken="pk.eyJ1IjoiamFsZXdpczEyMjEiLCJhIjoiY2tqZXZvdTd3M3ZjeTJ3cGRhdGdweDI0cyJ9.F-IKlfWkY18m-Or7vE3wuw"
+        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
         onViewportChange={(newViewport) => setViewport(newViewport)}
         {...viewport}
         onClick={handleMapClick}
@@ -72,7 +72,7 @@ const Map = ({}) => {
           />
         </div>
         {users.length &&
-          users.map((user) => (
+          users.map((user, i) => (
             <Box textAlign="center">
               <Marker
                 key={user._id}
@@ -80,7 +80,7 @@ const Map = ({}) => {
                 longitude={user.location.lng}
               >
                 <Icon
-                  key={user._id}
+                  key={user._id + i}
                   onClick={() => setPopup({ isOpen: true, id: user._id })}
                   name="pin"
                   size={ICON_SIZES.X_LARGE}
@@ -94,6 +94,7 @@ const Map = ({}) => {
 
               {popup.id && popup.id === user._id ? (
                 <Popup
+                  key={user._id + i + "1"}
                   anchor="bottom"
                   latitude={user.location.lat}
                   longitude={user.location.lng}
@@ -127,7 +128,7 @@ const Map = ({}) => {
             </Box>
           ))}
       </ReactMapGL>
-    </Box>
+    </Fragment>
   );
 };
 
