@@ -1,5 +1,6 @@
 import React, { Fragment, useContext, useEffect } from "react";
 import { Drawer, Box, Button, Text, ICON_SIZES, Icon } from "../../components";
+
 import { COLORS } from "../../constants";
 import { formatDistanceToNow } from "date-fns";
 import moment from "moment";
@@ -11,8 +12,9 @@ import { useHistory } from "react-router-dom";
 const Profile = ({ userClicked }) => {
   //eventually userClicked will be whole object
   const client = useClient();
-  const { state, dispatch } = useContext(Context);
   let history = useHistory();
+  const { state, dispatch } = useContext(Context);
+
   const {
     username,
     sobrietyTime,
@@ -24,6 +26,7 @@ const Profile = ({ userClicked }) => {
     sponsor,
     sponsee,
     pictures,
+    _id,
   } = userClicked;
 
   const toggleDrawer = () => {
@@ -34,6 +37,12 @@ const Profile = ({ userClicked }) => {
     dispatch({ type: "JOIN_CHANNEL", payload: username });
     dispatch({ type: "TOGGLE_PROFILE", payload: false });
     history.push("/video");
+  };
+
+  const handleLocation = (_id) => {
+    dispatch({ type: "VIEW_LOCATION", payload: _id });
+    dispatch({ type: "TOGGLE_PROFILE", payload: false });
+    history.push("/location");
   };
 
   return (
@@ -168,6 +177,15 @@ const Profile = ({ userClicked }) => {
             <span style={{ color: COLORS.vividBlue }}>
               Join {username}'s Video Channel
             </span>
+          </Button>
+        </Box>
+        <Box justifyContent="center">
+          <Button
+            onClick={() => handleLocation(_id)}
+            color={COLORS.vividBlue}
+            width="fit-content"
+          >
+            <span>View Location</span>
           </Button>
         </Box>
       </Box>

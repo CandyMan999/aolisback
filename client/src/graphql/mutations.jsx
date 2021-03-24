@@ -22,6 +22,10 @@ export const GOOGLE_LOGIN_MUTATION = `
             pictures{
                 url
             }
+            location{
+              lat
+              lng
+            }
             email
             intro
             sex
@@ -53,6 +57,10 @@ mutation($username: String!, $password: String! ){
         email
         pictures{
             url
+        }
+        location{
+          lat
+          lng
         }
         intro
         sex
@@ -118,6 +126,10 @@ mutation($_id: ID!, $intro: String!, $age: String!, $sex: Sex!, $occupation: Str
       pictures{
         url
     }
+    location{
+      lat
+      lng
+    }
       intro
       sex
       age
@@ -128,4 +140,29 @@ mutation($_id: ID!, $intro: String!, $age: String!, $sex: Sex!, $occupation: Str
       kids
         }
     }
+`;
+
+export const UPDATE_LOCATION_MUTATION = `
+mutation($_id: ID!, $lat: Float!, $lng: Float!){
+  updateLocation(_id: $_id, lat: $lat, lng: $lng){
+    _id
+    username
+    pictures{
+      url
+  }
+    intro
+    sex
+    age
+    occupation
+    sobrietyTime
+    sponsor
+    sponsee 
+    kids
+    location{
+      lat
+      lng
+    }
+  }
+}
+
 `;

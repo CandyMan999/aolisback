@@ -40,6 +40,10 @@ const ChatBox = ({}) => {
 
   useEffect(() => {
     getRooms();
+
+    if (state.roomId) {
+      subscribeToRoom(state.roomId);
+    }
   }, []);
 
   useEffect(() => {

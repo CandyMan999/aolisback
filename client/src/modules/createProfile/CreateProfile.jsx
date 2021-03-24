@@ -21,7 +21,10 @@ import {
 import { Formik, Form } from "formik";
 import { COLORS } from "../../constants";
 
-import { CREATE_PROFILE_MUTATION } from "../../graphql/mutations";
+import {
+  CREATE_PROFILE_MUTATION,
+  UPDATE_LOCATION_MUTATION,
+} from "../../graphql/mutations";
 
 import { useClient } from "../../client";
 import Context from "../../context";
@@ -40,6 +43,30 @@ const CreateProfile = ({}) => {
   });
   const [spinner, setSpinner] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [userCoords, setUserCoords] = useState({ lat: null, lng: null });
+  const [locationSuccess, setLocationSuccess] = useState(false);
+
+  useEffect(async () => {
+    if (!!userCoords.lat) {
+      try {
+        const variables = {
+          lat: userCoords.lat,
+          lng: userCoords.lng,
+          _id: currentUser._id,
+        };
+        const { updateLocation } = await client.request(
+          UPDATE_LOCATION_MUTATION,
+          variables
+        );
+        if (updateLocation) {
+          dispatch({ type: "UPDATE_USER", payload: updateLocation });
+          setLocationSuccess(true);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, [userCoords.lat]);
 
   const handleSubmit = async ({ intro, occupation, age, sponsor, sponsee }) => {
     const { sex, sobrietyTime, kids } = profile;
@@ -97,6 +124,15 @@ const CreateProfile = ({}) => {
     setProfile({ ...profile, [e.target.name]: updatedValue });
   };
 
+  const handleLocation = async () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        setUserCoords({ lat: latitude, lng: longitude });
+      });
+    }
+  };
+
   return (
     <Fragment>
       {success && <Redirect to="/" />}
@@ -116,6 +152,10 @@ const CreateProfile = ({}) => {
                 Sober Since {profile.sobrietyTime}
               </Text>
             )}
+            <button disabled={locationSuccess} onClick={handleLocation}>
+              Get Location
+            </button>{" "}
+            {locationSuccess && <Text margin={0}>We Found yo ASS!</Text>}
             <label htmlFor="sobreityTime">
               SobrietyTime:{" "}
               <input
@@ -127,7 +167,6 @@ const CreateProfile = ({}) => {
                 onChange={handleChange}
               />
             </label>
-
             <label htmlFor="sex">
               Gender:{" "}
               <select
@@ -140,7 +179,6 @@ const CreateProfile = ({}) => {
                 <option value={"female"}>female</option>
               </select>
             </label>
-
             <label htmlFor="kids">
               I Have Kids:{" "}
               <select

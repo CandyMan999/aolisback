@@ -25,6 +25,16 @@ export default function reducer(state, { type, payload }) {
         ...state,
         userChannel: payload,
       };
+    case "CHANGE_ROOM":
+      return {
+        ...state,
+        roomId: payload,
+      };
+    case "VIEW_LOCATION":
+      return {
+        ...state,
+        userLocationId: payload,
+      };
 
     default:
       return state;

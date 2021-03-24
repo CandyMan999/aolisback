@@ -20,3 +20,4 @@ export { default as WithOutsideClickHandler } from "./WithOutsideClickHandler";
 export { default as NavGuide } from "./NavGuide";
 export { default as Select } from "./Select";
 export { default as Video } from "./Video";
+export { default as Map } from "./Map";

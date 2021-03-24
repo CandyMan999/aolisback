@@ -59,6 +59,17 @@ module.exports = {
         throw new AuthenticationError(err.message);
       }
     },
+    getUsers: async (root, args, ctx) => {
+      try {
+        const users = await User.find({ "location.lat": { $ne: null } })
+          .populate("room")
+          .populate("pictures");
+
+        return users;
+      } catch (err) {
+        throw new AuthenticationError(err.message);
+      }
+    },
   },
   Mutation: {
     googleSignup: async (root, args, ctx) => {
@@ -215,7 +226,7 @@ module.exports = {
               subscribedAt: moment(),
               roomId: room._id,
             },
-            $push: { room },
+            room,
             new: true,
           }
         )
@@ -285,7 +296,7 @@ module.exports = {
               subscribedAt: moment(),
               roomId: room._id,
             },
-            $push: { room },
+            room,
             new: true,
           }
         )
@@ -297,16 +308,12 @@ module.exports = {
           { $pull: { users: user._id } },
           { multi: true }
         );
-        await User.findByIdAndUpdate(
-          { _id: userId },
-          { $pull: { room: { $ne: room._id } } }
-        );
 
         const currentRoom = await Room.findByIdAndUpdate(
           {
             _id: room._id,
           },
-          { $push: { users: user } },
+          { $addToSet: { users: user } },
           { new: true }
         ).populate("users");
 
@@ -407,6 +414,21 @@ module.exports = {
         ).populate("pictures");
 
         return profile;
+      } catch (err) {
+        throw new AuthenticationError(err.message);
+      }
+    },
+    updateLocation: async (root, args, ctx) => {
+      const { lat, lng, _id } = args;
+
+      try {
+        const user = await User.findByIdAndUpdate(
+          { _id },
+          { location: { lat, lng } },
+          { new: true }
+        ).populate("pictures");
+
+        return user;
       } catch (err) {
         throw new AuthenticationError(err.message);
       }

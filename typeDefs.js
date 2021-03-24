@@ -16,10 +16,17 @@ module.exports = gql`
     sobrietyTime: String
     sponsor: Boolean
     sponsee: Boolean
+    location: Location
+    room: Room
   }
   enum Sex {
     male
     female
+  }
+
+  type Location {
+    lat: Float
+    lng: Float
   }
 
   type Comment {
@@ -61,6 +68,7 @@ module.exports = gql`
     getRooms: [Room]
     getComments(roomId: ID!): [Comment]
     findUser(_id: ID!): User
+    getUsers: [User]
   }
 
   type Mutation {
@@ -82,6 +90,7 @@ module.exports = gql`
       sponsee: Boolean
       kids: Boolean
     ): User
+    updateLocation(_id: ID!, lat: Float!, lng: Float!): User
   }
 
   type Subscription {

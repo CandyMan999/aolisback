@@ -55,6 +55,31 @@ query($_id: ID!){
     sponsor
     sponsee 
     kids
+    location {
+      lat
+      lng
+    }
   }
 }
+`;
+
+export const GET_ALL_USERS_QUERY = `
+query{
+  getUsers{
+    _id
+    username
+    room{
+      _id
+      name
+    }
+    location{
+      lat
+      lng
+    }
+    pictures{
+      url
+    }
+  }
+}
+
 `;

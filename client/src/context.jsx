@@ -7,6 +7,7 @@ const Context = createContext({
   isProfile: false,
   isLogin: false,
   userChannel: null,
+  userLocationId: null,
 });
 
 export default Context;
