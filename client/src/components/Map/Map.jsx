@@ -73,7 +73,7 @@ const Map = ({}) => {
         </div>
         {users.length &&
           users.map((user, i) => (
-            <Box textAlign="center">
+            <Box key={"box" + i} textAlign="center">
               <Marker
                 key={user._id}
                 latitude={user.location.lat}
