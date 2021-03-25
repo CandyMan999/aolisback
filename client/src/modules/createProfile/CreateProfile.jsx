@@ -17,6 +17,7 @@ import {
   Loading,
   Checkbox,
   Text,
+  Icon,
 } from "../../components";
 import { Formik, Form } from "formik";
 import { COLORS } from "../../constants";
@@ -60,6 +61,7 @@ const CreateProfile = ({}) => {
         );
         if (updateLocation) {
           dispatch({ type: "UPDATE_USER", payload: updateLocation });
+          setSpinner(false);
           setLocationSuccess(true);
         }
       } catch (err) {
@@ -124,7 +126,9 @@ const CreateProfile = ({}) => {
     setProfile({ ...profile, [e.target.name]: updatedValue });
   };
 
-  const handleLocation = async () => {
+  const handleLocation = () => {
+    setSpinner(true);
+
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
@@ -152,10 +156,18 @@ const CreateProfile = ({}) => {
                 Sober Since {profile.sobrietyTime}
               </Text>
             )}
-            <button disabled={locationSuccess} onClick={handleLocation}>
-              Get Location
-            </button>{" "}
-            {locationSuccess && <Text margin={0}>We Found yo ASS!</Text>}
+            <Box padding={10}>
+              <button disabled={locationSuccess} onClick={handleLocation}>
+                Get Location
+              </button>{" "}
+              {locationSuccess && (
+                <Fragment>
+                  <Icon name="thumbsUp" color={COLORS.themeGreen} />
+                  <Text>Got yo ass</Text>
+                </Fragment>
+              )}
+            </Box>
+
             <label htmlFor="sobreityTime">
               SobrietyTime:{" "}
               <input

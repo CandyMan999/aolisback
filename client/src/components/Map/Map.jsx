@@ -5,11 +5,12 @@ import { withStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { GET_ALL_USERS_QUERY } from "../../graphql/queries";
 
-import { Box, Icon, ICON_SIZES, Text } from "../../components";
+import { Box, Icon, ICON_SIZES, Text, Button } from "../../components";
 import { COLORS } from "../../constants";
 
 import Context from "../../context";
 import { useClient } from "../../client";
+import { FONT_SIZES } from "../Text";
 
 const INITIAL_VIEWPORT = {
   latitude: 21.304026582335645,
@@ -54,6 +55,11 @@ const Map = ({}) => {
     history.push("/");
   };
 
+  const handleVideoLink = async (username) => {
+    await dispatch({ type: "JOIN_CHANNEL", payload: username });
+    history.push("/video");
+  };
+
   return (
     <Fragment>
       <ReactMapGL
@@ -93,35 +99,47 @@ const Map = ({}) => {
               </Marker>
 
               {popup.id && popup.id === user._id ? (
-                <Popup
-                  key={user._id + i + "1"}
-                  anchor="bottom"
-                  latitude={user.location.lat}
-                  longitude={user.location.lng}
-                  closeOnClick={false}
-                  onClose={() => setPopup({ isOpen: false, id: null })}
-                >
-                  <img
-                    style={{ height: "96px", width: "auto" }}
-                    className={"classes.popupImage"}
-                    src={user.pictures[0].url}
-                    alt={"popup.title"}
-                  />
+                <Box center>
+                  <Popup
+                    key={user._id + i + "1"}
+                    anchor="bottom"
+                    latitude={user.location.lat}
+                    longitude={user.location.lng}
+                    closeOnClick={false}
+                    onClose={() => setPopup({ isOpen: false, id: null })}
+                  >
+                    <img
+                      style={{ height: "96px", width: "auto" }}
+                      className={"classes.popupImage"}
+                      src={user.pictures[0].url}
+                      alt={"popup.title"}
+                    />
 
-                  <Text center>{user.username}</Text>
-                  {!!user.room && user.room.name && (
-                    <Fragment>
-                      <Text center>Currently in room</Text>
-                      <Text
-                        color={COLORS.themeGreen}
-                        onClick={() => handleRoomClick(user.room._id)}
-                        center
-                      >
-                        {user.room.name}
-                      </Text>
-                    </Fragment>
-                  )}
-                </Popup>
+                    <Text color={COLORS.orange} margin={0} center>
+                      {user.username}
+                    </Text>
+                    <Button
+                      size="small"
+                      fontSize={FONT_SIZES.X_SMALL}
+                      width="fit-content"
+                      onClick={() => handleVideoLink(user.username)}
+                    >
+                      {user.username}'s Video Channel
+                    </Button>
+                    {!!user.room && user.room.name && (
+                      <Fragment>
+                        <Text
+                          margin={0}
+                          color={COLORS.themeGreen}
+                          onClick={() => handleRoomClick(user.room._id)}
+                          center
+                        >
+                          Currently in {user.room.name}
+                        </Text>
+                      </Fragment>
+                    )}
+                  </Popup>{" "}
+                </Box>
               ) : (
                 ""
               )}

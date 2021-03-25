@@ -5,6 +5,7 @@ module.exports = gql`
     _id: ID!
     name: String
     username: String!
+    isLoggedIn: Boolean
     email: String
     pictures: [Picture]
     comments: [Comment]

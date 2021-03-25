@@ -61,7 +61,10 @@ module.exports = {
     },
     getUsers: async (root, args, ctx) => {
       try {
-        const users = await User.find({ "location.lat": { $ne: null } })
+        const users = await User.find({
+          "location.lat": { $ne: null },
+          isLoggedIn: true,
+        })
           .populate("room")
           .populate("pictures");
 
@@ -166,7 +169,11 @@ module.exports = {
       const { username, password } = args;
 
       try {
-        const user = await User.findOne({ username })
+        const user = await User.findOneAndUpdate(
+          { username },
+          { isLoggedIn: true },
+          { new: true }
+        )
           .populate("pictures")
           .populate("comments");
         if (!user) {
@@ -195,6 +202,7 @@ module.exports = {
               idToken,
               audience: process.env.OAUTH_CLIENT_ID,
             });
+
             return ticket.getPayload();
           } catch (err) {
             console.error(`Error verifying auth token`, err);
@@ -202,7 +210,11 @@ module.exports = {
         };
 
         const { email } = await verifyAuthToken(idToken);
-        const user = await User.findOne({ email })
+        const user = await User.findOneAndUpdate(
+          { email },
+          { isLoggedIn: true },
+          { new: true }
+        )
           .populate("pictures")
           .populate("comments");
 
@@ -266,7 +278,7 @@ module.exports = {
                 await Room.updateMany({ $pull: { users: user._id } });
                 await User.updateOne(
                   { _id: user._id },
-                  { $set: { comments: [] } }
+                  { $set: { comments: [], isLoggedIn: false } }
                 );
               }
             });
@@ -337,7 +349,7 @@ module.exports = {
                 await Room.updateMany({ $pull: { users: user._id } });
                 await User.updateOne(
                   { _id: user._id },
-                  { $set: { comments: [] } }
+                  { $set: { comments: [], isLoggedIn: false } }
                 );
               }
             });

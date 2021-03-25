@@ -12,10 +12,10 @@ const Button = (props) => (
 );
 
 const StyledButton = styled.button(
-  ({ active, disabled, minimal, inverse, color, width, size }) => ({
+  ({ active, disabled, minimal, inverse, color, width, size, fontSize }) => ({
     border: "none",
     borderRadius: "4px",
-    fontSize: "14px",
+    fontSize: fontSize ? fontSize : "14px",
     padding: size === "small" ? "4px" : "8px",
     margin: "8px 16px",
     width: width || "86px",

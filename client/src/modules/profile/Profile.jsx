@@ -59,8 +59,9 @@ const Profile = ({ userClicked }) => {
             <img
               style={{
                 height: "100px",
-                width: "100px",
-                border: `dotted 2px ${COLORS.vividBlue}`,
+                width: "auto",
+                border: `solid 2px ${COLORS.themeGreen}`,
+                borderRadius: "10px",
               }}
               src={pictures[0].url}
               alt={username}
@@ -174,9 +175,7 @@ const Profile = ({ userClicked }) => {
         </Text>
         <Box justifyContent="center">
           <Button onClick={handleVideo} color="red" width="fit-content">
-            <span style={{ color: COLORS.vividBlue }}>
-              Join {username}'s Video Channel
-            </span>
+            <span>Join {username}'s Video Channel</span>
           </Button>
         </Box>
         <Box justifyContent="center">

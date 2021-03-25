@@ -68,6 +68,7 @@ query{
   getUsers{
     _id
     username
+    isLoggedIn
     room{
       _id
       name

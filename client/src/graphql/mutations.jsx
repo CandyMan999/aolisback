@@ -18,6 +18,7 @@ export const GOOGLE_LOGIN_MUTATION = `
         googleLogin( idToken: $idToken){
             _id
             name
+            isLoggedIn
             username
             pictures{
                 url
@@ -55,6 +56,7 @@ mutation($username: String!, $password: String! ){
         _id
         username
         email
+        isLoggedIn
         pictures{
             url
         }
