@@ -67,7 +67,7 @@ const SignupModal = ({ onClose }) => {
         setSpinner(true);
 
         const variables = {
-          username,
+          username: username.replace(/ /g, ""),
           email,
           password,
         };
