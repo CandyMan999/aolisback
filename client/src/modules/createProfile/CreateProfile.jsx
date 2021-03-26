@@ -129,11 +129,16 @@ const CreateProfile = ({}) => {
   const handleLocation = () => {
     setSpinner(true);
 
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        setUserCoords({ lat: latitude, lng: longitude });
-      });
+    try {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const { latitude, longitude } = position.coords;
+          setUserCoords({ lat: latitude, lng: longitude });
+        });
+      }
+    } catch (err) {
+      setAuthError(err.message);
+      setSpinner(false);
     }
   };
 
