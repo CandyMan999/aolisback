@@ -37,7 +37,8 @@
     "react-speech": "^1.0.2",
     "react-spinners": "^0.10.6",
     "subscriptions-transport-ws": "^0.9.18",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "worker-loader": "^3.0.8"
   },
   "scripts": {
     "now-build": "CI='' yarn build",
