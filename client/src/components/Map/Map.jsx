@@ -11,6 +11,9 @@ import { COLORS } from "../../constants";
 import Context from "../../context";
 import { useClient } from "../../client";
 import { FONT_SIZES } from "../Text";
+import mapboxgl from "mapbox-gl";
+
+mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 const INITIAL_VIEWPORT = {
   latitude: 21.304026582335645,
