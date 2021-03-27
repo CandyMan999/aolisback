@@ -111,13 +111,14 @@ const Map = ({}) => {
                     closeOnClick={false}
                     onClose={() => setPopup({ isOpen: false, id: null })}
                   >
-                    <img
-                      style={{ height: "96px", width: "auto" }}
-                      className={"classes.popupImage"}
-                      src={user.pictures[0].url}
-                      alt={"popup.title"}
-                    />
-
+                    {user.pictures.length && (
+                      <img
+                        style={{ height: "96px", width: "auto" }}
+                        className={"classes.popupImage"}
+                        src={user.pictures[0].url}
+                        alt={"popup.title"}
+                      />
+                    )}
                     <Text color={COLORS.orange} margin={0} center>
                       {user.username}
                     </Text>
