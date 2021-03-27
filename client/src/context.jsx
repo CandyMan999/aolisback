@@ -7,7 +7,11 @@ const Context = createContext({
   isProfile: false,
   isLogin: false,
   userChannel: null,
-  userLocationId: null,
+  userLocation: {
+    _id: null,
+    lat: null,
+    lng: null,
+  },
 });
 
 export default Context;

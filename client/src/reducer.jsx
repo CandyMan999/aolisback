@@ -33,7 +33,11 @@ export default function reducer(state, { type, payload }) {
     case "VIEW_LOCATION":
       return {
         ...state,
-        userLocationId: payload,
+        userLocation: {
+          _id: payload._id,
+          lat: payload.location.lat,
+          lng: payload.location.lng,
+        },
       };
 
     default:

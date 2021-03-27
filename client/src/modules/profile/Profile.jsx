@@ -30,6 +30,7 @@ const Profile = ({ userClicked }) => {
     sex,
     age,
     kids,
+    location,
     occupation,
     sponsor,
     sponsee,
@@ -39,6 +40,7 @@ const Profile = ({ userClicked }) => {
 
   const toggleDrawer = () => {
     dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
+    console.log(userClicked);
   };
 
   const handleVideo = () => {
@@ -47,8 +49,9 @@ const Profile = ({ userClicked }) => {
     history.push("/video");
   };
 
-  const handleLocation = (_id) => {
-    dispatch({ type: "VIEW_LOCATION", payload: _id });
+  const handleLocation = (_id, location) => {
+    const payload = { _id, location };
+    dispatch({ type: "VIEW_LOCATION", payload });
     dispatch({ type: "TOGGLE_PROFILE", payload: false });
     history.push("/location");
   };
@@ -184,7 +187,8 @@ const Profile = ({ userClicked }) => {
         </Box>
         <Box justifyContent="center">
           <Button
-            onClick={() => handleLocation(_id)}
+            disabled={!location}
+            onClick={() => handleLocation(_id, location)}
             color={COLORS.vividBlue}
             width="fit-content"
           >

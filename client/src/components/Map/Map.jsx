@@ -34,23 +34,33 @@ const Map = ({}) => {
   useEffect(async () => {
     const { getUsers } = await client.request(GET_ALL_USERS_QUERY, {});
     setUsers([...getUsers]);
-    if (!!location && location.lat) {
+    if (!!location && location.lat && !state.userLocation._id) {
       setViewport({
         ...INITIAL_VIEWPORT,
         latitude: location.lat,
         longitude: location.lng,
       });
     }
-  }, [popup]);
+  }, []);
 
   useEffect(() => {
-    if (state.userLocationId) {
-      setPopup({ isOpen: true, id: state.userLocationId });
+    const { _id, lat, lng } = state.userLocation;
+    if (state.userLocation._id) {
+      setPopup({ isOpen: true, id: _id });
+      setViewport({
+        latitude: lat,
+        longitude: lng,
+        zoom: 12,
+      });
     }
-  }, []);
+  }, [state.userLocation._id]);
 
   const handleMapClick = () => {
     setPopup({ isOpen: false, id: null });
+    dispatch({
+      type: "VIEW_LOCATION",
+      payload: { _id: null, location: { lat: null, lng: null } },
+    });
   };
 
   const handleRoomClick = (roomId) => {
@@ -111,17 +121,29 @@ const Map = ({}) => {
                     closeOnClick={false}
                     onClose={() => setPopup({ isOpen: false, id: null })}
                   >
-                    {user.pictures.length && (
-                      <img
-                        style={{ height: "96px", width: "auto" }}
-                        className={"classes.popupImage"}
-                        src={user.pictures[0].url}
-                        alt={"popup.title"}
-                      />
-                    )}
+                    {" "}
                     <Text color={COLORS.orange} margin={0} center>
                       {user.username}
                     </Text>
+                    {user.pictures.length && (
+                      <Box
+                        justifyContent="center"
+                        style={{
+                          backgroundColor: "black",
+                          borderRadius: "5px",
+                        }}
+                      >
+                        <img
+                          style={{
+                            height: "96px",
+                            width: "auto",
+                          }}
+                          className={"classes.popupImage"}
+                          src={user.pictures[0].url}
+                          alt={"popup.title"}
+                        />
+                      </Box>
+                    )}
                     <Button
                       size="small"
                       fontSize={FONT_SIZES.X_SMALL}
@@ -138,11 +160,11 @@ const Map = ({}) => {
                           onClick={() => handleRoomClick(user.room._id)}
                           center
                         >
-                          Currently in {user.room.name}
+                          Current Room: {user.room.name}
                         </Text>
                       </Fragment>
                     )}
-                  </Popup>{" "}
+                  </Popup>
                 </Box>
               ) : (
                 ""
