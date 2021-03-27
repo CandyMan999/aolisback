@@ -17,7 +17,9 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [pictures, setPictures] = useState([]);
   useEffect(() => {
-    setPictures([...images]);
+    if (!!images) {
+      setPictures([...images]);
+    }
   }, [images]);
 
   const currentPhoto = pictures[currentIdx];

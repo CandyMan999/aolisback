@@ -67,7 +67,7 @@ const Profile = ({ userClicked }) => {
       <Box display="flex" column paddingLeft={20} paddingRight={20}>
         <Box justifyContent={"center"}>
           <PhotoSlider
-            withDelete={_id === state.currentUser._id ? true : false}
+            withDelete={_id && _id === state.currentUser._id ? true : false}
             images={pictures}
             height={200}
             width={200}
