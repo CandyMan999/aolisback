@@ -43,13 +43,14 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
     <Box
       justifyContent="center"
       height={height + 10}
-      width={width + 10}
-      border="2px solid black"
+      width={"100%"}
+      border="3px solid #ccc"
+      background={COLORS.white}
     >
       <Box
         position="absolute"
         background="black"
-        width={width + 8}
+        width={"100%"}
         height={border}
       />
 
@@ -71,9 +72,8 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
         justifyContent="center"
         paddingTop={border}
         paddingBottom={border}
-        paddingLeft={border / 2}
       >
-        <Box>
+        <Box justifyContent="center">
           {pictures.length && currentPhoto ? (
             <Slide
               id={currentPhoto._id}
@@ -126,7 +126,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
         position="absolute"
         background="black"
         bottom={0}
-        width={width + 8}
+        width={"100%"}
         height={border}
       />
     </Box>

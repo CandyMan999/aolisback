@@ -66,14 +66,12 @@ const Profile = ({ userClicked }) => {
     >
       <Box display="flex" column paddingLeft={20} paddingRight={20}>
         <Box justifyContent={"center"}>
-          {pictures && !!pictures.length && (
-            <PhotoSlider
-              withDelete={_id === state.currentUser._id ? true : false}
-              images={pictures}
-              height={200}
-              width={200}
-            />
-          )}
+          <PhotoSlider
+            withDelete={_id === state.currentUser._id ? true : false}
+            images={pictures}
+            height={200}
+            width={200}
+          />
         </Box>
         <Box justifyContent="center">
           {sobrietyTime && (
@@ -187,9 +185,11 @@ const Profile = ({ userClicked }) => {
         </Box>
         <Box justifyContent="center">
           <Button
-            disabled={!location}
+            disabled={location && !location.lat}
             onClick={() => handleLocation(_id, location)}
-            color={COLORS.vividBlue}
+            color={
+              location && !location.lat ? COLORS.lightGrey : COLORS.vividBlue
+            }
             width="fit-content"
           >
             <span>View Location</span>
