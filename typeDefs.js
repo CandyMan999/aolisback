@@ -92,6 +92,8 @@ module.exports = gql`
       kids: Boolean
     ): User
     updateLocation(_id: ID!, lat: Float!, lng: Float!): User
+    addPhoto(_id: ID!, url: String!): User
+    deletePhoto(photoId: ID!, userId: ID!): User
   }
 
   type Subscription {

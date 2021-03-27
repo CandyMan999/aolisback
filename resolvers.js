@@ -445,6 +445,42 @@ module.exports = {
         throw new AuthenticationError(err.message);
       }
     },
+    addPhoto: async (root, args, ctx) => {
+      const { _id, url } = args;
+      try {
+        const picture = await Picture.create({ url });
+        const user = await User.findByIdAndUpdate(
+          { _id },
+          { $push: { pictures: picture } },
+          { new: true }
+        ).populate("pictures");
+        await Picture.findByIdAndUpdate(
+          { _id: picture._id },
+          { user },
+          { new: true }
+        );
+
+        return user;
+      } catch (err) {
+        throw new AuthenticationError(err.message);
+      }
+    },
+    deletePhoto: async (root, args, ctx) => {
+      const { photoId, userId } = args;
+      try {
+        await Picture.deleteOne({ _id: photoId });
+        const user = await User.findByIdAndUpdate(
+          { _id: userId },
+          { $pull: { pictures: photoId } },
+          { new: true }
+        )
+          .populate("pictures")
+          .populate("comments");
+        return user;
+      } catch (err) {
+        throw new AuthenticationError(err.message);
+      }
+    },
   },
   Subscription: {
     roomCreatedOrUpdated: {

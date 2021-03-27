@@ -36,6 +36,7 @@ const Modal = ({ children, isLoading, onClose, height, width, classes }) => (
           position="absolute"
           onClick={onClose}
           className={classes.close}
+          zIndex={20}
         >
           <Icon color={COLORS.darkGrey} name="close" size={ICON_SIZES.MEDIUM} />
         </Box>

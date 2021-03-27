@@ -29,6 +29,7 @@ query($roomId: ID!){
       username
       pictures{
         url
+        _id
       }
     }
     room{
@@ -46,6 +47,7 @@ query($_id: ID!){
     email
     pictures{
         url
+        _id
     }
     intro
     sex
@@ -79,6 +81,7 @@ query{
     }
     pictures{
       url
+      _id
     }
   }
 }

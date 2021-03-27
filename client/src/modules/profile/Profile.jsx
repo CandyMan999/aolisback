@@ -1,5 +1,13 @@
 import React, { Fragment, useContext, useEffect } from "react";
-import { Drawer, Box, Button, Text, ICON_SIZES, Icon } from "../../components";
+import {
+  Drawer,
+  Box,
+  Button,
+  Text,
+  ICON_SIZES,
+  Icon,
+  PhotoSlider,
+} from "../../components";
 
 import { COLORS } from "../../constants";
 import { formatDistanceToNow } from "date-fns";
@@ -56,15 +64,11 @@ const Profile = ({ userClicked }) => {
       <Box display="flex" column paddingLeft={20} paddingRight={20}>
         <Box justifyContent={"center"}>
           {pictures && !!pictures.length && (
-            <img
-              style={{
-                height: "100px",
-                width: "auto",
-                border: `solid 2px ${COLORS.themeGreen}`,
-                borderRadius: "10px",
-              }}
-              src={pictures[0].url}
-              alt={username}
+            <PhotoSlider
+              withDelete={_id === state.currentUser._id ? true : false}
+              images={pictures}
+              height={200}
+              width={200}
             />
           )}
         </Box>

@@ -6,6 +6,7 @@ export const GOOGLE_SIGNUP_MUTATION = `
             username
             pictures{
                 url
+                _id
             }
             email
             
@@ -21,6 +22,7 @@ export const GOOGLE_LOGIN_MUTATION = `
             isLoggedIn
             username
             pictures{
+              _id
                 url
             }
             location{
@@ -58,6 +60,7 @@ mutation($username: String!, $password: String! ){
         email
         isLoggedIn
         pictures{
+          _id
             url
         }
         location{
@@ -110,6 +113,7 @@ mutation($text: String!, $userId: ID!, $roomId: ID!){
       author{
         username
         pictures{
+          _id
           url
         }
       }
@@ -126,6 +130,7 @@ mutation($_id: ID!, $intro: String!, $age: String!, $sex: Sex!, $occupation: Str
       _id
       username
       pictures{
+        _id
         url
     }
     location{
@@ -150,6 +155,7 @@ mutation($_id: ID!, $lat: Float!, $lng: Float!){
     _id
     username
     pictures{
+      _id
       url
   }
     intro
@@ -167,4 +173,54 @@ mutation($_id: ID!, $lat: Float!, $lng: Float!){
   }
 }
 
+`;
+
+export const ADD_PHOTO_MUTATION = `
+mutation($_id: ID!, $url: String!){
+  addPhoto(_id: $_id, url: $url){
+    _id
+    username
+    pictures{
+      _id
+      url
+    }
+    intro
+    sex
+    age
+    occupation
+    sobrietyTime
+    sponsor
+    sponsee 
+    kids
+    location{
+      lat
+      lng
+    }
+  }
+}
+`;
+
+export const DELETE_PHOTO_MUTATION = `
+mutation($userId: ID!, $photoId: ID!){
+  deletePhoto(userId: $userId, photoId: $photoId){
+    _id
+    username
+    pictures{
+      _id
+      url
+    }
+    intro
+    sex
+    age
+    occupation
+    sobrietyTime
+    sponsor
+    sponsee 
+    kids
+    location{
+      lat
+      lng
+    }
+  }
+}
 `;

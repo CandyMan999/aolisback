@@ -39,8 +39,8 @@ class GoogleButton extends React.PureComponent {
                 style={{
                   color: COLORS.white,
                   fontSize: "16px",
-                  position: "relative",
-                  top: "4px",
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
                 {this.props.label}

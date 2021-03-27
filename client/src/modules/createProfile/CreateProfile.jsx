@@ -18,6 +18,7 @@ import {
   Checkbox,
   Text,
   Icon,
+  PhotoUploader,
 } from "../../components";
 import { Formik, Form } from "formik";
 import { COLORS } from "../../constants";
@@ -145,8 +146,11 @@ const CreateProfile = ({}) => {
   return (
     <Fragment>
       {success && <Redirect to="/" />}
+
       {spinner ? (
-        <Loading grid color={COLORS.themeGreen} size={60} />
+        <Box center>
+          <Loading grid color={COLORS.themeGreen} size={60} />
+        </Box>
       ) : (
         <Fragment>
           <Box
@@ -172,7 +176,7 @@ const CreateProfile = ({}) => {
                 </Fragment>
               )}
             </Box>
-
+            <PhotoUploader />
             <label htmlFor="sobreityTime">
               SobrietyTime:{" "}
               <input
