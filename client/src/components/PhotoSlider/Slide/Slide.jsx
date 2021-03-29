@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import { Box, Button } from "../..";
 import { COLORS } from "../../../constants";
@@ -8,6 +9,7 @@ import Context from "../../../context";
 import { useClient } from "../../../client";
 
 const Slide = ({ countStr, height, id, url, width, onDelete, withDelete }) => {
+  const mobile = useMediaQuery("(max-width: 650px)");
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const [loading, setLoading] = useState(false);
@@ -33,7 +35,12 @@ const Slide = ({ countStr, height, id, url, width, onDelete, withDelete }) => {
 
   return (
     <Box noFlex>
-      <img src={url} width={"auto"} height={height} />
+      <img
+        src={url}
+        width={"auto"}
+        height={height}
+        style={{ maxWidth: mobile ? 240 : "" }}
+      />
 
       {countStr && (
         <Box

@@ -105,15 +105,15 @@ const CreateProfile = ({}) => {
 
   const handleValidation = (values) => {
     const err = {};
-    if (!values.age.length) err.age = "required";
+    if (!values.age.length) err.age = "Required";
     if (values.age) {
       if (!(Number(values.age) > 0.5)) err.age = "Age Must be a number";
     }
     if (!values.intro.length) {
-      err.intro = "Tell us about you loser";
+      err.intro = "Tell us about You!";
     }
     if (!values.occupation.length)
-      err.occupation = "If you aint got a job, then lie";
+      err.occupation = "If you ain't got a job, then Lie";
 
     return err;
   };
@@ -159,24 +159,12 @@ const CreateProfile = ({}) => {
             justifyContent="center"
             alignItems="center"
           >
-            <h3>Create Profile</h3>
+            <h3 style={{ marginBottom: 5 }}>Create Profile</h3>
             {profile.sobrietyTime && (
-              <Text color={COLORS.themeGreen} margin={0}>
+              <Text color={COLORS.themeGreen} marginTop={0} marginBottom={4}>
                 Sober Since {profile.sobrietyTime}
               </Text>
-            )}
-            <Box padding={10}>
-              <button disabled={locationSuccess} onClick={handleLocation}>
-                Get Location
-              </button>{" "}
-              {locationSuccess && (
-                <Fragment>
-                  <Icon name="thumbsUp" color={COLORS.themeGreen} />
-                  <Text>Got yo ass</Text>
-                </Fragment>
-              )}
-            </Box>
-            <PhotoUploader />
+            )}{" "}
             <label htmlFor="sobreityTime">
               SobrietyTime:{" "}
               <input
@@ -184,11 +172,32 @@ const CreateProfile = ({}) => {
                 id="sobrietyTime"
                 name="sobrietyTime"
                 value={profile.sobrietyTime}
-                placeholder={profile.sobrietyTime}
                 onChange={handleChange}
               />
             </label>
-            <label htmlFor="sex">
+            <Box padding={10}>
+              <Button
+                style={{ display: "flex", alignItems: "center" }}
+                disabled={locationSuccess}
+                onClick={handleLocation}
+                width="fit-content"
+              >
+                Get Location{" "}
+                <Icon
+                  name="pin"
+                  color={COLORS.red}
+                  style={{ padding: "0px" }}
+                />
+              </Button>
+              {locationSuccess && (
+                <Box alignItems="center">
+                  <Icon name="thumbsUp" color={COLORS.themeGreen} />
+                  <Text>Got yo ass</Text>
+                </Box>
+              )}
+            </Box>
+            <PhotoUploader />
+            <label htmlFor="sex" style={{ marginTop: 2, marginBottom: 8 }}>
               Gender:{" "}
               <select
                 id="sex"
@@ -200,7 +209,7 @@ const CreateProfile = ({}) => {
                 <option value={"female"}>female</option>
               </select>
             </label>
-            <label htmlFor="kids">
+            <label htmlFor="kids" style={{ marginBottom: 8 }}>
               I Have Kids:{" "}
               <select
                 id="kids"
@@ -241,7 +250,7 @@ const CreateProfile = ({}) => {
 
                   <Box
                     column
-                    height={260}
+                    height={200}
                     width="75%"
                     justifyContent="space-between"
                     center
@@ -252,13 +261,16 @@ const CreateProfile = ({}) => {
                       name="intro"
                       placeholder="intro"
                       type="input"
-                    />{" "}
-                    <Input
-                      marginBottom={15}
-                      name="occupation"
-                      type="input"
-                      placeholder="occupation"
                     />
+                    <Box marginBottom={15}>
+                      {" "}
+                      <Input
+                        name="occupation"
+                        type="input"
+                        placeholder="occupation"
+                      />
+                    </Box>
+
                     <Input name="age" type="input" placeholder="age" />
                     <Checkbox
                       label="I am willing to be a sponsor"
@@ -274,9 +286,10 @@ const CreateProfile = ({}) => {
                     />
                     <Button
                       type="submit"
-                      disabled={!props.isValid || !props.dirty}
+                      disabled={!props.isValid}
                       style={{ zIndex: 100 }}
                     >
+                      {console.log("formik props: ", props)}
                       Submit
                     </Button>
                   </Box>

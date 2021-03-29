@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 
 import { Box, Text, BackDrop, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
-import { isWidthUp } from "@material-ui/core";
 
 const Drawer = ({ isOpen, onClose, title, children }) => {
   const mobile = useMediaQuery("(max-width: 650px)");
