@@ -270,18 +270,18 @@ module.exports = {
             if (!room.users.length && !!isAfterMin) {
               await room.deleteOne({ _id: room._id });
             }
-            room.users.map(async (user) => {
-              const isAfterHour = moment(user.roomInfo.subscribedAt).isBefore(
-                moment().subtract(2, "hours")
-              );
-              if (isAfterHour) {
-                await Room.updateMany({ $pull: { users: user._id } });
-                await User.updateOne(
-                  { _id: user._id },
-                  { $set: { comments: [], isLoggedIn: false } }
-                );
-              }
-            });
+            // room.users.map(async (user) => {
+            //   const isAfterHour = moment(user.roomInfo.subscribedAt).isBefore(
+            //     moment().subtract(2, "hours")
+            //   );
+            //   if (isAfterHour) {
+            //     await Room.updateMany({ $pull: { users: user._id } });
+            //     await User.updateOne(
+            //       { _id: user._id },
+            //       { $set: { comments: [], isLoggedIn: false } }
+            //     );
+            //   }
+            // });
           })
         );
 
@@ -341,18 +341,18 @@ module.exports = {
               await room.deleteOne({ _id: room._id });
             }
 
-            return room.users.map(async (user) => {
-              const isAfterHour = moment(user.roomInfo.subscribedAt).isBefore(
-                moment().subtract(2, "hours")
-              );
-              if (isAfterHour) {
-                await Room.updateMany({ $pull: { users: user._id } });
-                await User.updateOne(
-                  { _id: user._id },
-                  { $set: { comments: [], isLoggedIn: false } }
-                );
-              }
-            });
+            // return room.users.map(async (user) => {
+            //   const isAfterHour = moment(user.roomInfo.subscribedAt).isBefore(
+            //     moment().subtract(2, "hours")
+            //   );
+            //   if (isAfterHour) {
+            //     await Room.updateMany({ $pull: { users: user._id } });
+            //     await User.updateOne(
+            //       { _id: user._id },
+            //       { $set: { comments: [], isLoggedIn: false } }
+            //     );
+            //   }
+            // });
           })
         );
 
