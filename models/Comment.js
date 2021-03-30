@@ -8,7 +8,7 @@ const CommentSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     //change this back to 3700 after a lot of users
-    expires: 14800,
+    // expires: 14800,
     default: Date.now,
   },
   author: { type: mongoose.Schema.ObjectId, ref: "User" },
