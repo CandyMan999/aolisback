@@ -109,7 +109,12 @@ module.exports = {
         return;
       }
 
-      const user = await new User({ name, email, username }).save();
+      const user = await new User({
+        name,
+        email,
+        username,
+        isLoggedIn: true,
+      }).save();
 
       const newPhoto = await Picture.create({ url: picture, user: user._id });
 
@@ -145,7 +150,12 @@ module.exports = {
           return;
         }
 
-        const user = await new User({ username, password, email }).save();
+        const user = await new User({
+          username,
+          password,
+          email,
+          isLoggedIn: true,
+        }).save();
         const newPhoto = await Picture.create({
           url: faker.image.people(),
           user: user._id,

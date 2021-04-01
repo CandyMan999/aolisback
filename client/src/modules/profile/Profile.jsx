@@ -40,7 +40,6 @@ const Profile = ({ userClicked }) => {
 
   const toggleDrawer = () => {
     dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
-    console.log(userClicked);
   };
 
   const handleVideo = () => {

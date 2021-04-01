@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Message from "./Message";
 import ReactDOM from "react-dom";
-import { Text } from "../../components";
+import { Text, Box } from "../../components";
+import { COLORS } from "../../constants";
 
 class MessageList extends Component {
   componentWillUpdate() {
@@ -31,6 +32,12 @@ class MessageList extends Component {
               &rarr;
             </span>
           </div>
+          <Box padding={10}>
+            <Text color={COLORS.red}>
+              Sorry I had to drop the database. If you cannot login... you will
+              need to create a new account!
+            </Text>
+          </Box>
         </div>
       );
     }
