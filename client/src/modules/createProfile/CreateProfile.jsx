@@ -148,7 +148,7 @@ const CreateProfile = ({}) => {
       {success && <Redirect to="/" />}
 
       {spinner ? (
-        <Box center>
+        <Box center height={"100vh"}>
           <Loading grid color={COLORS.themeGreen} size={60} />
         </Box>
       ) : (

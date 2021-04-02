@@ -95,11 +95,11 @@ module.exports = {
       const checkIfUserExists = async (email, username) => {
         const user = await User.findOne({ email });
         if (user) {
-          throw new AuthenticationError("Google User Already Exsists");
+          throw new AuthenticationError("Google User Already Exists");
         } else {
           const user = await User.findOne({ username });
           if (user) {
-            throw new AuthenticationError("Username Already Exsists");
+            throw new AuthenticationError("Username Already Exists");
           }
         }
       };
@@ -136,11 +136,11 @@ module.exports = {
         const checkIfUserExists = async (email, username) => {
           const user = await User.findOne({ email });
           if (user) {
-            throw new AuthenticationError("Email Already Exsists");
+            throw new AuthenticationError("Email Already Exists");
           } else {
             const user = await User.findOne({ username });
             if (user) {
-              throw new AuthenticationError("Username Already Exsists");
+              throw new AuthenticationError("Username Already Exists");
             }
           }
         };
@@ -187,7 +187,7 @@ module.exports = {
           .populate("pictures")
           .populate("comments");
         if (!user) {
-          return new AuthenticationError("Username Doesn't Exsist");
+          return new AuthenticationError("Username Doesn't Esist");
         }
 
         if (user) {
@@ -230,7 +230,7 @@ module.exports = {
 
         return user
           ? user
-          : new AuthenticationError("Google User Dosen't Exsist");
+          : new AuthenticationError("Google User Dosen't Exist");
       } catch (err) {
         throw new AuthenticationError(err.message);
       }
