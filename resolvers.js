@@ -156,6 +156,8 @@ module.exports = {
           email,
           isLoggedIn: true,
         }).save();
+
+        console.log("new User: ", user);
         const newPhoto = await Picture.create({
           url: faker.image.people(),
           user: user._id,
@@ -187,7 +189,7 @@ module.exports = {
           .populate("pictures")
           .populate("comments");
         if (!user) {
-          return new AuthenticationError("Username Doesn't Esist");
+          return new AuthenticationError("Username Doesn't Exsist");
         }
 
         if (user) {

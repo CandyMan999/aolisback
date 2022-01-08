@@ -73,6 +73,8 @@ const SignupModal = ({ onClose }) => {
         };
         const { signup } = await client.request(SIGNUP_MUTATION, variables);
 
+        console.log("data: ", signup);
+
         dispatch({ type: "LOGIN_USER", payload: signup });
       } catch (err) {
         setSpinner(false);

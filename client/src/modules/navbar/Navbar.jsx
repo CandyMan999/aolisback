@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  useState,
-  useContext,
-  useEffect,
-  compon,
-} from "react";
+import React, { Fragment, useState, useContext, useEffect } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 
 import { Box, Button, FONT_SIZES, Text, NavGuide } from "../../components";

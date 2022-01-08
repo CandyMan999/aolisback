@@ -62,5 +62,14 @@ const PhotoUploader = () => {
     </Fragment>
   );
 };
+const dropzoneStyles = css({
+  ["width"]: "300px",
+  ["height"]: "300px",
+  ["border"]: `1px dashed ${COLORS.darkestGrey}`,
+  ["borderRadius"]: "25px",
+  [":hover"]: {
+    ["cursor"]: "pointer",
+  },
+});
 
 export default PhotoUploader;
