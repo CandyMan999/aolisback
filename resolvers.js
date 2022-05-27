@@ -165,7 +165,6 @@ module.exports = {
           isLoggedIn: true,
         }).save();
 
-        console.log("new User: ", user);
         const newPhoto = await Picture.create({
           url: faker.image.people(),
           user: user._id,
@@ -488,16 +487,11 @@ module.exports = {
     deletePhoto: async (root, args, ctx) => {
       const { photoId, userId } = args;
 
-      console.log("firing: ", args);
-
       try {
         const { publicId } = await Picture.findById(photoId);
 
-        console.log("publicID: ", publicId);
-
         if (publicId) {
           const deleteData = await cloudinary.uploader.destroy(publicId);
-          console.log("delete: ", deleteData);
         }
 
         await Picture.deleteOne({ _id: photoId });
