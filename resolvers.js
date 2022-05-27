@@ -492,6 +492,7 @@ module.exports = {
 
         if (publicId) {
           const deleteData = await cloudinary.uploader.destroy(publicId);
+          console.log(deleteData);
         }
 
         await Picture.deleteOne({ _id: photoId });
