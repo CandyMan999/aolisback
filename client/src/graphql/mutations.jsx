@@ -176,13 +176,14 @@ mutation($_id: ID!, $lat: Float!, $lng: Float!){
 `;
 
 export const ADD_PHOTO_MUTATION = `
-mutation($_id: ID!, $url: String!){
-  addPhoto(_id: $_id, url: $url){
+mutation($_id: ID!, $url: String!, $publicId: String!){
+  addPhoto(_id: $_id, url: $url, publicId: $publicId){
     _id
     username
     pictures{
       _id
       url
+    
     }
     intro
     sex

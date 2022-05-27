@@ -25,6 +25,8 @@ const Navbar = ({}) => {
     }
   }, [currentUser]);
 
+  console.log("current User: ", currentUser);
+
   return (
     <div className={navbar}>
       {showSignupModal && (

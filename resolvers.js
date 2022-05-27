@@ -4,12 +4,20 @@ const { User, Picture, Room, Comment } = require("./models");
 const faker = require("faker");
 const bcrypt = require("bcrypt");
 const moment = require("moment");
+const cloudinary = require("cloudinary");
+require("dotenv").config();
 
 const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID);
 
 const pubsub = new PubSub();
 const ROOM_CREATED_OR_UPDATED = "ROOM_CREATED_OR_UPDATED";
 const CREATE_COMMENT = "CREATE_COMMENT";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 const authenticated = (next) => (root, args, ctx, info) => {
   if (!ctx.currentUser) {
@@ -282,18 +290,18 @@ module.exports = {
             if (!room.users.length && !!isAfterMin) {
               await room.deleteOne({ _id: room._id });
             }
-            // room.users.map(async (user) => {
-            //   const isAfterHour = moment(user.roomInfo.subscribedAt).isBefore(
-            //     moment().subtract(2, "hours")
-            //   );
-            //   if (isAfterHour) {
-            //     await Room.updateMany({ $pull: { users: user._id } });
-            //     await User.updateOne(
-            //       { _id: user._id },
-            //       { $set: { comments: [], isLoggedIn: false } }
-            //     );
-            //   }
-            // });
+            room.users.map(async (user) => {
+              const isAfterHour = moment(user.roomInfo.subscribedAt).isBefore(
+                moment().subtract(2, "hours")
+              );
+              if (isAfterHour) {
+                await Room.updateMany({ $pull: { users: user._id } });
+                await User.updateOne(
+                  { _id: user._id },
+                  { $set: { comments: [], isLoggedIn: false } }
+                );
+              }
+            });
           })
         );
 
@@ -353,18 +361,18 @@ module.exports = {
               await room.deleteOne({ _id: room._id });
             }
 
-            // return room.users.map(async (user) => {
-            //   const isAfterHour = moment(user.roomInfo.subscribedAt).isBefore(
-            //     moment().subtract(2, "hours")
-            //   );
-            //   if (isAfterHour) {
-            //     await Room.updateMany({ $pull: { users: user._id } });
-            //     await User.updateOne(
-            //       { _id: user._id },
-            //       { $set: { comments: [], isLoggedIn: false } }
-            //     );
-            //   }
-            // });
+            return room.users.map(async (user) => {
+              const isAfterHour = moment(user.roomInfo.subscribedAt).isBefore(
+                moment().subtract(2, "hours")
+              );
+              if (isAfterHour) {
+                await Room.updateMany({ $pull: { users: user._id } });
+                await User.updateOne(
+                  { _id: user._id },
+                  { $set: { comments: [], isLoggedIn: false } }
+                );
+              }
+            });
           })
         );
 
@@ -458,9 +466,9 @@ module.exports = {
       }
     },
     addPhoto: async (root, args, ctx) => {
-      const { _id, url } = args;
+      const { _id, url, publicId } = args;
       try {
-        const picture = await Picture.create({ url });
+        const picture = await Picture.create({ url, publicId });
         const user = await User.findByIdAndUpdate(
           { _id },
           { $push: { pictures: picture } },
@@ -479,7 +487,19 @@ module.exports = {
     },
     deletePhoto: async (root, args, ctx) => {
       const { photoId, userId } = args;
+
+      console.log("firing: ", args);
+
       try {
+        const { publicId } = await Picture.findById(photoId);
+
+        console.log("publicID: ", publicId);
+
+        if (publicId) {
+          const deleteData = await cloudinary.uploader.destroy(publicId);
+          console.log("delete: ", deleteData);
+        }
+
         await Picture.deleteOne({ _id: photoId });
         const user = await User.findByIdAndUpdate(
           { _id: userId },

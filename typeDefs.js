@@ -41,6 +41,7 @@ module.exports = gql`
   type Picture {
     _id: ID
     url: String
+    publicId: String
   }
 
   type Room {
@@ -92,7 +93,7 @@ module.exports = gql`
       kids: Boolean
     ): User
     updateLocation(_id: ID!, lat: Float!, lng: Float!): User
-    addPhoto(_id: ID!, url: String!): User
+    addPhoto(_id: ID!, url: String!, publicId: String!): User
     deletePhoto(photoId: ID!, userId: ID!): User
   }
 

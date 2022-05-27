@@ -14,29 +14,43 @@ const PhotoUploader = () => {
   const { state, dispatch } = useContext(Context);
   const client = useClient();
   const [image, setImages] = useState();
+  const [error, setError] = useState(false);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (image) {
-      const url = await handleImageUpload();
-      const variables = { url, _id: state.currentUser._id };
-      const { addPhoto } = await client.request(ADD_PHOTO_MUTATION, variables);
-      dispatch({ type: "UPDATE_USER", payload: addPhoto });
-      setTimeout(() => setImages(""), 2000);
+      imageUploader();
     }
   }, [image]);
 
+  const imageUploader = async () => {
+    try {
+      const { url, publicId } = await handleImageUpload();
+      const variables = { url, _id: state.currentUser._id, publicId };
+      const { addPhoto } = await client.request(ADD_PHOTO_MUTATION, variables);
+      dispatch({ type: "UPDATE_USER", payload: addPhoto });
+      setTimeout(() => setImages(""), 2000);
+    } catch (err) {
+      console.log(err);
+      setError("file size too large");
+    }
+  };
+
   const handleImageUpload = async () => {
-    const data = new FormData();
-    data.append("file", image);
-    data.append("upload_preset", "northShoreExpress");
-    data.append("cloud_name", "aolisback");
+    try {
+      const data = new FormData();
+      data.append("file", image);
+      data.append("upload_preset", "northShoreExpress");
+      data.append("cloud_name", "aolisback");
 
-    const res = await axios.post(
-      "https://api.cloudinary.com/v1_1/aolisback/image/upload",
-      data
-    );
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/localmassagepros/image/upload",
+        data
+      );
 
-    return res.data.url;
+      return { url: res.data.url, publicId: res.data.public_id };
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -55,8 +69,8 @@ const PhotoUploader = () => {
         </label>
       </Box>
       {image && (
-        <Text center color={COLORS.themeGreen}>
-          Success add another!
+        <Text center color={!error ? COLORS.themeGreen : COLORS.textRed}>
+          {!error ? "Success add another!" : error}
         </Text>
       )}
     </Fragment>

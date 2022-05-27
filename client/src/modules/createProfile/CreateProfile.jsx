@@ -19,6 +19,7 @@ import {
   Text,
   Icon,
   PhotoUploader,
+  PhotoSlider,
 } from "../../components";
 import { Formik, Form } from "formik";
 import { COLORS } from "../../constants";
@@ -197,6 +198,12 @@ const CreateProfile = ({}) => {
               )}
             </Box>
             <PhotoUploader />
+            <PhotoSlider
+              withDelete={true}
+              images={currentUser.pictures}
+              height={200}
+              width={200}
+            />
             <label htmlFor="sex" style={{ marginTop: 2, marginBottom: 8 }}>
               Gender:{" "}
               <select

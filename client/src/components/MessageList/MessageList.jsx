@@ -32,12 +32,6 @@ class MessageList extends Component {
               &rarr;
             </span>
           </div>
-          <Box padding={10}>
-            <Text color={COLORS.red}>
-              Sorry I had to drop the database. If you cannot login... you will
-              need to create a new account!
-            </Text>
-          </Box>
         </div>
       );
     }
