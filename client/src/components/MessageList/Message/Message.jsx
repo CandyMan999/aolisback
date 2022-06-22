@@ -16,6 +16,14 @@ const Message = ({
   picture,
   createdAt,
 }) => {
+  const handleSpeech = async (text) => {
+    let voices = await window.speechSynthesis.getVoices();
+    console.log("voices: ", voices);
+    const msg = new SpeechSynthesisUtterance();
+    msg.text = text;
+    window.speechSynthesis.speak(msg);
+  };
+
   return (
     <Fragment>
       {roomId === messageRoomId ? (
@@ -43,7 +51,9 @@ const Message = ({
                 margin={"auto"}
                 fontSize={FONT_SIZES.SMALL}
               >
-                <Speech voice="Alex" text={text} />
+                <span onClick={() => handleSpeech(text)}>
+                  <Speech />
+                </span>
 
                 {text}
 
@@ -139,7 +149,9 @@ const Message = ({
                 margin={"auto"}
                 fontSize={FONT_SIZES.SMALL}
               >
-                {text} <Speech voice="Google US English" text={text} />
+                <span onClick={() => handleSpeech(text)}>
+                  <Speech />
+                </span>
               </Text>
               <Text
                 paddingLeft={4}

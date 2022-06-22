@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import { Box, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
@@ -6,11 +7,7 @@ import Slide from "./Slide";
 import NavArrow from "./NavArrow";
 
 // interface Props {
-//   images: any[];
-//   height: number;
-//   width: number;
-//   withDelete?: boolean;
-//   isUser?: boolean;
+
 // }
 
 const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
@@ -133,6 +130,14 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
       />
     </Box>
   );
+};
+
+PhotoSlider.propTypes = {
+  images: PropTypes.array,
+  height: PropTypes.number,
+  width: PropTypes.number,
+  withDelete: PropTypes.bool,
+  isUser: PropTypes.bool,
 };
 
 export default PhotoSlider;
