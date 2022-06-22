@@ -138,10 +138,9 @@ const CreateProfile = ({}) => {
   };
 
   const handleLocation = () => {
-    setSpinner(true);
-
     try {
       if ("geolocation" in navigator) {
+        setSpinner(true);
         navigator.geolocation.getCurrentPosition((position) => {
           const { latitude, longitude } = position.coords;
           setUserCoords({ lat: latitude, lng: longitude });
