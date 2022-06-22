@@ -1,16 +1,14 @@
-import { Drawer } from "@material-ui/core";
-import React, { Component } from "react";
-import { Box, Text } from "../../components";
-import { COLORS } from "../../constants";
-import ChatBox from "../chatBox";
-import Video from "../../components/Video";
+import React from "react";
+import { Box } from "../../components";
 
-const HomeLayout = ({}) => {
+import ChatBox from "../chatBox";
+
+const HomeLayout = () => {
   return (
     <Box
       justifyContent="space-around"
       height="calc(100vh - 64px)"
-      width="100vw"
+      width="100vW"
       display="flex"
     >
       <ChatBox />

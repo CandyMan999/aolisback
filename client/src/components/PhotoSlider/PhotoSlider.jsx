@@ -45,7 +45,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
     <Box
       justifyContent="center"
       height={height + 10}
-      width={"100%"}
+      width={"70vW"}
       border="3px solid #ccc"
       background={COLORS.white}
     >

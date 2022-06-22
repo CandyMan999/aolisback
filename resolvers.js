@@ -356,7 +356,7 @@ module.exports = {
               moment().subtract(30, "minutes")
             );
 
-            if (!room.users.length && !!isAfterMin) {
+            if (!room.users.length && !!isAfterMin && room.name !== "Main") {
               await room.deleteOne({ _id: room._id });
             }
 
@@ -492,7 +492,6 @@ module.exports = {
 
         if (publicId) {
           const deleteData = await cloudinary.uploader.destroy(publicId);
-          console.log("test: ", deleteData);
         }
 
         await Picture.deleteOne({ _id: photoId });

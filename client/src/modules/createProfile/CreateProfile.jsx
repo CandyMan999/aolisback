@@ -49,28 +49,37 @@ const CreateProfile = ({}) => {
   const [userCoords, setUserCoords] = useState({ lat: null, lng: null });
   const [locationSuccess, setLocationSuccess] = useState(false);
 
-  useEffect(async () => {
-    if (!!userCoords.lat) {
-      try {
-        const variables = {
-          lat: userCoords.lat,
-          lng: userCoords.lng,
-          _id: currentUser._id,
-        };
-        const { updateLocation } = await client.request(
-          UPDATE_LOCATION_MUTATION,
-          variables
-        );
-        if (updateLocation) {
-          dispatch({ type: "UPDATE_USER", payload: updateLocation });
-          setSpinner(false);
-          setLocationSuccess(true);
-        }
-      } catch (err) {
-        console.log(err);
-      }
+  useEffect(() => {
+    if (userCoords.lat) {
+      handleGetLocation();
     }
   }, [userCoords.lat]);
+
+  const handleGetLocation = async () => {
+    try {
+      const variables = {
+        lat: userCoords.lat,
+        lng: userCoords.lng,
+        _id: currentUser._id,
+      };
+
+      console.log("variables: ", variables);
+      const { updateLocation } = await client.request(
+        UPDATE_LOCATION_MUTATION,
+        variables
+      );
+
+      console.log("updateLocation: ", !!updateLocation);
+      if (updateLocation) {
+        dispatch({ type: "UPDATE_USER", payload: updateLocation });
+        setSpinner(false);
+        setLocationSuccess(true);
+      }
+      setSpinner(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleSubmit = async ({ intro, occupation, age, sponsor, sponsee }) => {
     const { sex, sobrietyTime, kids } = profile;
