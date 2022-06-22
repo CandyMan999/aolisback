@@ -152,6 +152,7 @@ const Message = ({
                 <span onClick={() => handleSpeech(text)}>
                   <Speech />
                 </span>
+                {text}
               </Text>
               <Text
                 paddingLeft={4}

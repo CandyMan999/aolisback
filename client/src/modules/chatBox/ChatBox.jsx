@@ -6,7 +6,7 @@ import {
   MessageList,
   CreateRoom,
   SendMessage,
-  Drawer,
+  Box,
 } from "../../components";
 
 import {
@@ -150,10 +150,12 @@ const ChatBox = ({}) => {
         messages={messages}
         currentUser={!!currentUser && currentUser._id}
       />
+
       <CreateRoom
         createRoom={createRoom}
         currentUserID={!!currentUser && currentUser._id}
       />
+
       <SendMessage disabled={!roomId} sendMessage={sendMessage} />
 
       <Subscription

@@ -1,8 +1,10 @@
 import React, { Component } from "react";
+import { motion } from "framer-motion";
 
 class CreateRoom extends Component {
   state = {
     roomName: "",
+    touched: false,
   };
 
   handleChange = (e) => {
@@ -18,12 +20,19 @@ class CreateRoom extends Component {
       _id: this.props.currentUserID,
     };
     this.props.createRoom(variables);
-    this.setState({ roomName: "" });
+    this.setState({ roomName: "", touched: false });
   };
 
   render() {
     return (
-      <div className="new-room-form">
+      <motion.div
+        onClick={() => this.setState({ touched: !this.state.touched })}
+        // onMouseEnter={() => this.setState({ touched: true })}
+        // onMouseLeave={() => this.setState({ touched: false })}
+        className="new-room-form"
+        animate={{ width: this.state.touched ? "50vW" : undefined }}
+        transition={{ ease: "linear", duration: 0.5 }}
+      >
         <form onSubmit={this.handleSubmit}>
           <input
             value={this.state.roomName}
@@ -32,11 +41,13 @@ class CreateRoom extends Component {
             placeholder="Create Room"
             required
           />
-          <button id="create-room-btn" type="submit">
-            +
-          </button>
+          {this.state.touched && (
+            <button id="create-room-btn" type="submit">
+              +
+            </button>
+          )}
         </form>
-      </div>
+      </motion.div>
     );
   }
 }
