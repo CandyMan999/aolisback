@@ -142,15 +142,12 @@ const CreateProfile = ({}) => {
 
   const handleLocation = () => {
     try {
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const { latitude, longitude } = position.coords;
-          setUserCoords({ lat: latitude, lng: longitude });
-        });
-      } else {
-        handlePermission();
-      }
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        setUserCoords({ lat: latitude, lng: longitude });
+      });
     } catch (err) {
+      handlePermission();
       setAuthError(err.message);
       setSpinner(false);
     }
