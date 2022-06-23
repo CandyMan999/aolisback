@@ -53,6 +53,7 @@ class Input extends React.PureComponent {
       value,
       width,
       withoutFormik,
+      autoFocus,
     } = this.props;
 
     const hasError = !withoutFormik && !!errors && !!errors[name];
@@ -72,6 +73,7 @@ class Input extends React.PureComponent {
           placeholder={placeholder || ""}
           type={type}
           fontSize={fontSize}
+          autoFocus={autoFocus}
           value={value || (!withoutFormik && values[name]) || ""}
         />
         {hasClose && !!onClose && (
@@ -90,28 +92,31 @@ class Input extends React.PureComponent {
   }
 }
 
-const StyledInput = styled.input(({ value, hasError, readOnly, fontSize }) => ({
-  background: readOnly && !value ? COLORS.lighterGrey : undefined,
-  border: "none",
-  borderBottom: `2px solid ${
-    hasError
-      ? COLORS.darkRed
-      : !!value && !readOnly
-      ? COLORS.darkGrey
-      : COLORS.lightGrey
-  }`,
-  cursor: readOnly ? "pointer" : undefined,
-  fontSize: fontSize ? `${fontSize}px` : "14px",
-  padding: "6px 4px",
-  transition: "border-bottom 0.5s",
-  width: "100%",
-  [":focus"]: {
-    outline: 0,
-  },
-  ["::placeholder"]: {
-    color: COLORS.grey,
-  },
-}));
+const StyledInput = styled.input(
+  ({ value, hasError, readOnly, fontSize, autoFocus }) => ({
+    background: readOnly && !value ? COLORS.lighterGrey : undefined,
+    border: "none",
+    borderBottom: `2px solid ${
+      hasError
+        ? COLORS.darkRed
+        : !!value && !readOnly
+        ? COLORS.darkGrey
+        : COLORS.lightGrey
+    }`,
+    cursor: readOnly ? "pointer" : undefined,
+    fontSize: fontSize ? `${fontSize}px` : "14px",
+    padding: "6px 4px",
+    autoFocus: autoFocus ? autoFocus : true,
+    transition: "border-bottom 0.5s",
+    width: "100%",
+    [":focus"]: {
+      outline: 0,
+    },
+    ["::placeholder"]: {
+      color: COLORS.grey,
+    },
+  })
+);
 
 const errorStyles = css({
   color: COLORS.darkRed,

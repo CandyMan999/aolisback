@@ -286,7 +286,7 @@ module.exports = {
               moment().subtract(30, "minutes")
             );
 
-            if (!room.users.length && !!isAfterMin) {
+            if (!room.users.length && !!isAfterMin && room.name !== "Main") {
               await room.deleteOne({ _id: room._id });
             }
             room.users.map(async (user) => {

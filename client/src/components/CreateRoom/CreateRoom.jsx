@@ -40,12 +40,12 @@ class CreateRoom extends Component {
             type="text"
             placeholder="Create Room"
             required
+            autoFocus={false}
           />
-          {this.state.touched && (
-            <button id="create-room-btn" type="submit">
-              +
-            </button>
-          )}
+
+          <button id="create-room-btn" type="submit">
+            +
+          </button>
         </form>
       </motion.div>
     );
