@@ -31,23 +31,23 @@ class CreateRoom extends Component {
         // onMouseEnter={() => this.setState({ touched: true })}
         // onMouseLeave={() => this.setState({ touched: false })}
         className="new-room-form"
-        animate={{ width: this.state.touched ? "50vW" : undefined }}
+        animate={{ width: this.state.touched ? "50vW" : "100%" }}
         transition={{ ease: "linear", duration: 0.5 }}
+        style={{ border: "1px solid #69ffb4" }}
       >
         <form onSubmit={this.handleSubmit}>
-          <input
+          {/* <input
             value={this.state.roomName}
             onChange={this.handleChange}
             type="text"
             placeholder="Create Room"
             required
             autoFocus={false}
-          />
-          {/* <Input
+          /> */}
+          <Input
             style={{
               height: "100%",
               width: "100%",
-              border: "1px solid #69ffb4",
             }}
             fontSize={"10px"}
             withoutFormik
@@ -57,7 +57,7 @@ class CreateRoom extends Component {
             placeholder="Create Room"
             required
             autoFocus={false}
-          /> */}
+          />
 
           <button id="create-room-btn" type="submit">
             +
