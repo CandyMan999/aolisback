@@ -122,7 +122,7 @@
 
 }
 .new-room-form form input:focus {
- outline: 0;
+ outline: none;
 }
 
 #create-room-btn {
@@ -130,6 +130,7 @@
   background: gainsboro;
   height: 64px;
   border: 2px double;
+  outline: none;
 }
 
 #create-room-btn:hover {
