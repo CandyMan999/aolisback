@@ -42,7 +42,7 @@ const Message = ({
               flexWrap="wrap"
               height={"fit-content"}
               marginRight={45}
-              textAlign={"center"}
+              // textAlign={"center"}
               className="message-text"
             >
               <Text
@@ -139,7 +139,7 @@ const Message = ({
             <Box
               flexWrap="wrap"
               height={"fit-content"}
-              textAlign={"center"}
+              // textAlign={"center"}
               className="others-message-text"
               marginLeft={45}
             >
@@ -152,6 +152,7 @@ const Message = ({
                 <span onClick={() => handleSpeech(text)}>
                   <Speech />
                 </span>
+
                 {text}
               </Text>
               <Text
