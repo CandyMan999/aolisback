@@ -5,6 +5,7 @@ import { Box } from "..";
 import { COLORS } from "../../constants";
 import styled from "@emotion/styled";
 import { css } from "@emotion/css";
+import { FONT_SIZES } from "../Text";
 
 // interface Props {
 //   disabled?: boolean;
@@ -41,7 +42,7 @@ class Input extends React.PureComponent {
   render() {
     const {
       disabled,
-      formik: { values, touched, errors, setFieldValue, ...rest },
+      formik: FormikFormProps,
       full,
       fontSize,
       hasClose,
@@ -52,48 +53,64 @@ class Input extends React.PureComponent {
       type,
       value,
       width,
+      error,
+      mobile,
+      marginX,
+      paddingX,
+      borderRadius,
       withoutFormik,
-      autoFocus,
     } = this.props;
 
-    const hasError = !withoutFormik && !!errors && !!errors[name];
+    const hasError =
+      !withoutFormik &&
+      !!FormikFormProps.errors &&
+      !!FormikFormProps.errors[name];
 
     return (
       <Box
         direction="column"
         marginY={4}
-        marginX={8}
+        marginX={marginX ? marginX : 8}
+        height={hasError ? 50 : undefined}
         width={full ? "100%" : width}
+        paddingX={paddingX ? paddingX : undefined}
       >
         <StyledInput
+          style={{ borderRadius: borderRadius ? borderRadius : undefined }}
           disabled={disabled || readOnly}
           readOnly={readOnly}
           hasError={hasError}
+          fontColor={COLORS.black}
           onChange={this.handleChange}
           placeholder={placeholder || ""}
           type={type}
-          fontSize={fontSize}
-          autoFocus={autoFocus}
-          value={value || (!withoutFormik && values[name]) || ""}
+          fontSize={mobile ? FONT_SIZES.X_SMALL : fontSize}
+          value={
+            value || (!withoutFormik && FormikFormProps.values[name]) || ""
+          }
+          width={width}
         />
         {hasClose && !!onClose && (
           <Box
             onClick={this.props.onClose}
             position="absolute"
             top={6}
-            right={16}
+            left={"95%"}
           >
             <p style={{ color: COLORS.grey, margin: 0 }}>X</p>
           </Box>
         )}
-        {hasError && <p className={errorStyles}>{errors[name]}</p>}
+        {error && <p className={errorStyles}>{error}</p>}
+        {hasError && (
+          <p className={errorStyles}>{FormikFormProps.errors[name]}</p>
+        )}
       </Box>
     );
   }
 }
 
 const StyledInput = styled.input(
-  ({ value, hasError, readOnly, fontSize, autoFocus }) => ({
+  ({ value, hasError, readOnly, fontSize, width }) => ({
     background: readOnly && !value ? COLORS.lighterGrey : undefined,
     border: "none",
     borderBottom: `2px solid ${
@@ -106,14 +123,14 @@ const StyledInput = styled.input(
     cursor: readOnly ? "pointer" : undefined,
     fontSize: fontSize ? `${fontSize}px` : "14px",
     padding: "6px 4px",
-    autoFocus: autoFocus ? autoFocus : true,
+    autofocus: false,
     transition: "border-bottom 0.5s",
-    width: "100%",
-    [":focus"]: {
+    width: width ? width : "100%",
+    ":focus": {
       outline: 0,
     },
-    ["::placeholder"]: {
-      color: COLORS.grey,
+    "::placeholder": {
+      color: readOnly ? COLORS.darkGrey : COLORS.grey,
     },
   })
 );

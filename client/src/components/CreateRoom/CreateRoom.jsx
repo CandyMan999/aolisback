@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Input } from "../../components";
 import { motion } from "framer-motion";
 
 class CreateRoom extends Component {
@@ -42,6 +43,21 @@ class CreateRoom extends Component {
             required
             autoFocus={false}
           />
+          {/* <Input
+            style={{
+              height: "100%",
+              width: "100%",
+              border: "1px solid #69ffb4",
+            }}
+            fontSize={"10px"}
+            withoutFormik
+            value={this.state.roomName}
+            onChange={this.handleChange}
+            type="text"
+            placeholder="Create Room"
+            required
+            autoFocus={false}
+          /> */}
 
           <button id="create-room-btn" type="submit">
             +
