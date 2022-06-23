@@ -58,10 +58,11 @@ class CreateRoom extends Component {
             required
             autoFocus={false}
           />
-
-          <button id="create-room-btn" type="submit">
-            +
-          </button>
+          {!!this.state.roomName.length && (
+            <button id="create-room-btn" type="submit">
+              +
+            </button>
+          )}
         </form>
       </motion.div>
     );
