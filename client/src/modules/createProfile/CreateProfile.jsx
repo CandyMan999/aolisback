@@ -57,25 +57,28 @@ const CreateProfile = ({}) => {
 
   const handleGetLocation = async () => {
     try {
+      setSpinner(true);
       const variables = {
         lat: userCoords.lat,
         lng: userCoords.lng,
         _id: currentUser._id,
       };
 
-      console.log("variables: ", variables);
       const { updateLocation } = await client.request(
         UPDATE_LOCATION_MUTATION,
         variables
       );
 
-      console.log("updateLocation: ", !!updateLocation);
+      console.log("updateLocation: ", updateLocation);
       if (updateLocation) {
         dispatch({ type: "UPDATE_USER", payload: updateLocation });
         setSpinner(false);
         setLocationSuccess(true);
       }
-      setSpinner(false);
+      if (!updateLocation) {
+        setLocationSuccess(true);
+        setSpinner(false);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -140,7 +143,6 @@ const CreateProfile = ({}) => {
   const handleLocation = () => {
     try {
       if ("geolocation" in navigator) {
-        setSpinner(true);
         navigator.geolocation.getCurrentPosition((position) => {
           const { latitude, longitude } = position.coords;
           setUserCoords({ lat: latitude, lng: longitude });
@@ -202,6 +204,12 @@ const CreateProfile = ({}) => {
                 <Box alignItems="center">
                   <Icon name="thumbsUp" color={COLORS.themeGreen} />
                   <Text>Got yo ass</Text>
+                </Box>
+              )}
+              {!locationSuccess && (
+                <Box alignItems="center">
+                  <Icon name="thumbsDown" color={COLORS.textRed} />
+                  <Text>Couldn't find you</Text>
                 </Box>
               )}
             </Box>

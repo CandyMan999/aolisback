@@ -19,7 +19,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
   ]);
 
   useEffect(() => {
-    if (!!currentUser && !!currentUser.name) {
+    if (!!currentUser && !!currentUser.username) {
       setItems([
         { name: "My Profile", icon: "user", route: "/profile" },
 
@@ -28,7 +28,8 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
 
         { name: "Logout", icon: "signout", route: "/" },
       ]);
-    } else {
+    }
+    if (!currentUser) {
       setItems([
         { name: "Login", icon: "login", route: "/" },
         { name: "User Signup", icon: "signup", route: "/" },
