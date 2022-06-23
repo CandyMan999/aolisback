@@ -13,7 +13,12 @@ export default function reducer(state, { type, payload }) {
     case "TOGGLE_LOGIN":
       return {
         ...state,
-        isLogin: payload,
+        showLogin: payload,
+      };
+    case "TOGGLE_SIGNUP":
+      return {
+        ...state,
+        showSignup: payload,
       };
     case "UPDATE_USER":
       return {

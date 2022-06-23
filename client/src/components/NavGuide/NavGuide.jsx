@@ -1,88 +1,69 @@
-import React, { useContext, useState } from "react";
-import { NavLink, withRouter, Link } from "react-router-dom";
-import { Box, Icon, Text, WithOutsideClickHandler, ICON_SIZES } from "..";
-import { COLORS } from "../../constants";
-import { FONT_SIZES } from "../Text";
+import React, { useContext } from "react";
+
+import { motion, useCycle } from "framer-motion";
+import { withRouter } from "react-router-dom";
+
+import { MenuToggle } from "./MenuToggle";
+import Navigation from "./Navigation";
+
+import "./styles.css";
 import Context from "../../context";
 
-const NavGuide = ({}) => {
+const sidebar = () => {
+  return {
+    open: (height = 400) => ({
+      clipPath: `circle(${height * 2 + 200}px at 260px 40px)`,
+      zIndex: 100,
+      transition: {
+        type: "spring",
+        stiffness: 30,
+        restDelta: 2,
+        duration: 2,
+      },
+    }),
+    closed: {
+      clipPath: "circle(0px at 260px 30px)",
+      zIndex: 100,
+      transition: {
+        ease: "linear",
+        duration: 1,
+        type: "spring",
+        stiffness: 400,
+        damping: 40,
+      },
+    },
+  };
+};
+
+const Navguide = ({ mobile, props }) => {
+  console.log("props: ", props);
+  const [isOpen, toggleOpen] = useCycle(false, true);
   const { state, dispatch } = useContext(Context);
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const options = [
-    { label: "Create Profile", route: "profile" },
-    { label: "My Video Channel", route: "video" },
-    { label: "View Location", route: "location" },
-  ];
-
-  const toggleIsExpanded = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  const handleOptionClick = (option) => {
-    // this.optionClick(optionClick);
-    setIsExpanded(false);
-    dispatch({ type: "JOIN_CHANNEL", payload: null });
-  };
 
   return (
-    <Box width={"fit-content"}>
-      <WithOutsideClickHandler
-        isActive={isExpanded}
-        onOutsideClick={toggleIsExpanded}
-      >
-        <Icon
-          padding={0}
-          active={isExpanded}
-          name="threeDot"
-          color={COLORS.vividBlue}
-          size={ICON_SIZES.XX_LARGE}
-          onClick={toggleIsExpanded}
-        />
-        {isExpanded && (
-          <Box
-            style={{ left: "1px" }}
-            border={`1px solid ${COLORS.darkGrey}`}
-            boxShadow={`1px 1px 3px ${COLORS.lightGrey}`}
-            position="absolute"
-            top={24}
-            left={-100}
-            column
-            zIndex={100}
-            background={COLORS.white}
-          >
-            {options.map((option, i) => (
-              <Box
-                borderBottom={`1px solid ${COLORS.darkGrey}`}
-                center
-                key={i}
-                isDisabled={option.isDisabled}
-                onClick={
-                  option.isDisabled
-                    ? undefined
-                    : () => handleOptionClick(option)
-                }
-                padding={8}
-                background={COLORS.lighterGrey}
-                hoverBackground={
-                  option.isDisabled ? undefined : COLORS.lightGrey
-                }
-              >
-                <NavLink style={{ textDecoration: "none" }} to={option.route}>
-                  <Text
-                    fontSize={FONT_SIZES.SMALL}
-                    color={option.isDisabled ? COLORS.darkGrey : undefined}
-                  >
-                    {option.label}
-                  </Text>
-                </NavLink>
-              </Box>
-            ))}
-          </Box>
-        )}
-      </WithOutsideClickHandler>
-    </Box>
+    <motion.nav initial={false} animate={isOpen ? "open" : "closed"}>
+      {isOpen && (
+        <motion.div
+          initial={{
+            clipPath: "circle(0px at 260px 30px)",
+            height: "fit-content",
+          }}
+          transition={{ ease: "linear" }}
+          className="background"
+          variants={sidebar(mobile)}
+        >
+          <Navigation
+            initial={false}
+            toggle={() => toggleOpen()}
+            props={props}
+            state={state}
+            dispatch={dispatch}
+          />
+        </motion.div>
+      )}
+      <MenuToggle toggle={() => toggleOpen()} />
+    </motion.nav>
   );
 };
 
-export default NavGuide;
+export default withRouter(Navguide);

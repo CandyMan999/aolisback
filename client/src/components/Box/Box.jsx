@@ -22,6 +22,7 @@ const StyledDiv = styled.div(
     centerText,
     column,
     color,
+
     direction,
     display,
     isDisabled,
@@ -58,6 +59,7 @@ const StyledDiv = styled.div(
     position,
     right,
     top,
+    textAlign,
     transition,
     width,
     zIndex,
@@ -103,7 +105,7 @@ const StyledDiv = styled.div(
     paddingTop: paddingTop ? paddingTop : paddingY ? paddingY : padding,
     position: position || "relative",
     right: typeof right === "number" ? `${right}px` : right,
-    textAlign: centerText ? "center" : undefined,
+    textAlign: centerText ? "center" : textAlign,
     top: typeof top === "number" ? `${top}px` : top,
     transition,
     width: typeof width === "number" ? `${width}px` : width,
@@ -116,7 +118,6 @@ const StyledDiv = styled.div(
   }),
   ({ card }) =>
     card && {
-      backgroundColor: COLORS.white,
       border: `1px solid ${COLORS.grey}`,
       borderRadius: "0.5rem",
       boxShadow: `1px 1px 1px 1px ${COLORS.lightGrey}`,

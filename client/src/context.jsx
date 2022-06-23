@@ -5,7 +5,8 @@ const Context = createContext({
   roomId: null,
   rooms: ["Main"],
   isProfile: false,
-  isLogin: false,
+  showLogin: false,
+  showSignup: false,
   userChannel: null,
   userLocation: {
     _id: null,

@@ -7,6 +7,7 @@ export const ICON_SIZES = {
   XX_LARGE: "xxlarge",
   XXX_LARGE: "xxxlarge",
   XXXX_LARGE: "xxxxlarge",
+  MASTER: "master",
 };
 
 export const iconSizes = {
@@ -18,4 +19,5 @@ export const iconSizes = {
   [ICON_SIZES.XX_LARGE]: "32px",
   [ICON_SIZES.XXX_LARGE]: "48px",
   [ICON_SIZES.XXXX_LARGE]: "150px",
+  [ICON_SIZES.MASTER]: "84px",
 };

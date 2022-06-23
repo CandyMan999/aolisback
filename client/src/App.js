@@ -10,18 +10,20 @@ import { Video, Map } from "./components";
 
 import "./App.css";
 
-const App = () => {
-  return (
-    <Fragment>
-      <Navbar />
-      <Switch>
-        <Route exact path="/" component={HomeContainer} />
-        <ProtectedRoute path="/profile" component={CreateProfile} />
-        <ProtectedRoute path="/video" component={Video} />
-        <ProtectedRoute path="/location" component={Map} />
-      </Switch>
-    </Fragment>
-  );
-};
+class App extends React.PureComponent {
+  render() {
+    return (
+      <Fragment>
+        <Navbar props={this.props} />
+        <Switch>
+          <Route exact path="/" component={HomeContainer} />
+          <ProtectedRoute path="/profile" component={CreateProfile} />
+          <ProtectedRoute path="/video" component={Video} />
+          <ProtectedRoute path="/location" component={Map} />
+        </Switch>
+      </Fragment>
+    );
+  }
+}
 
 export default App;
