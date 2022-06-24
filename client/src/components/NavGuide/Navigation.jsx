@@ -4,7 +4,7 @@ import { MenuItem } from "./MenuItem";
 
 const variants = {
   open: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.2 },
+    transition: { staggerChildren: 0.07, delayChildren: 0.3 },
   },
   closed: {
     transition: { staggerChildren: 0.05, staggerDirection: -1 },
@@ -16,16 +16,16 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
   const [items, setItems] = useState([
     { name: "Login", icon: "login", route: "/" },
     { name: "User Signup", icon: "signup", route: "/" },
+    { name: "View Users Locations", icon: "search", route: "/location" },
+    { name: "Logout", icon: "signout", route: "/" },
   ]);
 
   useEffect(() => {
     if (!!currentUser && !!currentUser.username) {
       setItems([
         { name: "My Profile", icon: "user", route: "/profile" },
-
-        { name: "My Video Channel", icon: "login", route: "/video" },
-        { name: "Users Location", icon: "search", route: "/location" },
-
+        { name: "My Video Channel", icon: "video", route: "/video" },
+        { name: "View Users Locations", icon: "search", route: "/location" },
         { name: "Logout", icon: "signout", route: "/" },
       ]);
     }

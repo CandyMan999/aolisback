@@ -32,9 +32,33 @@ module.exports = {
     getRooms: async (root, args, ctx) => {
       try {
         //need to figure out a way to populate pictures
-        const rooms = await Room.find({})
-          .populate("users")
-          .populate("comments");
+        let rooms = await Room.find({}).populate("users").populate("comments");
+
+        await Promise.all(
+          rooms.map(async (room) => {
+            const isAfterMin = moment(room.createdAt).isBefore(
+              moment().subtract(30, "minutes")
+            );
+
+            if (!room.users.length && !!isAfterMin && room.name !== "Main") {
+              await room.deleteOne({ _id: room._id });
+            }
+            room.users.map(async (user) => {
+              const isAfterHour = moment(user.roomInfo.subscribedAt).isBefore(
+                moment().subtract(2, "hours")
+              );
+              if (isAfterHour) {
+                await Room.updateMany({ $pull: { users: user._id } });
+                await User.updateOne(
+                  { _id: user._id },
+                  { $set: { comments: [], isLoggedIn: false } }
+                );
+              }
+            });
+          })
+        );
+
+        rooms = await Room.find({}).populate("users").populate("comments");
 
         return rooms;
       } catch (err) {

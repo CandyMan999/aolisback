@@ -79,6 +79,7 @@ export const MenuItem = ({ i, item, dispatch, toggle, props }) => {
     if (item === "Logout") {
       clearToken();
       dispatch({ type: "LOGIN_USER", payload: null });
+      toggle();
     }
   };
 

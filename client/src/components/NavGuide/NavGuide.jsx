@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import { motion, useCycle } from "framer-motion";
 import { withRouter } from "react-router-dom";
@@ -35,10 +36,10 @@ const sidebar = () => {
   };
 };
 
-const Navguide = ({ mobile, props }) => {
-  console.log("props: ", props);
+const Navguide = ({ props }) => {
   const [isOpen, toggleOpen] = useCycle(false, true);
   const { state, dispatch } = useContext(Context);
+  const mobile = useMediaQuery("(max-width: 650px)");
 
   return (
     <motion.nav initial={false} animate={isOpen ? "open" : "closed"}>
