@@ -49,7 +49,7 @@ const Navbar = ({ props }) => {
             fontSize={FONT_SIZES.X_LARGE}
             bold
           >
-            SoberTalk
+            ChatSober
           </Text>
         </NavLink>
       </Box>
