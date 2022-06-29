@@ -5,6 +5,11 @@ export default function reducer(state, { type, payload }) {
         ...state,
         currentUser: payload,
       };
+    case "SET_USER_COORDS":
+      return {
+        ...state,
+        currentUser: { ...state.currentUser, location: payload },
+      };
     case "TOGGLE_PROFILE":
       return {
         ...state,

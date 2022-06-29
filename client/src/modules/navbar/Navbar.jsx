@@ -54,7 +54,7 @@ const Navbar = ({ props }) => {
         </NavLink>
       </Box>
 
-      {currentUser && (
+      {currentUser && currentUser.username && (
         <Box
           marginRight="20%"
           flexWrap="wrap"

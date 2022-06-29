@@ -47,7 +47,9 @@ const CreateProfile = ({}) => {
   const [spinner, setSpinner] = useState(false);
   const [success, setSuccess] = useState(false);
   const [userCoords, setUserCoords] = useState({ lat: null, lng: null });
-  const [locationSuccess, setLocationSuccess] = useState(false);
+  const [locationSuccess, setLocationSuccess] = useState(
+    !!state.currentUser.location.lat
+  );
 
   useEffect(() => {
     if (userCoords.lat) {
@@ -55,12 +57,16 @@ const CreateProfile = ({}) => {
     }
   }, [userCoords.lat]);
 
+  useEffect(() => {
+    handleGetLocation();
+  }, []);
+
   const handleGetLocation = async () => {
     try {
       setSpinner(true);
       const variables = {
-        lat: userCoords.lat,
-        lng: userCoords.lng,
+        lat: userCoords.lat ? userCoords.lat : currentUser.location.lat,
+        lng: userCoords.lng ? userCoords.lng : currentUser.location.lng,
         _id: currentUser._id,
       };
 
@@ -80,6 +86,7 @@ const CreateProfile = ({}) => {
         setSpinner(false);
       }
     } catch (err) {
+      setSpinner(false);
       console.log(err);
     }
   };
