@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { Text, Icon, ICON_SIZES } from "../../components";
 import { COLORS } from "../../constants";
 import { clearToken } from "../../utils/helpers";
+import { LOGOUT_MUTATION } from "../../graphql/mutations";
 
 const variants = {
   open: {
@@ -51,7 +52,15 @@ const teals = [
 //   "#ffdbed",
 // ];
 
-export const MenuItem = ({ i, item, dispatch, toggle, props }) => {
+export const MenuItem = ({
+  i,
+  item,
+  dispatch,
+  toggle,
+  props,
+  state,
+  client,
+}) => {
   const style = {
     border: `3px solid ${teals[i === teals.length ? 0 : i]}`,
     justifyContent: "center",
@@ -73,13 +82,30 @@ export const MenuItem = ({ i, item, dispatch, toggle, props }) => {
     if (item === "My Video Channel") {
       toggle();
     }
-    if (item === "Users Location") {
+    if (item === "View Users Locations") {
       toggle();
     }
     if (item === "Logout") {
+      handleLogout();
       clearToken();
+      dispatch({ type: "CHANGE_ROOM", payload: null });
       dispatch({ type: "LOGIN_USER", payload: false });
       toggle();
+      console.log(state);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      console.log(state);
+      const variables = {
+        username: state.currentUser.username,
+      };
+
+      const { logout } = await client.request(LOGOUT_MUTATION, variables);
+      return logout;
+    } catch (err) {
+      console.log(err);
     }
   };
 

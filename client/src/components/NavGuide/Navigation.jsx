@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { MenuItem } from "./MenuItem";
+import { useClient } from "../../client";
 
 const variants = {
   open: {
@@ -12,6 +13,7 @@ const variants = {
 };
 
 const Navigation = ({ dispatch, props, state, toggle }) => {
+  const client = useClient();
   const { currentUser } = state;
   const [items, setItems] = useState([
     { name: "Login", icon: "login", route: "/" },
@@ -43,6 +45,8 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
         <MenuItem
           toggle={toggle}
           dispatch={dispatch}
+          client={client}
+          state={state}
           props={props}
           item={item}
           key={i}

@@ -235,6 +235,33 @@ module.exports = {
         throw new AuthenticationError(err.message);
       }
     },
+    logout: async (root, args, ctx) => {
+      const { username } = args;
+
+      try {
+        const user = await User.findOneAndUpdate(
+          { username },
+          { isLoggedIn: false },
+          { new: true }
+        );
+
+        await Room.updateMany({ $pull: { users: user._id } });
+        await User.updateOne(
+          { _id: user._id },
+          { $set: { comments: [], isLoggedIn: false } }
+        );
+
+        const getAllRooms = await Room.find({}).populate("users");
+
+        pubsub.publish(ROOM_CREATED_OR_UPDATED, {
+          roomCreatedOrUpdated: getAllRooms,
+        });
+
+        return user;
+      } catch (err) {
+        throw new AuthenticationError(err.message);
+      }
+    },
 
     googleLogin: async (root, args, ctx) => {
       const { idToken } = args;

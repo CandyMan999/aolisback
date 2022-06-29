@@ -137,6 +137,8 @@ const ChatBox = ({}) => {
     }
   };
 
+  console.log(state);
+
   return (
     <Wrapper style={{ width: "100vW" }}>
       <RoomList

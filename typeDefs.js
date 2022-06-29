@@ -77,6 +77,7 @@ module.exports = gql`
     googleSignup(username: String!, idToken: String!): Auth
     signup(username: String!, email: String!, password: String!): AuthSignup
     login(username: String!, password: String!): User
+    logout(username: String!): User
     googleLogin(idToken: String!): User
     createRoom(name: String!, _id: ID): Room
     changeRoom(roomId: ID!, userId: ID!): Room

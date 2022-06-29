@@ -78,6 +78,14 @@ mutation($username: String!, $password: String! ){
     }
 }`;
 
+export const LOGOUT_MUTATION = `
+mutation($username: String!){
+	logout(username: $username){
+		username
+    isLoggedIn
+  }
+}`;
+
 export const CREATE_ROOM_MUTATION = `
 mutation($name: String!, $_id: ID!){
     createRoom(name: $name, _id: $_id){
