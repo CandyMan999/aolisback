@@ -13,6 +13,7 @@
     "@apollo/react-hooks": "^4.0.0",
     "apollo-server": "^2.21.0",
     "bcrypt": "^5.0.1",
+    "caniuse-lite": "^1.0.30001359",
     "cloudinary": "^1.30.0",
     "concurrently": "^6.0.0",
     "dotenv": "^8.2.0",

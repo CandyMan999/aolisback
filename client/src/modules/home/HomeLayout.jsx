@@ -4,10 +4,12 @@ import { Box } from "../../components";
 import ChatBox from "../chatBox";
 
 const HomeLayout = () => {
+  const height = window.innerHeight;
+
   return (
     <Box
       justifyContent="space-around"
-      height="calc(100vh - 64px)"
+      height={height - 64}
       width="100vW"
       display="flex"
     >
