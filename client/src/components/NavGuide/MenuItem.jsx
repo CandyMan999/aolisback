@@ -82,6 +82,9 @@ export const MenuItem = ({
     if (item === "My Video Channel") {
       toggle();
     }
+    if (item === "Home") {
+      toggle();
+    }
     if (item === "View Users Locations") {
       toggle();
     }
