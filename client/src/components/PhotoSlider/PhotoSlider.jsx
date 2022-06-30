@@ -6,10 +6,6 @@ import { COLORS } from "../../constants";
 import Slide from "./Slide";
 import NavArrow from "./NavArrow";
 
-// interface Props {
-
-// }
-
 const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [pictures, setPictures] = useState([]);
@@ -38,6 +34,8 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
 
   const border = (height + 10) * 0.1;
 
+  // console.log("image height: ", currentPhoto.naturalHeight);
+
   return (
     <Box
       justifyContent="center"
@@ -45,6 +43,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
       width={"70vW"}
       border="3px solid #ccc"
       background={COLORS.white}
+      style={{ overflow: "hidden" }}
     >
       <Box
         position="absolute"
@@ -76,6 +75,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
           {pictures.length && currentPhoto ? (
             <Slide
               id={currentPhoto._id}
+              publicId={currentPhoto.publicId ? currentPhoto.publicId : null}
               onDelete={handleDeletePhoto}
               url={currentPhoto.url}
               height={height - border}

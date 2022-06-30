@@ -248,7 +248,7 @@ const CreateProfile = ({}) => {
             <PhotoSlider
               withDelete={true}
               images={currentUser.pictures}
-              height={200}
+              height={310}
               width={200}
             />
             <label htmlFor="sex" style={{ marginTop: 2, marginBottom: 8 }}>

@@ -68,7 +68,7 @@ const Profile = ({ userClicked }) => {
           <PhotoSlider
             withDelete={_id && _id === state.currentUser._id ? true : false}
             images={pictures}
-            height={200}
+            height={310}
             width={200}
           />
         </Box>

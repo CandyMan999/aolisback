@@ -1,9 +1,9 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { Box, Text, FONT_SIZES } from "../../../components";
 import { COLORS } from "../../../constants";
 import { formatDistanceToNow } from "date-fns";
 import Speech from "react-speech";
-import { Icon, ICON_SIZES } from "../../../components";
+import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 
 const Message = ({
   username,
@@ -15,6 +15,7 @@ const Message = ({
   authorId,
   picture,
   createdAt,
+  publicId,
 }) => {
   const handleSpeech = async (text) => {
     let voices = await window.speechSynthesis.getVoices();
@@ -23,6 +24,8 @@ const Message = ({
     msg.text = text;
     window.speechSynthesis.speak(msg);
   };
+
+  console.log("picture: ", picture, publicId);
 
   return (
     <Fragment>
@@ -76,14 +79,30 @@ const Message = ({
               justifyContent={"center"}
               onClick={() => usernameClick(authorId)}
             >
-              {!!picture && (
+              {!!picture && picture.publicId && (
+                <CloudinaryContext cloudName="localmassagepros">
+                  <Image
+                    alt={`${picture._id}-avatar`}
+                    style={{
+                      height: "20px",
+                      borderRadius: "90%",
+                      border: `dotted 2px ${COLORS.vividBlue}`,
+                    }}
+                    loading="lazy"
+                    publicId={picture.publicId}
+                  >
+                    <Transformation height={"30"} width={"30"} crop="thumb" />
+                  </Image>
+                </CloudinaryContext>
+              )}
+              {!!picture.url && !picture.publicId && (
                 <img
                   style={{
                     height: "20px",
                     borderRadius: "90%",
                     border: `dotted 2px ${COLORS.vividBlue}`,
                   }}
-                  src={picture}
+                  src={picture.url}
                   alt={currentUser}
                 />
               )}
@@ -115,14 +134,30 @@ const Message = ({
               justifyContent={"center"}
               onClick={() => usernameClick(authorId)}
             >
-              {!!picture && (
+              {!!picture && picture.publicId && (
+                <CloudinaryContext cloudName="localmassagepros">
+                  <Image
+                    alt={`${picture._id}-avatar`}
+                    style={{
+                      height: "20px",
+                      borderRadius: "90%",
+                      border: `dotted 2px ${COLORS.vividBlue}`,
+                    }}
+                    loading="lazy"
+                    publicId={picture.publicId}
+                  >
+                    <Transformation height={"30"} width={"30"} crop="thumb" />
+                  </Image>
+                </CloudinaryContext>
+              )}
+              {!!picture.url && !picture.publicId && (
                 <img
                   style={{
                     height: "20px",
                     borderRadius: "90%",
                     border: `dotted 2px ${COLORS.vividBlue}`,
                   }}
-                  src={picture}
+                  src={picture.url}
                   alt={currentUser}
                 />
               )}

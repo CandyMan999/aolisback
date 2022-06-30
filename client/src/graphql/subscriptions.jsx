@@ -25,6 +25,7 @@ export const CREATE_COMMENT_SUBSCRIPTION = gql`
         pictures {
           url
           _id
+          publicId
         }
       }
       room {

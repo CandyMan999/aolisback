@@ -7,6 +7,7 @@ export const GOOGLE_SIGNUP_MUTATION = `
             pictures{
                 url
                 _id
+                publicId
             }
             email
             
@@ -23,7 +24,8 @@ export const GOOGLE_LOGIN_MUTATION = `
             username
             pictures{
               _id
-                url
+              url
+              publicId
             }
             location{
               lat
@@ -61,7 +63,8 @@ mutation($username: String!, $password: String! ){
         isLoggedIn
         pictures{
           _id
-            url
+          url
+          publicId
         }
         location{
           lat
@@ -123,6 +126,7 @@ mutation($text: String!, $userId: ID!, $roomId: ID!){
         pictures{
           _id
           url
+          publicId
         }
       }
       room{
@@ -140,6 +144,7 @@ mutation($_id: ID!, $intro: String!, $age: String!, $sex: Sex!, $occupation: Str
       pictures{
         _id
         url
+        publicId
     }
     location{
       lat
@@ -165,6 +170,7 @@ mutation($_id: ID!, $lat: Float!, $lng: Float!){
     pictures{
       _id
       url
+      publicId
   }
     intro
     sex
@@ -191,7 +197,7 @@ mutation($_id: ID!, $url: String!, $publicId: String!){
     pictures{
       _id
       url
-    
+      publicId
     }
     intro
     sex
@@ -217,6 +223,7 @@ mutation($userId: ID!, $photoId: ID!){
     pictures{
       _id
       url
+      publicId
     }
     intro
     sex

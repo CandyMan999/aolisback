@@ -1,19 +1,18 @@
-import React, { Fragment, useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { NavLink, withRouter } from "react-router-dom";
+import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 
-import { Box, Button, FONT_SIZES, Text, NavGuide } from "../../components";
+import { Box, FONT_SIZES, Text, NavGuide } from "../../components";
 
-import { navText, navbar } from "../../styles/classes";
+import { navbar } from "../../styles/classes";
 import SignupModal from "./signup-modal";
 import LoginModal from "./login-modal";
 
 import { COLORS } from "../../constants";
 
-import { useClient } from "../../client";
 import Context from "../../context";
 
 const Navbar = ({ props }) => {
-  const client = useClient();
   const { state, dispatch } = useContext(Context);
 
   const { currentUser } = state;
@@ -25,6 +24,9 @@ const Navbar = ({ props }) => {
   }, [currentUser]);
 
   console.log("current User: ", currentUser);
+
+  const profilePic =
+    currentUser && currentUser.pictures && currentUser.pictures[0];
 
   return (
     <div className={navbar}>
@@ -68,7 +70,24 @@ const Navbar = ({ props }) => {
             Welcome, {currentUser.username}
           </Text>
 
-          {!!currentUser.pictures && currentUser.pictures[0] && (
+          {!!profilePic && profilePic.publicId && (
+            <CloudinaryContext cloudName="localmassagepros">
+              <Image
+                alt={`${profilePic._id}-avatar`}
+                style={{
+                  borderRadius: "90%",
+                  marginTop: 2,
+                  border: `dotted 2px ${COLORS.vividBlue}`,
+                }}
+                loading="lazy"
+                publicId={profilePic.publicId}
+              >
+                <Transformation height={"30"} width={"30"} crop="thumb" />
+              </Image>
+            </CloudinaryContext>
+          )}
+
+          {profilePic && !profilePic.publicId && (
             <img
               style={{
                 height: "30px",
@@ -76,8 +95,8 @@ const Navbar = ({ props }) => {
                 borderRadius: "90%",
                 border: `dotted 2px ${COLORS.vividBlue}`,
               }}
-              src={currentUser.pictures[0].url}
-              alt={currentUser.name}
+              src={profilePic.url}
+              alt={profilePic.username}
             />
           )}
         </Box>

@@ -51,8 +51,7 @@ class MessageList extends Component {
                 currentUser={!!this.props.currentUser && this.props.currentUser}
                 authorId={message.author._id}
                 picture={
-                  !!message.author.pictures.length &&
-                  message.author.pictures[0].url
+                  !!message.author.pictures.length && message.author.pictures[0]
                 }
                 createdAt={message.createdAt}
               />

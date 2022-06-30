@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 
 import { Box, Button } from "../..";
 import { COLORS } from "../../../constants";
@@ -8,7 +9,16 @@ import { DELETE_PHOTO_MUTATION } from "../../../graphql/mutations";
 import Context from "../../../context";
 import { useClient } from "../../../client";
 
-const Slide = ({ countStr, height, id, url, width, onDelete, withDelete }) => {
+const Slide = ({
+  countStr,
+  height,
+  id,
+  url,
+  width,
+  onDelete,
+  withDelete,
+  publicId,
+}) => {
   const mobile = useMediaQuery("(max-width: 650px)");
   const client = useClient();
   const { state, dispatch } = useContext(Context);
@@ -35,13 +45,38 @@ const Slide = ({ countStr, height, id, url, width, onDelete, withDelete }) => {
 
   return (
     <Box noFlex>
-      <img
-        src={url}
-        width={"auto"}
-        height={height}
-        style={{ maxWidth: mobile ? 240 : "" }}
-      />
-
+      {!!publicId ? (
+        <CloudinaryContext cloudName="localmassagepros">
+          <Image
+            style={{
+              borderRadius: 10,
+            }}
+            loading="lazy"
+            publicId={publicId}
+            id="slide-photo"
+          >
+            <Transformation
+              height={mobile ? "259" : "290"}
+              width={mobile ? "240" : "270"}
+              maxHeight={mobile ? "259" : "290"}
+              crop="thumb"
+            />
+          </Image>
+        </CloudinaryContext>
+      ) : (
+        <Box
+          style={{
+            backgroundImage: `url(${url})`,
+            maxWidth: mobile ? 240 : 270,
+            borderRadius: 10,
+            maxHeight: mobile ? 259 : 290,
+            height: mobile ? 259 : 290,
+            width: mobile ? 240 : 290,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+      )}
       {countStr && (
         <Box
           width="100%"

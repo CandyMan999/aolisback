@@ -30,6 +30,7 @@ query($roomId: ID!){
       pictures{
         url
         _id
+        publicId
       }
     }
     room{
@@ -48,6 +49,7 @@ query($_id: ID!){
     pictures{
         url
         _id
+        publicId
     }
     intro
     sex
@@ -82,6 +84,7 @@ query{
     pictures{
       url
       _id
+      publicId
     }
   }
 }
