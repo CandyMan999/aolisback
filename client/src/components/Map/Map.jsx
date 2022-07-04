@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
 import ReactMapGL, { NavigationControl, Marker, Popup } from "react-map-gl";
-import { Redirect, useHistory } from "react-router-dom";
-import { withStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
+import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { GET_ALL_USERS_QUERY } from "../../graphql/queries";
 
@@ -13,7 +13,8 @@ import { useClient } from "../../client";
 import { FONT_SIZES } from "../Text";
 import mapboxgl from "mapbox-gl";
 
-mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
+mapboxgl.workerClass =
+  require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 const INITIAL_VIEWPORT = {
   latitude: 21.304026582335645,
@@ -31,16 +32,8 @@ const Map = ({}) => {
   const client = useClient();
   const { location } = state.currentUser;
 
-  useEffect(async () => {
-    const { getUsers } = await client.request(GET_ALL_USERS_QUERY, {});
-    setUsers([...getUsers]);
-    if (!!location && location.lat && !state.userLocation._id) {
-      setViewport({
-        ...INITIAL_VIEWPORT,
-        latitude: location.lat,
-        longitude: location.lng,
-      });
-    }
+  useEffect(() => {
+    handleGetUsers();
   }, []);
 
   useEffect(() => {
@@ -54,6 +47,22 @@ const Map = ({}) => {
       });
     }
   }, [state.userLocation._id]);
+
+  const handleGetUsers = async () => {
+    try {
+      const { getUsers } = await client.request(GET_ALL_USERS_QUERY, {});
+      setUsers([...getUsers]);
+      if (!!location && location.lat && !state.userLocation._id) {
+        setViewport({
+          ...INITIAL_VIEWPORT,
+          latitude: location.lat,
+          longitude: location.lng,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleMapClick = () => {
     setPopup({ isOpen: false, id: null });
@@ -133,15 +142,36 @@ const Map = ({}) => {
                           borderRadius: "5px",
                         }}
                       >
-                        <img
-                          style={{
-                            height: "96px",
-                            width: "auto",
-                          }}
-                          className={"classes.popupImage"}
-                          src={user.pictures[0].url}
-                          alt={"popup.title"}
-                        />
+                        {user.pictures[0].publicId ? (
+                          <CloudinaryContext cloudName="localmassagepros">
+                            <Image
+                              alt={`${user.picture[0]._id}-avatar`}
+                              style={{
+                                height: "20px",
+                                borderRadius: "90%",
+                                border: `dotted 2px ${COLORS.vividBlue}`,
+                              }}
+                              loading="lazy"
+                              publicId={user.picture[0].publicId}
+                            >
+                              <Transformation
+                                height={"30"}
+                                width={"30"}
+                                crop="thumb"
+                              />
+                            </Image>
+                          </CloudinaryContext>
+                        ) : (
+                          <img
+                            style={{
+                              height: "96px",
+                              width: "auto",
+                            }}
+                            className={"classes.popupImage"}
+                            src={user.pictures[0].url}
+                            alt={"popup.title"}
+                          />
+                        )}
                       </Box>
                     )}
                     <Button
