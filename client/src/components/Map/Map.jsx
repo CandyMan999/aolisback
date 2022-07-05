@@ -147,9 +147,8 @@ const Map = ({}) => {
                             <Image
                               alt={`${user.pictures[0]._id}-avatar`}
                               style={{
-                                height: "20px",
-                                borderRadius: "90%",
-                                border: `dotted 2px ${COLORS.vividBlue}`,
+                                height: "96px",
+                                width: "auto",
                               }}
                               loading="lazy"
                               publicId={user.pictures[0].publicId}
