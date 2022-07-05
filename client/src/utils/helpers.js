@@ -1,7 +1,7 @@
 export const setToken = (token, shouldPersist) =>
   localStorage.setItem("Sobertoken", token);
 export const getToken = () =>
-  sessionStorage.getItem("Sobertoken") || localStorage.getItem("token");
+  sessionStorage.getItem("Sobertoken") || localStorage.getItem("Sobertoken");
 export const clearToken = () => {
   sessionStorage.removeItem("Sobertoken");
   localStorage.removeItem("Sobertoken");
