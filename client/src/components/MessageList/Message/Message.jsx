@@ -55,7 +55,7 @@ const Message = ({
                 fontSize={FONT_SIZES.SMALL}
               >
                 {/* <span onClick={() => handleSpeech(text)}> */}
-                <Speech lang={"en-US"} voice={"Daniel"} text={text} />
+                <Speech lang={"en-US"} text={text} />
 
                 {/* </span> */}
 
@@ -186,7 +186,7 @@ const Message = ({
                 fontSize={FONT_SIZES.SMALL}
               >
                 {/* <span onClick={() => handleSpeech(text)}> */}
-                <Speech lang={"en-US"} voice={"Daniel"} text={text} />
+                <Speech lang={"en-US"} voice={"Samantha"} text={text} />
                 {/* </span> */}
 
                 {text}
