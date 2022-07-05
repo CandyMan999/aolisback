@@ -155,8 +155,8 @@ const Map = ({}) => {
                               publicId={user.pictures[0].publicId}
                             >
                               <Transformation
-                                height={"30"}
-                                width={"30"}
+                                height={"96"}
+                                width={"auto"}
                                 crop="thumb"
                               />
                             </Image>
