@@ -7,6 +7,8 @@ const moment = require("moment");
 const cloudinary = require("cloudinary");
 require("dotenv").config();
 
+const { verifyToken, createToken } = require("./utils/middleware");
+
 const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID);
 
 const pubsub = new PubSub();
@@ -29,6 +31,31 @@ const authenticated = (next) => (root, args, ctx, info) => {
 module.exports = {
   Query: {
     me: authenticated((root, args, ctx) => ctx.currentUser),
+    fetchMe: async (root, args, ctx) => {
+      const { token } = args;
+
+      try {
+        const { id } = await verifyToken({ token });
+        if (!id) {
+          throw new AuthenticationError("Unathenticated off token: ", token);
+        }
+
+        const user = await User.findOneAndUpdate(
+          { _id: id },
+          { isLoggedIn: true },
+          { new: true }
+        )
+          .populate("pictures")
+          .populate("comments");
+        if (!user) {
+          return new AuthenticationError("Username Doesn't Exsist");
+        }
+
+        return user;
+      } catch (err) {
+        throw new AuthenticationError(err.message);
+      }
+    },
     getRooms: async (root, args, ctx) => {
       try {
         //need to figure out a way to populate pictures
@@ -158,7 +185,9 @@ module.exports = {
         { new: true }
       ).populate("pictures");
 
-      return currentUser;
+      const token = await createToken(currentUser._id);
+
+      return { user: currentUser, token };
     },
 
     signup: async (root, args, ctx) => {
@@ -202,7 +231,8 @@ module.exports = {
           { new: true }
         ).populate("pictures");
 
-        return currentUser;
+        const token = await createToken(currentUser._id);
+        return { user: currentUser, token };
       } catch (err) {
         throw new AuthenticationError(err);
       }
@@ -226,7 +256,9 @@ module.exports = {
         if (user) {
           const match = await bcrypt.compare(password, user.password);
           if (match) {
-            return user;
+            const token = await createToken(user._id);
+
+            return { user, token };
           } else {
             throw new AuthenticationError("Incorrect Password");
           }
@@ -235,6 +267,7 @@ module.exports = {
         throw new AuthenticationError(err.message);
       }
     },
+
     logout: async (root, args, ctx) => {
       const { username } = args;
 
@@ -288,8 +321,10 @@ module.exports = {
           .populate("pictures")
           .populate("comments");
 
-        return user
-          ? user
+        const token = await createToken(user._id);
+
+        return !!user
+          ? { user, token }
           : new AuthenticationError("Google User Dosen't Exist");
       } catch (err) {
         throw new AuthenticationError(err.message);

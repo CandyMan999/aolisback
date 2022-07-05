@@ -1,19 +1,25 @@
 import React, { useContext, useEffect } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
+import { getToken } from "../../utils/helpers";
 
 import { Box, FONT_SIZES, Text, NavGuide } from "../../components";
 
 import { navbar } from "../../styles/classes";
 import SignupModal from "./signup-modal";
 import LoginModal from "./login-modal";
+import { FETCH_ME } from "../../graphql/queries";
 
 import { COLORS } from "../../constants";
+
+import { useClient } from "../../client";
 
 import Context from "../../context";
 
 const Navbar = ({ props }) => {
   const { state, dispatch } = useContext(Context);
+  const client = useClient();
+  const token = getToken();
 
   const { currentUser } = state;
   useEffect(() => {
@@ -23,7 +29,27 @@ const Navbar = ({ props }) => {
     }
   }, [currentUser]);
 
-  console.log("current User: ", currentUser);
+  useEffect(() => {
+    if (token) {
+      handleFetchMe();
+    }
+  }, [token]);
+
+  const handleFetchMe = async () => {
+    try {
+      const variables = {
+        token,
+      };
+
+      const { fetchMe } = await client.request(FETCH_ME, variables);
+
+      await dispatch({ type: "LOGIN_USER", payload: fetchMe });
+
+      console.log("dispatch current: ", currentUser);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const profilePic =
     currentUser && currentUser.pictures && currentUser.pictures[0];

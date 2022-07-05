@@ -145,14 +145,14 @@ const Map = ({}) => {
                         {user.pictures[0].publicId ? (
                           <CloudinaryContext cloudName="localmassagepros">
                             <Image
-                              alt={`${user.picture[0]._id}-avatar`}
+                              alt={`${user.pictures[0]._id}-avatar`}
                               style={{
                                 height: "20px",
                                 borderRadius: "90%",
                                 border: `dotted 2px ${COLORS.vividBlue}`,
                               }}
                               loading="lazy"
-                              publicId={user.picture[0].publicId}
+                              publicId={user.pictures[0].publicId}
                             >
                               <Transformation
                                 height={"30"}

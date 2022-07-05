@@ -51,34 +51,35 @@ module.exports = gql`
     comments: [Comment]
   }
 
-  type Auth {
-    _id: ID
-    email: String
-    name: String
-    username: String
-    pictures: [Picture]
-  }
-
   type AuthSignup {
-    _id: ID
-    username: String
-    email: String
+    user: User
+    token: String!
   }
 
   type Query {
     me: User
+    fetchMe(token: String!): User
     getRooms: [Room]
     getComments(roomId: ID!): [Comment]
     findUser(_id: ID!): User
     getUsers: [User]
   }
 
+  type GoogleAuth {
+    user: User!
+    token: String!
+  }
+  type Auth {
+    user: User!
+    token: String!
+  }
+
   type Mutation {
-    googleSignup(username: String!, idToken: String!): Auth
+    googleSignup(username: String!, idToken: String!): GoogleAuth
     signup(username: String!, email: String!, password: String!): AuthSignup
-    login(username: String!, password: String!): User
+    login(username: String!, password: String!): Auth
     logout(username: String!): User
-    googleLogin(idToken: String!): User
+    googleLogin(idToken: String!): GoogleAuth
     createRoom(name: String!, _id: ID): Room
     changeRoom(roomId: ID!, userId: ID!): Room
     createComment(text: String!, userId: ID!, roomId: ID!): Comment

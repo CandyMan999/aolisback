@@ -1,17 +1,16 @@
 export const setToken = (token, shouldPersist) =>
-  shouldPersist
-    ? localStorage.setItem("token", token)
-    : sessionStorage.setItem("token", token);
+  sessionStorage.setItem("Sobertoken", token);
 export const getToken = () =>
-  sessionStorage.getItem("token") || localStorage.getItem("token");
+  sessionStorage.getItem("Sobertoken") || localStorage.getItem("token");
 export const clearToken = () => {
-  sessionStorage.removeItem("token");
-  localStorage.removeItem("token");
+  sessionStorage.removeItem("Sobertoken");
+  localStorage.removeItem("Sobertoken");
 };
 
 export const getGoogleToken = () => {};
 
 export const validateEmail = (email) => {
-  const re = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re =
+    /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };

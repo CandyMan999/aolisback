@@ -88,5 +88,34 @@ query{
     }
   }
 }
+`;
 
+export const FETCH_ME = `
+query($token: String!){
+  fetchMe(token: $token){
+              _id
+              name
+              isLoggedIn
+              username
+              pictures{
+                _id
+                url
+                publicId
+              }
+              location{
+                lat
+                lng
+              }
+              email
+              intro
+              sex
+              age
+              occupation
+              sobrietyTime
+              sponsor
+              sponsee 
+              kids
+    
+      }
+  }
 `;

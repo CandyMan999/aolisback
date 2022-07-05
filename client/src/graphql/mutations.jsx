@@ -1,23 +1,8 @@
 export const GOOGLE_SIGNUP_MUTATION = `
     mutation( $username: String!, $idToken: String!){
         googleSignup( username: $username, idToken: $idToken){
-            _id
-            name
-            username
-            pictures{
-                url
-                _id
-                publicId
-            }
-            email
-            
-        }
-    }
-`;
-
-export const GOOGLE_LOGIN_MUTATION = `
-    mutation($idToken: String!){
-        googleLogin( idToken: $idToken){
+          token
+          user{ 
             _id
             name
             isLoggedIn
@@ -40,6 +25,40 @@ export const GOOGLE_LOGIN_MUTATION = `
             sponsor
             sponsee 
             kids
+          }
+            
+        }
+    }
+`;
+
+export const GOOGLE_LOGIN_MUTATION = `
+    mutation($idToken: String!){
+        googleLogin( idToken: $idToken){ 
+          token
+          user{ 
+            _id
+            name
+            isLoggedIn
+            username
+            pictures{
+              _id
+              url
+              publicId
+            }
+            location{
+              lat
+              lng
+            }
+            email
+            intro
+            sex
+            age
+            occupation
+            sobrietyTime
+            sponsor
+            sponsee 
+            kids
+          }
         }
     }
 `;
@@ -47,9 +66,12 @@ export const GOOGLE_LOGIN_MUTATION = `
 export const SIGNUP_MUTATION = `
 mutation($username: String!, $email: String!, $password: String! ){
     signup(username: $username, email: $email, password: $password){
+      token
+      user{ 
         _id
         username
-        email  
+        email
+      }
     }
  }
 `;
@@ -57,10 +79,12 @@ mutation($username: String!, $email: String!, $password: String! ){
 export const LOGIN_MUTATION = `
 mutation($username: String!, $password: String! ){
     login(username: $username, password: $password){
+      token
+      user{ 
         _id
-        username
-        email
+        name
         isLoggedIn
+        username
         pictures{
           _id
           url
@@ -70,6 +94,7 @@ mutation($username: String!, $password: String! ){
           lat
           lng
         }
+        email
         intro
         sex
         age
@@ -78,6 +103,7 @@ mutation($username: String!, $password: String! ){
         sponsor
         sponsee 
         kids
+      }
     }
 }`;
 

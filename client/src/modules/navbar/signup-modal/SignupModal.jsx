@@ -1,24 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
-import gql from "graphql-tag";
-import { GoogleLogin } from "react-google-login";
-import { GraphQLClient } from "graphql-request";
-import { useMutation } from "@apollo/react-hooks";
-import { Mutation } from "react-apollo";
+import React, { useState, useContext } from "react";
+
 import { Formik, Form } from "formik";
 
-import {
-  Box,
-  Button,
-  Modal,
-  GoogleButton,
-  Input,
-  Checkbox,
-  Loading,
-} from "../../../components";
+import { Box, Button, Modal, GoogleButton, Input } from "../../../components";
 
-import { useLoginGoogle } from "../../../hooks/auth";
 import { setToken } from "../../../utils/helpers";
-import { BASE_URL } from "../../../client";
+
 import {
   GOOGLE_SIGNUP_MUTATION,
   SIGNUP_MUTATION,
@@ -32,11 +19,10 @@ import { validateEmail } from "../../../utils/helpers";
 
 const SignupModal = ({ onClose }) => {
   const client = useClient();
-  const { state, dispatch } = useContext(Context);
+  const { dispatch } = useContext(Context);
   const [spinner, setSpinner] = useState(false);
   const [username, setUsername] = useState("");
   const [authError, setAuthError] = useState("");
-  const { currentUser } = state;
 
   const handleGoogle = async (googleUser) => {
     try {
@@ -48,12 +34,11 @@ const SignupModal = ({ onClose }) => {
         idToken,
       };
       setSpinner(true);
-      const { googleSignup } = await client.request(
-        GOOGLE_SIGNUP_MUTATION,
-        variables
-      );
-
-      dispatch({ type: "LOGIN_USER", payload: googleSignup });
+      const {
+        googleSignup: { user, token },
+      } = await client.request(GOOGLE_SIGNUP_MUTATION, variables);
+      setToken(token);
+      dispatch({ type: "LOGIN_USER", payload: user });
     } catch (err) {
       setSpinner(false);
       setAuthError(err.response.errors[0].message);
@@ -71,11 +56,14 @@ const SignupModal = ({ onClose }) => {
           email,
           password,
         };
-        const { signup } = await client.request(SIGNUP_MUTATION, variables);
 
-        console.log("data: ", signup);
+        const {
+          signup: { user, token },
+        } = await client.request(SIGNUP_MUTATION, variables);
 
-        dispatch({ type: "LOGIN_USER", payload: signup });
+        setToken(token);
+
+        dispatch({ type: "LOGIN_USER", payload: user });
       } catch (err) {
         setSpinner(false);
 
