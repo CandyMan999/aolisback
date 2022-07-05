@@ -55,7 +55,7 @@ const Message = ({
                 fontSize={FONT_SIZES.SMALL}
               >
                 {/* <span onClick={() => handleSpeech(text)}> */}
-                <Speech lang={"en-US"} text={text} />
+                <Speech lang={"en-US"} voice={"Alex"} text={text} />
 
                 {/* </span> */}
 
