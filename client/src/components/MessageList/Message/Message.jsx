@@ -54,9 +54,10 @@ const Message = ({
                 margin={"auto"}
                 fontSize={FONT_SIZES.SMALL}
               >
-                <span onClick={() => handleSpeech(text)}>
-                  <Speech />
-                </span>
+                {/* <span onClick={() => handleSpeech(text)}> */}
+                <Speech lang={"en-US"} voice={"Daniel"} text={text} />
+
+                {/* </span> */}
 
                 {text}
 
@@ -184,9 +185,9 @@ const Message = ({
                 margin={"auto"}
                 fontSize={FONT_SIZES.SMALL}
               >
-                <span onClick={() => handleSpeech(text)}>
-                  <Speech />
-                </span>
+                {/* <span onClick={() => handleSpeech(text)}> */}
+                <Speech lang={"en-US"} voice={"Daniel"} text={text} />
+                {/* </span> */}
 
                 {text}
               </Text>
