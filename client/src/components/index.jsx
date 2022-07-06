@@ -23,3 +23,4 @@ export { default as Video } from "./Video";
 export { default as Map } from "./Map";
 export { default as PhotoUploader } from "./PhotoUploader";
 export { default as PhotoSlider } from "./PhotoSlider";
+export { default as CollapsableHeader } from "./CollapsableHeader";

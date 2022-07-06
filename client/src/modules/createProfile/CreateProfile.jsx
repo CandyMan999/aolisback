@@ -11,9 +11,7 @@ import {
   Box,
   Input,
   Button,
-  CheckboxGroup,
   Textarea,
-  Select,
   Loading,
   Checkbox,
   Text,
@@ -24,10 +22,10 @@ import {
 import { Formik, Form } from "formik";
 import { COLORS } from "../../constants";
 
-import {
-  CREATE_PROFILE_MUTATION,
-  UPDATE_LOCATION_MUTATION,
-} from "../../graphql/mutations";
+import { CREATE_PROFILE_MUTATION } from "../../graphql/mutations";
+
+import { SobrietyTime } from "./sobriety-time";
+import { GetLocation } from "./get-location";
 
 import { useClient } from "../../client";
 import Context from "../../context";
@@ -46,50 +44,6 @@ const CreateProfile = ({}) => {
   });
   const [spinner, setSpinner] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [userCoords, setUserCoords] = useState({ lat: null, lng: null });
-  const [locationSuccess, setLocationSuccess] = useState(
-    !!state.currentUser.location.lat
-  );
-
-  useEffect(() => {
-    if (userCoords.lat) {
-      handleGetLocation();
-    }
-  }, [userCoords.lat]);
-
-  useEffect(() => {
-    handleGetLocation();
-  }, []);
-
-  const handleGetLocation = async () => {
-    try {
-      setSpinner(true);
-      const variables = {
-        lat: userCoords.lat ? userCoords.lat : currentUser.location.lat,
-        lng: userCoords.lng ? userCoords.lng : currentUser.location.lng,
-        _id: currentUser._id,
-      };
-
-      const { updateLocation } = await client.request(
-        UPDATE_LOCATION_MUTATION,
-        variables
-      );
-
-      console.log("updateLocation: ", updateLocation);
-      if (updateLocation) {
-        dispatch({ type: "UPDATE_USER", payload: updateLocation });
-        setSpinner(false);
-        setLocationSuccess(true);
-      }
-      if (!updateLocation) {
-        setLocationSuccess(true);
-        setSpinner(false);
-      }
-    } catch (err) {
-      setSpinner(false);
-      console.log(err);
-    }
-  };
 
   const handleSubmit = async ({ intro, occupation, age, sponsor, sponsee }) => {
     const { sex, sobrietyTime, kids } = profile;
@@ -107,6 +61,7 @@ const CreateProfile = ({}) => {
         sponsor,
         kids,
       };
+
       const { createProfile } = await client.request(
         CREATE_PROFILE_MUTATION,
         variables
@@ -140,50 +95,12 @@ const CreateProfile = ({}) => {
 
   const handleChange = (e) => {
     let updatedValue = e.currentTarget.value;
-    if (updatedValue === "true" || updatedValue == "false") {
+    if (updatedValue === "true" || updatedValue === "false") {
       updatedValue = JSON.parse(updatedValue);
     }
 
     setProfile({ ...profile, [e.target.name]: updatedValue });
   };
-
-  const handleLocation = () => {
-    try {
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const { latitude, longitude } = position.coords;
-          setUserCoords({ lat: latitude, lng: longitude });
-        });
-      } else {
-        handlePermission();
-      }
-    } catch (err) {
-      setAuthError(err.message);
-      setSpinner(false);
-    }
-  };
-
-  function handlePermission() {
-    navigator.permissions
-      .query({ name: "geolocation" })
-      .then(function (result) {
-        if (result.state == "granted") {
-          report(result.state);
-        } else if (result.state == "prompt") {
-          report(result.state);
-          // navigator.geolocation.getCurrentPosition(revealPosition,positionDenied,geoSettings);
-        } else if (result.state == "denied") {
-          report(result.state);
-        }
-        result.onchange = function () {
-          report(result.state);
-        };
-      });
-  }
-
-  function report(state) {
-    console.log("Permission " + state);
-  }
 
   return (
     <Fragment>
@@ -202,48 +119,19 @@ const CreateProfile = ({}) => {
             alignItems="center"
           >
             <h3 style={{ marginBottom: 5 }}>Create Profile</h3>
-            {profile.sobrietyTime && (
-              <Text color={COLORS.themeGreen} marginTop={0} marginBottom={4}>
-                Sober Since {profile.sobrietyTime}
-              </Text>
-            )}{" "}
-            <label htmlFor="sobreityTime">
-              SobrietyTime:{" "}
-              <input
-                type="date"
-                id="sobrietyTime"
-                name="sobrietyTime"
-                value={profile.sobrietyTime}
-                onChange={handleChange}
-              />
-            </label>
-            <Box padding={10}>
-              <Button
-                style={{ display: "flex", alignItems: "center" }}
-                disabled={locationSuccess}
-                onClick={handleLocation}
-                width="fit-content"
-              >
-                Get Location{" "}
-                <Icon
-                  name="pin"
-                  color={COLORS.red}
-                  style={{ padding: "0px" }}
-                />
-              </Button>
-              {locationSuccess && (
-                <Box alignItems="center">
-                  <Icon name="thumbsUp" color={COLORS.themeGreen} />
-                  <Text>Got yo ass</Text>
-                </Box>
-              )}
-              {!locationSuccess && (
-                <Box alignItems="center">
-                  <Icon name="thumbsDown" color={COLORS.textRed} />
-                  <Text>Couldn't find you</Text>
-                </Box>
-              )}
-            </Box>
+            <SobrietyTime
+              handleChange={handleChange}
+              profile={profile}
+              client={client}
+              dispatch={dispatch}
+              currentUser={currentUser}
+              handleSubmit={handleSubmit}
+            />
+            <GetLocation
+              client={client}
+              currentUser={currentUser}
+              dispatch={dispatch}
+            />
             <PhotoUploader />
             <PhotoSlider
               withDelete={true}
