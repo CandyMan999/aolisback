@@ -26,6 +26,7 @@ import { CREATE_PROFILE_MUTATION } from "../../graphql/mutations";
 
 import { SobrietyTime } from "./sobriety-time";
 import { GetLocation } from "./get-location";
+import { MyPhotos } from "./my-photos";
 
 import { useClient } from "../../client";
 import Context from "../../context";
@@ -132,13 +133,7 @@ const CreateProfile = ({}) => {
               currentUser={currentUser}
               dispatch={dispatch}
             />
-            <PhotoUploader />
-            <PhotoSlider
-              withDelete={true}
-              images={currentUser.pictures}
-              height={310}
-              width={200}
-            />
+            <MyPhotos currentUser={currentUser} />
             <label htmlFor="sex" style={{ marginTop: 2, marginBottom: 8 }}>
               Gender:{" "}
               <select
