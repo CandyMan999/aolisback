@@ -115,10 +115,14 @@
 }
 
 .new-room-form form input {
+  grid-area: f;
+  width: -webkit-fill-available;
   height: 100%;
   width: 100%;
-  font-size: 10px;
+  font-size: 15px;
+  
   border-bottom: none;
+  padding-left: 5%;
 }
 .new-room-form form input:focus {
  outline: none;

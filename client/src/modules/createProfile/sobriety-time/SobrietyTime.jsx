@@ -48,7 +48,7 @@ const SobrietyTime = ({
         {" "}
         {profile.sobrietyTime && (
           <Text
-            fontSize={FONT_SIZES.XX_LARGE}
+            fontSize={FONT_SIZES.X_LARGE}
             color={COLORS.vividBlue}
             marginTop={0}
             marginBottom={15}
