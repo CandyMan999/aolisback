@@ -19,7 +19,7 @@ import {
   PhotoUploader,
   PhotoSlider,
 } from "../../components";
-import { Formik, Form } from "formik";
+
 import { COLORS } from "../../constants";
 
 import { CREATE_PROFILE_MUTATION } from "../../graphql/mutations";
@@ -27,6 +27,7 @@ import { CREATE_PROFILE_MUTATION } from "../../graphql/mutations";
 import { SobrietyTime } from "./sobriety-time";
 import { GetLocation } from "./get-location";
 import { MyPhotos } from "./my-photos";
+import { MyDetails } from "./my-details";
 
 import { useClient } from "../../client";
 import Context from "../../context";
@@ -112,129 +113,31 @@ const CreateProfile = ({}) => {
           <Loading grid color={COLORS.themeGreen} size={60} />
         </Box>
       ) : (
-        <Fragment>
-          <Box
-            display="flex"
-            column
-            justifyContent="center"
-            alignItems="center"
-          >
-            <h3 style={{ marginBottom: 5 }}>Create Profile</h3>
-            <SobrietyTime
-              handleChange={handleChange}
-              profile={profile}
-              client={client}
-              dispatch={dispatch}
-              currentUser={currentUser}
-              handleSubmit={handleSubmit}
-            />
-            <GetLocation
-              client={client}
-              currentUser={currentUser}
-              dispatch={dispatch}
-            />
-            <MyPhotos currentUser={currentUser} />
-            <label htmlFor="sex" style={{ marginTop: 2, marginBottom: 8 }}>
-              Gender:{" "}
-              <select
-                id="sex"
-                name="sex"
-                value={profile.sex}
-                onChange={handleChange}
-              >
-                <option value={"male"}>male</option>
-                <option value={"female"}>female</option>
-              </select>
-            </label>
-            <label htmlFor="kids" style={{ marginBottom: 8 }}>
-              I Have Kids:{" "}
-              <select
-                id="kids"
-                name="kids"
-                onChange={handleChange}
-                value={profile.kids}
-              >
-                <option value={true}>Yes</option>
-                <option value={false}>No</option>
-              </select>
-            </label>
-          </Box>
-          <Formik
-            onSubmit={handleSubmit}
-            validate={handleValidation}
-            initialValues={{
-              intro: currentUser.intro ? currentUser.intro : "",
-              age: currentUser.age ? currentUser.age : "",
-              occupation: currentUser.occupation ? currentUser.occupation : "",
-              sponsor: currentUser.sponsor ? currentUser.sponsor : false,
-              sponsee: currentUser.sponsee ? currentUser.sponsee : false,
-            }}
-            render={(props) => (
-              <Form style={{ height: "100%" }}>
-                <Box
-                  column
-                  center
-                  justifyContent="space-between"
-                  width="100%"
-                  height="100%"
-                  marginBottom={16}
-                >
-                  {authError && (
-                    <p style={{ color: COLORS.darkRed, margin: "0px" }}>
-                      {authError}
-                    </p>
-                  )}
-
-                  <Box
-                    column
-                    height={200}
-                    width="75%"
-                    justifyContent="space-between"
-                    center
-                  >
-                    <Textarea
-                      width={"90%"}
-                      maxLength={140}
-                      name="intro"
-                      placeholder="intro"
-                      type="input"
-                    />
-                    <Box marginBottom={15}>
-                      {" "}
-                      <Input
-                        name="occupation"
-                        type="input"
-                        placeholder="occupation"
-                      />
-                    </Box>
-
-                    <Input name="age" type="input" placeholder="age" />
-                    <Checkbox
-                      label="I am willing to be a sponsor"
-                      type="checkbox"
-                      id="sponsor"
-                      name="sponsor"
-                    />
-                    <Checkbox
-                      label="I am willing to be a sponsee"
-                      type="checkbox"
-                      id="sponsee"
-                      name="sponsee"
-                    />
-                    <Button
-                      type="submit"
-                      disabled={!props.isValid}
-                      style={{ zIndex: 100 }}
-                    >
-                      {console.log("formik props: ", props)}
-                      Submit
-                    </Button>
-                  </Box>
-                </Box>
-              </Form>
-            )}
+        <Box display="flex" column justifyContent="center" alignItems="center">
+          <h3 style={{ marginBottom: 5 }}>Create Profile</h3>
+          <SobrietyTime
+            handleChange={handleChange}
+            profile={profile}
+            client={client}
+            dispatch={dispatch}
+            currentUser={currentUser}
+            handleSubmit={handleSubmit}
           />
-        </Fragment>
+          <GetLocation
+            client={client}
+            currentUser={currentUser}
+            dispatch={dispatch}
+          />
+          <MyPhotos currentUser={currentUser} />
+          <MyDetails
+            profile={profile}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            handleValidation={handleValidation}
+            currentUser={currentUser}
+            authError={authError}
+          />
+        </Box>
       )}
     </Fragment>
   );

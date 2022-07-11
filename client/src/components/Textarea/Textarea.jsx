@@ -4,32 +4,8 @@ import { connect } from "formik";
 import { Box, Text } from "..";
 import { COLORS } from "../../constants";
 
-// import { FormikConnectedProps } from "../../types/formik";
 import styled from "@emotion/styled";
 import { css } from "@emotion/css";
-
-// interface Props {
-//   rows?: number;
-//   cols?: number;
-//   placeholder?: string;
-//   maxLength?: number;
-//   disabled?: boolean;
-//   name: string;
-//   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-//   value?: string;
-//   withoutFormik?: boolean;
-//   width?: number;
-//   full?: boolean;
-//   fontSize?: number;
-//   readOnly?: boolean;
-// }
-
-// interface TextareaProps {
-//   value?: string;
-//   fontSize?: number;
-//   hasError?: boolean;
-//   readOnly?: boolean;
-// }
 
 class Textarea extends React.PureComponent {
   handleChange = (e) => {
@@ -54,6 +30,7 @@ class Textarea extends React.PureComponent {
       readOnly,
       rows,
       value,
+      height,
       width,
       withoutFormik,
     } = this.props;
@@ -80,10 +57,13 @@ class Textarea extends React.PureComponent {
           rows={rows}
           value={currentValue}
           fontSize={fontSize}
+          height={height}
+          width={width}
         />
         <Box
           position="absolute"
-          bottom={-16}
+          right={10}
+          bottom={-10}
           display="flex"
           justifyContent="flex-end"
         >
@@ -99,7 +79,7 @@ class Textarea extends React.PureComponent {
 }
 
 const StyledTextarea = styled("textarea")(
-  ({ value, fontSize, hasError, readOnly }) => ({
+  ({ value, fontSize, hasError, readOnly, height, width }) => ({
     border: `2px solid ${
       hasError ? COLORS.darkRed : !!value ? COLORS.darkGrey : COLORS.lightGrey
     }`,
@@ -107,8 +87,9 @@ const StyledTextarea = styled("textarea")(
     cursor: readOnly ? "pointer" : undefined,
     fontSize: fontSize ? `${fontSize}px` : "14px",
     padding: "6px 4px",
+    height: height ? `${height}px` : undefined,
     transition: "border 0.5s",
-    width: "100%",
+    // width: width ? width : "100%",
     resize: "vertical",
     [":focus"]: {
       outline: 0,
