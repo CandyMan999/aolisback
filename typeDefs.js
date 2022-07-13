@@ -85,9 +85,9 @@ module.exports = gql`
     createComment(text: String!, userId: ID!, roomId: ID!): Comment
     createProfile(
       _id: ID!
-      intro: String!
-      age: String!
-      sex: Sex!
+      intro: String
+      age: String
+      sex: Sex
       occupation: String
       sobrietyTime: String
       sponsor: Boolean

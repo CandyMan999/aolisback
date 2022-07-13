@@ -163,7 +163,7 @@ mutation($text: String!, $userId: ID!, $roomId: ID!){
 }`;
 
 export const CREATE_PROFILE_MUTATION = `
-mutation($_id: ID!, $intro: String!, $age: String!, $sex: Sex!, $occupation: String, $sobrietyTime: String, $sponsor: Boolean, $sponsee: Boolean, $kids: Boolean ){
+mutation($_id: ID!, $intro: String, $age: String, $sex: Sex, $occupation: String, $sobrietyTime: String, $sponsor: Boolean, $sponsee: Boolean, $kids: Boolean ){
     createProfile(_id: $_id, intro: $intro, age: $age, sex: $sex, occupation: $occupation, sobrietyTime: $sobrietyTime, sponsor: $sponsor, sponsee: $sponsee, kids: $kids){
       _id
       username

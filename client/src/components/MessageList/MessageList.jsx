@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import Message from "./Message";
 import ReactDOM from "react-dom";
-import { Text, Box } from "../../components";
-import { COLORS } from "../../constants";
 
 class MessageList extends Component {
   componentWillUpdate() {

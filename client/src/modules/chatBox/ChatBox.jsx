@@ -145,6 +145,7 @@ const ChatBox = ({}) => {
         roomId={roomId}
         subscribeToRoom={subscribeToRoom}
         rooms={rooms}
+        currentUser={currentUser}
       />
       <MessageList
         usernameClick={usernameClick}
@@ -156,9 +157,15 @@ const ChatBox = ({}) => {
       <CreateRoom
         createRoom={createRoom}
         currentUserID={!!currentUser && currentUser._id}
+        dispatch={dispatch}
       />
 
-      <SendMessage disabled={!roomId} sendMessage={sendMessage} />
+      <SendMessage
+        disabled={!roomId}
+        sendMessage={sendMessage}
+        dispatch={dispatch}
+        currentUserID={!!currentUser && currentUser._id}
+      />
 
       <Subscription
         subscription={ROOM_CREATED_OR_UPDATED_SUBSCRIPTION}

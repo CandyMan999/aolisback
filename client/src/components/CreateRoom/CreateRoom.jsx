@@ -24,26 +24,28 @@ class CreateRoom extends Component {
     this.setState({ roomName: "", touched: false });
   };
 
+  handleIsLoggedIn = async () => {
+    try {
+      if (!this.props.currentUserID) {
+        this.props.dispatch({ type: "TOGGLE_SIGNUP", payload: true });
+      } else {
+        this.setState({ touched: !this.state.touched });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   render() {
     return (
       <motion.div
-        onClick={() => this.setState({ touched: !this.state.touched })}
-        // onMouseEnter={() => this.setState({ touched: true })}
-        // onMouseLeave={() => this.setState({ touched: false })}
+        onClick={() => this.handleIsLoggedIn()}
         className="new-room-form"
         animate={{ width: this.state.touched ? "50vW" : "100%" }}
         transition={{ ease: "linear", duration: 0.5 }}
         style={{ border: "1px solid #69ffb4" }}
       >
         <form onSubmit={this.handleSubmit}>
-          {/* <input
-            value={this.state.roomName}
-            onChange={this.handleChange}
-            type="text"
-            placeholder="Create Room"
-            required
-            autoFocus={false}
-          /> */}
           <Input
             style={{
               height: "100%",

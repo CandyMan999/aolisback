@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   CollapsableHeader,
   Text,
   Box,
   Button,
   FONT_SIZES,
+  Loading,
 } from "../../../components";
 import { COLORS } from "../../../constants";
-import moment from "moment";
 
 import { CREATE_PROFILE_MUTATION } from "../../../graphql/mutations";
 
@@ -20,9 +20,12 @@ const SobrietyTime = ({
   currentUser,
 }) => {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     try {
+      setSubmitted(false);
+      setLoading(true);
       const variables = {
         ...currentUser,
         sobrietyTime: profile.sobrietyTime,
@@ -35,9 +38,11 @@ const SobrietyTime = ({
 
       if (createProfile) {
         setSubmitted(true);
+        setLoading(false);
         dispatch({ type: "UPDATE_USER", payload: createProfile });
       }
     } catch (err) {
+      setLoading(false);
       console.log(err);
     }
   };
@@ -68,7 +73,13 @@ const SobrietyTime = ({
           />
         </label>
         <Button padding={30} onClick={handleSubmit}>
-          {!currentUser.sobrietyTime ? "Submit" : "Update"}
+          {loading ? (
+            <Loading bar color={COLORS.themeGreen} />
+          ) : !currentUser.sobrietyTime && !loading ? (
+            "Submit"
+          ) : (
+            "Update"
+          )}
         </Button>
       </Box>
     </CollapsableHeader>

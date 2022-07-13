@@ -1,7 +1,7 @@
 const { AuthenticationError, PubSub } = require("apollo-server");
 const { OAuth2Client } = require("google-auth-library");
 const { User, Picture, Room, Comment } = require("./models");
-const faker = require("faker");
+
 const bcrypt = require("bcrypt");
 const moment = require("moment");
 const cloudinary = require("cloudinary");
@@ -218,21 +218,8 @@ module.exports = {
           isLoggedIn: true,
         }).save();
 
-        const newPhoto = await Picture.create({
-          url: faker.image.people(),
-          user: user._id,
-        });
-
-        const currentUser = await User.findByIdAndUpdate(
-          {
-            _id: user._id,
-          },
-          { $push: { pictures: newPhoto } },
-          { new: true }
-        ).populate("pictures");
-
-        const token = await createToken(currentUser._id);
-        return { user: currentUser, token };
+        const token = await createToken(user._id);
+        return { user: user, token };
       } catch (err) {
         throw new AuthenticationError(err);
       }

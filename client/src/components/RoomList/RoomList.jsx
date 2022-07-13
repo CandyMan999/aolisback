@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Box, Button, Text } from "../../components";
+import { Box, Text } from "../../components";
 import { COLORS } from "../../constants";
 
 import Context from "../../context";
@@ -7,8 +7,18 @@ import Context from "../../context";
 const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom }) => {
   const { state, dispatch } = useContext(Context);
 
+  const handleIsLoggedIn = async () => {
+    try {
+      if (currentUser && !currentUser.username) {
+        dispatch({ type: "TOGGLE_SIGNUP", payload: true });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <div className="rooms-list">
+    <div className="rooms-list" onClick={() => handleIsLoggedIn()}>
       <ul>
         <h3>Rooms:</h3>
         {rooms &&
@@ -23,7 +33,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom }) => {
                 key={room._id}
                 display="flex"
                 onClick={() =>
-                  !!state.currentUser
+                  !!state.currentUser.username
                     ? subscribeToRoom(room._id)
                     : dispatch({ type: "TOGGLE_LOGIN", payload: true })
                 }

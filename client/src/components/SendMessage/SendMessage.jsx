@@ -19,9 +19,23 @@ class SendMessageForm extends Component {
     });
   };
 
+  handleIsLoggedIn = async () => {
+    try {
+      if (!this.props.currentUserID) {
+        this.props.dispatch({ type: "TOGGLE_SIGNUP", payload: true });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   render() {
     return (
-      <form onSubmit={this.handleSubmit} className="send-message-form">
+      <form
+        onSubmit={this.handleSubmit}
+        className="send-message-form"
+        onClick={() => this.handleIsLoggedIn()}
+      >
         <input
           disabled={this.props.disabled}
           onChange={this.handleChange}

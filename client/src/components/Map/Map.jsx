@@ -22,12 +22,16 @@ const INITIAL_VIEWPORT = {
   zoom: 4,
 };
 
-const Map = ({}) => {
+const Map = ({ zoom, width, height }) => {
   const mobileSize = useMediaQuery("(max-width: 650px)");
   let history = useHistory();
   const [popup, setPopup] = useState({ isOpen: false, id: null });
   const [users, setUsers] = useState([]);
-  const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
+  const [viewport, setViewport] = useState({
+    latitude: 21.304026582335645,
+    longitude: -157.8411131383927,
+    zoom: zoom ? zoom : 4,
+  });
   const { state, dispatch } = useContext(Context);
   const client = useClient();
   const { location } = state.currentUser;
@@ -54,7 +58,7 @@ const Map = ({}) => {
       setUsers([...getUsers]);
       if (!!location && location.lat && !state.userLocation._id) {
         setViewport({
-          ...INITIAL_VIEWPORT,
+          ...viewport,
           latitude: location.lat,
           longitude: location.lng,
         });
@@ -85,8 +89,8 @@ const Map = ({}) => {
   return (
     <Fragment>
       <ReactMapGL
-        width="100vw"
-        height="calc(100vh - 64px)"
+        width={width ? width : "100vw"}
+        height={height ? height : "calc(100vh - 64px)"}
         mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
         onViewportChange={(newViewport) => setViewport(newViewport)}

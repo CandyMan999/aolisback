@@ -6,6 +6,7 @@ import {
   Icon,
   Text,
   Loading,
+  Map,
 } from "../../../components";
 import { COLORS } from "../../../constants";
 
@@ -32,6 +33,7 @@ const GetLocation = ({ dispatch, client, currentUser }) => {
   const handleGetLocation = async () => {
     try {
       setSpinner(true);
+      setSubmitted(false);
       const variables = {
         lat: userCoords.lat ? userCoords.lat : currentUser.location.lat,
         lng: userCoords.lng ? userCoords.lng : currentUser.location.lng,
@@ -43,14 +45,14 @@ const GetLocation = ({ dispatch, client, currentUser }) => {
         variables
       );
 
-      console.log("updateLocation: ", updateLocation);
       if (updateLocation) {
         dispatch({ type: "UPDATE_USER", payload: updateLocation });
         setSpinner(false);
+        setSubmitted(true);
         setLocationSuccess(true);
       }
       if (!updateLocation) {
-        setLocationSuccess(true);
+        setLocationSuccess(false);
         setSpinner(false);
       }
     } catch (err) {
@@ -68,23 +70,28 @@ const GetLocation = ({ dispatch, client, currentUser }) => {
         });
       }
     } catch (err) {
-      setSpinner(false);
+      console.log(err);
     }
   };
 
-  console.log("location: ", currentUser);
   return (
     <CollapsableHeader title={"Get Location"} onClose={submitted}>
-      {spinner ? (
-        <Loading color={COLORS.themeGreen} />
-      ) : (
+      <Box width={"100%"} height={"100%"} column alignItems="center">
+        <Map width={"100vW"} height={250} zoom={12} />
+
         <Box padding={10}>
           <Button
             style={{ display: "flex", alignItems: "center" }}
             onClick={handleLocation}
             width="fit-content"
           >
-            {!currentUser.location.lat ? "Get Location" : "Update Location"}
+            {spinner ? (
+              <Loading bar color={COLORS.themeGreen} />
+            ) : !currentUser.location.lat ? (
+              "Get Location"
+            ) : (
+              "Update Location"
+            )}
             <Icon name="pin" color={COLORS.red} style={{ padding: "0px" }} />
           </Button>
           {locationSuccess && (
@@ -100,7 +107,7 @@ const GetLocation = ({ dispatch, client, currentUser }) => {
             </Box>
           )}
         </Box>
-      )}
+      </Box>
     </CollapsableHeader>
   );
 };

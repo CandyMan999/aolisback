@@ -40,6 +40,7 @@ const Message = ({
             margin="auto"
             flexWrap="wrap"
             paddingTop={10}
+            paddingX={5}
           >
             <Box
               flexWrap="wrap"
