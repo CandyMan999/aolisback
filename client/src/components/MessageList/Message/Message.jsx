@@ -25,12 +25,10 @@ const Message = ({
     window.speechSynthesis.speak(msg);
   };
 
-  console.log("picture: ", picture, publicId);
-
   return (
     <Fragment>
-      {roomId === messageRoomId ? (
-        currentUser === authorId ? (
+      {roomId === messageRoomId &&
+        (currentUser === authorId ? (
           <Box
             display={"flex"}
             justifyContent={"flex-end"}
@@ -40,12 +38,13 @@ const Message = ({
             margin="auto"
             flexWrap="wrap"
             paddingTop={10}
-            paddingX={5}
+            marginLeft={2}
+            marginRight={2}
           >
             <Box
               flexWrap="wrap"
               height={"fit-content"}
-              marginRight={45}
+              marginRight={47}
               // textAlign={"center"}
               className="message-text"
             >
@@ -126,6 +125,8 @@ const Message = ({
             margin="auto"
             flexWrap="wrap"
             paddingTop={10}
+            marginRight={2}
+            marginLeft={3}
           >
             <Box
               position={"absolute"}
@@ -177,7 +178,7 @@ const Message = ({
               height={"fit-content"}
               // textAlign={"center"}
               className="others-message-text"
-              marginLeft={45}
+              marginLeft={47}
             >
               <Text
                 paddingLeft={2}
@@ -200,10 +201,7 @@ const Message = ({
               </Text>
             </Box>
           </Box>
-        )
-      ) : (
-        ""
-      )}
+        ))}
     </Fragment>
   );
 };
