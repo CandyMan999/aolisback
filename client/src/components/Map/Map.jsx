@@ -27,11 +27,7 @@ const Map = ({ zoom, width, height }) => {
   let history = useHistory();
   const [popup, setPopup] = useState({ isOpen: false, id: null });
   const [users, setUsers] = useState([]);
-  const [viewport, setViewport] = useState({
-    latitude: 21.304026582335645,
-    longitude: -157.8411131383927,
-    zoom: zoom ? zoom : 4,
-  });
+  const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const { state, dispatch } = useContext(Context);
   const client = useClient();
   const { location } = state.currentUser;
@@ -47,10 +43,10 @@ const Map = ({ zoom, width, height }) => {
       setViewport({
         latitude: lat,
         longitude: lng,
-        zoom: 12,
+        zoom: zoom ? zoom : 12,
       });
     }
-  }, [state.userLocation._id]);
+  }, [state.userLocation._id, zoom]);
 
   const handleGetUsers = async () => {
     try {
@@ -58,7 +54,7 @@ const Map = ({ zoom, width, height }) => {
       setUsers([...getUsers]);
       if (!!location && location.lat && !state.userLocation._id) {
         setViewport({
-          ...viewport,
+          ...INITIAL_VIEWPORT,
           latitude: location.lat,
           longitude: location.lng,
         });
