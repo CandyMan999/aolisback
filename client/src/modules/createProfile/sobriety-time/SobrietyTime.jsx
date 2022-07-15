@@ -18,6 +18,8 @@ const SobrietyTime = ({
   profile,
   handleChange,
   currentUser,
+  total,
+  completed,
 }) => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -48,7 +50,12 @@ const SobrietyTime = ({
   };
 
   return (
-    <CollapsableHeader title={"Sobriety Time"} onClose={submitted}>
+    <CollapsableHeader
+      title={"Sobriety Time"}
+      onClose={submitted}
+      total={total}
+      completed={completed}
+    >
       <Box column width={"100%"} marginY={15} alignItems="center">
         {" "}
         {profile.sobrietyTime && (

@@ -17,9 +17,11 @@ const MyDetails = ({
   handleValidation,
   currentUser,
   authError,
+  total,
+  completed,
 }) => {
   return (
-    <CollapsableHeader title={"My Details"}>
+    <CollapsableHeader title={"My Details"} total={total} completed={completed}>
       <Box column width={"100%"} height={"100%"}>
         <Box column width={"100%"} alignItems="center">
           <label htmlFor="sex" style={{ marginTop: 2, marginBottom: 8 }}>
@@ -115,7 +117,7 @@ const MyDetails = ({
                       disabled={!props.isValid}
                       style={{ zIndex: 100 }}
                     >
-                      Submit
+                      {total === completed ? "Update" : "Submit"}
                     </Button>
                   </Box>
                 </Box>

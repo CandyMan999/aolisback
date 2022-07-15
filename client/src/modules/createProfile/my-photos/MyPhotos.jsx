@@ -6,9 +6,9 @@ import {
   Box,
 } from "../../../components";
 
-const MyPhotos = ({ currentUser }) => {
+const MyPhotos = ({ currentUser, total, completed }) => {
   return (
-    <CollapsableHeader title="My Photos">
+    <CollapsableHeader title="My Photos" total={total} completed={completed}>
       <Box width={"100%"} column alignItems="center">
         <PhotoUploader />
         <PhotoSlider

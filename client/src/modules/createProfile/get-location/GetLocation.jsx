@@ -12,7 +12,7 @@ import { COLORS } from "../../../constants";
 
 import { UPDATE_LOCATION_MUTATION } from "../../../graphql/mutations";
 
-const GetLocation = ({ dispatch, client, currentUser }) => {
+const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
   const [submitted, setSubmitted] = useState(false);
   const [userCoords, setUserCoords] = useState({ lat: null, lng: null });
   const [spinner, setSpinner] = useState(false);
@@ -75,7 +75,12 @@ const GetLocation = ({ dispatch, client, currentUser }) => {
   };
 
   return (
-    <CollapsableHeader title={"Get Location"} onClose={submitted}>
+    <CollapsableHeader
+      title={"Get Location"}
+      onClose={submitted}
+      total={total}
+      completed={completed}
+    >
       <Box width={"100%"} height={"100%"} column alignItems="center">
         <Map width={"100vW"} height={250} zoom={12} />
 

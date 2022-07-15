@@ -1,24 +1,7 @@
-import React, {
-  Component,
-  Fragment,
-  useState,
-  useContext,
-  useEffect,
-} from "react";
+import React, { Fragment, useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import moment from "moment";
-import {
-  Box,
-  Input,
-  Button,
-  Textarea,
-  Loading,
-  Checkbox,
-  Text,
-  Icon,
-  PhotoUploader,
-  PhotoSlider,
-} from "../../components";
+import { Box, ProfileProgress, Loading } from "../../components";
 
 import { COLORS } from "../../constants";
 
@@ -113,31 +96,53 @@ const CreateProfile = ({}) => {
           <Loading grid color={COLORS.themeGreen} size={60} />
         </Box>
       ) : (
-        <Box display="flex" column justifyContent="center" alignItems="center">
-          <h3 style={{ marginBottom: 5 }}>Create Profile</h3>
-          <SobrietyTime
-            handleChange={handleChange}
-            profile={profile}
-            client={client}
-            dispatch={dispatch}
-            currentUser={currentUser}
-            handleSubmit={handleSubmit}
-          />
-          <GetLocation
-            client={client}
-            currentUser={currentUser}
-            dispatch={dispatch}
-          />
-          <MyPhotos currentUser={currentUser} />
-          <MyDetails
-            profile={profile}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            handleValidation={handleValidation}
-            currentUser={currentUser}
-            authError={authError}
-          />
-        </Box>
+        <ProfileProgress me={currentUser}>
+          {({ completedCounts, totalCounts }) => {
+            console.log("completed: ", completedCounts, totalCounts);
+            return (
+              <Box
+                display="flex"
+                column
+                justifyContent="center"
+                alignItems="center"
+              >
+                <h3 style={{ marginBottom: 5 }}>Create Profile</h3>
+                <SobrietyTime
+                  handleChange={handleChange}
+                  profile={profile}
+                  client={client}
+                  dispatch={dispatch}
+                  currentUser={currentUser}
+                  handleSubmit={handleSubmit}
+                  completed={completedCounts.mySobriety}
+                  total={totalCounts.mySobriety}
+                />
+                <GetLocation
+                  client={client}
+                  currentUser={currentUser}
+                  dispatch={dispatch}
+                  completed={completedCounts.myLocation}
+                  total={totalCounts.myLocation}
+                />
+                <MyPhotos
+                  currentUser={currentUser}
+                  completed={completedCounts.myPhotos}
+                  total={totalCounts.myPhotos}
+                />
+                <MyDetails
+                  profile={profile}
+                  handleChange={handleChange}
+                  handleSubmit={handleSubmit}
+                  handleValidation={handleValidation}
+                  currentUser={currentUser}
+                  authError={authError}
+                  completed={completedCounts.myDetails}
+                  total={totalCounts.myDetails}
+                />
+              </Box>
+            );
+          }}
+        </ProfileProgress>
       )}
     </Fragment>
   );
