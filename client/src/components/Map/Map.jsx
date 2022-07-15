@@ -32,6 +32,7 @@ const Map = ({ zoom, width, height }) => {
   const client = useClient();
   const { location } = state.currentUser;
 
+  console.log("do we have zoom: ", !!zoom);
   useEffect(() => {
     handleGetUsers();
   }, []);
@@ -43,10 +44,10 @@ const Map = ({ zoom, width, height }) => {
       setViewport({
         latitude: lat,
         longitude: lng,
-        zoom: zoom ? zoom : 12,
+        zoom: 12,
       });
     }
-  }, [state.userLocation._id, zoom]);
+  }, [state.userLocation._id]);
 
   const handleGetUsers = async () => {
     try {
@@ -58,6 +59,15 @@ const Map = ({ zoom, width, height }) => {
           latitude: location.lat,
           longitude: location.lng,
         });
+
+        if (zoom) {
+          setViewport({
+            ...INITIAL_VIEWPORT,
+            zoom,
+            latitude: location.lat,
+            longitude: location.lng,
+          });
+        }
       }
     } catch (err) {
       console.log(err);
