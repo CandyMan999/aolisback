@@ -162,8 +162,10 @@ const SignupModal = ({ onClose }) => {
               <p style={{ margin: "0px", padding: "0px" }}>
                 ------------------or------------------
               </p>
-              <Box>
-                <Input name="username" placeholder="username" type="input" />
+              <Box width="100%" justifyContent="space-evenly">
+                <Box width={"50%"}>
+                  <Input name="username" placeholder="username" type="input" />
+                </Box>
 
                 <GoogleButton
                   label="Signup"
