@@ -1,6 +1,7 @@
 const { AuthenticationError, PubSub } = require("apollo-server");
 const { OAuth2Client } = require("google-auth-library");
 const { User, Picture, Room, Comment } = require("./models");
+const { Configuration, OpenAIApi } = require("openai");
 
 const bcrypt = require("bcrypt");
 const moment = require("moment");
@@ -10,6 +11,10 @@ require("dotenv").config();
 const { verifyToken, createToken } = require("./utils/middleware");
 
 const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID);
+const configuration = new Configuration({
+  apiKey: process.env.OPEN_AI_KEY,
+});
+const openai = new OpenAIApi(configuration);
 
 const pubsub = new PubSub();
 const ROOM_CREATED_OR_UPDATED = "ROOM_CREATED_OR_UPDATED";
@@ -461,7 +466,6 @@ module.exports = {
     },
     createComment: async (root, args, ctx) => {
       const { text, userId, roomId } = args;
-
       try {
         const comment = await new Comment({ text }).save();
 
@@ -481,7 +485,7 @@ module.exports = {
           {
             _id: comment._id,
           },
-          { $push: { author, room } },
+          { author, room },
           { new: true }
         )
           .populate({
@@ -493,6 +497,98 @@ module.exports = {
         pubsub.publish(CREATE_COMMENT, {
           createComment: newComment,
         });
+
+        if (room.users.length === 1 && room.name === "Main") {
+          let mainRoom = await Room.find({ name: "Main" }).populate({
+            path: "comments",
+            populate: [{ path: "author", model: "User" }],
+          });
+
+          const findHumanComments = async () => {
+            let comments = [];
+            await mainRoom[0].comments.forEach((comment) => {
+              if (comment.author._id == userId) {
+                comments.push(comment.text);
+              }
+            });
+
+            return comments;
+          };
+
+          const findAIComments = async () => {
+            let comments = [];
+            await mainRoom[0].comments.forEach((comment) => {
+              if (comment.author.username === "J_Money$") {
+                comments.push(comment.text);
+              }
+            });
+
+            return comments;
+          };
+
+          const humanComments = await findHumanComments();
+
+          const AIcomments = await findAIComments();
+
+          const createPrompt = () => {
+            let prompt = "";
+            for (let i = 0; i < humanComments.length; i++) {
+              prompt += AIcomments[i]
+                ? `Human: ${humanComments[i]}\nAI:\n${AIcomments[i]}\n`
+                : i === 0
+                ? `Human: ${humanComments[i]}`
+                : `\nHuman: ${humanComments[i]}`;
+            }
+            return prompt;
+          };
+
+          const prompt = await createPrompt();
+
+          const responseAI = await openai.createCompletion({
+            model: "text-davinci-002",
+            prompt,
+            temperature: 0.9,
+            max_tokens: 150,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0.6,
+            stop: [" Human:", " AI:"],
+          });
+
+          const commentAI = await new Comment({
+            text: responseAI.data.choices[0].text,
+          }).save();
+
+          const roomAI = await Room.findByIdAndUpdate(
+            { _id: roomId },
+            { $push: { comments: commentAI } },
+            { new: true }
+          );
+
+          const authorAI = await User.findByIdAndUpdate(
+            { _id: "62c38477a2b49e4cbb75a8d3" },
+            { $push: { comments: commentAI } },
+            { new: true }
+          ).populate("pictures");
+
+          const newCommentAI = await Comment.findByIdAndUpdate(
+            {
+              _id: commentAI._id,
+            },
+            { author: authorAI, room: roomAI },
+            { new: true }
+          )
+            .populate({
+              path: "author",
+              populate: [{ path: "pictures", model: "Picture" }],
+            })
+            .populate("room");
+
+          pubsub.publish(CREATE_COMMENT, {
+            createComment: newCommentAI,
+          });
+        }
+
         return newComment;
       } catch (err) {
         throw new AuthenticationError(err.message);

@@ -24,6 +24,7 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mongoose": "^5.11.18",
+    "openai": "^3.0.0",
     "react-jitsi": "^1.0.4"
   },
   "devDependencies": {
