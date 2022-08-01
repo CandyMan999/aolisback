@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Message from "./Message";
+import { Loading, ICON_SIZES } from "../../components";
+
 import ReactDOM from "react-dom";
 
 class MessageList extends Component {
@@ -20,16 +22,21 @@ class MessageList extends Component {
     if (!this.props.roomId) {
       return (
         <div className="message-list">
-          <div className="join-a-room">
-            Join a Room!{" "}
-            <span
-              style={{
-                fontSize: "100px",
-              }}
-            >
-              &rarr;
-            </span>
-          </div>
+          {this.props.loading ? (
+            <Loading ring size={"150px"} />
+          ) : (
+            <div className="join-a-room">
+              {" "}
+              Join a Room!{" "}
+              <span
+                style={{
+                  fontSize: "100px",
+                }}
+              >
+                &rarr;
+              </span>
+            </div>
+          )}
         </div>
       );
     }

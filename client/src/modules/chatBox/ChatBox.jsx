@@ -35,6 +35,7 @@ const ChatBox = ({}) => {
   const [rooms, setRooms] = useState([]);
   const [roomId, setRoomId] = useState("");
   const [userClicked, setUserClicked] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { currentUser } = state;
 
@@ -81,6 +82,7 @@ const ChatBox = ({}) => {
   };
 
   const subscribeToRoom = async (roomId) => {
+    setLoading(true);
     const variables = {
       roomId,
       userId: currentUser._id,
@@ -93,7 +95,9 @@ const ChatBox = ({}) => {
       if (!!changeRoom) {
         setRoomId(changeRoom._id);
       }
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.error(err.message);
     }
   };
@@ -137,8 +141,6 @@ const ChatBox = ({}) => {
     }
   };
 
-  console.log(state);
-
   return (
     <Wrapper style={{ width: "100vW" }}>
       <RoomList
@@ -146,12 +148,14 @@ const ChatBox = ({}) => {
         subscribeToRoom={subscribeToRoom}
         rooms={rooms}
         currentUser={currentUser}
+        loading={loading}
       />
       <MessageList
         usernameClick={usernameClick}
         roomId={roomId}
         messages={messages}
         currentUser={!!currentUser && currentUser._id}
+        loading={loading}
       />
 
       <CreateRoom

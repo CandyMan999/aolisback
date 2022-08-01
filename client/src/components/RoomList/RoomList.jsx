@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import { Box, Text } from "../../components";
+import { Box, Text, Loading } from "../../components";
 import { COLORS } from "../../constants";
 
 import Context from "../../context";
 
-const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom }) => {
+const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
   const { state, dispatch } = useContext(Context);
 
   const handleIsLoggedIn = async () => {
@@ -32,19 +32,27 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom }) => {
                 borderBottom={active && `solid 2px ${COLORS.themeGreen}`}
                 key={room._id}
                 display="flex"
-                onClick={() =>
-                  !!state.currentUser.username
-                    ? subscribeToRoom(room._id)
-                    : dispatch({ type: "TOGGLE_LOGIN", payload: true })
+                isDisabled={loading}
+                onClick={
+                  !loading
+                    ? () =>
+                        !!state.currentUser.username
+                          ? subscribeToRoom(room._id)
+                          : dispatch({ type: "TOGGLE_LOGIN", payload: true })
+                    : undefined
                 }
               >
-                <Text
-                  color={active ? COLORS.themeGreen : COLORS.lightGrey}
-                  textShadow={active && `-2px 2px 3px ${COLORS.textRed}`}
-                  className="userNumber"
-                >
-                  {room.name}: Online {numberOfUsers}
-                </Text>
+                {loading ? (
+                  <Loading pulse />
+                ) : (
+                  <Text
+                    color={active ? COLORS.themeGreen : COLORS.lightGrey}
+                    textShadow={active && `-2px 2px 3px ${COLORS.textRed}`}
+                    className="userNumber"
+                  >
+                    {room.name}: Online {numberOfUsers}
+                  </Text>
+                )}
               </Box>
             );
           })}
