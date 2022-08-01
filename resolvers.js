@@ -72,6 +72,14 @@ module.exports = {
               moment().subtract(30, "minutes")
             );
 
+            await Room.findByIdAndUpdate(
+              {
+                _id: room._id,
+              },
+              { comments: room.comments.length ? room.comments : [] },
+              { new: true }
+            );
+
             if (!room.users.length && !!isAfterMin && room.name !== "Main") {
               await room.deleteOne({ _id: room._id });
             }
