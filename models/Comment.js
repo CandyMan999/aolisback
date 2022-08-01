@@ -8,11 +8,17 @@ const CommentSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     //change this back to 3700 after a lot of users
-    expires: 14800,
+    // was 14800
+    expires: 100,
     default: Date.now,
   },
   author: { type: mongoose.Schema.ObjectId, ref: "User" },
   room: { type: mongoose.Schema.ObjectId, ref: "Room" },
+});
+
+CommentSchema.pre("remove", function (next) {
+  // Remove all the assignment docs that reference the removed person.
+  this.model("Assignment").remove({ comment: this._id }, next);
 });
 
 module.exports = mongoose.model("Comment", CommentSchema);
