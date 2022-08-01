@@ -407,6 +407,54 @@ module.exports = {
       try {
         const room = await Room.findById({ _id: roomId });
 
+        if (room.name === "Main" && !room.comments.length) {
+          const prompt = `Human: I just joined the main chat for this new app about sobriety, please welcome me to "ChatSober.com" ask me a random personal question about my sobriety and give me a random sobriety quote`;
+
+          const responseAI = await openai.createCompletion({
+            model: "text-davinci-002",
+            prompt,
+            temperature: 0.9,
+            max_tokens: 250,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0.6,
+            stop: [" Human:", " AI:"],
+          });
+
+          const commentAI = await new Comment({
+            text: responseAI.data.choices[0].text,
+          }).save();
+
+          const roomAI = await Room.findByIdAndUpdate(
+            { _id: roomId },
+            { $push: { comments: commentAI } },
+            { new: true }
+          );
+
+          const authorAI = await User.findByIdAndUpdate(
+            { _id: "62c38477a2b49e4cbb75a8d3" },
+            { $push: { comments: commentAI } },
+            { new: true }
+          ).populate("pictures");
+
+          const newCommentAI = await Comment.findByIdAndUpdate(
+            {
+              _id: commentAI._id,
+            },
+            { author: authorAI, room: roomAI },
+            { new: true }
+          )
+            .populate({
+              path: "author",
+              populate: [{ path: "pictures", model: "Picture" }],
+            })
+            .populate("room");
+
+          pubsub.publish(CREATE_COMMENT, {
+            createComment: newCommentAI,
+          });
+        }
+
         const user = await User.findByIdAndUpdate(
           { _id: userId },
           {
@@ -467,54 +515,6 @@ module.exports = {
         pubsub.publish(ROOM_CREATED_OR_UPDATED, {
           roomCreatedOrUpdated: getAllRooms,
         });
-
-        if (room.name === "Main" && !room.comments.length) {
-          const prompt = `Human: I just joined the main chat for this new app about sobriety, please welcome me to "ChatSober.com" ask me a random personal question about my sobriety and give me a random sobriety quote`;
-
-          const responseAI = await openai.createCompletion({
-            model: "text-davinci-002",
-            prompt,
-            temperature: 0.9,
-            max_tokens: 250,
-            top_p: 1,
-            frequency_penalty: 0,
-            presence_penalty: 0.6,
-            stop: [" Human:", " AI:"],
-          });
-
-          const commentAI = await new Comment({
-            text: responseAI.data.choices[0].text,
-          }).save();
-
-          const roomAI = await Room.findByIdAndUpdate(
-            { _id: roomId },
-            { $push: { comments: commentAI } },
-            { new: true }
-          );
-
-          const authorAI = await User.findByIdAndUpdate(
-            { _id: "62c38477a2b49e4cbb75a8d3" },
-            { $push: { comments: commentAI } },
-            { new: true }
-          ).populate("pictures");
-
-          const newCommentAI = await Comment.findByIdAndUpdate(
-            {
-              _id: commentAI._id,
-            },
-            { author: authorAI, room: roomAI },
-            { new: true }
-          )
-            .populate({
-              path: "author",
-              populate: [{ path: "pictures", model: "Picture" }],
-            })
-            .populate("room");
-
-          pubsub.publish(CREATE_COMMENT, {
-            createComment: newCommentAI,
-          });
-        }
 
         return currentRoom;
       } catch (err) {
@@ -588,15 +588,33 @@ module.exports = {
           const AIcomments = await findAIComments();
 
           const createPrompt = () => {
-            let prompt = "";
-            for (let i = 0; i < humanComments.length; i++) {
-              prompt += AIcomments[i]
-                ? `Human: ${humanComments[i]}\nAI:\n${AIcomments[i]}\n`
-                : i === 0
-                ? `Human: ${humanComments[i]}`
-                : `\nHuman: ${humanComments[i]}`;
+            try {
+              const mostComment =
+                humanComments.length > AIcomments.length
+                  ? {
+                      type: "Human: ",
+                      comments: humanComments,
+                      otherType: "AI: ",
+                      otherComments: AIcomments,
+                    }
+                  : {
+                      type: "AI: ",
+                      comments: AIcomments,
+                      otherType: "Human: ",
+                      otherComments: humanComments,
+                    };
+
+              let prompt = "";
+              for (let i = 0; i < mostComment.comments.length; i++) {
+                prompt += mostComment.otherComments[i]
+                  ? `\n${mostComment.type}${mostComment.comments[i]}\n${mostComment.otherType}${mostComment.otherComments[i]}`
+                  : `\n${mostComment.type}${mostComment.comments[i]}`;
+              }
+
+              return prompt;
+            } catch (err) {
+              console.log(err);
             }
-            return prompt;
           };
 
           const prompt = await createPrompt();
