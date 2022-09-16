@@ -51,6 +51,9 @@ const ChatBox = ({}) => {
     if (roomId) {
       getComments();
     }
+    if (!currentUser) {
+      setRoomId("");
+    }
   }, [roomId]);
 
   const getRooms = async () => {

@@ -91,7 +91,7 @@ export const MenuItem = ({
     if (item === "Logout") {
       handleLogout();
       clearToken();
-      dispatch({ type: "CHANGE_ROOM", payload: null });
+      dispatch({ type: "CHANGE_ROOM", payload: "" });
       dispatch({ type: "LOGIN_USER", payload: false });
       toggle();
       console.log(state);

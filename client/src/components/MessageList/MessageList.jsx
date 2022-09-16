@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Message from "./Message";
-import { Loading, ICON_SIZES } from "../../components";
+import { Loading } from "../../components";
 
 import ReactDOM from "react-dom";
 
@@ -19,31 +19,30 @@ class MessageList extends Component {
   }
 
   render() {
-    if (this.props.loading) {
+    if (!this.props.roomId) {
       return (
         <div className="message-list">
-          {this.props.roomId ? (
-            <Loading ring size={"150px"} />
-          ) : (
-            <div className="join-a-room">
-              {" "}
-              Join a Room!{" "}
-              <span
-                style={{
-                  fontSize: "100px",
-                }}
-              >
-                &rarr;
-              </span>
-            </div>
-          )}
+          <div className="join-a-room">
+            {" "}
+            Join a Room!{" "}
+            <span
+              style={{
+                fontSize: "100px",
+              }}
+            >
+              &rarr;
+            </span>
+          </div>
         </div>
       );
     }
 
     return (
       <div className="message-list">
-        {!!this.props.messages.length &&
+        {this.props.loading ? (
+          <Loading ring size={"150px"} />
+        ) : (
+          !!this.props.messages.length &&
           this.props.messages.map((message, index) => {
             return (
               <Message
@@ -61,7 +60,8 @@ class MessageList extends Component {
                 createdAt={message.createdAt}
               />
             );
-          })}
+          })
+        )}
       </div>
     );
   }
