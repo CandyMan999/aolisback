@@ -68,6 +68,7 @@ const ChatBox = ({}) => {
       roomId,
     };
     try {
+      setLoading(true);
       const { getComments } = await client.request(
         GET_COMMENTS_QUERY,
         variables
@@ -76,7 +77,9 @@ const ChatBox = ({}) => {
       if (!!getComments) {
         setMessages(getComments);
       }
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log(err.message);
     }
   };
@@ -116,13 +119,16 @@ const ChatBox = ({}) => {
 
   const createRoom = async (variables) => {
     try {
+      setLoading(true);
       const { createRoom } = await client.request(
         CREATE_ROOM_MUTATION,
         variables
       );
 
       setRoomId(createRoom._id);
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.error(err);
     }
   };

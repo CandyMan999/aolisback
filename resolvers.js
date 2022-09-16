@@ -390,6 +390,54 @@ module.exports = {
           })
         );
 
+        if (currentRoom.name !== "Main" && !currentRoom.comments.length) {
+          const prompt = `Human: Let's pretend this is a chat application with the topic of ${currentRoom.name}, introduce yourself as artificial intelligence to me, my name is "${user.username}", then let me know that they I can chat with you while I wait for other users to join the room I just created.`;
+
+          const responseAI = await openai.createCompletion({
+            model: "text-davinci-002",
+            prompt,
+            temperature: 0.9,
+            max_tokens: 250,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0.6,
+            stop: [" Human:", " AI:"],
+          });
+
+          const commentAI = await new Comment({
+            text: responseAI.data.choices[0].text,
+          }).save();
+
+          const roomAI = await Room.findByIdAndUpdate(
+            { _id: room._id },
+            { $push: { comments: commentAI } },
+            { new: true }
+          );
+
+          const authorAI = await User.findByIdAndUpdate(
+            { _id: "62c38477a2b49e4cbb75a8d3" },
+            { $push: { comments: commentAI } },
+            { new: true }
+          ).populate("pictures");
+
+          const newCommentAI = await Comment.findByIdAndUpdate(
+            {
+              _id: commentAI._id,
+            },
+            { author: authorAI, room: roomAI },
+            { new: true }
+          )
+            .populate({
+              path: "author",
+              populate: [{ path: "pictures", model: "Picture" }],
+            })
+            .populate("room");
+
+          pubsub.publish(CREATE_COMMENT, {
+            createComment: newCommentAI,
+          });
+        }
+
         const getAllRooms = await Room.find().populate("users");
 
         pubsub.publish(ROOM_CREATED_OR_UPDATED, {
@@ -555,8 +603,8 @@ module.exports = {
           createComment: newComment,
         });
 
-        if (room.users.length === 1 && room.name === "Main") {
-          let mainRoom = await Room.find({ name: "Main" }).populate({
+        if (room.users.length === 1) {
+          let mainRoom = await Room.find({ _id: roomId }).populate({
             path: "comments",
             populate: [{ path: "author", model: "User" }],
           });

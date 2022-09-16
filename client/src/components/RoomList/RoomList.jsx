@@ -33,6 +33,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                 key={room._id}
                 display="flex"
                 isDisabled={loading}
+                width={"100%"}
                 onClick={
                   !loading
                     ? () =>
@@ -42,17 +43,18 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                     : undefined
                 }
               >
-                {loading ? (
-                  <Loading pulse />
-                ) : (
-                  <Text
-                    color={active ? COLORS.themeGreen : COLORS.lightGrey}
-                    textShadow={active && `-2px 2px 3px ${COLORS.textRed}`}
-                    className="userNumber"
-                  >
-                    {room.name}: Online {numberOfUsers}
-                  </Text>
-                )}
+                <Text
+                  color={active ? COLORS.themeGreen : COLORS.lightGrey}
+                  textShadow={active && `-2px 2px 3px ${COLORS.textRed}`}
+                  className="userNumber"
+                  width={"100%"}
+                >
+                  {active && loading ? (
+                    <Loading bar />
+                  ) : (
+                    `${room.name}: Online ${numberOfUsers}`
+                  )}
+                </Text>
               </Box>
             );
           })}

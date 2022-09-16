@@ -19,10 +19,10 @@ class MessageList extends Component {
   }
 
   render() {
-    if (!this.props.roomId) {
+    if (this.props.loading) {
       return (
         <div className="message-list">
-          {this.props.loading ? (
+          {this.props.roomId ? (
             <Loading ring size={"150px"} />
           ) : (
             <div className="join-a-room">
