@@ -22,17 +22,21 @@ class MessageList extends Component {
     if (!this.props.roomId) {
       return (
         <div className="message-list">
-          <div className="join-a-room">
-            {" "}
-            Join a Room!{" "}
-            <span
-              style={{
-                fontSize: "100px",
-              }}
-            >
-              &rarr;
-            </span>
-          </div>
+          {this.props.loading ? (
+            <Loading ring size={"150px"} />
+          ) : (
+            <div className="join-a-room">
+              {" "}
+              Join a Room!{" "}
+              <span
+                style={{
+                  fontSize: "100px",
+                }}
+              >
+                &rarr;
+              </span>
+            </div>
+          )}
         </div>
       );
     }
