@@ -16,7 +16,7 @@ const Drawer = ({ isOpen, onClose, title, children }) => {
         animate={{ width: isOpen ? (mobile ? 300 : 800) : 0 }}
         transition={{ ease: "linear", duration: 0.5 }}
         style={{
-          height: "100%",
+          height: "calc(100vH - 100px)",
           backgroundColor: COLORS.darkestGrey,
           boxShadow: "2px 0px 5px rgba(0,0,0,0.5)",
           position: "fixed",
