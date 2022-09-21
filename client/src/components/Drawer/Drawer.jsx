@@ -1,4 +1,4 @@
-import React, { Fragment, Children } from "react";
+import React, { Fragment } from "react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { motion } from "framer-motion";
 
@@ -16,7 +16,7 @@ const Drawer = ({ isOpen, onClose, title, children }) => {
         animate={{ width: isOpen ? (mobile ? 300 : 800) : 0 }}
         transition={{ ease: "linear", duration: 0.5 }}
         style={{
-          height: "calc(100vH - 100px)",
+          height: `calc(100vH - 165px)`,
           backgroundColor: COLORS.darkestGrey,
           boxShadow: "2px 0px 5px rgba(0,0,0,0.5)",
           position: "fixed",
