@@ -19,7 +19,7 @@ const Message = ({
 }) => {
   const handleSpeech = async (text) => {
     let voices = await window.speechSynthesis.getVoices();
-    console.log("voices: ", voices);
+
     const msg = new SpeechSynthesisUtterance();
     msg.text = text;
     window.speechSynthesis.speak(msg);

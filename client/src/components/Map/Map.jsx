@@ -32,7 +32,6 @@ const Map = ({ zoom, width, height }) => {
   const client = useClient();
   const { location } = state.currentUser;
 
-  console.log("do we have zoom: ", !!zoom);
   useEffect(() => {
     handleGetUsers();
   }, []);

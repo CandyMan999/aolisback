@@ -33,7 +33,7 @@ const ChatBox = ({}) => {
   const { state, dispatch } = useContext(Context);
   const [messages, setMessages] = useState([]);
   const [rooms, setRooms] = useState([]);
-  const [roomId, setRoomId] = useState("");
+  // const [roomId, setRoomId] = useState("");
   const [userClicked, setUserClicked] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -48,13 +48,14 @@ const ChatBox = ({}) => {
   }, []);
 
   useEffect(() => {
-    if (roomId) {
+    if (state.roomId) {
       getComments();
     }
     if (!currentUser) {
-      setRoomId("");
+      // setRoomId("");
+      dispatch({ type: "CHANGE_ROOM", payload: null });
     }
-  }, [roomId]);
+  }, [state.roomId, currentUser]);
 
   const getRooms = async () => {
     try {
@@ -68,7 +69,7 @@ const ChatBox = ({}) => {
 
   const getComments = async () => {
     const variables = {
-      roomId,
+      roomId: state.roomId,
     };
     try {
       setLoading(true);
@@ -99,7 +100,8 @@ const ChatBox = ({}) => {
         variables
       );
       if (!!changeRoom) {
-        setRoomId(changeRoom._id);
+        // setRoomId(changeRoom._id);
+        await dispatch({ type: "CHANGE_ROOM", payload: changeRoom._id });
       }
       setLoading(false);
     } catch (err) {
@@ -128,7 +130,8 @@ const ChatBox = ({}) => {
         variables
       );
 
-      setRoomId(createRoom._id);
+      // setRoomId(createRoom._id);
+      await dispatch({ type: "CHANGE_ROOM", payload: createRoom._id });
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -140,7 +143,7 @@ const ChatBox = ({}) => {
     const variables = {
       text,
       userId: currentUser._id,
-      roomId,
+      roomId: state.roomId,
     };
 
     try {
@@ -153,7 +156,7 @@ const ChatBox = ({}) => {
   return (
     <Wrapper style={{ width: "100vW" }}>
       <RoomList
-        roomId={roomId}
+        roomId={state.roomId}
         subscribeToRoom={subscribeToRoom}
         rooms={rooms}
         currentUser={currentUser}
@@ -161,7 +164,7 @@ const ChatBox = ({}) => {
       />
       <MessageList
         usernameClick={usernameClick}
-        roomId={roomId}
+        roomId={state.roomId}
         messages={messages}
         currentUser={!!currentUser && currentUser._id}
         loading={loading}
@@ -174,7 +177,7 @@ const ChatBox = ({}) => {
       />
 
       <SendMessage
-        disabled={!roomId}
+        disabled={!state.roomId}
         sendMessage={sendMessage}
         dispatch={dispatch}
         currentUserID={!!currentUser && currentUser._id}

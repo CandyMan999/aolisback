@@ -44,8 +44,6 @@ const Navbar = ({ props }) => {
       const { fetchMe } = await client.request(FETCH_ME, variables);
 
       await dispatch({ type: "LOGIN_USER", payload: fetchMe });
-
-      console.log("dispatch current: ", currentUser);
     } catch (err) {
       console.log(err);
     }
@@ -77,7 +75,9 @@ const Navbar = ({ props }) => {
             fontSize={FONT_SIZES.X_LARGE}
             bold
           >
-            ChatSober
+            {currentUser && currentUser.username
+              ? "LoveChat"
+              : "LoveAtFirstChat"}
           </Text>
         </NavLink>
       </Box>

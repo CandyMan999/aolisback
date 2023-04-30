@@ -34,8 +34,6 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
 
   const border = (height + 10) * 0.1;
 
-  // console.log("image height: ", currentPhoto.naturalHeight);
-
   return (
     <Box
       justifyContent="center"

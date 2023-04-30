@@ -91,16 +91,14 @@ export const MenuItem = ({
     if (item === "Logout") {
       handleLogout();
       clearToken();
-      dispatch({ type: "CHANGE_ROOM", payload: "" });
+      dispatch({ type: "CHANGE_ROOM", payload: null });
       dispatch({ type: "LOGIN_USER", payload: false });
       toggle();
-      console.log(state);
     }
   };
 
   const handleLogout = async () => {
     try {
-      console.log(state);
       const variables = {
         username: state.currentUser.username,
       };
