@@ -60,7 +60,7 @@ const MyDetails = ({
                 >
                   <Textarea
                     width={"90%"}
-                    maxLength={140}
+                    maxLength={400}
                     name="intro"
                     placeholder="intro"
                     type="input"

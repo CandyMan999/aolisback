@@ -6,6 +6,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Navbar from "./modules/navbar";
 import HomeContainer from "./modules/home";
 import CreateProfile from "./modules/createProfile";
+import GridSearch from "./modules/gridSearch";
 import { Video, Map } from "./components";
 
 import "./App.css";
@@ -20,6 +21,7 @@ class App extends React.PureComponent {
           <ProtectedRoute path="/profile" component={CreateProfile} />
           <ProtectedRoute path="/video" component={Video} />
           <ProtectedRoute path="/location" component={Map} />
+          <Route path="/grid-search" component={GridSearch} />
         </Switch>
       </Fragment>
     );

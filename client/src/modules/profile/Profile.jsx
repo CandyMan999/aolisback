@@ -7,6 +7,7 @@ import {
   ICON_SIZES,
   Icon,
   PhotoSlider,
+  FONT_SIZES,
 } from "../../components";
 
 import { COLORS } from "../../constants";
@@ -17,7 +18,7 @@ import { useClient } from "../../client";
 import Context from "../../context";
 import { useHistory } from "react-router-dom";
 
-const Profile = ({ userClicked }) => {
+const Profile = ({ userClicked, mobile }) => {
   //eventually userClicked will be whole object
   const client = useClient();
   let history = useHistory();
@@ -34,6 +35,8 @@ const Profile = ({ userClicked }) => {
     occupation,
     marijuana,
     drink,
+    smoke,
+    drugs,
     pictures,
     _id,
   } = userClicked;
@@ -56,144 +59,182 @@ const Profile = ({ userClicked }) => {
   };
 
   return (
-    <Drawer
-      onClose={toggleDrawer}
-      isOpen={state.isProfile}
-      title={
-        <span style={{ color: COLORS.vividBlue }}>{username}'s Profile</span>
-      }
-    >
-      <Box display="flex" column paddingLeft={20} paddingRight={20}>
-        <Box justifyContent={"center"}>
-          <PhotoSlider
-            withDelete={_id && _id === state.currentUser._id ? true : false}
-            images={pictures}
-            height={310}
-            width={200}
-          />
+    <Drawer onClose={toggleDrawer} isOpen={state.isProfile}>
+      <Box width={"100%"} style={{ borderBottom: "solid 1px black" }}>
+        <PhotoSlider
+          withDelete={_id && _id === state.currentUser._id ? true : false}
+          images={pictures}
+          height={310}
+          width={200}
+        />
+      </Box>
+      <Box display="flex" width="100%" justifyContent="space-between">
+        <Box paddingLeft={"5%"} display="flex" column>
+          <Text margin={2} bold fontSize={FONT_SIZES.XX_LARGE}>
+            {username}
+          </Text>
+          <Text margin={2}>
+            {sex} {age}
+          </Text>
         </Box>
-        <Box justifyContent="center">
-          {singleTime && (
-            <Box position="absolute" left={0}>
-              <Icon
-                name="heart"
-                color={COLORS.red}
-                size={ICON_SIZES.XX_LARGE}
-              />
-            </Box>
-          )}
-
-          {singleTime && (
-            <Text
-              style={{
-                borderBottom: "solid 2px white",
-                paddingBottom: "4px",
-              }}
-              center
-              margin={0}
-            >
-              <span style={{ color: COLORS.white }}>Single Since:</span>{" "}
-              <span style={{ color: COLORS.themeGreen }}>
-                {moment(Number(singleTime)).format("MM-DD-YYYY")}{" "}
-              </span>
-              <Text margin={1} center color={COLORS.vividBlue}>
-                ({formatDistanceToNow(Number(singleTime)).toUpperCase()})
-              </Text>
+        <Box display="flex" column paddingRight="5%">
+          <Box>
+            <Icon name="heart" color={COLORS.red} size={ICON_SIZES.XX_LARGE} />
+            <Text marginBottom={0} bold>
+              Single Since:
             </Text>
-          )}
+          </Box>
+          <Box display="flex" justifyContent="flex-end">
+            {singleTime && (
+              <Text
+                style={{
+                  marginTop: "0px",
+                  paddingBottom: "4px",
+                }}
+                center
+                margin={0}
+              >
+                <Text bold margin={0}>
+                  {moment(Number(singleTime)).format("MM-DD-YYYY")}{" "}
+                </Text>
+                <Text margin={1} center color={COLORS.red}>
+                  ({formatDistanceToNow(Number(singleTime)).toUpperCase()})
+                </Text>
+              </Text>
+            )}
+          </Box>
+        </Box>
+      </Box>
+      <Box
+        display="flex"
+        width="auto"
+        justifyContent="space-between"
+        height={"fit-content"}
+        paddingY={5}
+        paddingLeft="5%"
+        paddingRight="5%"
+        style={{
+          borderBottom: `solid 2px ${COLORS.lighterGrey}`,
+          paddingBottom: "6px",
+        }}
+      >
+        {intro && <Text margin={0}>{intro}</Text>}
+      </Box>
+      <Box
+        display="flex"
+        width="auto"
+        justifyContent="space-between"
+        style={{
+          borderBottom: `solid 2px ${COLORS.lighterGrey}`,
+          paddingBottom: "4px",
+        }}
+        paddingY={5}
+        paddingLeft="5%"
+        paddingRight="5%"
+      >
+        <Text bold>Occupation: </Text>
+        {occupation && <Text>{occupation}</Text>}
+      </Box>
+      <Box
+        display="flex"
+        width="auto"
+        justifyContent="space-between"
+        style={{
+          borderBottom: `solid 2px ${COLORS.lighterGrey}`,
+          paddingBottom: "4px",
+        }}
+        paddingY={5}
+        paddingLeft="5%"
+        paddingRight="5%"
+      >
+        <Text bold>Drink: </Text>
+        {drink && <Text>{drink}</Text>}
+      </Box>
+      <Box
+        display="flex"
+        width="auto"
+        justifyContent="space-between"
+        style={{
+          borderBottom: `solid 2px ${COLORS.lighterGrey}`,
+          paddingBottom: "4px",
+        }}
+        paddingY={5}
+        paddingLeft="5%"
+        paddingRight="5%"
+      >
+        <Text bold>Smoke: </Text>
+        {smoke && <Text>{smoke}</Text>}
+      </Box>
+      <Box
+        display="flex"
+        width="auto"
+        justifyContent="space-between"
+        style={{
+          borderBottom: `solid 2px ${COLORS.lighterGrey}`,
+          paddingBottom: "4px",
+        }}
+        paddingY={5}
+        paddingLeft="5%"
+        paddingRight="5%"
+      >
+        <Box>
+          <Text bold>Marijuana: </Text>
+          <Icon name="weed" color={COLORS.green} size={ICON_SIZES.X_LARGE} />
         </Box>
 
-        {intro && (
-          <Text
-            style={{ borderBottom: "solid 2px white", paddingBottom: "4px" }}
-            margin={0}
-            color={COLORS.white}
-          >
-            {" "}
-            INTRO: <span style={{ color: COLORS.themeGreen }}>{intro}</span>
-          </Text>
-        )}
-        {sex && (
-          <Text
-            style={{ borderBottom: "solid 2px white", paddingBottom: "4px" }}
-            margin={0}
-            color={COLORS.white}
-          >
-            {" "}
-            Gender: <span style={{ color: COLORS.themeGreen }}>{sex}</span>
-          </Text>
-        )}
-        {age && (
-          <Text
-            style={{ borderBottom: "solid 2px white", paddingBottom: "4px" }}
-            margin={0}
-            color={COLORS.white}
-          >
-            {" "}
-            Age: <span style={{ color: COLORS.themeGreen }}>{age}</span>
-          </Text>
-        )}
-        <Text
-          style={{ borderBottom: "solid 2px white", paddingBottom: "4px" }}
-          margin={0}
-          color={COLORS.white}
+        {marijuana && <Text>{marijuana}</Text>}
+      </Box>
+      <Box
+        display="flex"
+        width="auto"
+        justifyContent="space-between"
+        style={{
+          borderBottom: `solid 2px ${COLORS.lighterGrey}`,
+          paddingBottom: "4px",
+        }}
+        paddingY={5}
+        paddingLeft="5%"
+        paddingRight="5%"
+      >
+        <Text bold>Drugs: </Text>
+        {drugs && <Text>{drugs}</Text>}
+      </Box>
+      <Box
+        display="flex"
+        width="auto"
+        justifyContent="space-between"
+        style={{
+          borderBottom: `solid 2px ${COLORS.lighterGrey}`,
+          paddingBottom: "4px",
+        }}
+        paddingY={5}
+        paddingLeft="5%"
+        paddingRight="5%"
+      >
+        <Text bold>Kids: </Text>
+        {kids && <Text>{kids}</Text>}
+      </Box>
+
+      <Box justifyContent="center" width={"100%"}>
+        <Button
+          style={{ margin: 0 }}
+          onClick={handleVideo}
+          color="red"
+          width="100%"
         >
-          {" "}
-          Kids:{" "}
-          <span style={{ color: COLORS.themeGreen }}>
-            {kids ? "Yes" : "No"}
-          </span>
-        </Text>
-        {occupation && (
-          <Text
-            style={{ borderBottom: "solid 2px white", paddingBottom: "4px" }}
-            margin={0}
-            color={COLORS.white}
-          >
-            {" "}
-            Occupation:{" "}
-            <span style={{ color: COLORS.themeGreen }}>{occupation}</span>
-          </Text>
-        )}
-        {drink && (
-          <Text
-            style={{ borderBottom: "solid 2px white", paddingBottom: "4px" }}
-            margin={0}
-            color={COLORS.white}
-          >
-            {" "}
-            Alcohol: <span style={{ color: COLORS.themeGreen }}>{drink}</span>
-          </Text>
-        )}
-        {marijuana && (
-          <Text
-            style={{ borderBottom: "solid 2px white", paddingBottom: "4px" }}
-            margin={0}
-            color={COLORS.white}
-          >
-            {" "}
-            Marijuana:{" "}
-            <span style={{ color: COLORS.themeGreen }}>{marijuana}</span>
-          </Text>
-        )}
-
-        <Box justifyContent="center">
-          <Button onClick={handleVideo} color="red" width="fit-content">
-            <span>Join {username}'s Video Channel</span>
-          </Button>
-        </Box>
-        <Box justifyContent="center">
-          <Button
-            disabled={location && !location.lat}
-            onClick={() => handleLocation(_id, location)}
-            color={
-              location && !location.lat ? COLORS.lightGrey : COLORS.vividBlue
-            }
-            width="fit-content"
-          >
-            <span>View Location</span>
-          </Button>
-        </Box>
+          <span>{username}'s Video Channel</span>
+        </Button>
+        <Button
+          style={{ margin: 0 }}
+          disabled={location && !location.lat}
+          onClick={() => handleLocation(_id, location)}
+          color={
+            location && !location.lat ? COLORS.lightGrey : COLORS.vividBlue
+          }
+          width="100%"
+        >
+          <span>View Location</span>
+        </Button>
       </Box>
     </Drawer>
   );

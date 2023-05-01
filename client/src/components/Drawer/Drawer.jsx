@@ -13,37 +13,31 @@ const Drawer = ({ isOpen, onClose, title, children }) => {
       {isOpen && <BackDrop onClose={onClose} />}
 
       <motion.div
-        animate={{ width: isOpen ? (mobile ? 300 : 800) : 0 }}
+        animate={{ width: isOpen ? (mobile ? "100%" : 800) : 0 }}
         transition={{ ease: "linear", duration: 0.5 }}
         style={{
-          height: `85%`,
-          backgroundColor: COLORS.darkestGrey,
+          height: mobile ? "100%" : `85%`,
+          backgroundColor: COLORS.white,
           boxShadow: "2px 0px 5px rgba(0,0,0,0.5)",
           position: "fixed",
-          top: 100,
+          top: mobile ? 0 : 100,
           left: 0,
-          borderRadius: "0px 5px 5px 0px",
+          borderRadius: mobile ? "" : "0px 5px 5px 0px",
           zIndex: 200,
           overflow: "scroll",
         }}
       >
-        <Box position="absolute" top={6} right={6} zIndex={2}>
+        <Box position="absolute" top={30} left={10} zIndex={20000}>
           <Icon
             clickable
-            name="close"
-            color={COLORS.white}
-            size={ICON_SIZES.LARGE}
+            name="back"
+            color={COLORS.black}
+            size={ICON_SIZES.XX_LARGE}
             onClick={onClose}
           />
         </Box>
         {isOpen && (
-          <Box
-            position="absolute"
-            column
-            top={6}
-            width="100%"
-            justifyContent="center"
-          >
+          <Box position="absolute" column width="100%" justifyContent="center">
             <Text center color={COLORS.white} bold>
               {title}
             </Text>

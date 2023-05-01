@@ -25,7 +25,8 @@
     "moment": "^2.29.1",
     "mongoose": "^5.11.18",
     "openai": "^3.0.0",
-    "react-jitsi": "^1.0.4"
+    "react-jitsi": "^1.0.4",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"

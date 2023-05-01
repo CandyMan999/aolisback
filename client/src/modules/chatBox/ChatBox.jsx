@@ -28,6 +28,8 @@ import Profile from "../profile";
 import { useClient } from "../../client";
 import Context from "../../context";
 
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 const ChatBox = ({}) => {
   const client = useClient();
   const { state, dispatch } = useContext(Context);
@@ -36,7 +38,7 @@ const ChatBox = ({}) => {
   // const [roomId, setRoomId] = useState("");
   const [userClicked, setUserClicked] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const mobile = useMediaQuery("(max-width: 650px)");
   const { currentUser } = state;
 
   useEffect(() => {
@@ -200,7 +202,7 @@ const ChatBox = ({}) => {
           setMessages([...messages, createComment]);
         }}
       />
-      <Profile userClicked={userClicked} />
+      <Profile userClicked={userClicked} mobile={mobile} />
     </Wrapper>
   );
 };

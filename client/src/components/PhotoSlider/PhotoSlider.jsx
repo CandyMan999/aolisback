@@ -38,17 +38,17 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
     <Box
       justifyContent="center"
       height={height + 10}
-      width={"70vW"}
-      border="3px solid #ccc"
+      width={"100%"}
+      // border="3px solid #ccc"
       background={COLORS.white}
       style={{ overflow: "hidden" }}
     >
-      <Box
+      {/* <Box
         position="absolute"
         background="black"
         width={"100%"}
         height={border}
-      />
+      /> */}
 
       {pictures.length && (
         <Box
@@ -76,8 +76,8 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
               publicId={currentPhoto.publicId ? currentPhoto.publicId : null}
               onDelete={handleDeletePhoto}
               url={currentPhoto.url}
-              height={height - border}
-              width={width - border}
+              height={height}
+              width={width}
               withDelete={withDelete}
               countStr={`${currentIdx + 1} of ${pictures.length}`}
             />
@@ -119,13 +119,13 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
         </Box>
       )}
 
-      <Box
+      {/* <Box
         position="absolute"
         background="black"
         bottom={0}
         width={"100%"}
         height={border}
-      />
+      /> */}
     </Box>
   );
 };

@@ -20,6 +20,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
     { name: "User Signup", icon: "signup", route: "/" },
     { name: "View Users Locations", icon: "search", route: "/location" },
     { name: "Home", icon: "home", route: "/" },
+    { name: "Browse Users", icon: "search", route: "/grid-search" },
     { name: "Logout", icon: "signout", route: "/" },
   ]);
 
@@ -30,6 +31,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
         { name: "My Video Channel", icon: "video", route: "/video" },
         { name: "View Users Locations", icon: "search", route: "/location" },
         { name: "Home", icon: "home", route: "/" },
+        { name: "Browse Users", icon: "search", route: "/grid-search" },
         { name: "Logout", icon: "signout", route: "/" },
       ]);
     }

@@ -88,6 +88,9 @@ export const MenuItem = ({
     if (item === "View Users Locations") {
       toggle();
     }
+    if (item === "Browse Users") {
+      toggle();
+    }
     if (item === "Logout") {
       handleLogout();
       clearToken();

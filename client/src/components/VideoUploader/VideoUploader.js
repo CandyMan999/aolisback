@@ -34,7 +34,7 @@ function VideoUploader() {
   return (
     <div>
       {submitting ? (
-        <Loading />
+        <Loading ring />
       ) : (
         <Fragment>
           <input
