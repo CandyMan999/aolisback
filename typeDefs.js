@@ -12,17 +12,44 @@ module.exports = gql`
     intro: String
     age: String
     sex: Sex
-    kids: Boolean
+    kids: String
     occupation: String
-    sobrietyTime: String
-    sponsor: Boolean
-    sponsee: Boolean
+    singleTime: String
+    drink: Drink
+    smoke: Smoke
+    marijuana: Marijuana
+    drugs: Drugs
     location: Location
     room: Room
   }
+
+  enum Drugs {
+    Recreational
+    Yes
+    No
+  }
+
+  enum Marijuana {
+    Friendly
+    Unfriendly
+  }
+
+  enum Smoke {
+    Yes
+    Socially
+    Never
+  }
+
+  enum Drink {
+    Yes
+    Socially
+    Never
+  }
+
   enum Sex {
-    male
-    female
+    Male
+    Female
+    Gender_Diverse
   }
 
   type Location {
@@ -89,10 +116,12 @@ module.exports = gql`
       age: String
       sex: Sex
       occupation: String
-      sobrietyTime: String
-      sponsor: Boolean
-      sponsee: Boolean
-      kids: Boolean
+      singleTime: String
+      drink: Drink
+      smoke: Smoke
+      marijuana: Marijuana
+      drugs: Drugs
+      kids: String
     ): User
     updateLocation(_id: ID!, lat: Float!, lng: Float!): User
     addPhoto(_id: ID!, url: String!, publicId: String!): User

@@ -29,6 +29,6 @@ export const COLORS = {
   textYellow: "#6d671d",
   backgroundBlue: "#9cb9d8",
   textBlue: "#0c2642",
-  gold: "gold",
+  gold: "#FFBF00",
   pink: "#FF69B4",
 };

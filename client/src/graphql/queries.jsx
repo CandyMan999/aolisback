@@ -55,9 +55,11 @@ query($_id: ID!){
     sex
     age
     occupation
-    sobrietyTime
-    sponsor
-    sponsee 
+    singleTime
+    drink
+    smoke
+    marijuana
+    drugs
     kids
     location {
       lat
@@ -111,9 +113,11 @@ query($token: String!){
               sex
               age
               occupation
-              sobrietyTime
-              sponsor
-              sponsee 
+              singleTime
+              drink
+              smoke
+              marijuana
+              drugs
               kids
     
       }

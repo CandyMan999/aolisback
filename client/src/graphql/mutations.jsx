@@ -21,9 +21,11 @@ export const GOOGLE_SIGNUP_MUTATION = `
             sex
             age
             occupation
-            sobrietyTime
-            sponsor
-            sponsee 
+            singleTime
+            drink
+            smoke
+            marijuana
+            drugs
             kids
           }
             
@@ -54,9 +56,11 @@ export const GOOGLE_LOGIN_MUTATION = `
             sex
             age
             occupation
-            sobrietyTime
-            sponsor
-            sponsee 
+            singleTime
+            drink
+            smoke
+            marijuana
+            drugs
             kids
           }
         }
@@ -99,9 +103,11 @@ mutation($username: String!, $password: String! ){
         sex
         age
         occupation
-        sobrietyTime
-        sponsor
-        sponsee 
+        singleTime
+        drink
+        smoke
+        marijuana
+        drugs
         kids
       }
     }
@@ -163,8 +169,8 @@ mutation($text: String!, $userId: ID!, $roomId: ID!){
 }`;
 
 export const CREATE_PROFILE_MUTATION = `
-mutation($_id: ID!, $intro: String, $age: String, $sex: Sex, $occupation: String, $sobrietyTime: String, $sponsor: Boolean, $sponsee: Boolean, $kids: Boolean ){
-    createProfile(_id: $_id, intro: $intro, age: $age, sex: $sex, occupation: $occupation, sobrietyTime: $sobrietyTime, sponsor: $sponsor, sponsee: $sponsee, kids: $kids){
+mutation($_id: ID!, $intro: String, $age: String, $sex: Sex, $occupation: String, $singleTime: String, $drink: Drink, $smoke: Smoke, $marijuana: Marijuana, $drugs: Drugs, $kids: String ){
+    createProfile(_id: $_id, intro: $intro, age: $age, sex: $sex, occupation: $occupation, singleTime: $singleTime, drink: $drink, smoke: $smoke, marijuana: $marijuana, drugs: $drugs, kids: $kids){
       _id
       username
       pictures{
@@ -180,9 +186,11 @@ mutation($_id: ID!, $intro: String, $age: String, $sex: Sex, $occupation: String
       sex
       age
       occupation
-      sobrietyTime
-      sponsor
-      sponsee 
+      singleTime
+      drink
+      smoke
+      marijuana
+      drugs
       kids
         }
     }
@@ -202,9 +210,11 @@ mutation($_id: ID!, $lat: Float!, $lng: Float!){
     sex
     age
     occupation
-    sobrietyTime
-    sponsor
-    sponsee 
+    singleTime
+    drink
+    smoke
+    marijuana
+    drugs
     kids
     location{
       lat
@@ -229,9 +239,11 @@ mutation($_id: ID!, $url: String!, $publicId: String!){
     sex
     age
     occupation
-    sobrietyTime
-    sponsor
-    sponsee 
+    singleTime
+    drink
+    smoke
+    marijuana
+    drugs
     kids
     location{
       lat
@@ -255,9 +267,11 @@ mutation($userId: ID!, $photoId: ID!){
     sex
     age
     occupation
-    sobrietyTime
-    sponsor
-    sponsee 
+    singleTime
+    drink
+    smoke
+    marijuana
+    drugs
     kids
     location{
       lat

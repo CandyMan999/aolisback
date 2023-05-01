@@ -25,15 +25,15 @@ const Profile = ({ userClicked }) => {
 
   const {
     username,
-    sobrietyTime,
+    singleTime,
     intro,
     sex,
     age,
     kids,
     location,
     occupation,
-    sponsor,
-    sponsee,
+    marijuana,
+    drink,
     pictures,
     _id,
   } = userClicked;
@@ -73,17 +73,17 @@ const Profile = ({ userClicked }) => {
           />
         </Box>
         <Box justifyContent="center">
-          {sobrietyTime && (
+          {singleTime && (
             <Box position="absolute" left={0}>
               <Icon
-                name="beer"
-                color={COLORS.vividBlue}
+                name="heart"
+                color={COLORS.red}
                 size={ICON_SIZES.XX_LARGE}
               />
             </Box>
           )}
 
-          {sobrietyTime && (
+          {singleTime && (
             <Text
               style={{
                 borderBottom: "solid 2px white",
@@ -92,12 +92,12 @@ const Profile = ({ userClicked }) => {
               center
               margin={0}
             >
-              <span style={{ color: COLORS.white }}>SoberSince:</span>{" "}
+              <span style={{ color: COLORS.white }}>Single Since:</span>{" "}
               <span style={{ color: COLORS.themeGreen }}>
-                {moment(Number(sobrietyTime)).format("MM-DD-YYYY")}{" "}
+                {moment(Number(singleTime)).format("MM-DD-YYYY")}{" "}
               </span>
               <Text margin={1} center color={COLORS.vividBlue}>
-                ({formatDistanceToNow(Number(sobrietyTime)).toUpperCase()})
+                ({formatDistanceToNow(Number(singleTime)).toUpperCase()})
               </Text>
             </Text>
           )}
@@ -155,28 +155,28 @@ const Profile = ({ userClicked }) => {
             <span style={{ color: COLORS.themeGreen }}>{occupation}</span>
           </Text>
         )}
-        <Text
-          style={{ borderBottom: "solid 2px white", paddingBottom: "4px" }}
-          margin={0}
-          color={COLORS.white}
-        >
-          {" "}
-          I am willing to sponsor:{" "}
-          <span style={{ color: COLORS.themeGreen }}>
-            {sponsor ? "Yes" : "No"}
-          </span>
-        </Text>
-        <Text
-          style={{ borderBottom: "solid 2px white", paddingBottom: "4px" }}
-          margin={0}
-          color={COLORS.white}
-        >
-          {" "}
-          I am looking for a sponsor:{" "}
-          <span style={{ color: COLORS.themeGreen }}>
-            {sponsee ? "Yes" : "No"}
-          </span>
-        </Text>
+        {drink && (
+          <Text
+            style={{ borderBottom: "solid 2px white", paddingBottom: "4px" }}
+            margin={0}
+            color={COLORS.white}
+          >
+            {" "}
+            Alcohol: <span style={{ color: COLORS.themeGreen }}>{drink}</span>
+          </Text>
+        )}
+        {marijuana && (
+          <Text
+            style={{ borderBottom: "solid 2px white", paddingBottom: "4px" }}
+            margin={0}
+            color={COLORS.white}
+          >
+            {" "}
+            Marijuana:{" "}
+            <span style={{ color: COLORS.themeGreen }}>{marijuana}</span>
+          </Text>
+        )}
+
         <Box justifyContent="center">
           <Button onClick={handleVideo} color="red" width="fit-content">
             <span>Join {username}'s Video Channel</span>

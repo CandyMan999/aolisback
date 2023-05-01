@@ -1,13 +1,13 @@
 import React, { Fragment, useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import moment from "moment";
-import { Box, ProfileProgress, Loading } from "../../components";
+import { Box, ProfileProgress, Loading, VideoUploader } from "../../components";
 
 import { COLORS } from "../../constants";
 
 import { CREATE_PROFILE_MUTATION } from "../../graphql/mutations";
 
-import { SobrietyTime } from "./sobriety-time";
+import { SingleTime } from "./single-time";
 import { GetLocation } from "./get-location";
 import { MyPhotos } from "./my-photos";
 import { MyDetails } from "./my-details";
@@ -21,37 +21,51 @@ const CreateProfile = ({}) => {
   const { currentUser } = state;
   const [authError, setAuthError] = useState("");
   const [profile, setProfile] = useState({
-    sex: currentUser.sex ? currentUser.sex : "male",
-    sobrietyTime: currentUser.sobrietyTime
-      ? moment(Number(currentUser.sobrietyTime)).format("MM/DD/YYYY")
+    singleTime: currentUser.singleTime
+      ? moment(Number(currentUser.singleTime)).format("MM/DD/YYYY")
       : "",
-    kids: currentUser.kids ? currentUser.kids : false,
   });
   const [spinner, setSpinner] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async ({ intro, occupation, age, sponsor, sponsee }) => {
-    const { sex, sobrietyTime, kids } = profile;
+  const handleSubmit = async ({
+    intro,
+    occupation,
+    age,
+    drink,
+    smoke,
+    marijuana,
+    drugs,
+    sex,
+    kids,
+  }) => {
+    const { singleTime } = profile;
 
     try {
       setSpinner(true);
+
       const variables = {
         _id: state.currentUser._id,
         intro,
         sex,
         age,
         occupation,
-        sobrietyTime,
-        sponsee,
-        sponsor,
+        singleTime,
+        drink,
+        smoke,
+        marijuana,
+        drugs,
         kids,
       };
+
+      console.log("profile: ", variables);
 
       const { createProfile } = await client.request(
         CREATE_PROFILE_MUTATION,
         variables
       );
 
+      console.log("was created: ", createProfile);
       if (createProfile) {
         setSpinner(false);
         setSuccess(true);
@@ -107,7 +121,7 @@ const CreateProfile = ({}) => {
                 alignItems="center"
               >
                 <h3 style={{ marginBottom: 5 }}>Create Profile</h3>
-                <SobrietyTime
+                <SingleTime
                   handleChange={handleChange}
                   profile={profile}
                   client={client}
@@ -139,6 +153,7 @@ const CreateProfile = ({}) => {
                   completed={completedCounts.myDetails}
                   total={totalCounts.myDetails}
                 />
+                <VideoUploader />
               </Box>
             );
           }}

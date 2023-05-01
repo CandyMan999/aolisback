@@ -41,9 +41,11 @@
     "react-scripts": "4.0.3",
     "react-speech": "^1.0.2",
     "react-spinners": "^0.10.6",
+    "styled-components": "^5.3.10",
     "subscriptions-transport-ws": "^0.9.18",
     "web-vitals": "^1.0.1",
-    "worker-loader": "^3.0.8"
+    "worker-loader": "^3.0.8",
+    "yup": "^1.1.1"
   },
   "scripts": {
     "now-build": "CI='' yarn build",

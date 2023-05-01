@@ -5,7 +5,7 @@ import HomeLayout from "./HomeLayout";
 import Context from "../../context";
 
 const HomeContainer = ({ queryParams, history }) => {
-  const { dispatch } = useContext(Context);
+  const { dispatch, state } = useContext(Context);
 
   useEffect(() => {
     handleLocation();
@@ -27,7 +27,7 @@ const HomeContainer = ({ queryParams, history }) => {
       console.log(err.message);
     }
   };
-  return <HomeLayout>{Children}</HomeLayout>;
+  return <HomeLayout state={state}>{Children}</HomeLayout>;
 };
 
 export default withRouter(HomeContainer);

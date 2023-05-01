@@ -11,7 +11,7 @@ import { COLORS } from "../../../constants";
 
 import { CREATE_PROFILE_MUTATION } from "../../../graphql/mutations";
 
-const SobrietyTime = ({
+const SingleTime = ({
   client,
   dispatch,
   mobile,
@@ -30,7 +30,7 @@ const SobrietyTime = ({
       setLoading(true);
       const variables = {
         ...currentUser,
-        sobrietyTime: profile.sobrietyTime,
+        singleTime: profile.singleTime,
       };
 
       const { createProfile } = await client.request(
@@ -51,38 +51,38 @@ const SobrietyTime = ({
 
   return (
     <CollapsableHeader
-      title={"Sobriety Time"}
+      title={"Time Single"}
       onClose={submitted}
       total={total}
       completed={completed}
     >
       <Box column width={"100%"} marginY={15} alignItems="center">
         {" "}
-        {profile.sobrietyTime && (
+        {profile.singleTime && (
           <Text
             fontSize={FONT_SIZES.X_LARGE}
             color={COLORS.vividBlue}
             marginTop={0}
             marginBottom={15}
           >
-            Sober Since {profile.sobrietyTime}
+            {profile.singleTime}
           </Text>
         )}{" "}
         <label htmlFor="sobreityTime">
-          SobrietyTime:{" "}
+          Single Since:{" "}
           <input
             style={{ margin: "30px" }}
             type="date"
-            id="sobrietyTime"
-            name="sobrietyTime"
-            value={profile.sobrietyTime}
+            id="singleTime"
+            name="singleTime"
+            value={profile.singleTime}
             onChange={handleChange}
           />
         </label>
         <Button padding={30} onClick={handleSubmit}>
           {loading ? (
             <Loading bar color={COLORS.themeGreen} />
-          ) : !currentUser.sobrietyTime && !loading ? (
+          ) : !currentUser.singleTime && !loading ? (
             "Submit"
           ) : (
             "Update"
@@ -93,4 +93,4 @@ const SobrietyTime = ({
   );
 };
 
-export default SobrietyTime;
+export default SingleTime;

@@ -1,7 +1,9 @@
 import { createContext } from "react";
 
 const Context = createContext({
-  currentUser: null,
+  currentUser: {
+    username: null,
+  },
   roomId: null,
   rooms: ["Main"],
   isProfile: false,

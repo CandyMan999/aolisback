@@ -25,3 +25,5 @@ export { default as PhotoUploader } from "./PhotoUploader";
 export { default as PhotoSlider } from "./PhotoSlider";
 export { default as CollapsableHeader } from "./CollapsableHeader";
 export { default as ProfileProgress } from "./ProfileProgress";
+export { default as VideoUploader } from "./VideoUploader";
+export { default as FloatingHeart } from "./FloatingHeart";

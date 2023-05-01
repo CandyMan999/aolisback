@@ -43,7 +43,7 @@ const UserSchema = new mongoose.Schema({
   },
   sex: {
     type: String,
-    enum: ["male", "female"],
+    enum: ["Male", "Female", "Gender_Diverse"],
   },
   pictures: [
     {
@@ -55,33 +55,29 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  sobrietyTime: {
+  singleTime: {
     type: Date,
     default: null,
   },
-  sponsor: {
-    type: Boolean,
-    default: false,
+  drink: {
+    type: String,
+    enum: ["Yes", "Socially", "Never"],
   },
-  sponsee: {
-    type: Boolean,
-    default: false,
+  smoke: {
+    type: String,
+    enum: ["Yes", "Socially", "Never"],
   },
-  // drink: {
-  //   type: String,
-  //   enum: ["yes", "socially", "never"],
-  // },
-  // smoke: {
-  //   type: String,
-  //   enum: ["yes", "socially", "never"],
-  // },
-  // marijuana: {
-  //   type: String,
-  //   enum: ["friendly", "unfriendly"],
-  // },
+  marijuana: {
+    type: String,
+    enum: ["Friendly", "Unfriendly"],
+  },
   kids: {
-    type: Boolean,
-    default: false,
+    type: String,
+    default: "",
+  },
+  drugs: {
+    type: String,
+    enum: ["Yes", "No", "Recreational"],
   },
   location: {
     lat: {

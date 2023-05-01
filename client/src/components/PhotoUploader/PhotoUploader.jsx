@@ -62,6 +62,7 @@ const PhotoUploader = () => {
           type="file"
           onChange={(e) => setImages(e.target.files[0])}
         />
+
         <label htmlFor="image">
           <AddAPhotoIcon
             style={{ color: image && COLORS.themeGreen }}

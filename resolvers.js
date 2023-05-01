@@ -415,7 +415,7 @@ module.exports = {
           );
 
           const authorAI = await User.findByIdAndUpdate(
-            { _id: "62c38477a2b49e4cbb75a8d3" },
+            { _id: "644ede97a160fa38dcd9a0a2" },
             { $push: { comments: commentAI } },
             { new: true }
           ).populate("pictures");
@@ -511,7 +511,7 @@ module.exports = {
         );
 
         if (currentRoom.name === "Main" && !currentRoom.comments.length) {
-          const prompt = `Human: Let's pretend this is a new chat app about sobriety where you can create profiles, video chat, share location, and sponsor others; please welcome me to "ChatSober.com" and give me a short description of the app. Give me a random sobriety quote and ask me a random personal question about my sobriety.`;
+          const prompt = `Human: Let's pretend this is a new chat app about dating where you can create profiles, video chat, share location, and create chatrooms of particular interest; please welcome me to "LoveAtFirstChat.com" and give me a short description of the app. Give me a random quote about love ask me a random personal question about literally anything.`;
 
           const responseAI = await openai.createCompletion({
             model: "text-davinci-002",
@@ -535,7 +535,7 @@ module.exports = {
           );
 
           const authorAI = await User.findByIdAndUpdate(
-            { _id: "62c38477a2b49e4cbb75a8d3" },
+            { _id: "644ede97a160fa38dcd9a0a2" },
             { $push: { comments: commentAI } },
             { new: true }
           ).populate("pictures");
@@ -689,7 +689,7 @@ module.exports = {
           );
 
           const authorAI = await User.findByIdAndUpdate(
-            { _id: "62c38477a2b49e4cbb75a8d3" },
+            { _id: "644ede97a160fa38dcd9a0a2" },
             { $push: { comments: commentAI } },
             { new: true }
           ).populate("pictures");
@@ -723,16 +723,29 @@ module.exports = {
         age,
         sex,
         occupation,
-        sobrietyTime,
-        sponsor,
-        sponsee,
+        singleTime,
+        drink,
+        smoke,
+        marijuana,
+        drugs,
         kids,
         _id,
       } = args;
       try {
         const profile = await User.findByIdAndUpdate(
           { _id },
-          { intro, age, sex, occupation, sobrietyTime, sponsor, sponsee, kids },
+          {
+            intro,
+            age,
+            sex,
+            occupation,
+            singleTime,
+            drink,
+            smoke,
+            marijuana,
+            drugs,
+            kids,
+          },
           { new: true }
         ).populate("pictures");
 

@@ -7,12 +7,11 @@ import {
   Checkbox,
   Button,
 } from "../../../components";
-import { Formik, Form } from "formik";
+
 import { COLORS } from "../../../constants";
+import { Form, Formik, Field } from "formik";
 
 const MyDetails = ({
-  profile,
-  handleChange,
   handleSubmit,
   handleValidation,
   currentUser,
@@ -23,32 +22,6 @@ const MyDetails = ({
   return (
     <CollapsableHeader title={"My Details"} total={total} completed={completed}>
       <Box column width={"100%"} height={"100%"}>
-        <Box column width={"100%"} alignItems="center">
-          <label htmlFor="sex" style={{ marginTop: 2, marginBottom: 8 }}>
-            Gender:{" "}
-            <select
-              id="sex"
-              name="sex"
-              value={profile.sex}
-              onChange={handleChange}
-            >
-              <option value={"male"}>male</option>
-              <option value={"female"}>female</option>
-            </select>
-          </label>
-          <label htmlFor="kids" style={{ marginBottom: 8 }}>
-            I Have Kids:{" "}
-            <select
-              id="kids"
-              name="kids"
-              onChange={handleChange}
-              value={profile.kids}
-            >
-              <option value={true}>Yes</option>
-              <option value={false}>No</option>
-            </select>
-          </label>
-        </Box>
         <Formik
           onSubmit={handleSubmit}
           validate={handleValidation}
@@ -56,8 +29,12 @@ const MyDetails = ({
             intro: currentUser.intro ? currentUser.intro : "",
             age: currentUser.age ? currentUser.age : "",
             occupation: currentUser.occupation ? currentUser.occupation : "",
-            sponsor: currentUser.sponsor ? currentUser.sponsor : false,
-            sponsee: currentUser.sponsee ? currentUser.sponsee : false,
+            sex: currentUser.sex ? currentUser.sex : "",
+            drink: currentUser.drink ? currentUser.drink : "",
+            smoke: currentUser.smoke ? currentUser.smoke : "",
+            marijuana: currentUser.marijuana ? currentUser.marijuana : "",
+            drugs: currentUser.drugs ? currentUser.drugs : "",
+            kids: currentUser.kids ? currentUser.kids : "",
           }}
           render={(props) => (
             <Form style={{ height: "100%" }}>
@@ -90,27 +67,68 @@ const MyDetails = ({
                     height={300}
                   />
                   <Box marginBottom={15}>
-                    {" "}
                     <Input
                       name="occupation"
                       type="input"
                       placeholder="occupation"
                     />
                   </Box>
+                  <Box marginBottom={15}>
+                    <Input name="age" type="input" placeholder="age" />
+                  </Box>
 
-                  <Input name="age" type="input" placeholder="age" />
-                  <Checkbox
-                    label="I am willing to be a sponsor"
-                    type="checkbox"
-                    id="sponsor"
-                    name="sponsor"
-                  />
-                  <Checkbox
-                    label="I am willing to be a sponsee"
-                    type="checkbox"
-                    id="sponsee"
-                    name="sponsee"
-                  />
+                  <div>
+                    <Field as="select" name="sex">
+                      <option value="">Select a sex</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Gender_Diverse">Gender Diverse</option>
+                    </Field>
+                  </div>
+
+                  <Box marginY={15}>
+                    <Field as="select" name="kids">
+                      <option value="">Do You Have Kids</option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </Field>
+                  </Box>
+
+                  <Box marginY={15}>
+                    <Field as="select" name="drink">
+                      <option value="">Do You Drink</option>
+                      <option value="Yes">Yes</option>
+                      <option value="Socially">Socially</option>
+                      <option value="Never">Never</option>
+                    </Field>
+                  </Box>
+
+                  <Box marginY={15}>
+                    <Field as="select" name="smoke">
+                      <option value="">Do You Smoke</option>
+                      <option value="Yes">Yes</option>
+                      <option value="Socially">Socially</option>
+                      <option value="Never">Never</option>
+                    </Field>
+                  </Box>
+
+                  <Box marginY={15}>
+                    <Field as="select" name="marijuana">
+                      <option value="">Marijuana Tolerance</option>
+                      <option value="Friendly">Friendly</option>
+                      <option value="Unfriendly">Unfriendly</option>
+                    </Field>
+                  </Box>
+
+                  <Box marginY={15}>
+                    <Field as="select" name="drugs">
+                      <option value="">Do use Drugs</option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                      <option value="Recreational">Recreational</option>
+                    </Field>
+                  </Box>
+
                   <Box marginBottom={40}>
                     <Button
                       type="submit"
