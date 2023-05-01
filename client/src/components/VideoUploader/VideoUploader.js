@@ -9,6 +9,11 @@ const VideoUploader = () => {
       {
         cloudName: "localmassagepros",
         uploadPreset: "dlxzn2uj",
+        resourceType: "video",
+        sourceTypes: ["local", "camera"],
+        maxDuration: 60, // set the maximum duration limit to 60 seconds
+        multiple: false,
+        cropping: true,
       },
       function (error, result) {
         console.log(result);
