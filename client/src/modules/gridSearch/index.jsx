@@ -1,1 +1,1 @@
-export { default } from "./GridSearch";
+export { default } from "./GridContainer";

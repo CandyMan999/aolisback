@@ -123,3 +123,18 @@ query($token: String!){
       }
   }
 `;
+
+export const GET_ALL_USERS = `
+query{
+  getAllUsers{
+    _id
+    name
+    username
+    pictures{
+      _id
+      url
+      publicId
+    }
+    isLoggedIn
+  }
+}`;

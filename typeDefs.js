@@ -90,6 +90,7 @@ module.exports = gql`
     getComments(roomId: ID!): [Comment]
     findUser(_id: ID!): User
     getUsers: [User]
+    getAllUsers: [User]
   }
 
   type GoogleAuth {

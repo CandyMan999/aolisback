@@ -1,9 +1,10 @@
 import React from "react";
-import { Box, Text, Wrapper, Slider } from "../../components";
+import { Box, Text, Wrapper } from "../../components";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { css } from "@emotion/css";
+import SearchResults from "./search-results/SearchResults";
 
-const GridSearch = ({}) => {
+const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
   const mobile = useMediaQuery("(max-width: 740px)");
   return (
     <Box
@@ -22,7 +23,14 @@ const GridSearch = ({}) => {
         justifyContent="space-around"
         card
       >
-        <Slider />
+        <SearchResults
+          state={state}
+          client={client}
+          dispatch={dispatch}
+          currentUser={currentUser}
+          mobile={mobile}
+          users={users}
+        />
       </Box>
     </Box>
   );

@@ -51,11 +51,7 @@ class Icon extends React.Component {
               <path
                 stroke={this.props.stroke}
                 strokeWidth={this.props.strokeWidth}
-                fill={
-                  this.props.fill
-                    ? this.props.fill
-                    : this.props.fill1 || COLORS.darkGrey
-                }
+                fill={this.props.color || COLORS.darkGrey}
                 d={icons[this.props.name].path2}
               />
             )}

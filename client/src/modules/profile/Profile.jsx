@@ -83,8 +83,12 @@ const Profile = ({ userClicked, mobile }) => {
         </Box>
         <Box display="flex" column paddingRight="5%">
           <Box>
-            <Icon name="heart" color={COLORS.red} size={ICON_SIZES.XX_LARGE} />
-            <Text marginBottom={0} bold color={COLORS.gold}>
+            <Icon
+              name="brokenHeart"
+              color={COLORS.red}
+              size={ICON_SIZES.XX_LARGE}
+            />
+            <Text marginBottom={0} bold>
               Single Since:
             </Text>
           </Box>

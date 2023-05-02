@@ -145,6 +145,15 @@ module.exports = {
         throw new AuthenticationError(err.message);
       }
     },
+    getAllUsers: async (root, args, ctx) => {
+      try {
+        const users = await User.find({}).populate("room").populate("pictures");
+
+        return users;
+      } catch (err) {
+        throw new AuthenticationError(err.message);
+      }
+    },
   },
   Mutation: {
     googleSignup: async (root, args, ctx) => {
