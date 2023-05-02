@@ -56,10 +56,10 @@ const Slide = ({
             id="slide-photo"
           >
             <Transformation
-              height={mobile ? "259" : "290"}
-              width={mobile ? "240" : "270"}
-              maxHeight={mobile ? "259" : "290"}
-              crop="thumb"
+              height={mobile ? "390" : "390"}
+              width={mobile ? "auto" : "auto"}
+              crop={mobile ? "scale" : "fill"}
+              gravity="center"
             />
           </Image>
         </CloudinaryContext>
@@ -97,7 +97,7 @@ const Slide = ({
           zIndex={1}
           justifyContent="center"
           position="absolute"
-          bottom={0}
+          bottom={20}
         >
           <Button
             critical

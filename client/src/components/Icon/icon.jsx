@@ -147,6 +147,46 @@ class Icon extends React.Component {
                 d={icons[this.props.name].path13}
               />
             )}
+            {icons[this.props.name].path13 && (
+              <path
+                stroke={this.props.stroke}
+                strokeWidth={this.props.strokeWidth}
+                fill={this.props.color || COLORS.darkGrey}
+                d={icons[this.props.name].path13}
+              />
+            )}
+            {icons[this.props.name].path14 && (
+              <path
+                stroke={this.props.stroke}
+                strokeWidth={this.props.strokeWidth}
+                fill={this.props.color || COLORS.darkGrey}
+                d={icons[this.props.name].path14}
+              />
+            )}
+            {icons[this.props.name].path15 && (
+              <path
+                stroke={this.props.stroke}
+                strokeWidth={this.props.strokeWidth}
+                fill={this.props.color || COLORS.darkGrey}
+                d={icons[this.props.name].path15}
+              />
+            )}
+            {icons[this.props.name].path16 && (
+              <path
+                stroke={this.props.stroke}
+                strokeWidth={this.props.strokeWidth}
+                fill={this.props.color || COLORS.darkGrey}
+                d={icons[this.props.name].path16}
+              />
+            )}
+            {icons[this.props.name].path17 && (
+              <path
+                stroke={this.props.stroke}
+                strokeWidth={this.props.strokeWidth}
+                fill={this.props.color || COLORS.darkGrey}
+                d={icons[this.props.name].path17}
+              />
+            )}
           </svg>
           {this.props.children}
         </Box>

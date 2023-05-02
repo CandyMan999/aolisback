@@ -27,7 +27,7 @@ const Drawer = ({ isOpen, onClose, title, children }) => {
           overflow: "scroll",
         }}
       >
-        <Box position="absolute" top={30} left={10} zIndex={20000}>
+        <Box position="absolute" top={25} left={10} zIndex={20000}>
           <Icon
             clickable
             name="back"
@@ -37,10 +37,10 @@ const Drawer = ({ isOpen, onClose, title, children }) => {
           />
         </Box>
         {isOpen && (
-          <Box position="absolute" column width="100%" justifyContent="center">
-            <Text center color={COLORS.white} bold>
-              {title}
-            </Text>
+          <Box column width="100%" justifyContent="center">
+            {/* <Text center color={COLORS.white} bold>
+            {title}
+          </Text> */}
             {children}
           </Box>
         )}

@@ -37,7 +37,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
   return (
     <Box
       justifyContent="center"
-      height={height + 10}
+      height={height + 30}
       width={"100%"}
       // border="3px solid #ccc"
       background={COLORS.white}
@@ -64,10 +64,11 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
       )}
 
       <Box
-        position="absolute"
+        display="flex"
+        alignItems="center"
         justifyContent="center"
-        paddingTop={border}
-        paddingBottom={border}
+        // paddingTop={border}
+        // paddingBottom={border}
       >
         <Box justifyContent="center">
           {pictures.length && currentPhoto ? (

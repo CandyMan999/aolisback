@@ -7,7 +7,7 @@ const NavArrow = ({ onClick, direction }) => (
     borderRadius="50%"
     onClick={onClick}
     background={COLORS.white}
-    hoverBackground={COLORS.lightBlue}
+    hoverBackground={COLORS.vividBlue}
   >
     <Icon
       name={`${direction}Arrow`}

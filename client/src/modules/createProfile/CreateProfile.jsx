@@ -153,7 +153,6 @@ const CreateProfile = ({}) => {
                   completed={completedCounts.myDetails}
                   total={totalCounts.myDetails}
                 />
-                <VideoUploader />
               </Box>
             );
           }}

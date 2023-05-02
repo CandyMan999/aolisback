@@ -70,7 +70,11 @@ const Profile = ({ userClicked, mobile }) => {
       </Box>
       <Box display="flex" width="100%" justifyContent="space-between">
         <Box paddingLeft={"5%"} display="flex" column>
-          <Text margin={2} bold fontSize={FONT_SIZES.XX_LARGE}>
+          <Text
+            margin={2}
+            bold
+            fontSize={mobile ? FONT_SIZES.X_LARGE : FONT_SIZES.XX_LARGE}
+          >
             {username}
           </Text>
           <Text margin={2}>
@@ -80,7 +84,7 @@ const Profile = ({ userClicked, mobile }) => {
         <Box display="flex" column paddingRight="5%">
           <Box>
             <Icon name="heart" color={COLORS.red} size={ICON_SIZES.XX_LARGE} />
-            <Text marginBottom={0} bold>
+            <Text marginBottom={0} bold color={COLORS.gold}>
               Single Since:
             </Text>
           </Box>
@@ -132,7 +136,11 @@ const Profile = ({ userClicked, mobile }) => {
         paddingLeft="5%"
         paddingRight="5%"
       >
-        <Text bold>Occupation: </Text>
+        <Box>
+          <Text bold>Occupation: </Text>
+          <Icon name="job" color={COLORS.black} size={ICON_SIZES.XX_LARGE} />
+        </Box>
+
         {occupation && <Text>{occupation}</Text>}
       </Box>
       <Box
@@ -147,7 +155,11 @@ const Profile = ({ userClicked, mobile }) => {
         paddingLeft="5%"
         paddingRight="5%"
       >
-        <Text bold>Drink: </Text>
+        <Box>
+          <Text bold>Drink: </Text>
+          <Icon name="beer" color={COLORS.black} size={ICON_SIZES.XX_LARGE} />
+        </Box>
+
         {drink && <Text>{drink}</Text>}
       </Box>
       <Box
@@ -162,7 +174,15 @@ const Profile = ({ userClicked, mobile }) => {
         paddingLeft="5%"
         paddingRight="5%"
       >
-        <Text bold>Smoke: </Text>
+        <Box>
+          <Text bold>Smoke: </Text>
+          <Icon
+            name="smoke"
+            color={COLORS.textRed}
+            size={ICON_SIZES.XX_LARGE}
+          />
+        </Box>
+
         {smoke && <Text>{smoke}</Text>}
       </Box>
       <Box
@@ -196,7 +216,11 @@ const Profile = ({ userClicked, mobile }) => {
         paddingLeft="5%"
         paddingRight="5%"
       >
-        <Text bold>Drugs: </Text>
+        <Box>
+          <Text bold>Drugs: </Text>
+          <Icon name="drugs" color={COLORS.green} size={ICON_SIZES.XX_LARGE} />
+        </Box>
+
         {drugs && <Text>{drugs}</Text>}
       </Box>
       <Box
@@ -211,7 +235,11 @@ const Profile = ({ userClicked, mobile }) => {
         paddingLeft="5%"
         paddingRight="5%"
       >
-        <Text bold>Kids: </Text>
+        <Box>
+          <Text bold>Kids: </Text>
+          <Icon name="kid" color={COLORS.black} size={ICON_SIZES.XX_LARGE} />
+        </Box>
+
         {kids && <Text>{kids}</Text>}
       </Box>
 
