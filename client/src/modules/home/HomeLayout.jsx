@@ -7,8 +7,6 @@ import ChatBox from "../chatBox";
 const HomeLayout = ({ state }) => {
   const height = window.innerHeight;
 
-  console.log("State: ", state);
-
   return (
     <Box
       justifyContent="space-around"

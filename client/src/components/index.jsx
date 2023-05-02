@@ -28,3 +28,5 @@ export { default as ProfileProgress } from "./ProfileProgress";
 export { default as VideoUploader } from "./VideoUploader";
 export { default as FloatingHeart } from "./FloatingHeart";
 export { default as Slider } from "./Slider";
+export { default as OnlineDot } from "./OnlineDot";
+export { default as FlipCard } from "./FlipCard";

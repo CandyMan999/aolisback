@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Box, Text, FONT_SIZES } from "../../../components";
-import ProfileCard from "../profile-card";
+import { Box, Text, FONT_SIZES, FlipCard } from "../../../components";
+import ProfileCardFront from "../profile-card-front";
+import ProfileCardBack from "../profile-card-back/ProfileCardBack";
 
 import { css } from "@emotion/css";
 
@@ -13,8 +14,13 @@ const SearchResults = ({
   dispatch,
   currentUser,
 }) => {
+  const [activeID, setActiveID] = useState(null);
+
+  const onUserCardClick = (id) => {
+    setActiveID(id);
+  };
+
   const handleComponent = () => {
-    console.log("users: ", users);
     if (!users.length) {
       return (
         <Box display={"flex"} column justifyContent="space-around">
@@ -39,14 +45,31 @@ const SearchResults = ({
     >
       {!!users.length
         ? users.map((user, i) => (
-            <ProfileCard
-              state={state}
-              user={user}
-              key={`${user.username}-${i}`}
-              name={`${user.username}`}
-              //   onClick={() => onTherapistCardClick(therapist.addressId)}
-              photos={user.pictures}
-              online={user.isLoggedIn}
+            <FlipCard
+              frontContent={
+                <ProfileCardFront
+                  state={state}
+                  user={user}
+                  key={`${user.username}-${i}`}
+                  name={`${user.username}`}
+                  onClick={() => onUserCardClick(user._id)}
+                  photos={user.pictures}
+                  online={user.isLoggedIn}
+                  activeID={activeID}
+                />
+              }
+              backContent={
+                <ProfileCardBack
+                  state={state}
+                  user={user}
+                  key={`${user.username}-${i}`}
+                  name={`${user.username}`}
+                  onClick={() => onUserCardClick(user._id)}
+                  photos={user.pictures}
+                  online={user.isLoggedIn}
+                  activeID={activeID}
+                />
+              }
             />
           ))
         : handleComponent()}
@@ -57,7 +80,7 @@ const SearchResults = ({
 const gridStyle = (mobile) =>
   css({
     display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr",
+    gridTemplateColumns: "1fr 1fr 1fr 1fr",
     justifyItems: "center",
     paddingBottom: "0px",
     marginBottom: "0px",

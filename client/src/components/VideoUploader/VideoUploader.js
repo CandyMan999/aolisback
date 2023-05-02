@@ -25,7 +25,6 @@ function VideoUploader() {
         `https://api.cloudinary.com/v1_1/localmassagepros/video/upload`,
         formData
       );
-      console.log(response.data);
     };
     reader.readAsDataURL(file);
     setSubmitting(false);

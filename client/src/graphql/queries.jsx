@@ -136,5 +136,12 @@ query{
       publicId
     }
     isLoggedIn
+    location{
+      lat
+      lng
+    }
+    age
+    sex
+    intro
   }
 }`;

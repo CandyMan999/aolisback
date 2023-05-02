@@ -1,19 +1,52 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Image, CloudinaryContext } from "cloudinary-react";
 
-import { Box, Icon, ICON_SIZES, Text } from "../../../components";
+import { Box, Icon, ICON_SIZES, Text, OnlineDot } from "../../../components";
 import { COLORS } from "../../../constants";
-import { isEqual } from "lodash";
+import { getDistanceFromCoords } from "../../../utils/helpers";
 import { motion } from "framer-motion";
 
-const ProfileCard = ({ online, photos, name, user }) => {
+const ProfileCardFront = ({
+  online,
+  photos,
+  name,
+  user,
+  activeID,
+  onClick,
+  state,
+}) => {
+  const [distance, setDistance] = useState("No Location");
   const profilePic = photos[0];
-  console.log("photos: ", photos, profilePic);
+
+  useEffect(() => {
+    handleDistance(user);
+  }, []);
 
   const randomVariable = () => {
     return Math.random() < 0.5
       ? Math.floor(Math.random() * 1000)
       : Math.floor(Math.random() * -1000);
+  };
+
+  const handleDistance = async (user) => {
+    if (
+      !!state.currentUser.location &&
+      !!state.currentUser.location.lat &&
+      !!user.location &&
+      !!user.location.lat
+    ) {
+      const { lat, lng } = state.currentUser.location;
+      const miles = await getDistanceFromCoords(
+        lat,
+        lng,
+        user.location.lat,
+        user.location.lng
+      );
+
+      setDistance(`${miles} miles away`);
+    } else {
+      setDistance("No Location");
+    }
   };
 
   return (
@@ -44,12 +77,14 @@ const ProfileCard = ({ online, photos, name, user }) => {
 
         justifyContent: "space-between",
         boxShadow: `0px 0px 5px 1px ${COLORS.lightGrey}`,
-        // border: isActive
-        //   ? `3px solid ${COLORS.yellow}`
-        //   : `1px solid ${COLORS.grey}`,
+        border:
+          activeID === user._id
+            ? `3px solid ${COLORS.yellow}`
+            : `1px solid ${COLORS.grey}`,
       }}
-      // onClick={onClick}
+      onClick={() => onClick(user._id)}
     >
+      <OnlineDot online={online} />
       {!!profilePic ? (
         !!profilePic.publicId ? (
           <CloudinaryContext cloudName="localmassagepros">
@@ -96,8 +131,9 @@ const ProfileCard = ({ online, photos, name, user }) => {
       <Text bold margin={0}>
         {name}
       </Text>
-
-      {/* <Text margin={0}>${baseRate}+</Text> */}
+      <Text>
+        {user.sex} {user.age}
+      </Text>
 
       <Box
         width="105%"
@@ -109,11 +145,11 @@ const ProfileCard = ({ online, photos, name, user }) => {
       >
         <Icon name="distance" color={COLORS.red} size={ICON_SIZES.LARGE} />
         <Text margin={0} paddingRight={4}>
-          miles away
+          {distance}
         </Text>
       </Box>
     </motion.div>
   );
 };
 
-export default ProfileCard;
+export default ProfileCardFront;

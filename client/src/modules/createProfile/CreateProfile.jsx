@@ -58,14 +58,11 @@ const CreateProfile = ({}) => {
         kids,
       };
 
-      console.log("profile: ", variables);
-
       const { createProfile } = await client.request(
         CREATE_PROFILE_MUTATION,
         variables
       );
 
-      console.log("was created: ", createProfile);
       if (createProfile) {
         setSpinner(false);
         setSuccess(true);
@@ -112,7 +109,6 @@ const CreateProfile = ({}) => {
       ) : (
         <ProfileProgress me={currentUser}>
           {({ completedCounts, totalCounts }) => {
-            console.log("completed: ", completedCounts, totalCounts);
             return (
               <Box
                 display="flex"
