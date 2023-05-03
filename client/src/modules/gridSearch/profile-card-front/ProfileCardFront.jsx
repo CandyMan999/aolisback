@@ -16,6 +16,7 @@ const ProfileCardFront = ({
   state,
 }) => {
   const [distance, setDistance] = useState("No Location");
+
   const profilePic = photos[0];
 
   useEffect(() => {
@@ -51,15 +52,6 @@ const ProfileCardFront = ({
 
   return (
     <motion.div
-      animate={{
-        x: [randomVariable(), 0],
-        y: [randomVariable(), 0],
-      }}
-      transition={{
-        duration: 1.5,
-        ease: "easeInOut",
-        times: [0, 0.2],
-      }}
       style={{
         display: "flex",
         flexDirection: "column",

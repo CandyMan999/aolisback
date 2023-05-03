@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import moment from "moment";
-import { Box, ProfileProgress, Loading, VideoUploader } from "../../components";
+import { Box, ProfileProgress, Loading } from "../../components";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import { COLORS } from "../../constants";
 
@@ -15,10 +16,11 @@ import { MyDetails } from "./my-details";
 import { useClient } from "../../client";
 import Context from "../../context";
 
-const CreateProfile = ({}) => {
+const CreateProfile = () => {
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const { currentUser } = state;
+  const mobile = useMediaQuery("(max-width: 650px)");
   const [authError, setAuthError] = useState("");
   const [profile, setProfile] = useState({
     singleTime: currentUser.singleTime
@@ -148,6 +150,7 @@ const CreateProfile = ({}) => {
                   authError={authError}
                   completed={completedCounts.myDetails}
                   total={totalCounts.myDetails}
+                  mobile={mobile}
                 />
               </Box>
             );

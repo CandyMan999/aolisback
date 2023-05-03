@@ -4,9 +4,11 @@ import {
   Box,
   Textarea,
   Input,
-  Checkbox,
+  Icon,
+  ICON_SIZES,
   Button,
 } from "../../../components";
+import styled from "styled-components";
 
 import { COLORS } from "../../../constants";
 import { Form, Formik, Field } from "formik";
@@ -18,6 +20,7 @@ const MyDetails = ({
   authError,
   total,
   completed,
+  mobile,
 }) => {
   return (
     <CollapsableHeader title={"My Details"} total={total} completed={completed}>
@@ -66,36 +69,60 @@ const MyDetails = ({
                     type="input"
                     height={300}
                   />
-                  <Box marginBottom={15}>
+                  <Box
+                    display="flex"
+                    width={"100%"}
+                    justifyContent="space-around"
+                    marginY={15}
+                  >
                     <Input
-                      name="occupation"
+                      marginRight={mobile ? 100 : ""}
+                      name="age"
                       type="input"
-                      placeholder="occupation"
+                      placeholder="age"
                     />
-                  </Box>
-                  <Box marginBottom={15}>
-                    <Input name="age" type="input" placeholder="age" />
-                  </Box>
-
-                  <div>
                     <Field as="select" name="sex">
                       <option value="">Select a sex</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
                       <option value="Gender_Diverse">Gender Diverse</option>
                     </Field>
-                  </div>
+                  </Box>
 
-                  <Box marginY={15}>
-                    <Field as="select" name="kids">
+                  <Box width="100%" justifyContent="center" marginBottom={15}>
+                    <Icon
+                      name="job"
+                      color={COLORS.black}
+                      size={ICON_SIZES.XX_LARGE}
+                    />
+                    <Input
+                      name="occupation"
+                      type="input"
+                      placeholder="occupation"
+                      width={mobile ? 200 : 280}
+                    />
+                  </Box>
+
+                  <Box width="100%" justifyContent="center" marginY={15}>
+                    <Icon
+                      name="kid"
+                      color={COLORS.black}
+                      size={ICON_SIZES.XX_LARGE}
+                    />
+                    <Field as="select" name="kids" style={{ width: 300 }}>
                       <option value="">Do You Have Kids</option>
                       <option value="Yes">Yes</option>
                       <option value="No">No</option>
                     </Field>
                   </Box>
 
-                  <Box marginY={15}>
-                    <Field as="select" name="drink">
+                  <Box width="100%" justifyContent="center" marginY={15}>
+                    <Icon
+                      name="beer"
+                      color={COLORS.black}
+                      size={ICON_SIZES.XX_LARGE}
+                    />
+                    <Field as="select" name="drink" style={{ width: 300 }}>
                       <option value="">Do You Drink</option>
                       <option value="Yes">Yes</option>
                       <option value="Socially">Socially</option>
@@ -103,8 +130,13 @@ const MyDetails = ({
                     </Field>
                   </Box>
 
-                  <Box marginY={15}>
-                    <Field as="select" name="smoke">
+                  <Box width="100%" justifyContent="center" marginY={15}>
+                    <Icon
+                      name="smoke"
+                      color={COLORS.textRed}
+                      size={ICON_SIZES.XX_LARGE}
+                    />
+                    <Field as="select" name="smoke" style={{ width: 300 }}>
                       <option value="">Do You Smoke</option>
                       <option value="Yes">Yes</option>
                       <option value="Socially">Socially</option>
@@ -112,16 +144,26 @@ const MyDetails = ({
                     </Field>
                   </Box>
 
-                  <Box marginY={15}>
-                    <Field as="select" name="marijuana">
+                  <Box width="100%" justifyContent="center" marginY={15}>
+                    <Icon
+                      name="weed"
+                      color={COLORS.green}
+                      size={ICON_SIZES.XX_LARGE}
+                    />
+                    <Field as="select" name="marijuana" style={{ width: 300 }}>
                       <option value="">Marijuana Tolerance</option>
                       <option value="Friendly">Friendly</option>
                       <option value="Unfriendly">Unfriendly</option>
                     </Field>
                   </Box>
 
-                  <Box marginY={15}>
-                    <Field as="select" name="drugs">
+                  <Box width="100%" justifyContent="center" marginY={15}>
+                    <Icon
+                      name="drugs"
+                      color={COLORS.green}
+                      size={ICON_SIZES.XX_LARGE}
+                    />
+                    <Field as="select" name="drugs" style={{ width: 300 }}>
                       <option value="">Do use Drugs</option>
                       <option value="Yes">Yes</option>
                       <option value="No">No</option>
@@ -129,11 +171,11 @@ const MyDetails = ({
                     </Field>
                   </Box>
 
-                  <Box marginBottom={40}>
+                  <Box width="100%" justifyContent="center" paddingBottom={100}>
                     <Button
                       type="submit"
                       disabled={!props.isValid}
-                      style={{ zIndex: 100 }}
+                      style={{ zIndex: 100, width: "100%" }}
                     >
                       {total === completed ? "Update" : "Submit"}
                     </Button>

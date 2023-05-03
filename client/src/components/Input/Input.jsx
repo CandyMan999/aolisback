@@ -56,6 +56,7 @@ class Input extends React.PureComponent {
       error,
       mobile,
       marginX,
+      marginRight,
       paddingX,
       borderRadius,
       withoutFormik,
@@ -71,6 +72,7 @@ class Input extends React.PureComponent {
         direction="column"
         marginY={4}
         marginX={marginX ? marginX : 8}
+        marginRight={marginRight ? marginRight : undefined}
         height={hasError ? 50 : undefined}
         width={full ? "100%" : width}
         paddingX={paddingX ? paddingX : undefined}

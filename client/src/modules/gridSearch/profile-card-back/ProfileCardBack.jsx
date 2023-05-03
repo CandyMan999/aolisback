@@ -26,15 +26,15 @@ const ProfileCardBack = ({ online, photos, name, user, activeID, onClick }) => {
 
   return (
     <motion.div
-      animate={{
-        x: [randomVariable(), 0],
-        y: [randomVariable(), 0],
-      }}
-      transition={{
-        duration: 1.5,
-        ease: "easeInOut",
-        times: [0, 0.2],
-      }}
+      //   animate={{
+      //     x: [randomVariable(), 0],
+      //     y: [randomVariable(), 0],
+      //   }}
+      //   transition={{
+      //     duration: 1.5,
+      //     ease: "easeInOut",
+      //     times: [0, 0.2],
+      //   }}
       style={{
         display: "flex",
         flexDirection: "column",
