@@ -85,8 +85,8 @@ const SignupModal = ({ onClose }) => {
     if (values.password) {
       if (values.password.length < 6)
         err.password = "Min length is 6 characters";
-      if (values.password.length > 16)
-        err.password = "Max length is 16 characters";
+      if (values.password.length > 25)
+        err.password = "Max length is 25 characters";
       if (!values.password.match(/[A-Z]/))
         err.password = "Must contain an uppercase letter";
       if (!values.password.match(/[a-z]/))

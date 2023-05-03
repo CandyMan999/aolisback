@@ -79,15 +79,21 @@ const SearchResults = ({
 
 const gridStyle = (mobile) =>
   css({
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr 1fr",
+    // display: "grid",
+    gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
     justifyItems: "center",
     paddingBottom: "0px",
     marginBottom: "0px",
     maxHeight: mobile ? undefined : "1220px",
-    overflowY: !mobile ? "scroll" : undefined,
+    overflowY: !mobile ? "scroll" : "scroll",
     "@media (max-width: 1180px)": {
+      gridTemplateColumns: "1fr 1fr 1fr",
+    },
+    "@media (max-width: 840px)": {
       gridTemplateColumns: "1fr 1fr",
+    },
+    "::-webkit-scrollbar": {
+      display: "none",
     },
   });
 
