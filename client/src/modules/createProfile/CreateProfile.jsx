@@ -77,7 +77,6 @@ const CreateProfile = () => {
   };
 
   const handleValidation = (values) => {
-    console.log("values: ", values);
     const err = {};
     if (!values.age.length) err.age = "Required";
     if (values.age) {

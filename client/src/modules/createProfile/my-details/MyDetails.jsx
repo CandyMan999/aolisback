@@ -16,14 +16,14 @@ import styled from "styled-components";
 import { COLORS } from "../../../constants";
 import { Form, Formik, Field } from "formik";
 
-const validationSchema = Yup.object().shape({
-  sex: Yup.string().required("Gender is required!!"),
-  drink: Yup.string().required("Do You Drink?!"),
-  kids: Yup.string().required("Do you have kids?!"),
-  smoke: Yup.string().required("Do you Smoke?!"),
-  marijuana: Yup.string().required("Pothead Focker?!"),
-  drugs: Yup.string().required("You Party?!"),
-});
+// const validationSchema = Yup.object().shape({
+//   sex: Yup.string().required("Gender is required!!"),
+//   drink: Yup.string().required("Do You Drink?!"),
+//   kids: Yup.string().required("Do you have kids?!"),
+//   smoke: Yup.string().required("Do you Smoke?!"),
+//   marijuana: Yup.string().required("Pothead Focker?!"),
+//   drugs: Yup.string().required("You Party?!"),
+// });
 
 const MyDetails = ({
   handleSubmit,
@@ -40,7 +40,7 @@ const MyDetails = ({
         <Formik
           onSubmit={handleSubmit}
           validate={handleValidation}
-          validationSchema={validationSchema}
+          // validationSchema={validationSchema}
           initialValues={{
             intro: currentUser.intro ? currentUser.intro : "",
             age: currentUser.age ? currentUser.age : "",
@@ -101,14 +101,14 @@ const MyDetails = ({
                         <option value="Female">Female</option>
                         <option value="Gender_Diverse">Gender Diverse</option>
                       </Field>
-                      {props.errors.sex && props.touched.sex ? (
+                      {/* {props.errors.sex && props.touched.sex ? (
                         <Text
                           fontSize={FONT_SIZES.SMALL}
                           color={COLORS.textRed}
                         >
                           {props.errors.sex}
                         </Text>
-                      ) : null}
+                      ) : null} */}
                     </Box>
                   </Box>
                   <Box width="100%" justifyContent="center" marginBottom={15}>
@@ -136,11 +136,11 @@ const MyDetails = ({
                       <option value="No">No</option>
                     </Field>
                   </Box>
-                  {props.errors.kids && props.touched.kids ? (
+                  {/* {props.errors.kids && props.touched.kids ? (
                     <Text fontSize={FONT_SIZES.SMALL} color={COLORS.textRed}>
                       {props.errors.kids}
                     </Text>
-                  ) : null}
+                  ) : null} */}
                   <Box width="100%" justifyContent="center" marginY={15}>
                     <Icon
                       name="beer"
@@ -155,11 +155,11 @@ const MyDetails = ({
                       <option value="Never">Never</option>
                     </Field>
                   </Box>
-                  {props.errors.drink && props.touched.drink ? (
+                  {/* {props.errors.drink && props.touched.drink ? (
                     <Text fontSize={FONT_SIZES.SMALL} color={COLORS.textRed}>
                       {props.errors.drink}
                     </Text>
-                  ) : null}
+                  ) : null} */}
                   <Box width="100%" justifyContent="center" marginY={15}>
                     <Icon
                       name="smoke"
@@ -173,11 +173,11 @@ const MyDetails = ({
                       <option value="Never">Never</option>
                     </Field>
                   </Box>
-                  {props.errors.smoke && props.touched.smoke ? (
+                  {/* {props.errors.smoke && props.touched.smoke ? (
                     <Text fontSize={FONT_SIZES.SMALL} color={COLORS.textRed}>
                       {props.errors.smoke}
                     </Text>
-                  ) : null}
+                  ) : null} */}
                   <Box width="100%" justifyContent="center" marginY={15}>
                     <Icon
                       name="weed"
@@ -190,11 +190,11 @@ const MyDetails = ({
                       <option value="Unfriendly">Unfriendly</option>
                     </Field>
                   </Box>
-                  {props.errors.marijuana && props.touched.marijuana ? (
+                  {/* {props.errors.marijuana && props.touched.marijuana ? (
                     <Text fontSize={FONT_SIZES.SMALL} color={COLORS.textRed}>
                       {props.errors.marijuana}
                     </Text>
-                  ) : null}
+                  ) : null} */}
                   <Box width="100%" justifyContent="center" marginY={15}>
                     <Icon
                       name="drugs"
@@ -208,15 +208,22 @@ const MyDetails = ({
                       <option value="Recreational">Recreational</option>
                     </Field>
                   </Box>
-                  {props.errors.drugs && props.touched.drugs ? (
+                  {/* {props.errors.drugs && props.touched.drugs ? (
                     <Text fontSize={FONT_SIZES.SMALL} color={COLORS.textRed}>
                       {props.errors.drugs}
                     </Text>
-                  ) : null}
+                  ) : null} */}
                   <Box width="140%" justifyContent="center" paddingBottom={100}>
                     <Button
                       type="submit"
-                      disabled={!props.isValid}
+                      disabled={
+                        !props.isValid ||
+                        props.values.sex === "" ||
+                        props.values.drink === "" ||
+                        props.values.drugs === "" ||
+                        props.values.smoke === "" ||
+                        props.values.marijuana === ""
+                      }
                       style={{ zIndex: 100, width: "100%" }}
                     >
                       {total === completed ? "Update" : "Submit"}
