@@ -1,4 +1,5 @@
 import React from "react";
+import * as Yup from "yup";
 import {
   CollapsableHeader,
   Box,
@@ -7,11 +8,22 @@ import {
   Icon,
   ICON_SIZES,
   Button,
+  Text,
+  FONT_SIZES,
 } from "../../../components";
 import styled from "styled-components";
 
 import { COLORS } from "../../../constants";
 import { Form, Formik, Field } from "formik";
+
+const validationSchema = Yup.object().shape({
+  sex: Yup.string().required("Gender is required!!"),
+  drink: Yup.string().required("Do You Drink?!"),
+  kids: Yup.string().required("Do you have kids?!"),
+  smoke: Yup.string().required("Do you Smoke?!"),
+  marijuana: Yup.string().required("Pothead Focker?!"),
+  drugs: Yup.string().required("You Party?!"),
+});
 
 const MyDetails = ({
   handleSubmit,
@@ -28,6 +40,7 @@ const MyDetails = ({
         <Formik
           onSubmit={handleSubmit}
           validate={handleValidation}
+          validationSchema={validationSchema}
           initialValues={{
             intro: currentUser.intro ? currentUser.intro : "",
             age: currentUser.age ? currentUser.age : "",
@@ -81,14 +94,23 @@ const MyDetails = ({
                       type="input"
                       placeholder="age"
                     />
-                    <Field as="select" name="sex">
-                      <option value="">Select a sex</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Gender_Diverse">Gender Diverse</option>
-                    </Field>
+                    <Box display="flex" column>
+                      <Field as="select" name="sex" style={{ height: 35 }}>
+                        <option value="">Select a Sex</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Gender_Diverse">Gender Diverse</option>
+                      </Field>
+                      {props.errors.sex && props.touched.sex ? (
+                        <Text
+                          fontSize={FONT_SIZES.SMALL}
+                          color={COLORS.textRed}
+                        >
+                          {props.errors.sex}
+                        </Text>
+                      ) : null}
+                    </Box>
                   </Box>
-
                   <Box width="100%" justifyContent="center" marginBottom={15}>
                     <Icon
                       name="job"
@@ -102,7 +124,6 @@ const MyDetails = ({
                       width={mobile ? 200 : 280}
                     />
                   </Box>
-
                   <Box width="100%" justifyContent="center" marginY={15}>
                     <Icon
                       name="kid"
@@ -115,13 +136,18 @@ const MyDetails = ({
                       <option value="No">No</option>
                     </Field>
                   </Box>
-
+                  {props.errors.kids && props.touched.kids ? (
+                    <Text fontSize={FONT_SIZES.SMALL} color={COLORS.textRed}>
+                      {props.errors.kids}
+                    </Text>
+                  ) : null}
                   <Box width="100%" justifyContent="center" marginY={15}>
                     <Icon
                       name="beer"
                       color={COLORS.black}
                       size={ICON_SIZES.XX_LARGE}
                     />
+
                     <Field as="select" name="drink" style={{ width: 300 }}>
                       <option value="">Do You Drink</option>
                       <option value="Yes">Yes</option>
@@ -129,7 +155,11 @@ const MyDetails = ({
                       <option value="Never">Never</option>
                     </Field>
                   </Box>
-
+                  {props.errors.drink && props.touched.drink ? (
+                    <Text fontSize={FONT_SIZES.SMALL} color={COLORS.textRed}>
+                      {props.errors.drink}
+                    </Text>
+                  ) : null}
                   <Box width="100%" justifyContent="center" marginY={15}>
                     <Icon
                       name="smoke"
@@ -143,7 +173,11 @@ const MyDetails = ({
                       <option value="Never">Never</option>
                     </Field>
                   </Box>
-
+                  {props.errors.smoke && props.touched.smoke ? (
+                    <Text fontSize={FONT_SIZES.SMALL} color={COLORS.textRed}>
+                      {props.errors.smoke}
+                    </Text>
+                  ) : null}
                   <Box width="100%" justifyContent="center" marginY={15}>
                     <Icon
                       name="weed"
@@ -156,7 +190,11 @@ const MyDetails = ({
                       <option value="Unfriendly">Unfriendly</option>
                     </Field>
                   </Box>
-
+                  {props.errors.marijuana && props.touched.marijuana ? (
+                    <Text fontSize={FONT_SIZES.SMALL} color={COLORS.textRed}>
+                      {props.errors.marijuana}
+                    </Text>
+                  ) : null}
                   <Box width="100%" justifyContent="center" marginY={15}>
                     <Icon
                       name="drugs"
@@ -164,14 +202,18 @@ const MyDetails = ({
                       size={ICON_SIZES.XX_LARGE}
                     />
                     <Field as="select" name="drugs" style={{ width: 300 }}>
-                      <option value="">Do use Drugs</option>
+                      <option value="">Drug Use</option>
                       <option value="Yes">Yes</option>
                       <option value="No">No</option>
                       <option value="Recreational">Recreational</option>
                     </Field>
                   </Box>
-
-                  <Box width="100%" justifyContent="center" paddingBottom={100}>
+                  {props.errors.drugs && props.touched.drugs ? (
+                    <Text fontSize={FONT_SIZES.SMALL} color={COLORS.textRed}>
+                      {props.errors.drugs}
+                    </Text>
+                  ) : null}
+                  <Box width="140%" justifyContent="center" paddingBottom={100}>
                     <Button
                       type="submit"
                       disabled={!props.isValid}

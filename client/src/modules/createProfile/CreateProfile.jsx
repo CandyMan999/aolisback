@@ -77,6 +77,7 @@ const CreateProfile = () => {
   };
 
   const handleValidation = (values) => {
+    console.log("values: ", values);
     const err = {};
     if (!values.age.length) err.age = "Required";
     if (values.age) {
@@ -84,6 +85,15 @@ const CreateProfile = () => {
     }
     if (!values.intro.length) {
       err.intro = "Tell us about You!";
+    }
+    if (!values.drink === "") {
+      err.drink = "Do You Drink?";
+    }
+    if (!values.sex === "") {
+      err.drink = "What's Your Gender";
+    }
+    if (!values.kids === "") {
+      err.kids = "Kids?";
     }
     if (!values.occupation.length)
       err.occupation = "If you ain't got a job, then Lie";
