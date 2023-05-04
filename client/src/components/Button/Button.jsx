@@ -28,7 +28,7 @@ const StyledButton = styled.button(
       : active
       ? COLORS.vividBlue
       : disabled
-      ? `${COLORS.lightGrey}88`
+      ? `${COLORS.grey}88`
       : COLORS.blue,
     [":focus"]: {
       outline: 0,
