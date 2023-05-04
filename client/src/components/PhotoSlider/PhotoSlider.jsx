@@ -16,6 +16,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
   }, [images]);
 
   const currentPhoto = pictures[currentIdx];
+  console.log("pictures: ", pictures.length);
 
   const changeSlide = (n) => {
     const newIdx = currentIdx + n;
@@ -32,25 +33,15 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
     setPictures([...pictures.filter((picture) => picture._id !== id)]);
   };
 
-  const border = (height + 10) * 0.1;
-
   return (
     <Box
       justifyContent="center"
       height={height + 30}
       width={"100%"}
-      // border="3px solid #ccc"
       background={COLORS.white}
       style={{ overflow: "hidden" }}
     >
-      {/* <Box
-        position="absolute"
-        background="black"
-        width={"100%"}
-        height={border}
-      /> */}
-
-      {pictures.length && (
+      {pictures.length > 0 && (
         <Box
           position="absolute"
           left={2}
@@ -83,13 +74,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
               countStr={`${currentIdx + 1} of ${pictures.length}`}
             />
           ) : (
-            <Box
-              column
-              position={"absolute"}
-              justifyContent="center"
-              height={height}
-              width={width}
-            >
+            <Box column height={height} width={width} justifyContent="center">
               <Box justifyContent="center">
                 {!!isUser ? null : (
                   <Icon
@@ -107,7 +92,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
         </Box>
       </Box>
 
-      {pictures.length && (
+      {pictures.length > 0 && (
         <Box
           position="absolute"
           column

@@ -14,7 +14,7 @@ const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
       width="100%"
       maxHeight={1066}
       // flexWrap={mobile ? "wrap" : ""}
-      // paddingBottom={mobile ? 20 : undefined}
+      paddingBottom={mobile ? 100 : undefined}
     >
       <Box
         // className={!!therapists.length ? gridStyle(mobile) : ""}

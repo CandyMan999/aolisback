@@ -18,7 +18,7 @@ class App extends React.PureComponent {
         <Navbar props={this.props} />
         <Switch>
           <Route exact path="/" component={HomeContainer} />
-          <ProtectedRoute path="/profile" component={CreateProfile} />
+          <ProtectedRoute exact path="/profile" component={CreateProfile} />
           <ProtectedRoute path="/video" component={Video} />
           <ProtectedRoute path="/location" component={Map} />
           <Route path="/grid-search" component={GridSearch} />

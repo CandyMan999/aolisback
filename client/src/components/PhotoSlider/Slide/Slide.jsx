@@ -25,6 +25,8 @@ const Slide = ({
   const [loading, setLoading] = useState(false);
   const { currentUser } = state;
 
+  console.log("count: ", countStr);
+
   const handleDeletePhoto = async (id) => {
     const variables = { photoId: id, userId: currentUser._id };
     setLoading(true);
@@ -97,7 +99,7 @@ const Slide = ({
           zIndex={1}
           justifyContent="center"
           position="absolute"
-          bottom={20}
+          bottom={25}
         >
           <Button
             critical
