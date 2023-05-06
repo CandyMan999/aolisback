@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Subscription } from "react-apollo";
 
-import { Box, Text, Button, VideoPlayer } from "../../../components";
+import { Box, Text, Button, VideoPlayer, Loading } from "../../../components";
 import { COLORS } from "../../../constants";
 import { GET_VIDEOS_QUERY } from "../../../graphql/queries";
 import { CREATE_VIDEO_SUBSCRIPTION } from "../../../graphql/subscriptions";
@@ -22,10 +22,11 @@ const ProfileCardBack = ({
   client,
 }) => {
   const [video, setVideo] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     handleGetVideos();
-  }, []);
+  }, [currentUser.sentVideos]);
 
   const handleMessage = () => {
     openModal();
@@ -39,6 +40,7 @@ const ProfileCardBack = ({
 
   const handleGetVideos = async () => {
     try {
+      setLoading(true);
       const variables = {
         senderID: currentUser._id,
         receiverID: user._id,
@@ -47,9 +49,12 @@ const ProfileCardBack = ({
       const { getVideos } = await client.request(GET_VIDEOS_QUERY, variables);
       if (getVideos) {
         const lastVideo = await getVideos.pop();
+
         setVideo(lastVideo);
+        setLoading(false);
       }
     } catch (err) {
+      setLoading(false);
       console.log("err getting videos, profile card back: ", err);
     }
   };
@@ -116,14 +121,14 @@ const ProfileCardBack = ({
       >
         {/* <Icon name="distance" color={COLORS.red} size={ICON_SIZES.LARGE} /> */}
         <Text onClick={handleMessage}> Send Video Message</Text>{" "}
-        <Subscription
+        {/* <Subscription
           subscription={CREATE_VIDEO_SUBSCRIPTION}
           onSubscriptionData={({ subscriptionData }) => {
             const { createVideo } = subscriptionData.data;
 
             setVideo(createVideo);
           }}
-        />
+        /> */}
       </Box>
     </motion.div>
   );

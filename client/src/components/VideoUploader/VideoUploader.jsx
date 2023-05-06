@@ -40,10 +40,9 @@ function VideoUploader({ senderID, receiverID }) {
         variables
       );
 
-      // dispatch({ type: "UPDATE_USER", payload: sendVideo });
+      dispatch({ type: "UPDATE_USER_VIDEO", payload: sendVideo });
 
       dispatch({ type: "TOGGLE_VIDEO", payload: false });
-      setFile("");
     } catch (err) {
       console.log(err);
       setError(err);

@@ -108,6 +108,32 @@ query($token: String!){
                 lat
                 lng
               }
+              sentVideos{
+                _id
+								url
+                publicId
+               	sender{
+                  username
+                  _id
+                }
+                receiver{
+                  _id
+                  username
+                } 
+              }
+    					receivedVideos{
+                _id
+								url
+                publicId
+               	sender{
+                  username
+                  _id
+                }
+                receiver{
+                  _id
+                  username
+                } 
+              }
               email
               intro
               sex

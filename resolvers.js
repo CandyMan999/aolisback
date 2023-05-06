@@ -50,9 +50,27 @@ module.exports = {
           { _id: id },
           { isLoggedIn: true },
           { new: true }
-        )
-          .populate("pictures")
-          .populate("comments");
+        ).populate([
+          "pictures",
+          "comments",
+          "sentVideos",
+          "receivedVideos",
+          {
+            path: "sentVideos",
+            populate: [
+              { path: "sender", model: "User" },
+              { path: "receiver", model: "User" },
+            ],
+          },
+          {
+            path: "receivedVideos",
+            populate: [
+              { path: "sender", model: "User" },
+              { path: "receiver", model: "User" },
+            ],
+          },
+        ]);
+
         if (!user) {
           return new AuthenticationError("Username Doesn't Exsist");
         }
@@ -830,6 +848,7 @@ module.exports = {
           sender: senderID,
           receiver: receiverID,
         });
+
         const sender = await User.findByIdAndUpdate(
           { _id: senderID },
           { $push: { sentVideos: video } },
@@ -842,11 +861,15 @@ module.exports = {
           { new: true }
         ).populate("receivedVideos");
 
+        const newVideo = await Video.findOne({ _id: video._id })
+          .populate("sender")
+          .populate("receiver");
+
         pubsub.publish(CREATE_VIDEO, {
-          createVideo: video,
+          createVideo: newVideo,
         });
 
-        return sender;
+        return newVideo;
       } catch (err) {
         throw new AuthenticationError(err.message);
       }

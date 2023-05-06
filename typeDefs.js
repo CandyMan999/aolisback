@@ -141,7 +141,7 @@ module.exports = gql`
       publicId: String!
       receiverID: ID!
       senderID: ID!
-    ): User
+    ): Video
     deletePhoto(photoId: ID!, userId: ID!): User
   }
 

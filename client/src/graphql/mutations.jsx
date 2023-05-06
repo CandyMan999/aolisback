@@ -257,7 +257,16 @@ export const SEND_VIDEO_MUTATION = `
 mutation($url: String!, $publicId: String!, $senderID: ID!, $receiverID: ID!){
   sendVideo(url: $url, publicId: $publicId, senderID: $senderID, receiverID: $receiverID){
     _id
-   
+    url
+    sender{
+      _id
+      username
+    }
+    receiver{
+      _id
+      username
+    }
+    publicId
   }
 }
 `;

@@ -53,6 +53,7 @@ const SearchResults = ({
       {!!users.length
         ? users.map((user, i) => (
             <FlipCard
+              key={`card${user.username}-${i}`}
               state={state}
               frontContent={
                 <ProfileCardFront

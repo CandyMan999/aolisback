@@ -35,6 +35,16 @@ export default function reducer(state, { type, payload }) {
         ...state,
         currentUser: payload,
       };
+    case "UPDATE_USER_VIDEO":
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          sentVideos: state.currentUser.sentVideos
+            ? [...state.currentUser.sentVideos, payload]
+            : [payload],
+        },
+      };
     case "JOIN_CHANNEL":
       return {
         ...state,

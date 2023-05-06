@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Text, Wrapper } from "../../components";
+import { Box, Text, Wrapper, Loading } from "../../components";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { css } from "@emotion/css";
 import SearchResults from "./search-results/SearchResults";
@@ -25,14 +25,18 @@ const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
         justifyContent="space-around"
         card
       >
-        <SearchResults
-          state={state}
-          client={client}
-          dispatch={dispatch}
-          currentUser={currentUser}
-          mobile={mobile}
-          users={users}
-        />
+        {!!currentUser.username ? (
+          <SearchResults
+            state={state}
+            client={client}
+            dispatch={dispatch}
+            currentUser={currentUser}
+            mobile={mobile}
+            users={users}
+          />
+        ) : (
+          <Loading ring />
+        )}
       </Box>
     </Box>
   );

@@ -8,7 +8,7 @@ const OnlineDot = ({ online }) => {
     start: {
       scale: 1,
       opacity: 1,
-      boxShadow: "0 0 0 rgba(255, 0, 0, 1)",
+
       transition: {
         duration: 0.4,
         yoyo: Infinity,
@@ -17,7 +17,7 @@ const OnlineDot = ({ online }) => {
     end: {
       scale: 1.3,
       opacity: 0.3,
-      boxShadow: "0 0 25px 25px rgba(255, 0, 0, 0)",
+
       transition: {
         duration: 0.4,
         yoyo: Infinity,
