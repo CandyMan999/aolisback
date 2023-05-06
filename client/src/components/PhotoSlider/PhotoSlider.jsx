@@ -16,7 +16,6 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
   }, [images]);
 
   const currentPhoto = pictures[currentIdx];
-  console.log("pictures: ", pictures.length);
 
   const changeSlide = (n) => {
     const newIdx = currentIdx + n;

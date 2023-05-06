@@ -3,6 +3,7 @@ import { Box, Text, Wrapper } from "../../components";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { css } from "@emotion/css";
 import SearchResults from "./search-results/SearchResults";
+import VideoModal from "./video-modal";
 
 const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
   const mobile = useMediaQuery("(max-width: 740px)");

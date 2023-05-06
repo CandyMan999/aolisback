@@ -25,8 +25,6 @@ const Slide = ({
   const [loading, setLoading] = useState(false);
   const { currentUser } = state;
 
-  console.log("count: ", countStr);
-
   const handleDeletePhoto = async (id) => {
     const variables = { photoId: id, userId: currentUser._id };
     setLoading(true);

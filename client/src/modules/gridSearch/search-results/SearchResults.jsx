@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Box, Text, FONT_SIZES, FlipCard } from "../../../components";
 import ProfileCardFront from "../profile-card-front";
 import ProfileCardBack from "../profile-card-back/ProfileCardBack";
+import VideoModal from "../video-modal";
 
 import { css } from "@emotion/css";
 
@@ -13,11 +14,17 @@ const SearchResults = ({
   client,
   dispatch,
   currentUser,
+
+  showModal,
 }) => {
   const [activeID, setActiveID] = useState(null);
 
   const onUserCardClick = (id) => {
     setActiveID(id);
+  };
+
+  const toggleModal = () => {
+    dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
   };
 
   const handleComponent = () => {
@@ -46,6 +53,7 @@ const SearchResults = ({
       {!!users.length
         ? users.map((user, i) => (
             <FlipCard
+              state={state}
               frontContent={
                 <ProfileCardFront
                   state={state}
@@ -68,11 +76,20 @@ const SearchResults = ({
                   photos={user.pictures}
                   online={user.isLoggedIn}
                   activeID={activeID}
+                  openModal={toggleModal}
+                  dispatch={dispatch}
                 />
               }
             />
           ))
         : handleComponent()}
+      {state.showVideo && (
+        <VideoModal
+          onClose={toggleModal}
+          receiverID={activeID}
+          senderID={currentUser._id}
+        />
+      )}
     </Box>
   );
 };

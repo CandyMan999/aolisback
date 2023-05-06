@@ -130,6 +130,10 @@ query{
     _id
     name
     username
+    room{
+      _id
+      name
+    }
     pictures{
       _id
       url

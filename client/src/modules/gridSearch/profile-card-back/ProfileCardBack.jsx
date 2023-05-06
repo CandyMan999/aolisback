@@ -1,40 +1,33 @@
-import React, { useState } from "react";
-import { Image, CloudinaryContext } from "cloudinary-react";
+import React from "react";
+import { useHistory } from "react-router-dom";
 
-import {
-  Box,
-  Icon,
-  ICON_SIZES,
-  Text,
-  OnlineDot,
-  Button,
-} from "../../../components";
+import { Box, Text, Button, VideoPlayer } from "../../../components";
 import { COLORS } from "../../../constants";
-import { isEqual } from "lodash";
+
 import { motion } from "framer-motion";
 
-const ProfileCardBack = ({ online, photos, name, user, activeID, onClick }) => {
-  const randomVariable = () => {
-    return Math.random() < 0.5
-      ? Math.floor(Math.random() * 1000)
-      : Math.floor(Math.random() * -1000);
-  };
-
+const ProfileCardBack = ({
+  online,
+  photos,
+  name,
+  user,
+  activeID,
+  onClick,
+  openModal,
+  dispatch,
+}) => {
   const handleMessage = () => {
-    alert("Video Message in Progress");
+    openModal();
+  };
+  let history = useHistory();
+
+  const handleRoomClick = (roomId) => {
+    dispatch({ type: "CHANGE_ROOM", payload: roomId });
+    history.push("/");
   };
 
   return (
     <motion.div
-      //   animate={{
-      //     x: [randomVariable(), 0],
-      //     y: [randomVariable(), 0],
-      //   }}
-      //   transition={{
-      //     duration: 1.5,
-      //     ease: "easeInOut",
-      //     times: [0, 0.2],
-      //   }}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -45,6 +38,7 @@ const ProfileCardBack = ({ online, photos, name, user, activeID, onClick }) => {
         alignItems: "center",
         textAlign: "center",
         marginTop: 12,
+
         marginBottom: 12,
         paddingLeft: 2,
         paddingRight: 2,
@@ -59,11 +53,26 @@ const ProfileCardBack = ({ online, photos, name, user, activeID, onClick }) => {
       }}
       onClick={() => onClick(user._id)}
     >
-      <OnlineDot online={online} />
-
-      <Text bold margin={0}>
-        Back
-      </Text>
+      <Box card column padding={5} marginTop={25} onClick={handleMessage}>
+        <Text bold margin={0}>
+          No Messages!
+        </Text>
+        <Text bold margin={0}>
+          Try sending a Video Message!
+        </Text>
+      </Box>
+      {!!user.room && online && user.room.name && (
+        <Button width={"100%"}>
+          <Text
+            margin={0}
+            onClick={() => handleRoomClick(user.room._id)}
+            center
+          >
+            Current Room: {user.room.name}
+          </Text>
+        </Button>
+      )}
+      {/* <VideoPlayer publicId={"k5vxaofje2szdzdne8tu"} width={150} height={280} /> */}
 
       <Box
         width="105%"
@@ -73,6 +82,7 @@ const ProfileCardBack = ({ online, photos, name, user, activeID, onClick }) => {
         height={40}
         alignItems="center"
       >
+        {/* <Icon name="distance" color={COLORS.red} size={ICON_SIZES.LARGE} /> */}
         <Text onClick={handleMessage}> Send Video Message</Text>
       </Box>
     </motion.div>

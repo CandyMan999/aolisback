@@ -1,6 +1,6 @@
 const { AuthenticationError, PubSub } = require("apollo-server");
 const { OAuth2Client } = require("google-auth-library");
-const { User, Picture, Room, Comment } = require("./models");
+const { User, Picture, Room, Comment, Video } = require("./models");
 const { Configuration, OpenAIApi } = require("openai");
 
 const bcrypt = require("bcrypt");
@@ -19,6 +19,7 @@ const openai = new OpenAIApi(configuration);
 const pubsub = new PubSub();
 const ROOM_CREATED_OR_UPDATED = "ROOM_CREATED_OR_UPDATED";
 const CREATE_COMMENT = "CREATE_COMMENT";
+const CREATE_VIDEO = "CREATE_VIDEO";
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -83,7 +84,7 @@ module.exports = {
             if (!room.users.length && !!isAfterMin && room.name !== "Main") {
               await room.deleteOne({ _id: room._id });
             }
-            room.users.map(async (user) => {
+            await room.users.map(async (user) => {
               const isAfterHour = moment(user.roomInfo.subscribedAt).isBefore(
                 moment().subtract(2, "hours")
               );
@@ -384,7 +385,7 @@ module.exports = {
             if (!room.users.length && !!isAfterMin && room.name !== "Main") {
               await room.deleteOne({ _id: room._id });
             }
-            room.users.map(async (user) => {
+            await room.users.map(async (user) => {
               const isAfterHour = moment(user.roomInfo.subscribedAt).isBefore(
                 moment().subtract(2, "hours")
               );
@@ -798,6 +799,40 @@ module.exports = {
         throw new AuthenticationError(err.message);
       }
     },
+    sendVideo: async (root, args, ctx) => {
+      const { url, publicId, receiverID, senderID } = args;
+      console.log("!!!", args);
+      try {
+        const video = await Video.create({
+          url,
+          publicId,
+          sender: senderID,
+          receiver: receiverID,
+        });
+        const sender = await User.findByIdAndUpdate(
+          { _id: senderID },
+          { $push: { sentVideos: video } },
+          { new: true }
+        ).populate("sentVideos");
+
+        const receiver = await User.findByIdAndUpdate(
+          { _id: receiverID },
+          { $push: { receivedVideos: video } },
+          { new: true }
+        ).populate("receivedVideos");
+
+        pubsub.publish(CREATE_VIDEO, {
+          createVideo: receiver,
+        });
+        pubsub.publish(CREATE_VIDEO, {
+          createVideo: sender,
+        });
+
+        return sender;
+      } catch (err) {
+        throw new AuthenticationError(err.message);
+      }
+    },
     deletePhoto: async (root, args, ctx) => {
       const { photoId, userId } = args;
 
@@ -828,6 +863,9 @@ module.exports = {
     },
     createComment: {
       subscribe: () => pubsub.asyncIterator(CREATE_COMMENT),
+    },
+    createVideo: {
+      subscribe: () => pubsub.asyncIterator(CREATE_VIDEO),
     },
   },
 };

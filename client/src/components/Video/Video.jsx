@@ -1,25 +1,17 @@
 import React, { useEffect, useState, useContext, Fragment } from "react";
-import { Jutsu, useJitsi } from "react-jutsu";
+import { Jutsu } from "react-jutsu";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import { Loading } from "..";
-import {
-  Redirect,
-  useHistory,
-  withRouter,
-  useLocation,
-} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { Box } from "../../components";
 import Banner from "./banner";
-import Offline from "./offline";
 
-import { useClient } from "../../client";
 import Context from "../../context";
 
 const Video = () => {
-  const client = useClient();
-  const { state, dispatch } = useContext(Context);
+  const { state } = useContext(Context);
   const [spinner, setSpinner] = useState(false);
   const mobile = useMediaQuery("(max-width: 650px)");
 

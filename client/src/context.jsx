@@ -9,6 +9,7 @@ const Context = createContext({
   isProfile: false,
   showLogin: false,
   showSignup: false,
+  showVideo: false,
   userChannel: null,
   userLocation: {
     _id: null,

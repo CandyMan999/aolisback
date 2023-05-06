@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Box } from "../../components";
+import { Box, Icon, ICON_SIZES } from "../../components";
+import { COLORS } from "../../constants";
 
-const FlipCard = ({ frontContent, backContent }) => {
+const FlipCard = ({
+  frontContent,
+  backContent,
+  openModal,
+  showModal,
+  state,
+}) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [side, setSide] = useState("front");
 
@@ -28,15 +35,16 @@ const FlipCard = ({ frontContent, backContent }) => {
     },
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = async () => {
+    await setSide(side === "front" ? "back" : "front");
     setIsFlipped(!isFlipped);
-    setSide(side === "front" ? "back" : "front");
   };
 
   return (
-    <Box position="relative" height={300} width={170} onClick={handleCardClick}>
+    <Box position="relative" height={300} width={170}>
       <AnimatePresence>
         <motion.div
+          onClick={handleCardClick}
           key="front-face"
           className="flip-card-front"
           variants={frontFaceVariants}
@@ -66,6 +74,16 @@ const FlipCard = ({ frontContent, backContent }) => {
             position: "absolute",
           }}
         >
+          <Box
+            position="absolute"
+            zIndex={20}
+            top={10}
+            left={10}
+            onClick={handleCardClick}
+          >
+            <Icon name="back" size={ICON_SIZES.LARGE} color={COLORS.black} />
+          </Box>
+
           {backContent}
         </motion.div>
       </AnimatePresence>

@@ -253,6 +253,15 @@ mutation($_id: ID!, $url: String!, $publicId: String!){
 }
 `;
 
+export const SEND_VIDEO_MUTATION = `
+mutation($url: String!, $publicId: String!, $senderID: ID!, $receiverID: ID!){
+  sendVideo(url: $url, publicId: $publicId, senderID: $senderID, receiverID: $receiverID){
+    _id
+   
+  }
+}
+`;
+
 export const DELETE_PHOTO_MUTATION = `
 mutation($userId: ID!, $photoId: ID!){
   deletePhoto(userId: $userId, photoId: $photoId){

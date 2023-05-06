@@ -3,4 +3,5 @@ module.exports = {
   Picture: require("./Picture"),
   Comment: require("./Comment"),
   Room: require("./Room"),
+  Video: require("./Video"),
 };

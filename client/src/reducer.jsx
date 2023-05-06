@@ -25,6 +25,11 @@ export default function reducer(state, { type, payload }) {
         ...state,
         showSignup: payload,
       };
+    case "TOGGLE_VIDEO":
+      return {
+        ...state,
+        showVideo: payload,
+      };
     case "UPDATE_USER":
       return {
         ...state,

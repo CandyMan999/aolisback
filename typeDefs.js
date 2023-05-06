@@ -21,6 +21,15 @@ module.exports = gql`
     drugs: Drugs
     location: Location
     room: Room
+    sentVideos: [Video]
+    receivedVideos: [Video]
+  }
+  type Video {
+    _id: ID!
+    url: String
+    sender: User
+    receiver: User
+    publicId: String
   }
 
   enum Drugs {
@@ -126,11 +135,18 @@ module.exports = gql`
     ): User
     updateLocation(_id: ID!, lat: Float!, lng: Float!): User
     addPhoto(_id: ID!, url: String!, publicId: String!): User
+    sendVideo(
+      url: String!
+      publicId: String!
+      receiverID: ID!
+      senderID: ID!
+    ): User
     deletePhoto(photoId: ID!, userId: ID!): User
   }
 
   type Subscription {
     roomCreatedOrUpdated: [Room]
     createComment: Comment
+    createVideo: Video
   }
 `;

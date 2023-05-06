@@ -100,6 +100,18 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "Room",
   },
+  sentVideos: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Video",
+    },
+  ],
+  receivedVideos: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "Video",
+    },
+  ],
 });
 
 UserSchema.pre("save", function (next) {

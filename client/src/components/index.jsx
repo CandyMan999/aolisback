@@ -30,3 +30,4 @@ export { default as FloatingHeart } from "./FloatingHeart";
 export { default as Slider } from "./Slider";
 export { default as OnlineDot } from "./OnlineDot";
 export { default as FlipCard } from "./FlipCard";
+export { default as VideoPlayer } from "./VideoPlayer";
