@@ -149,3 +149,20 @@ query{
     intro
   }
 }`;
+
+export const GET_VIDEOS_QUERY = `
+query($senderID: ID!, $receiverID: ID!){
+  getVideos(senderID: $senderID, receiverID: $receiverID){
+   _id
+   url
+   publicId
+   sender{
+     _id
+     username
+   }
+   receiver{
+     _id
+     username
+   }
+ }
+}`;

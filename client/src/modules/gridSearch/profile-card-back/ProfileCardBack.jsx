@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { Subscription } from "react-apollo";
 
 import { Box, Text, Button, VideoPlayer } from "../../../components";
 import { COLORS } from "../../../constants";
+import { GET_VIDEOS_QUERY } from "../../../graphql/queries";
+import { CREATE_VIDEO_SUBSCRIPTION } from "../../../graphql/subscriptions";
 
 import { motion } from "framer-motion";
 
@@ -10,12 +13,20 @@ const ProfileCardBack = ({
   online,
   photos,
   name,
+  currentUser,
   user,
   activeID,
   onClick,
   openModal,
   dispatch,
+  client,
 }) => {
+  const [video, setVideo] = useState(null);
+
+  useEffect(() => {
+    handleGetVideos();
+  }, []);
+
   const handleMessage = () => {
     openModal();
   };
@@ -24,6 +35,23 @@ const ProfileCardBack = ({
   const handleRoomClick = (roomId) => {
     dispatch({ type: "CHANGE_ROOM", payload: roomId });
     history.push("/");
+  };
+
+  const handleGetVideos = async () => {
+    try {
+      const variables = {
+        senderID: currentUser._id,
+        receiverID: user._id,
+      };
+
+      const { getVideos } = await client.request(GET_VIDEOS_QUERY, variables);
+      if (getVideos) {
+        const lastVideo = await getVideos.pop();
+        setVideo(lastVideo);
+      }
+    } catch (err) {
+      console.log("err getting videos, profile card back: ", err);
+    }
   };
 
   return (
@@ -53,14 +81,16 @@ const ProfileCardBack = ({
       }}
       onClick={() => onClick(user._id)}
     >
-      <Box card column padding={5} marginTop={25} onClick={handleMessage}>
-        <Text bold margin={0}>
-          No Messages!
-        </Text>
-        <Text bold margin={0}>
-          Try sending a Video Message!
-        </Text>
-      </Box>
+      {!video && (
+        <Box card column padding={5} marginTop={25} onClick={handleMessage}>
+          <Text bold margin={0}>
+            No Messages!
+          </Text>
+          <Text bold margin={0}>
+            Try sending a Video Message!
+          </Text>
+        </Box>
+      )}
       {!!user.room && online && user.room.name && (
         <Button width={"100%"}>
           <Text
@@ -72,7 +102,9 @@ const ProfileCardBack = ({
           </Text>
         </Button>
       )}
-      {/* <VideoPlayer publicId={"k5vxaofje2szdzdne8tu"} width={150} height={280} /> */}
+      {video && (
+        <VideoPlayer publicId={video.publicId} width={150} height={280} />
+      )}
 
       <Box
         width="105%"
@@ -83,7 +115,15 @@ const ProfileCardBack = ({
         alignItems="center"
       >
         {/* <Icon name="distance" color={COLORS.red} size={ICON_SIZES.LARGE} /> */}
-        <Text onClick={handleMessage}> Send Video Message</Text>
+        <Text onClick={handleMessage}> Send Video Message</Text>{" "}
+        <Subscription
+          subscription={CREATE_VIDEO_SUBSCRIPTION}
+          onSubscriptionData={({ subscriptionData }) => {
+            const { createVideo } = subscriptionData.data;
+
+            setVideo(createVideo);
+          }}
+        />
       </Box>
     </motion.div>
   );

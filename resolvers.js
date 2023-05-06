@@ -139,7 +139,9 @@ module.exports = {
           isLoggedIn: true,
         })
           .populate("room")
-          .populate("pictures");
+          .populate("pictures")
+          .populate("sentVideos")
+          .populate("receivedVideos");
 
         return users;
       } catch (err) {
@@ -148,9 +150,28 @@ module.exports = {
     },
     getAllUsers: async (root, args, ctx) => {
       try {
-        const users = await User.find({}).populate("room").populate("pictures");
+        const users = await User.find({})
+          .populate("room")
+          .populate("pictures")
+          .populate("sentVideos")
+          .populate("receivedVideos");
 
         return users;
+      } catch (err) {
+        throw new AuthenticationError(err.message);
+      }
+    },
+    getVideos: async (root, args, ctx) => {
+      try {
+        const { senderID, receiverID } = args;
+        const videos = await Video.find({
+          sender: senderID,
+          receiver: receiverID,
+        })
+          .populate("sender")
+          .populate("receiver");
+
+        return videos;
       } catch (err) {
         throw new AuthenticationError(err.message);
       }
@@ -801,7 +822,7 @@ module.exports = {
     },
     sendVideo: async (root, args, ctx) => {
       const { url, publicId, receiverID, senderID } = args;
-      console.log("!!!", args);
+
       try {
         const video = await Video.create({
           url,
@@ -822,10 +843,7 @@ module.exports = {
         ).populate("receivedVideos");
 
         pubsub.publish(CREATE_VIDEO, {
-          createVideo: receiver,
-        });
-        pubsub.publish(CREATE_VIDEO, {
-          createVideo: sender,
+          createVideo: video,
         });
 
         return sender;

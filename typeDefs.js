@@ -100,6 +100,7 @@ module.exports = gql`
     findUser(_id: ID!): User
     getUsers: [User]
     getAllUsers: [User]
+    getVideos(senderID: ID!, receiverID: ID!): [Video]
   }
 
   type GoogleAuth {

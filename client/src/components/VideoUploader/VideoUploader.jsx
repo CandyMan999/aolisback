@@ -39,10 +39,11 @@ function VideoUploader({ senderID, receiverID }) {
         SEND_VIDEO_MUTATION,
         variables
       );
-      console.log("backend: ", sendVideo);
+
+      // dispatch({ type: "UPDATE_USER", payload: sendVideo });
 
       dispatch({ type: "TOGGLE_VIDEO", payload: false });
-      setTimeout(() => setFile(""), 2000);
+      setFile("");
     } catch (err) {
       console.log(err);
       setError(err);

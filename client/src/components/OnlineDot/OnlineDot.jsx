@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import BlinkingDot from "./BlinkingDot";
 import { COLORS } from "../../constants";
 
 const OnlineDot = ({ online }) => {

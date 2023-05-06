@@ -20,6 +20,7 @@ import {
   FIND_USER_QUERY,
 } from "../../graphql/queries";
 import {
+  CREATE_VIDEO_SUBSCRIPTION,
   ROOM_CREATED_OR_UPDATED_SUBSCRIPTION,
   CREATE_COMMENT_SUBSCRIPTION,
 } from "../../graphql/subscriptions";
@@ -202,6 +203,7 @@ const ChatBox = ({}) => {
           setMessages([...messages, createComment]);
         }}
       />
+
       <Profile userClicked={userClicked} mobile={mobile} />
     </Wrapper>
   );

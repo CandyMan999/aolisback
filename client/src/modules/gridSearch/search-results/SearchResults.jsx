@@ -70,7 +70,9 @@ const SearchResults = ({
                 <ProfileCardBack
                   state={state}
                   user={user}
-                  key={`${user.username}-${i}`}
+                  currentUser={currentUser}
+                  client={client}
+                  key={`${user.username}-${i}-back`}
                   name={`${user.username}`}
                   onClick={() => onUserCardClick(user._id)}
                   photos={user.pictures}

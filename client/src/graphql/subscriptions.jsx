@@ -35,3 +35,21 @@ export const CREATE_COMMENT_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const CREATE_VIDEO_SUBSCRIPTION = gql`
+  subscription {
+    createVideo {
+      _id
+      url
+      publicId
+      sender {
+        _id
+        username
+      }
+      receiver {
+        _id
+        username
+      }
+    }
+  }
+`;
