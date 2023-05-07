@@ -12,6 +12,7 @@ const VideoPlayer = ({ publicId, width, height, props }) => {
   }, []);
   return (
     <video
+      key={publicId}
       ref={videoRef}
       data-cld-public-id={publicId}
       width={width}

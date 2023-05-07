@@ -81,7 +81,11 @@ const FlipCard = ({
             left={10}
             onClick={handleCardClick}
           >
-            <Icon name="back" size={ICON_SIZES.LARGE} color={COLORS.black} />
+            <Icon
+              name="back"
+              size={ICON_SIZES.LARGE}
+              color={COLORS.vividBlue}
+            />
           </Box>
 
           {backContent}

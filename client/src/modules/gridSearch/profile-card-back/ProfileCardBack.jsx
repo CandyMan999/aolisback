@@ -107,9 +107,13 @@ const ProfileCardBack = ({
           </Text>
         </Button>
       )}
-      {video && (
-        <VideoPlayer publicId={video.publicId} width={150} height={280} />
-      )}
+      {loading ? (
+        <Loading ring />
+      ) : video ? (
+        <Box style={{ display: "contents" }} key={video.publicId}>
+          <VideoPlayer publicId={video.publicId} width={150} height={280} />
+        </Box>
+      ) : undefined}
 
       <Box
         width="105%"
