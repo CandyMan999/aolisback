@@ -97,15 +97,18 @@ const ProfileCardBack = ({
         </Box>
       )}
       {!!user.room && online && user.room.name && (
-        <Button width={"100%"}>
-          <Text
-            margin={0}
-            onClick={() => handleRoomClick(user.room._id)}
-            center
-          >
-            Current Room: {user.room.name}
-          </Text>
-        </Button>
+        <Text
+          position={video ? "absolute" : undefined}
+          style={!video ? undefined : { zIndex: 20, top: 40 }}
+          margin={0}
+          onClick={() => handleRoomClick(user.room._id)}
+          center
+          className="logo font-effect-fire-animation"
+          color={COLORS.magenta}
+          bold
+        >
+          Room: {user.room.name}
+        </Text>
       )}
       {loading ? (
         <Loading ring />

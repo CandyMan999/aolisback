@@ -31,4 +31,5 @@ export const COLORS = {
   textBlue: "#0c2642",
   gold: "#FFBF00",
   pink: "#FF69B4",
+  magenta: "#e90076",
 };
