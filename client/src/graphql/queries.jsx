@@ -115,10 +115,20 @@ query($token: String!){
                	sender{
                   username
                   _id
+                  pictures{
+                    _id
+                    url
+                    publicId
+                  }
                 }
                 receiver{
                   _id
                   username
+                  pictures{
+									  _id
+                    url
+                    publicId
+                  }
                 } 
               }
     					receivedVideos{
@@ -128,10 +138,20 @@ query($token: String!){
                	sender{
                   username
                   _id
+                  pictures{
+									  _id
+                    url
+                    publicId
+                  }
                 }
                 receiver{
                   _id
                   username
+                  pictures{
+									  _id
+                    url
+                    publicId
+                  }
                 } 
               }
               email

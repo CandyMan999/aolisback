@@ -114,7 +114,12 @@ const ProfileCardBack = ({
         <Loading ring />
       ) : video ? (
         <Box style={{ display: "contents" }} key={video.publicId}>
-          <VideoPlayer publicId={video.publicId} width={150} height={280} />
+          <VideoPlayer
+            publicId={video.publicId}
+            width={150}
+            height={280}
+            controls={true}
+          />
         </Box>
       ) : undefined}
 

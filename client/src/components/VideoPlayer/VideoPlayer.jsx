@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const VideoPlayer = ({ publicId, width, height, props }) => {
+const VideoPlayer = ({ publicId, width, height, props, controls }) => {
   const cloudinaryRef = useRef();
   const videoRef = useRef();
   useEffect(() => {
@@ -17,7 +17,7 @@ const VideoPlayer = ({ publicId, width, height, props }) => {
       data-cld-public-id={publicId}
       width={width}
       height={height}
-      controls
+      controls={controls}
       {...props}
     />
   );

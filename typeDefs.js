@@ -28,6 +28,7 @@ module.exports = gql`
     _id: ID!
     url: String
     sender: User
+    createdAt: String
     receiver: User
     publicId: String
   }

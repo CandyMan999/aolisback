@@ -91,6 +91,9 @@ export const MenuItem = ({
     if (item === "Browse Users") {
       toggle();
     }
+    if (item === "Message Center") {
+      toggle();
+    }
     if (item === "Logout") {
       handleLogout();
       clearToken();

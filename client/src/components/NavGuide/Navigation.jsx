@@ -18,7 +18,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
   const [items, setItems] = useState([
     { name: "Login", icon: "login", route: "/" },
     { name: "User Signup", icon: "signup", route: "/" },
-    { name: "Message Center", icon: "browseLogo", route: "/grid-search" },
+    { name: "Message Center", icon: "browseLogo", route: "/message-center" },
     { name: "View Users Locations", icon: "search", route: "/location" },
     { name: "Home", icon: "home", route: "/" },
     { name: "Browse Users", icon: "browseLogo", route: "/grid-search" },
@@ -30,7 +30,11 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
       setItems([
         { name: "My Profile", icon: "user", route: "/profile" },
         { name: "My Video Channel", icon: "video", route: "/video" },
-        { name: "Message Center", icon: "browseLogo", route: "/grid-search" },
+        {
+          name: "Message Center",
+          icon: "browseLogo",
+          route: "/message-center",
+        },
         { name: "View Users Locations", icon: "search", route: "/location" },
         { name: "Home", icon: "home", route: "/" },
         { name: "Browse Users", icon: "browseLogo", route: "/grid-search" },

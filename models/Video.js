@@ -5,6 +5,12 @@ const VideoSchema = new mongoose.Schema({
   sender: { type: mongoose.Schema.ObjectId, ref: "User" },
   receiver: { type: mongoose.Schema.ObjectId, ref: "User" },
   publicId: { type: String },
+  createdAt: {
+    type: Date,
+
+    // expires: 14800,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("Video", VideoSchema);
