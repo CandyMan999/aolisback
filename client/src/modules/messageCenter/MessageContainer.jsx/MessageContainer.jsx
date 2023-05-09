@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Image, CloudinaryContext } from "cloudinary-react";
+
 import { Box, Text, Icon, ICON_SIZES, VideoPlayer } from "../../../components";
 import { COLORS } from "../../../constants";
 import { withRouter } from "react-router-dom";
