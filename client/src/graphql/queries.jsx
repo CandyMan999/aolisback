@@ -112,6 +112,7 @@ query($token: String!){
                 _id
 								url
                 publicId
+                createdAt
                	sender{
                   username
                   _id
@@ -135,6 +136,7 @@ query($token: String!){
                 _id
 								url
                 publicId
+                createdAt
                	sender{
                   username
                   _id

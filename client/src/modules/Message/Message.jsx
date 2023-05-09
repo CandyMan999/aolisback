@@ -1,5 +1,12 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Box, Icon, ICON_SIZES } from "../../components";
+import React, { useContext, useState, useEffect, Fragment } from "react";
+import {
+  Box,
+  Icon,
+  ICON_SIZES,
+  VideoPlayer,
+  Text,
+  FONT_SIZES,
+} from "../../components";
 import { COLORS } from "../../constants";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -19,22 +26,39 @@ const Message = () => {
 
   useEffect(() => {
     if (receivedVideos && !!receivedVideos.length && !!senderID) {
-      groupVideosBySender(receivedVideos);
+      groupVideosBySender(receivedVideos, sentVideos);
     }
   }, [senderID]);
 
-  const groupVideosBySender = (videos) => {
+  const groupVideosBySender = async (receivedVids, sentVids) => {
     const array = [];
 
-    for (const video of videos) {
+    for (const video of receivedVids) {
       const senderId = video.sender._id;
 
       if (senderId === senderID) {
         array.push(video);
       }
     }
-    console.log("received :", array);
-    setGroupReceived(array);
+
+    for (const video of sentVids) {
+      const senderId = video.receiver._id;
+
+      if (senderId === senderID) {
+        array.push(video);
+      }
+    }
+    const data = await orderByCreatedAt(array);
+    console.log("ordered: ", data);
+    setGroupReceived(data);
+  };
+
+  const orderByCreatedAt = (array) => {
+    return array.sort((a, b) => {
+      const dateA = new Date(parseInt(a.createdAt));
+      const dateB = new Date(parseInt(b.createdAt));
+      return dateA - dateB;
+    });
   };
 
   const handleOnClick = () => {
@@ -44,20 +68,76 @@ const Message = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      margin={20}
-      justifyContent="space-around"
-      card
-      height={"calc(100vH - 60px)"}
-      width="95%"
-      maxHeight={1066}
-    >
-      <Box onClick={handleOnClick}>
-        <Icon name="back" size={ICON_SIZES.LARGE} color={COLORS.black} />
-      </Box>
-      Message Open for sender with ID: {senderID}
-    </Box>
+    groupedReceived &&
+    !!groupedReceived.length && (
+      <Fragment>
+        <Text width={"100%"} bold fontSize={FONT_SIZES.XX_LARGE} center>{`${
+          groupedReceived[0].sender._id === currentUser._id
+            ? groupedReceived[0].receiver.username
+            : groupedReceived[0].sender.username
+        }'s Messages`}</Text>
+        <Box
+          display="flex"
+          margin={20}
+          justifyContent="space-around"
+          card
+          height={"auto"}
+          style={{ overflow: "scroll" }}
+          width="auto"
+          maxHeight={1066}
+          column
+        >
+          <Box
+            onClick={handleOnClick}
+            position="absolute"
+            top={20}
+            zIndex={20}
+            right={
+              groupedReceived[0].sender._id === currentUser._id ? undefined : 40
+            }
+            left={
+              groupedReceived[0].sender._id === currentUser._id ? 40 : undefined
+            }
+          >
+            <Icon
+              name="back"
+              size={ICON_SIZES.XXX_LARGE}
+              color={COLORS.black}
+            />
+          </Box>
+          {groupedReceived &&
+            !!groupedReceived.length &&
+            groupedReceived.map((video) => {
+              return (
+                <Box
+                  key={video.publicId}
+                  width="100%"
+                  display="flex"
+                  justifyContent={
+                    video.sender._id === currentUser._id
+                      ? "flex-end"
+                      : undefined
+                  }
+                >
+                  <Box column>
+                    <VideoPlayer
+                      publicId={video.publicId}
+                      controls={true}
+                      height={100}
+                      width={150}
+                    />
+                    <Text center bold>
+                      {video.sender._id === currentUser._id
+                        ? "Sent Video"
+                        : "Received Video"}
+                    </Text>
+                  </Box>
+                </Box>
+              );
+            })}
+        </Box>
+      </Fragment>
+    )
   );
 };
 
