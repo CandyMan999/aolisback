@@ -12,8 +12,10 @@ const VideoPlayer = ({ publicId, width, height, props, controls, mobile }) => {
     });
     videoPlayer.on("play", () => {
       const onTouchStart = () => {};
+
       videoRef.current.addEventListener("touchstart", onTouchStart);
-      videoRef.current.msRequestFullscreen();
+      //   videoRef.current.msRequestFullscreen();
+      videoPlayer.maximize();
 
       // Cleanup touchstart event listener on unmount
       return () => {
