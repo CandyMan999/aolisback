@@ -14,7 +14,7 @@ const VideoPlayer = ({ publicId, width, height, props, controls, mobile }) => {
       const onTouchStart = () => {};
 
       videoRef.current.addEventListener("touchstart", onTouchStart);
-      //   videoRef.current.msRequestFullscreen();
+
       videoPlayer.maximize();
 
       // Cleanup touchstart event listener on unmount

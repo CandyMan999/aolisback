@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Subscription } from "react-apollo";
 
 import { Box, Text, Button, VideoPlayer, Loading } from "../../../components";
 import { COLORS } from "../../../constants";
 import { GET_VIDEOS_QUERY } from "../../../graphql/queries";
-import { CREATE_VIDEO_SUBSCRIPTION } from "../../../graphql/subscriptions";
 
 import { motion } from "framer-motion";
 
@@ -135,14 +133,6 @@ const ProfileCardBack = ({
       >
         {/* <Icon name="distance" color={COLORS.red} size={ICON_SIZES.LARGE} /> */}
         <Text onClick={handleMessage}> Send Video Message</Text>{" "}
-        {/* <Subscription
-          subscription={CREATE_VIDEO_SUBSCRIPTION}
-          onSubscriptionData={({ subscriptionData }) => {
-            const { createVideo } = subscriptionData.data;
-
-            setVideo(createVideo);
-          }}
-        /> */}
       </Box>
     </motion.div>
   );

@@ -889,9 +889,24 @@ module.exports = {
           { new: true }
         ).populate("receivedVideos");
 
-        const newVideo = await Video.findOne({ _id: video._id })
-          .populate("sender")
-          .populate("receiver");
+        const newVideo = await Video.findOne({ _id: video._id }).populate([
+          {
+            path: "sender",
+            model: "User",
+            populate: {
+              path: "pictures",
+              model: "Picture",
+            },
+          },
+          {
+            path: "receiver",
+            model: "User",
+            populate: {
+              path: "pictures",
+              model: "Picture",
+            },
+          },
+        ]);
 
         pubsub.publish(CREATE_VIDEO, {
           createVideo: newVideo,

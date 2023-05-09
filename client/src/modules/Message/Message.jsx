@@ -1,4 +1,7 @@
 import React, { useContext, useState, useEffect, Fragment } from "react";
+import { Subscription } from "react-apollo";
+import { formatDistanceToNow } from "date-fns";
+import { CREATE_VIDEO_SUBSCRIPTION } from "../../graphql/subscriptions";
 import {
   Box,
   Icon,
@@ -6,9 +9,11 @@ import {
   VideoPlayer,
   Text,
   FONT_SIZES,
+  Button,
 } from "../../components";
 import { COLORS } from "../../constants";
 import { useHistory, useLocation } from "react-router-dom";
+import VideoModal from "../gridSearch/video-modal";
 
 import { useClient } from "../../client";
 import Context from "../../context";
@@ -65,6 +70,10 @@ const Message = () => {
     history.push({
       pathname: "/message-center",
     });
+  };
+
+  const toggleModal = () => {
+    dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
   };
 
   return (
@@ -128,14 +137,45 @@ const Message = () => {
                     />
                     <Text center bold>
                       {video.sender._id === currentUser._id
-                        ? "Sent Video"
-                        : "Received Video"}
+                        ? "Sent Video "
+                        : "Received Video "}
+                      (
+                      {formatDistanceToNow(
+                        Number(video.createdAt)
+                      ).toUpperCase()}
+                      )
                     </Text>
                   </Box>
                 </Box>
               );
             })}
+          <Box width="100%">
+            <Button width="100%" onClick={toggleModal}>
+              Reply
+            </Button>
+          </Box>
         </Box>
+        {state.showVideo && (
+          <VideoModal
+            onClose={toggleModal}
+            receiverID={senderID}
+            senderID={currentUser._id}
+          />
+        )}
+        <Subscription
+          subscription={CREATE_VIDEO_SUBSCRIPTION}
+          onSubscriptionData={({ subscriptionData }) => {
+            const { createVideo } = subscriptionData.data;
+            console.log("subscription data: ", createVideo);
+            if (
+              (createVideo.sender._id === senderID &&
+                createVideo.receiver._id === currentUser._id) ||
+              (createVideo.sender._id === currentUser._id &&
+                createVideo.receiver._id === senderID)
+            )
+              setGroupReceived([...groupedReceived, createVideo]);
+          }}
+        />
       </Fragment>
     )
   );
