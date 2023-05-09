@@ -204,6 +204,7 @@ query($senderID: ID!, $receiverID: ID!){
    _id
    url
    publicId
+   createdAt
    sender{
      _id
      username

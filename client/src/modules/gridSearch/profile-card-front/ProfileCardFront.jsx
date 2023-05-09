@@ -84,8 +84,8 @@ const ProfileCardFront = ({
               alt={`${name}-profile-pic`}
               style={{
                 borderRadius: "50%",
-                height: 84,
-                width: 84,
+                height: 120,
+                width: 120,
                 marginBottom: "0px",
               }}
               loading="lazy"
@@ -97,8 +97,8 @@ const ProfileCardFront = ({
             alt={`${name}-profile-pic`}
             style={{
               borderRadius: "50%",
-              height: 84,
-              width: 84,
+              height: 100,
+              width: 100,
               marginBottom: "8px",
             }}
             src={profilePic.url}
@@ -108,8 +108,8 @@ const ProfileCardFront = ({
         <Box>
           <Box
             borderRadius="50%"
-            height={64}
-            width={64}
+            height={120}
+            width={120}
             center
             background={COLORS.lightGrey}
             justifyContent="center"

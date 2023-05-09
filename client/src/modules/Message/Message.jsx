@@ -10,6 +10,7 @@ import {
   Text,
   FONT_SIZES,
   Button,
+  Loading,
 } from "../../components";
 import { COLORS } from "../../constants";
 import { useHistory, useLocation } from "react-router-dom";
@@ -21,10 +22,10 @@ import Context from "../../context";
 const Message = () => {
   let history = useHistory();
   const location = useLocation();
-  const client = useClient();
   const { state, dispatch } = useContext(Context);
   const currentUser = state.currentUser;
   const { sentVideos, receivedVideos } = currentUser;
+  const [loading, setLoading] = useState(false);
   const senderID = new URLSearchParams(location.search).get("sender");
 
   const [groupedReceived, setGroupReceived] = useState(null);
@@ -33,29 +34,36 @@ const Message = () => {
     if (receivedVideos && !!receivedVideos.length && !!senderID) {
       groupVideosBySender(receivedVideos, sentVideos);
     }
-  }, [senderID]);
+  }, [senderID, currentUser]);
 
   const groupVideosBySender = async (receivedVids, sentVids) => {
-    const array = [];
+    try {
+      setLoading(true);
+      const array = [];
 
-    for (const video of receivedVids) {
-      const senderId = video.sender._id;
+      for (const video of receivedVids) {
+        const senderId = video.sender._id;
 
-      if (senderId === senderID) {
-        array.push(video);
+        if (senderId === senderID) {
+          array.push(video);
+        }
       }
-    }
 
-    for (const video of sentVids) {
-      const senderId = video.receiver._id;
+      for (const video of sentVids) {
+        const senderId = video.receiver._id;
 
-      if (senderId === senderID) {
-        array.push(video);
+        if (senderId === senderID) {
+          array.push(video);
+        }
       }
+      const data = await orderByCreatedAt(array);
+      console.log("ordered: ", data);
+      setGroupReceived(data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
     }
-    const data = await orderByCreatedAt(array);
-    console.log("ordered: ", data);
-    setGroupReceived(data);
   };
 
   const orderByCreatedAt = (array) => {
@@ -76,50 +84,49 @@ const Message = () => {
     dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
   };
 
-  return (
-    groupedReceived &&
-    !!groupedReceived.length && (
+  return loading ? (
+    <Loading fade size={100} />
+  ) : (
+    groupedReceived && !!groupedReceived.length && (
       <Fragment>
-        <Text width={"100%"} bold fontSize={FONT_SIZES.XX_LARGE} center>{`${
-          groupedReceived[0].sender._id === currentUser._id
-            ? groupedReceived[0].receiver.username
-            : groupedReceived[0].sender.username
-        }'s Messages`}</Text>
         <Box
+          onClick={handleOnClick}
+          width="100%"
           display="flex"
-          margin={20}
-          justifyContent="space-around"
-          card
-          height={"auto"}
-          style={{ overflow: "scroll" }}
-          width="auto"
-          maxHeight={1066}
-          column
+          justifyContent="center"
+          paddingX={"5%"}
         >
-          <Box
-            onClick={handleOnClick}
-            position="absolute"
-            top={20}
-            zIndex={20}
-            right={
-              groupedReceived[0].sender._id === currentUser._id ? undefined : 40
-            }
-            left={
-              groupedReceived[0].sender._id === currentUser._id ? 40 : undefined
-            }
-          >
+          <Box zIndex={20}>
             <Icon
               name="back"
               size={ICON_SIZES.XXX_LARGE}
               color={COLORS.black}
             />
           </Box>
+          <Text width={"100%"} bold fontSize={FONT_SIZES.X_LARGE} center>{`${
+            groupedReceived[0].sender._id === currentUser._id
+              ? groupedReceived[0].receiver.username
+              : groupedReceived[0].sender.username
+          }'s Messages`}</Text>
+        </Box>
+
+        <Box
+          display="flex"
+          margin={20}
+          justifyContent="space-around"
+          card
+          height={"auto"}
+          minHeight={"60vH"}
+          // style={{ overflow: "scroll" }}
+          width="auto"
+          column
+        >
           {groupedReceived &&
             !!groupedReceived.length &&
-            groupedReceived.map((video) => {
+            groupedReceived.map((video, i) => {
               return (
                 <Box
-                  key={video.publicId}
+                  key={`${video.publicId}-${i}`}
                   width="100%"
                   display="flex"
                   justifyContent={
@@ -135,15 +142,18 @@ const Message = () => {
                       height={100}
                       width={150}
                     />
-                    <Text center bold>
+                    <Text center bold margin={0}>
                       {video.sender._id === currentUser._id
                         ? "Sent Video "
                         : "Received Video "}
-                      (
-                      {formatDistanceToNow(
-                        Number(video.createdAt)
-                      ).toUpperCase()}
-                      )
+                    </Text>
+                    <Text
+                      color={COLORS.facebookBlue}
+                      margin={0}
+                      center
+                      fontSize={FONT_SIZES.SMALL}
+                    >
+                      {formatDistanceToNow(Number(video.createdAt))} ago
                     </Text>
                   </Box>
                 </Box>

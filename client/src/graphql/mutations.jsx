@@ -258,6 +258,7 @@ mutation($url: String!, $publicId: String!, $senderID: ID!, $receiverID: ID!){
   sendVideo(url: $url, publicId: $publicId, senderID: $senderID, receiverID: $receiverID){
     _id
     url
+    createdAt
     sender{
       _id
       username

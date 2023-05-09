@@ -5,22 +5,29 @@ import Context from "../../context";
 import { GET_ALL_USERS } from "../../graphql/queries";
 import { Loading, Box } from "../../components";
 import { useClient } from "../../client";
+import { getDistanceFromCoords } from "../../utils/helpers";
 
 const GridContainer = () => {
   const client = useClient();
   const { state, dispatch } = useContext(Context);
+  const { currentUser } = state;
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [state.currentUser]);
 
   const fetchData = async () => {
     setLoading(true);
     try {
       const { getAllUsers } = await client.request(GET_ALL_USERS, {});
-      setUsers(getAllUsers);
+      const filteredUsers = await getAllUsers.filter(
+        (user) => user.username !== state.currentUser.username
+      );
+      const filteredAndSorted = await sortByDistance(filteredUsers);
+
+      setUsers(filteredAndSorted);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -28,26 +35,26 @@ const GridContainer = () => {
     }
   };
 
-  //   const handleLocation = () => {
-  //     setLoading(true);
-  //     try {
-  //       if ("geolocation" in navigator) {
-  //         navigator.geolocation.getCurrentPosition((position) => {
-  //           const { latitude, longitude } = position.coords;
+  const sortByDistance = (array) => {
+    const newArray = array
+      .map((user) => ({
+        ...user,
+        distanceAway: Math.abs(
+          Math.round(
+            getDistanceFromCoords(
+              currentUser.location.lat,
+              currentUser.location.lng,
+              user.location.lat,
+              user.location.lng
+            )
+          )
+        ),
+      }))
+      .sort((a, b) => a.distanceAway - b.distanceAway);
 
-  //           setCoords({ lat: latitude, lng: longitude });
-  //           dispatch({
-  //             type: "SET_USER_COORDS",
-  //             payload: { lat: latitude, lng: longitude },
-  //           });
-  //         });
-  //       }
-  //       setLoading(false);
-  //     } catch (err) {
-  //       setLoading(false);
-  //       console.log(err.message);
-  //     }
-  //   };
+    return newArray;
+  };
+
   return !!loading ? (
     <Box
       position="absolute"

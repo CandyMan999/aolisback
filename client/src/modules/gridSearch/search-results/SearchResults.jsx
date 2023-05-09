@@ -14,8 +14,6 @@ const SearchResults = ({
   client,
   dispatch,
   currentUser,
-
-  showModal,
 }) => {
   const [activeID, setActiveID] = useState(null);
 
@@ -47,7 +45,6 @@ const SearchResults = ({
       className={gridStyle(mobile)}
       style={{ display: users.length ? "grid" : "" }}
       width="100%"
-      height="100%"
       justifyContent="space-around"
     >
       {!!users.length
@@ -106,7 +103,7 @@ const gridStyle = (mobile) =>
     paddingBottom: "0px",
     marginBottom: "0px",
     maxHeight: mobile ? undefined : "1220px",
-    overflowY: !mobile ? "scroll" : "scroll",
+    overflowY: !mobile ? "scroll" : undefined,
     "@media (max-width: 1180px)": {
       gridTemplateColumns: "1fr 1fr 1fr",
     },

@@ -21,8 +21,9 @@ const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
         // className={!!therapists.length ? gridStyle(mobile) : ""}
         style={{ display: "grid", margin: "20px" }}
         width="100%"
-        height="100%"
+        height="fit-content"
         justifyContent="space-around"
+        paddingBottom={"10%"}
         card
       >
         {!!currentUser.username ? (

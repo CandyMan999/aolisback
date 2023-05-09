@@ -32,7 +32,7 @@ const MessageContainer = ({
           }
           borderBottom={i === 0 ? undefined : `solid 2px ${COLORS.grey}`}
           onClick={() => handleOnClick(video[0].sender._id)}
-          key={`${video[0].sender.username}-${i}`}
+          key={`${video[0].publicId}-${i}`}
         >
           {!!video[0].sender.pictures[0] &&
           !!video[0].sender.pictures[0].publicId ? (

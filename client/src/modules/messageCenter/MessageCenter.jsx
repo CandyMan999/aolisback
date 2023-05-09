@@ -12,7 +12,8 @@ const MessageCenter = () => {
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const currentUser = state.currentUser;
-  const { sentVideos, receivedVideos } = currentUser;
+  // const { sentVideos, receivedVideos } = currentUser;
+  const [receivedVideos, setReceivedVideos] = useState([]);
   const token = getToken();
   const [loading, setLoading] = useState(false);
   const [groupedReceived, setGroupReceived] = useState(null);
@@ -37,6 +38,8 @@ const MessageCenter = () => {
       };
 
       const { fetchMe } = await client.request(FETCH_ME, variables);
+
+      await setReceivedVideos(fetchMe.receivedVideos);
 
       await dispatch({ type: "LOGIN_USER", payload: fetchMe });
       setLoading(false);
