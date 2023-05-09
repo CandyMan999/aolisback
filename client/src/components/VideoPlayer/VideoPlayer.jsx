@@ -11,25 +11,26 @@ const VideoPlayer = ({ publicId, width, height, props, controls }) => {
       cloud_name: "localmassagepros",
     });
     videoPlayer.on("play", () => {
-      if (videoRef.current.requestFullscreen) {
+      console.log("videoPlayer: ", videoRef.current.requestFullscreen);
+      const onTouchStart = () => {
         videoRef.current.requestFullscreen();
-      } else if (videoRef.current.webkitRequestFullscreen) {
-        /* Safari */
+      };
+      videoRef.current.addEventListener("touchstart", onTouchStart);
+      if (videoRef.current.webkitRequestFullscreen) {
         videoRef.current.webkitRequestFullscreen();
+        videoRef.current.requestFullscreen();
+      } else if (videoRef.current.RequestFullscreen) {
+        /* Safari */
+        videoRef.current.RequestFullscreen();
       } else if (videoRef.current.msRequestFullscreen) {
         /* IE11 */
         videoRef.current.msRequestFullscreen();
         // Listen for touchstart event to enter fullscreen mode on mobile
-        const onTouchStart = () => {
-          videoRef.current.requestFullscreen();
-        };
-        videoRef.current.addEventListener("touchstart", onTouchStart);
-
-        // Cleanup touchstart event listener on unmount
-        return () => {
-          videoRef.current.removeEventListener("touchstart", onTouchStart);
-        };
       }
+      // Cleanup touchstart event listener on unmount
+      return () => {
+        videoRef.current.removeEventListener("touchstart", onTouchStart);
+      };
     });
   }, []);
 
