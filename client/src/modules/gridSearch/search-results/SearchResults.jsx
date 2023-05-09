@@ -81,6 +81,7 @@ const SearchResults = ({
                   activeID={activeID}
                   openModal={toggleModal}
                   dispatch={dispatch}
+                  mobile={mobile}
                 />
               }
             />

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const VideoPlayer = ({ publicId, width, height, props, controls }) => {
+const VideoPlayer = ({ publicId, width, height, props, controls, mobile }) => {
   const cloudinaryRef = useRef();
   const videoRef = useRef();
 
@@ -13,7 +13,7 @@ const VideoPlayer = ({ publicId, width, height, props, controls }) => {
     videoPlayer.on("play", () => {
       const onTouchStart = () => {};
       videoRef.current.addEventListener("touchstart", onTouchStart);
-      videoRef.current.requestFullscreen();
+      videoRef.current.msRequestFullscreen();
 
       // Cleanup touchstart event listener on unmount
       return () => {

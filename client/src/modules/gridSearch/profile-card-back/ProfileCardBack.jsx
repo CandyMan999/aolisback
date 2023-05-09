@@ -20,6 +20,7 @@ const ProfileCardBack = ({
   openModal,
   dispatch,
   client,
+  mobile,
 }) => {
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -119,6 +120,7 @@ const ProfileCardBack = ({
             width={150}
             height={280}
             controls={true}
+            mobile={mobile}
           />
         </Box>
       ) : undefined}
