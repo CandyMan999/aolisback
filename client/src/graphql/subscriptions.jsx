@@ -42,13 +42,20 @@ export const CREATE_VIDEO_SUBSCRIPTION = gql`
       _id
       url
       publicId
+      createdAt
       sender {
         _id
         username
+        pictures {
+          publicId
+        }
       }
       receiver {
         _id
         username
+        pictures {
+          publicId
+        }
       }
     }
   }
