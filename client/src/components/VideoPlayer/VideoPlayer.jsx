@@ -11,9 +11,10 @@ const VideoPlayer = ({ publicId, width, height, props, controls }) => {
       cloud_name: "localmassagepros",
     });
     videoPlayer.on("play", () => {
-      console.log("videoPlayer: ", videoRef.current.requestFullscreen);
       const onTouchStart = () => {
         videoRef.current.requestFullscreen();
+        videoRef.current.msRequestFullscreen();
+        videoRef.current.webkitRequestFullscreen();
       };
       videoRef.current.addEventListener("touchstart", onTouchStart);
       if (videoRef.current.webkitRequestFullscreen) {
@@ -42,6 +43,7 @@ const VideoPlayer = ({ publicId, width, height, props, controls }) => {
       width={width}
       height={height}
       controls={controls}
+      data-cld-overlays="fullscreen,playpause"
       {...props}
     />
   );
