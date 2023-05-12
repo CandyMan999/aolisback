@@ -46,6 +46,7 @@ query($_id: ID!){
     _id
     username
     email
+    isLoggedIn
     pictures{
         url
         _id

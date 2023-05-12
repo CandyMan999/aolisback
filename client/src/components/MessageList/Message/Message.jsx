@@ -17,11 +17,21 @@ const Message = ({
   createdAt,
   publicId,
 }) => {
-  const handleSpeech = async (text) => {
+  const handleSpeech = async (text, voiceType) => {
     let voices = await window.speechSynthesis.getVoices();
+    let voice;
+
+    if (voiceType === "male") {
+      // Find the American male voice
+      voice = voices.find((v) => v.name === "Google US English male");
+    } else {
+      // Find the English American female voice
+      voice = voices.find((v) => v.name === "Google UK English Female");
+    }
 
     const msg = new SpeechSynthesisUtterance();
     msg.text = text;
+    msg.voice = voice;
     window.speechSynthesis.speak(msg);
   };
 
@@ -54,7 +64,7 @@ const Message = ({
                 margin={"auto"}
                 fontSize={FONT_SIZES.SMALL}
               >
-                <span onClick={() => handleSpeech(text)}>
+                <span onClick={() => handleSpeech(text, "male")}>
                   <Speech />
                 </span>
 
@@ -186,9 +196,9 @@ const Message = ({
                 margin={"auto"}
                 fontSize={FONT_SIZES.SMALL}
               >
-                {/* <span onClick={() => handleSpeech(text)}> */}
-                <Speech lang={"en-US"} voice={"Samantha"} text={text} />
-                {/* </span> */}
+                <span onClick={() => handleSpeech(text, "female")}>
+                  <Speech />
+                </span>
 
                 {text}
               </Text>

@@ -46,6 +46,8 @@ const Profile = ({ userClicked, mobile }) => {
     dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
   };
 
+  console.log("PROFILE: ", user);
+
   const handleVideo = () => {
     dispatch({ type: "JOIN_CHANNEL", payload: username });
     dispatch({ type: "TOGGLE_PROFILE", payload: false });
