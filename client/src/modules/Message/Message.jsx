@@ -11,12 +11,14 @@ import {
   FONT_SIZES,
   Button,
   Loading,
+  Picture,
 } from "../../components";
 import { COLORS } from "../../constants";
 import { useHistory, useLocation } from "react-router-dom";
 import VideoModal from "../gridSearch/video-modal";
+import Profile from "../../modules/profile";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-import { useClient } from "../../client";
 import Context from "../../context";
 
 const Message = () => {
@@ -26,6 +28,7 @@ const Message = () => {
   const currentUser = state.currentUser;
   const { sentVideos, receivedVideos } = currentUser;
   const [loading, setLoading] = useState(false);
+  const mobile = useMediaQuery("(max-width: 650px)");
   const senderID = new URLSearchParams(location.search).get("sender");
 
   const [groupedReceived, setGroupReceived] = useState(null);
@@ -36,6 +39,9 @@ const Message = () => {
     }
   }, [senderID, currentUser]);
 
+  useEffect(() => {
+    console.log("state; ", state);
+  }, [state]);
   const groupVideosBySender = async (receivedVids, sentVids) => {
     try {
       setLoading(true);
@@ -80,6 +86,15 @@ const Message = () => {
     });
   };
 
+  const handleProfileClick = async () => {
+    const user = await groupedReceived.filter(
+      (video) => video.sender._id === senderID
+    );
+
+    await dispatch({ type: "UPDATE_PROFILE", payload: user[0].sender });
+    await dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
+  };
+
   const toggleModal = () => {
     dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
   };
@@ -90,34 +105,56 @@ const Message = () => {
     groupedReceived && !!groupedReceived.length && (
       <Fragment>
         <Box
-          onClick={handleOnClick}
           width="100%"
           display="flex"
-          justifyContent="center"
-          paddingX={"5%"}
+          justifyContent="space-around"
+          paddingX={"3%"}
+          backgroundColor={COLORS.lighterGrey}
         >
+          <Box marginTop={5} onClick={handleProfileClick} center width={"70%"}>
+            <Picture
+              profilePic={
+                groupedReceived[0].sender._id === currentUser._id
+                  ? groupedReceived[0].receiver.pictures[0]
+                  : groupedReceived[0].sender.pictures[0]
+              }
+              name={
+                groupedReceived[0].sender._id === currentUser._id
+                  ? groupedReceived[0].receiver.username
+                  : groupedReceived[0].sender.username
+              }
+              height={140}
+              width={140}
+            />
+            <Text
+              paddingLeft={"2%"}
+              width={"100%"}
+              bold
+              fontSize={FONT_SIZES.X_LARGE}
+              center
+            >{`${
+              groupedReceived[0].sender._id === currentUser._id
+                ? groupedReceived[0].receiver.username
+                : groupedReceived[0].sender.username
+            }'s Messages`}</Text>
+          </Box>
+
           <Box zIndex={20}>
             <Icon
               name="back"
               size={ICON_SIZES.XXX_LARGE}
               color={COLORS.black}
+              onClick={handleOnClick}
             />
           </Box>
-          <Text width={"100%"} bold fontSize={FONT_SIZES.X_LARGE} center>{`${
-            groupedReceived[0].sender._id === currentUser._id
-              ? groupedReceived[0].receiver.username
-              : groupedReceived[0].sender.username
-          }'s Messages`}</Text>
         </Box>
 
         <Box
           display="flex"
           margin={20}
           justifyContent="space-around"
-          card
           height={"auto"}
           minHeight={"60vH"}
-          // style={{ overflow: "scroll" }}
           width="auto"
           column
         >
@@ -186,6 +223,7 @@ const Message = () => {
               setGroupReceived([...groupedReceived, createVideo]);
           }}
         />
+        <Profile mobile={mobile} userClicked={state.profile} />
       </Fragment>
     )
   );

@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import {
   Drawer,
   Box,
@@ -20,9 +20,11 @@ import { useHistory } from "react-router-dom";
 
 const Profile = ({ userClicked, mobile }) => {
   //eventually userClicked will be whole object
+  console.log("userClicked: ", userClicked);
   const client = useClient();
   let history = useHistory();
   const { state, dispatch } = useContext(Context);
+  let user = userClicked ? userClicked : state.currentUser;
 
   const {
     username,
@@ -39,7 +41,7 @@ const Profile = ({ userClicked, mobile }) => {
     drugs,
     pictures,
     _id,
-  } = userClicked;
+  } = user;
 
   const toggleDrawer = () => {
     dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });

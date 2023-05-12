@@ -37,7 +37,7 @@ const ChatBox = ({}) => {
   const [messages, setMessages] = useState([]);
   const [rooms, setRooms] = useState([]);
   // const [roomId, setRoomId] = useState("");
-  const [userClicked, setUserClicked] = useState("");
+
   const [loading, setLoading] = useState(false);
   const mobile = useMediaQuery("(max-width: 650px)");
   const { currentUser } = state;
@@ -119,7 +119,8 @@ const ChatBox = ({}) => {
     try {
       dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
       const { findUser } = await client.request(FIND_USER_QUERY, variables);
-      setUserClicked(findUser);
+      // setUserClicked(findUser);
+      await dispatch({ type: "UPDATE_PROFILE", payload: findUser });
     } catch (err) {
       console.log(err.message);
     }
@@ -204,7 +205,7 @@ const ChatBox = ({}) => {
         }}
       />
 
-      <Profile userClicked={userClicked} mobile={mobile} />
+      <Profile userClicked={state.profile} mobile={mobile} />
     </Wrapper>
   );
 };

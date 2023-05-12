@@ -31,3 +31,5 @@ export { default as Slider } from "./Slider";
 export { default as OnlineDot } from "./OnlineDot";
 export { default as FlipCard } from "./FlipCard";
 export { default as VideoPlayer } from "./VideoPlayer";
+export { default as RoomLink } from "./RoomLink";
+export { default as Picture } from "./Picture";

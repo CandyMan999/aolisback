@@ -26,11 +26,17 @@ const MessageContainer = ({
           display="flex"
           width="100%"
           borderTop={
-            i === receivedVideos.length - 1
+            receivedVideos.length < 2
+              ? `solid 2px ${COLORS.grey}`
+              : i === receivedVideos.length - 1
               ? undefined
               : `solid 2px ${COLORS.grey}`
           }
-          borderBottom={i === 0 ? undefined : `solid 2px ${COLORS.grey}`}
+          borderBottom={
+            i === 0 && receivedVideos.length > 2
+              ? undefined
+              : `solid 2px ${COLORS.grey}`
+          }
           onClick={() => handleOnClick(video[0].sender._id)}
           key={`${video[0].publicId}-${i}`}
         >

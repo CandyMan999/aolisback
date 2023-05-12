@@ -28,6 +28,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
   useEffect(() => {
     if (!!currentUser && !!currentUser.username) {
       setItems([
+        { name: "Home", icon: "home", route: "/" },
         { name: "My Profile", icon: "user", route: "/profile" },
         { name: "My Video Channel", icon: "video", route: "/video" },
         {
@@ -36,7 +37,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
           route: "/message-center",
         },
         { name: "View Users Locations", icon: "search", route: "/location" },
-        { name: "Home", icon: "home", route: "/" },
+
         { name: "Browse Users", icon: "browseLogo", route: "/grid-search" },
         { name: "Logout", icon: "signout", route: "/" },
       ]);

@@ -74,19 +74,29 @@ query{
   getUsers{
     _id
     username
-    isLoggedIn
+    email
+    pictures{
+        url
+        _id
+        publicId
+    }
+    intro
+    sex
+    age
     room{
       _id
       name
     }
-    location{
+    occupation
+    singleTime
+    drink
+    smoke
+    marijuana
+    drugs
+    kids
+    location {
       lat
       lng
-    }
-    pictures{
-      url
-      _id
-      publicId
     }
   }
 }
@@ -145,10 +155,30 @@ query($token: String!){
                     url
                     publicId
                   }
+                  intro
+                  sex
+                  age
+                  occupation
+                  singleTime
+                  drink
+                  smoke
+                  marijuana
+                  drugs
+                  kids
                 }
                 receiver{
                   _id
                   username
+                  intro
+                  sex
+                  age
+                  occupation
+                  singleTime
+                  drink
+                  smoke
+                  marijuana
+                  drugs
+                  kids
                   pictures{
 									  _id
                     url

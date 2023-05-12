@@ -5,9 +5,16 @@ import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { GET_ALL_USERS_QUERY } from "../../graphql/queries";
 
-import { Box, Icon, ICON_SIZES, Text, Button } from "../../components";
+import {
+  Box,
+  Icon,
+  ICON_SIZES,
+  Text,
+  Button,
+  RoomLink,
+} from "../../components";
 import { COLORS } from "../../constants";
-
+import Profile from "../../modules/profile";
 import Context from "../../context";
 import { useClient } from "../../client";
 import { FONT_SIZES } from "../Text";
@@ -27,10 +34,13 @@ const Map = ({ zoom, width, height }) => {
   let history = useHistory();
   const [popup, setPopup] = useState({ isOpen: false, id: null });
   const [users, setUsers] = useState([]);
+
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const { state, dispatch } = useContext(Context);
   const client = useClient();
   const { location } = state.currentUser;
+
+  console.log("state: ", state);
 
   useEffect(() => {
     handleGetUsers();
@@ -81,14 +91,15 @@ const Map = ({ zoom, width, height }) => {
     });
   };
 
-  const handleRoomClick = (roomId) => {
-    dispatch({ type: "CHANGE_ROOM", payload: roomId });
-    history.push("/");
-  };
-
   const handleVideoLink = async (username) => {
     await dispatch({ type: "JOIN_CHANNEL", payload: username });
     history.push("/video");
+  };
+
+  const handleSetProfile = async (user) => {
+    console.log("clicked: ", user);
+    await dispatch({ type: "UPDATE_PROFILE", payload: user });
+    dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
   };
 
   return (
@@ -123,14 +134,13 @@ const Map = ({ zoom, width, height }) => {
                   size={ICON_SIZES.X_LARGE}
                   color={
                     state.currentUser._id === user._id
-                      ? COLORS.themeGreen
+                      ? COLORS.vividBlue
                       : COLORS.red
                   }
                 />
               </Marker>
-
               {popup.id && popup.id === user._id ? (
-                <Box center>
+                <Box center width="100%" display="flex">
                   <Popup
                     key={user._id + i + "1"}
                     anchor="bottom"
@@ -139,12 +149,12 @@ const Map = ({ zoom, width, height }) => {
                     closeOnClick={false}
                     onClose={() => setPopup({ isOpen: false, id: null })}
                   >
-                    {" "}
-                    <Text color={COLORS.orange} margin={0} center>
+                    <Text bold fontSize={FONT_SIZES.X_LARGE} margin={0} center>
                       {user.username}
                     </Text>
                     {user.pictures.length && (
                       <Box
+                        onClick={() => handleSetProfile(user)}
                         justifyContent="center"
                         style={{
                           backgroundColor: "black",
@@ -185,22 +195,17 @@ const Map = ({ zoom, width, height }) => {
                     <Button
                       size="small"
                       fontSize={FONT_SIZES.X_SMALL}
-                      width="fit-content"
+                      width="90%"
+                      paddingX={0}
+                      color={COLORS.black}
                       onClick={() => handleVideoLink(user.username)}
                     >
-                      {user.username}'s Video Channel
+                      <Text margin={0} bold color={COLORS.themeGreen}>
+                        {user.username}'s Video Channel
+                      </Text>
                     </Button>
                     {!!user.room && user.room.name && (
-                      <Fragment>
-                        <Text
-                          margin={0}
-                          color={COLORS.themeGreen}
-                          onClick={() => handleRoomClick(user.room._id)}
-                          center
-                        >
-                          Current Room: {user.room.name}
-                        </Text>
-                      </Fragment>
+                      <RoomLink dispatch={dispatch} user={user} />
                     )}
                   </Popup>
                 </Box>
@@ -209,6 +214,7 @@ const Map = ({ zoom, width, height }) => {
               )}
             </Box>
           ))}
+        <Profile userClicked={state.profile} mobile={mobileSize} />
       </ReactMapGL>
     </Fragment>
   );

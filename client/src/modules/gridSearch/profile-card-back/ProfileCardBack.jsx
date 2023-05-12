@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 
-import { Box, Text, Button, VideoPlayer, Loading } from "../../../components";
+import {
+  Box,
+  Text,
+  Button,
+  VideoPlayer,
+  Loading,
+  RoomLink,
+} from "../../../components";
 import { COLORS } from "../../../constants";
 import { GET_VIDEOS_QUERY } from "../../../graphql/queries";
 
@@ -29,12 +35,6 @@ const ProfileCardBack = ({
 
   const handleMessage = () => {
     openModal();
-  };
-  let history = useHistory();
-
-  const handleRoomClick = (roomId) => {
-    dispatch({ type: "CHANGE_ROOM", payload: roomId });
-    history.push("/");
   };
 
   const handleGetVideos = async () => {
@@ -96,18 +96,7 @@ const ProfileCardBack = ({
         </Box>
       )}
       {!!user.room && online && user.room.name && (
-        <Text
-          position={video ? "absolute" : undefined}
-          style={!video ? undefined : { zIndex: 20, top: 40 }}
-          margin={0}
-          onClick={() => handleRoomClick(user.room._id)}
-          center
-          className="logo font-effect-fire-animation"
-          color={COLORS.magenta}
-          bold
-        >
-          Room: {user.room.name}
-        </Text>
+        <RoomLink dispatch={dispatch} user={user} video={video} />
       )}
       {loading ? (
         <Loading ring />

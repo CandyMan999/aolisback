@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Image, CloudinaryContext } from "cloudinary-react";
 
-import { Box, Icon, ICON_SIZES, Text, OnlineDot } from "../../../components";
+import {
+  Box,
+  Icon,
+  ICON_SIZES,
+  Text,
+  OnlineDot,
+  Picture,
+} from "../../../components";
 import { COLORS } from "../../../constants";
 import { getDistanceFromCoords } from "../../../utils/helpers";
 import { motion } from "framer-motion";
@@ -77,49 +83,7 @@ const ProfileCardFront = ({
       onClick={() => onClick(user._id)}
     >
       <OnlineDot online={online} />
-      {!!profilePic ? (
-        !!profilePic.publicId ? (
-          <CloudinaryContext cloudName="localmassagepros">
-            <Image
-              alt={`${name}-profile-pic`}
-              style={{
-                borderRadius: "50%",
-                height: 120,
-                width: 120,
-                marginBottom: "0px",
-              }}
-              loading="lazy"
-              publicId={profilePic.publicId}
-            ></Image>
-          </CloudinaryContext>
-        ) : (
-          <img
-            alt={`${name}-profile-pic`}
-            style={{
-              borderRadius: "50%",
-              height: 100,
-              width: 100,
-              marginBottom: "8px",
-            }}
-            src={profilePic.url}
-          />
-        )
-      ) : (
-        <Box>
-          <Box
-            borderRadius="50%"
-            height={120}
-            width={120}
-            center
-            background={COLORS.lightGrey}
-            justifyContent="center"
-            marginBottom={8}
-          >
-            <Icon name="user" size={ICON_SIZES.XX_LARGE} color={COLORS.black} />
-          </Box>
-        </Box>
-      )}
-
+      <Picture profilePic={profilePic} name={name} height={120} width={120} />
       <Text bold margin={0}>
         {name}
       </Text>
