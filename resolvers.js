@@ -182,7 +182,7 @@ module.exports = {
       try {
         const users = await User.find({
           "location.lat": { $ne: null },
-          isLoggedIn: true,
+          // isLoggedIn: true,
         })
           .populate("room")
           .populate("pictures")

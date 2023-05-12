@@ -74,6 +74,7 @@ query{
   getUsers{
     _id
     username
+    isLoggedIn
     email
     pictures{
         url
@@ -157,6 +158,10 @@ query($token: String!){
                   }
                   intro
                   sex
+                  location{
+                    lat
+                    lng
+                  }
                   age
                   occupation
                   singleTime
@@ -179,6 +184,10 @@ query($token: String!){
                   marijuana
                   drugs
                   kids
+                  location{
+                    lat
+                    lng
+                  }
                   pictures{
 									  _id
                     url

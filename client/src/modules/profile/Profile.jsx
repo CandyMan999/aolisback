@@ -14,14 +14,12 @@ import { COLORS } from "../../constants";
 import { formatDistanceToNow } from "date-fns";
 import moment from "moment";
 
-import { useClient } from "../../client";
 import Context from "../../context";
 import { useHistory } from "react-router-dom";
 
 const Profile = ({ userClicked, mobile }) => {
   //eventually userClicked will be whole object
-  console.log("userClicked: ", userClicked);
-  const client = useClient();
+
   let history = useHistory();
   const { state, dispatch } = useContext(Context);
   let user = userClicked ? userClicked : state.currentUser;
@@ -41,6 +39,7 @@ const Profile = ({ userClicked, mobile }) => {
     drugs,
     pictures,
     _id,
+    isLoggedIn,
   } = user;
 
   const toggleDrawer = () => {
@@ -253,10 +252,11 @@ const Profile = ({ userClicked, mobile }) => {
         <Button
           style={{ margin: 0 }}
           onClick={handleVideo}
-          color="red"
+          disabled={!isLoggedIn}
+          color={!isLoggedIn ? COLORS.lightGrey : COLORS.red}
           width="100%"
         >
-          <span>{username}'s Video Channel</span>
+          <Text bold>{username}'s Video Channel</Text>
         </Button>
         <Button
           style={{ margin: 0 }}
@@ -267,7 +267,7 @@ const Profile = ({ userClicked, mobile }) => {
           }
           width="100%"
         >
-          <span>View Location</span>
+          <Text bold>View Location</Text>
         </Button>
       </Box>
     </Drawer>

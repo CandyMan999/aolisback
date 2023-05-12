@@ -16,7 +16,7 @@ const GridContainer = () => {
 
   useEffect(() => {
     fetchData();
-  }, [state.currentUser]);
+  }, []);
 
   const fetchData = async () => {
     setLoading(true);

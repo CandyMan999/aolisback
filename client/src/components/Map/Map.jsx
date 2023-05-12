@@ -12,6 +12,7 @@ import {
   Text,
   Button,
   RoomLink,
+  OnlineDot,
 } from "../../components";
 import { COLORS } from "../../constants";
 import Profile from "../../modules/profile";
@@ -40,8 +41,6 @@ const Map = ({ zoom, width, height }) => {
   const client = useClient();
   const { location } = state.currentUser;
 
-  console.log("state: ", state);
-
   useEffect(() => {
     handleGetUsers();
   }, []);
@@ -61,6 +60,7 @@ const Map = ({ zoom, width, height }) => {
   const handleGetUsers = async () => {
     try {
       const { getUsers } = await client.request(GET_ALL_USERS_QUERY, {});
+
       setUsers([...getUsers]);
       if (!!location && location.lat && !state.userLocation._id) {
         setViewport({
@@ -97,7 +97,6 @@ const Map = ({ zoom, width, height }) => {
   };
 
   const handleSetProfile = async (user) => {
-    console.log("clicked: ", user);
     await dispatch({ type: "UPDATE_PROFILE", payload: user });
     dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
   };
@@ -149,6 +148,7 @@ const Map = ({ zoom, width, height }) => {
                     closeOnClick={false}
                     onClose={() => setPopup({ isOpen: false, id: null })}
                   >
+                    <OnlineDot online={user.isLoggedIn} />
                     <Text bold fontSize={FONT_SIZES.X_LARGE} margin={0} center>
                       {user.username}
                     </Text>
@@ -197,14 +197,17 @@ const Map = ({ zoom, width, height }) => {
                       fontSize={FONT_SIZES.X_SMALL}
                       width="90%"
                       paddingX={0}
-                      color={COLORS.black}
+                      disabled={!user.isLoggedIn}
+                      color={
+                        !user.isLoggedIn ? COLORS.lighterGrey : COLORS.black
+                      }
                       onClick={() => handleVideoLink(user.username)}
                     >
                       <Text margin={0} bold color={COLORS.themeGreen}>
                         {user.username}'s Video Channel
                       </Text>
                     </Button>
-                    {!!user.room && user.room.name && (
+                    {!!user.room && user.isLoggedIn && user.room.name && (
                       <RoomLink dispatch={dispatch} user={user} />
                     )}
                   </Popup>

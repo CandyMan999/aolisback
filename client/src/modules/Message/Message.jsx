@@ -39,9 +39,7 @@ const Message = () => {
     }
   }, [senderID, currentUser]);
 
-  useEffect(() => {
-    console.log("state; ", state);
-  }, [state]);
+  useEffect(() => {}, [state]);
   const groupVideosBySender = async (receivedVids, sentVids) => {
     try {
       setLoading(true);
@@ -63,7 +61,7 @@ const Message = () => {
         }
       }
       const data = await orderByCreatedAt(array);
-      console.log("ordered: ", data);
+
       setGroupReceived(data);
       setLoading(false);
     } catch (err) {
@@ -105,7 +103,6 @@ const Message = () => {
     groupedReceived && !!groupedReceived.length && (
       <Fragment>
         <Box
-          width="100%"
           display="flex"
           justifyContent="space-around"
           paddingX={"3%"}
@@ -123,8 +120,8 @@ const Message = () => {
                   ? groupedReceived[0].receiver.username
                   : groupedReceived[0].sender.username
               }
-              height={140}
-              width={140}
+              height={mobile ? 120 : 140}
+              width={mobile ? 120 : 140}
             />
             <Text
               paddingLeft={"2%"}
@@ -141,7 +138,7 @@ const Message = () => {
 
           <Box zIndex={20}>
             <Icon
-              name="back"
+              name="reverse"
               size={ICON_SIZES.XXX_LARGE}
               color={COLORS.black}
               onClick={handleOnClick}
@@ -213,7 +210,7 @@ const Message = () => {
           subscription={CREATE_VIDEO_SUBSCRIPTION}
           onSubscriptionData={({ subscriptionData }) => {
             const { createVideo } = subscriptionData.data;
-            console.log("subscription data: ", createVideo);
+
             if (
               (createVideo.sender._id === senderID &&
                 createVideo.receiver._id === currentUser._id) ||
