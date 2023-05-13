@@ -1,6 +1,15 @@
 import { useEffect, useRef } from "react";
 
-const VideoPlayer = ({ publicId, width, height, props, controls, mobile }) => {
+const VideoPlayer = ({
+  publicId,
+  width,
+  height,
+  props,
+  controls,
+  mobile,
+  borderRadius,
+  fullScreen,
+}) => {
   const cloudinaryRef = useRef();
   const videoRef = useRef();
 
@@ -14,8 +23,9 @@ const VideoPlayer = ({ publicId, width, height, props, controls, mobile }) => {
       const onTouchStart = () => {};
 
       videoRef.current.addEventListener("touchstart", onTouchStart);
-
-      videoPlayer.maximize();
+      if (fullScreen) {
+        videoPlayer.maximize();
+      }
 
       // Cleanup touchstart event listener on unmount
       return () => {
@@ -32,6 +42,7 @@ const VideoPlayer = ({ publicId, width, height, props, controls, mobile }) => {
       width={width}
       height={height}
       controls={controls}
+      style={{ borderRadius: borderRadius ? borderRadius : undefined }} // Add border radius
       {...props}
     />
   );

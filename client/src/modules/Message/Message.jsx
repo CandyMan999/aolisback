@@ -169,13 +169,15 @@ const Message = () => {
                       : undefined
                   }
                 >
-                  <Box column>
+                  <Box column alignItems="center" display="flex">
                     <VideoPlayer
                       publicId={video.publicId}
                       controls={true}
                       height={100}
-                      width={150}
+                      borderRadius={"10px"}
+                      fullScreen={true}
                     />
+
                     <Text center bold margin={0}>
                       {video.sender._id === currentUser._id
                         ? "Sent Video "

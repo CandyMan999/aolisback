@@ -258,7 +258,9 @@ const Profile = ({ userClicked, mobile }) => {
           color={!isLoggedIn ? COLORS.lightGrey : COLORS.red}
           width="100%"
         >
-          <Text bold>{username}'s Video Channel</Text>
+          <Text margin={0} bold>
+            {username}'s Video Channel
+          </Text>
         </Button>
         <Button
           style={{ margin: 0 }}
@@ -269,7 +271,9 @@ const Profile = ({ userClicked, mobile }) => {
           }
           width="100%"
         >
-          <Text bold>View Location</Text>
+          <Text margin={0} bold>
+            View Location
+          </Text>
         </Button>
       </Box>
     </Drawer>

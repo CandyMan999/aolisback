@@ -6,13 +6,14 @@ import MessageContainer from "./MessageContainer.jsx";
 import { useClient } from "../../client";
 import Context from "../../context";
 import { getToken } from "../../utils/helpers";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const MessageCenter = () => {
   let history = useHistory();
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const currentUser = state.currentUser;
-  // const { sentVideos, receivedVideos } = currentUser;
+  const mobile = useMediaQuery("(max-width: 650px)");
   const [receivedVideos, setReceivedVideos] = useState([]);
   const token = getToken();
   const [loading, setLoading] = useState(false);
@@ -75,8 +76,8 @@ const MessageCenter = () => {
   return (
     <Box width="100%" display="flex" column>
       {loading ? (
-        <Box height="100vH" alignItems="center">
-          <Loading grid size={100} />
+        <Box height={mobile ? "60vH" : "100vH"} alignItems="center">
+          <Loading grid size={mobile ? 50 : 100} />
         </Box>
       ) : (
         <MessageContainer

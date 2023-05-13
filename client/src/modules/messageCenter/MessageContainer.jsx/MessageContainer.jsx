@@ -75,6 +75,8 @@ const MessageContainer = ({
                   publicId={video[video.length - 1].publicId}
                   height={90}
                   controls={false}
+                  fullScreen={true}
+                  borderRadius={"10px"}
                 />
               </Box>
             ) : (
@@ -103,7 +105,12 @@ const MessageContainer = ({
                   </Text>
                 </Box>
 
-                <VideoPlayer publicId={video[0].publicId} height={90} />
+                <VideoPlayer
+                  publicId={video[0].publicId}
+                  height={90}
+                  controls={false}
+                  borderRadius={"10px"}
+                />
               </Box>
             )
           ) : (

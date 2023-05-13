@@ -25,8 +25,8 @@ mapboxgl.workerClass =
   require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 const INITIAL_VIEWPORT = {
-  latitude: 21.304026582335645,
-  longitude: -157.8411131383927,
+  latitude: 37.6521549856949,
+  longitude: -97.14298803846937,
   zoom: 4,
 };
 
@@ -139,7 +139,7 @@ const Map = ({ zoom, width, height }) => {
                 />
               </Marker>
               {popup.id && popup.id === user._id ? (
-                <Box center width="100%" display="flex">
+                <Box width="100%" display="flex">
                   <Popup
                     key={user._id + i + "1"}
                     anchor="bottom"
@@ -156,40 +156,45 @@ const Map = ({ zoom, width, height }) => {
                       <Box
                         onClick={() => handleSetProfile(user)}
                         justifyContent="center"
-                        style={{
-                          backgroundColor: "black",
-                          borderRadius: "5px",
-                        }}
                       >
-                        {user.pictures[0].publicId ? (
-                          <CloudinaryContext cloudName="localmassagepros">
-                            <Image
-                              alt={`${user.pictures[0]._id}-avatar`}
+                        <Box
+                          justifyContent="center"
+                          style={{
+                            backgroundColor: "black",
+                            borderRadius: "5px",
+                            width: "90%",
+                          }}
+                        >
+                          {user.pictures[0].publicId ? (
+                            <CloudinaryContext cloudName="localmassagepros">
+                              <Image
+                                alt={`${user.pictures[0]._id}-avatar`}
+                                style={{
+                                  height: "96px",
+                                  width: "auto",
+                                }}
+                                loading="lazy"
+                                publicId={user.pictures[0].publicId}
+                              >
+                                <Transformation
+                                  height={"96"}
+                                  width={"auto"}
+                                  crop="thumb"
+                                />
+                              </Image>
+                            </CloudinaryContext>
+                          ) : (
+                            <img
                               style={{
                                 height: "96px",
                                 width: "auto",
                               }}
-                              loading="lazy"
-                              publicId={user.pictures[0].publicId}
-                            >
-                              <Transformation
-                                height={"96"}
-                                width={"auto"}
-                                crop="thumb"
-                              />
-                            </Image>
-                          </CloudinaryContext>
-                        ) : (
-                          <img
-                            style={{
-                              height: "96px",
-                              width: "auto",
-                            }}
-                            className={"classes.popupImage"}
-                            src={user.pictures[0].url}
-                            alt={"popup.title"}
-                          />
-                        )}
+                              className={"classes.popupImage"}
+                              src={user.pictures[0].url}
+                              alt={"popup.title"}
+                            />
+                          )}
+                        </Box>
                       </Box>
                     )}
                     <Button
@@ -197,6 +202,7 @@ const Map = ({ zoom, width, height }) => {
                       fontSize={FONT_SIZES.X_SMALL}
                       width="90%"
                       paddingX={0}
+                      style={{ marginLeft: "5%" }}
                       disabled={!user.isLoggedIn}
                       color={
                         !user.isLoggedIn ? COLORS.lighterGrey : COLORS.black
