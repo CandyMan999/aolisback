@@ -7,29 +7,6 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/css";
 import { FONT_SIZES } from "../Text";
 
-// interface Props {
-//   disabled?: boolean;
-//   hasClose?: boolean;
-//   name: string;
-//   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-//   onClose?: () => void;
-//   placeholder?: string;
-//   readOnly?: boolean;
-//   type?: string;
-//   value?: string;
-//   withoutFormik?: boolean;
-//   width?: number;
-//   full?: boolean;
-//   fontSize?: number;
-// }
-
-// interface InputProps {
-//   hasError?: boolean;
-//   readOnly?: boolean;
-//   value?: string;
-//   fontSize?: number;
-// }
-
 class Input extends React.PureComponent {
   handleChange = (e) => {
     if (this.props.onChange) {

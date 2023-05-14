@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { Loading, Text, ICON_SIZES } from "..";
+import { Loading, Text, Button, Box } from "..";
 import Context from "../../context";
 import { COLORS } from "../../constants";
 import { useClient } from "../../client";
@@ -78,23 +78,31 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
       {submitting ? (
         <Loading ring size={150} />
       ) : (
-        <Fragment>
-          <input
-            type="file"
-            accept="video/*"
-            capture="user"
-            placeholder="Take Video"
-            onChange={handleFileChange}
-          />
-          <button disabled={submitting} onClick={handleUpload}>
-            Upload
-          </button>
-          {file && (
-            <Text center color={!error ? COLORS.themeGreen : COLORS.textRed}>
-              {!error ? "Success add another!" : error}
+        <Box width="100%" column>
+          <Button width={"250px"} disabled={submitting}>
+            <input
+              type="file"
+              accept="video/*"
+              capture="user"
+              placeholder="Take Video"
+              onChange={handleFileChange}
+              style={{ position: "absolute", opacity: 0 }}
+            />
+            <Text bold center>
+              Record Video
             </Text>
+          </Button>
+          {file && (
+            <Box display="flex" justifyContent="center">
+              <Text
+                center
+                color={!error ? COLORS.facebookBlue : COLORS.textRed}
+              >
+                {!error ? "Success add another!" : error}
+              </Text>
+            </Box>
           )}
-        </Fragment>
+        </Box>
       )}
     </div>
   );
