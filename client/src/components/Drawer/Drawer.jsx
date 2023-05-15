@@ -2,10 +2,10 @@ import React, { Fragment } from "react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { motion } from "framer-motion";
 
-import { Box, Text, BackDrop, Icon, ICON_SIZES } from "..";
+import { Box, BackDrop, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
 
-const Drawer = ({ isOpen, onClose, title, children }) => {
+const Drawer = ({ isOpen, onClose, children }) => {
   const mobile = useMediaQuery("(max-width: 650px)");
 
   return (
@@ -38,9 +38,6 @@ const Drawer = ({ isOpen, onClose, title, children }) => {
         </Box>
         {isOpen && (
           <Box column width="100%" justifyContent="center">
-            {/* <Text center color={COLORS.white} bold>
-            {title}
-          </Text> */}
             {children}
           </Box>
         )}

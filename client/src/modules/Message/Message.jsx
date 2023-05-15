@@ -12,6 +12,7 @@ import {
   Button,
   Loading,
   Picture,
+  BottomDrawer,
 } from "../../components";
 import { COLORS } from "../../constants";
 import { useHistory, useLocation } from "react-router-dom";
@@ -32,6 +33,7 @@ const Message = () => {
   const senderID = new URLSearchParams(location.search).get("sender");
 
   const [groupedReceived, setGroupReceived] = useState(null);
+  const [openReport, setOpenReport] = useState(false);
 
   useEffect(() => {
     if (receivedVideos && !!receivedVideos.length && !!senderID) {
@@ -95,6 +97,11 @@ const Message = () => {
 
   const toggleModal = () => {
     dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
+  };
+
+  const handleToggleBottomDrawer = () => {
+    console.log("clicked");
+    setOpenReport(!openReport);
   };
 
   return loading ? (
@@ -169,7 +176,19 @@ const Message = () => {
                       : undefined
                   }
                 >
-                  <Box column alignItems="center" display="flex">
+                  <Box column alignItems="center" display="flex" marginTop={20}>
+                    {video.sender._id !== currentUser._id && (
+                      <Box position={"absolute"} top={-20} right={0}>
+                        <Icon
+                          style={{ zIndex: 1000 }}
+                          name="threeDot"
+                          size={ICON_SIZES.LARGE}
+                          color={COLORS.vividBlue}
+                          onClick={handleToggleBottomDrawer}
+                        />
+                      </Box>
+                    )}
+
                     <VideoPlayer
                       publicId={video.publicId}
                       controls={true}
@@ -223,6 +242,7 @@ const Message = () => {
           }}
         />
         <Profile mobile={mobile} userClicked={state.profile} />
+        <BottomDrawer isOpen={openReport} onClose={handleToggleBottomDrawer} />
       </Fragment>
     )
   );
