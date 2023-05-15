@@ -70,9 +70,9 @@ query($_id: ID!){
 }
 `;
 
-export const GET_ALL_USERS_QUERY = `
+export const GET_USERS_MAP_QUERY = `
 query{
-  getUsers{
+  getUsersMap{
     _id
     username
     isLoggedIn

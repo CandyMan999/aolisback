@@ -79,14 +79,19 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
         <Loading ring size={150} />
       ) : (
         <Box width="100%" column>
-          <Button width={"250px"} disabled={submitting}>
+          <Button width={"200px"} disabled={submitting}>
             <input
               type="file"
               accept="video/*"
               capture="user"
               placeholder="Take Video"
               onChange={handleFileChange}
-              style={{ position: "absolute", opacity: 0 }}
+              style={{
+                position: "absolute",
+                opacity: 0,
+                top: 30,
+                left: 70,
+              }}
             />
             <Text bold center>
               Record Video

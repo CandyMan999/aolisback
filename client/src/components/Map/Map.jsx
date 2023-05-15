@@ -3,7 +3,7 @@ import ReactMapGL, { NavigationControl, Marker, Popup } from "react-map-gl";
 import { useHistory } from "react-router-dom";
 import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { GET_ALL_USERS_QUERY } from "../../graphql/queries";
+import { GET_USERS_MAP_QUERY } from "../../graphql/queries";
 
 import {
   Box,
@@ -59,9 +59,9 @@ const Map = ({ zoom, width, height }) => {
 
   const handleGetUsers = async () => {
     try {
-      const { getUsers } = await client.request(GET_ALL_USERS_QUERY, {});
+      const { getUsersMap } = await client.request(GET_USERS_MAP_QUERY, {});
 
-      setUsers([...getUsers]);
+      setUsers([...getUsersMap]);
       if (!!location && location.lat && !state.userLocation._id) {
         setViewport({
           ...INITIAL_VIEWPORT,

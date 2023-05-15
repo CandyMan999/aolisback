@@ -44,10 +44,17 @@ const verifyGoogleToken = async (idToken) => {
     throw new AuthenticationError(`Error verifying auth token`, err);
   }
 };
+const authenticated = (next) => (root, args, ctx, info) => {
+  if (!ctx.currentUser) {
+    throw new AuthenticationError("You must be logged in");
+  }
+  return next(root, args, ctx, info);
+};
 
 module.exports = {
   verifyToken,
   parseToken,
   verifyGoogleToken,
   createToken,
+  authenticated,
 };
