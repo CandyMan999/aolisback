@@ -14,7 +14,7 @@ const BottomDrawer = ({ isOpen, onClose }) => {
   return (
     <Fragment>
       <motion.div
-        animate={{ height: !isOpen ? 0 : "60vh" }}
+        animate={{ height: !isOpen ? 0 : "30vh" }}
         transition={{ ease: "linear", duration: 0.7 }}
         style={drawerStyle(isOpen)}
         // onClick={onClose}
@@ -43,7 +43,7 @@ const drawerStyle = (isOpen) => ({
   bottom: 0,
   left: 0,
   width: "100vw",
-  height: isOpen ? "60vh" : 0,
+  height: isOpen ? "30vh" : 0,
   background: "rgba(0,0,0,0.3)",
   zIndex: 1001,
   borderTopRightRadius: 30,
