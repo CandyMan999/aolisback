@@ -15,8 +15,10 @@ const GridContainer = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (!!currentUser) {
+      fetchData();
+    }
+  }, [currentUser]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -37,8 +39,10 @@ const GridContainer = () => {
 
   const sortByDistance = (array) => {
     const newArray = array
+
       .map((user) => ({
         ...user,
+
         distanceAway: Math.abs(
           Math.round(
             getDistanceFromCoords(

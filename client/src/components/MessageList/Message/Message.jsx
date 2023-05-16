@@ -43,7 +43,7 @@ const Message = ({
             display={"flex"}
             justifyContent={"flex-end"}
             height={"fit-content"}
-            minHeight={35}
+            minHeight={45}
             className="message"
             margin="auto"
             flexWrap="wrap"
@@ -94,21 +94,21 @@ const Message = ({
                   <Image
                     alt={`${picture._id}-avatar`}
                     style={{
-                      height: "20px",
+                      height: "35px",
                       borderRadius: "90%",
                       border: `dotted 2px ${COLORS.vividBlue}`,
                     }}
                     loading="lazy"
                     publicId={picture.publicId}
                   >
-                    <Transformation height={"30"} width={"30"} crop="thumb" />
+                    <Transformation height={"35"} width={"35"} crop="thumb" />
                   </Image>
                 </CloudinaryContext>
               )}
               {!!picture.url && !picture.publicId && (
                 <img
                   style={{
-                    height: "20px",
+                    height: "35px",
                     borderRadius: "90%",
                     border: `dotted 2px ${COLORS.vividBlue}`,
                   }}
@@ -132,6 +132,7 @@ const Message = ({
             display={"flex"}
             height={"fit-content"}
             className="message"
+            minHeight={45}
             margin="auto"
             flexWrap="wrap"
             paddingTop={10}
@@ -151,21 +152,21 @@ const Message = ({
                   <Image
                     alt={`${picture._id}-avatar`}
                     style={{
-                      height: "20px",
+                      height: "35px",
                       borderRadius: "90%",
                       border: `dotted 2px ${COLORS.vividBlue}`,
                     }}
                     loading="lazy"
                     publicId={picture.publicId}
                   >
-                    <Transformation height={"30"} width={"30"} crop="thumb" />
+                    <Transformation height={"35"} width={"35"} crop="thumb" />
                   </Image>
                 </CloudinaryContext>
               )}
               {!!picture.url && !picture.publicId && (
                 <img
                   style={{
-                    height: "20px",
+                    height: "35px",
                     borderRadius: "90%",
                     border: `dotted 2px ${COLORS.vividBlue}`,
                   }}

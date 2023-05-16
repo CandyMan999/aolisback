@@ -99,7 +99,7 @@ const Navbar = ({ props }) => {
           alignItems="center"
           column
           width="fit-content"
-          color={COLORS.orange}
+          color={COLORS.vividBlue}
           onClick={handleOpenProfile}
         >
           <Text margin={2} fontSize={FONT_SIZES.SMALL}>
