@@ -1,35 +1,70 @@
 import React, { Fragment } from "react";
 import { motion } from "framer-motion";
 
-import { Box, Button } from "..";
+import { Box, Button, Text } from "..";
 import { COLORS } from "../../constants";
 
 const BottomDrawer = ({ isOpen, onClose }) => {
   const BUTTONS = [
-    { name: "Report", color: COLORS.red, onClick: null },
-    { name: "Block", color: COLORS.red, onClick: null },
-    { name: "Cancel", color: COLORS.grey, onClick: onClose },
+    {
+      name: "Report",
+      color: COLORS.white,
+      onClick: null,
+      textColor: COLORS.red,
+      marginTop: 20,
+      marginBottom: 0,
+      borderBottom: `solid 2px ${COLORS.black}`,
+      boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+    },
+    {
+      name: "Block",
+      color: COLORS.white,
+      onClick: null,
+      textColor: COLORS.red,
+      marginTop: 0,
+      marginBottom: 0,
+      borderBottom: `solid 2px ${COLORS.black}`,
+      boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+    },
+    {
+      name: "Cancel",
+      color: COLORS.grey,
+      onClick: onClose,
+      textColor: COLORS.white,
+      marginTop: 20,
+      marginBottom: undefined,
+      borderBottom: undefined,
+      boxShadow: undefined,
+    },
   ];
 
   return (
     <Fragment>
       <motion.div
-        animate={{ height: !isOpen ? 0 : "30vh" }}
+        animate={{
+          height: !isOpen ? 0 : "30vh",
+          background: !isOpen ? "rgba(0,0,0,0.0)" : "rgba(0,0,0,0.3)",
+        }}
         transition={{ ease: "linear", duration: 0.7 }}
         style={drawerStyle(isOpen)}
-        // onClick={onClose}
       >
         <Box column width="100%" alignItems="center" paddingBottom={2}>
           {BUTTONS.map((button, index) => (
             <Button
               key={index}
-              width={"80%"}
+              width={"90%"}
               color={button.color}
-              style={{ marginTop: index === 0 ? 40 : 10 }}
-              marginBottom={10}
+              style={{
+                marginTop: button.marginTop,
+                marginBottom: button.marginBottom,
+                borderBottom: button.borderBottom,
+                boxShadow: button.boxShadow,
+              }}
               onClick={button.onClick}
             >
-              {button.name}
+              <Text bold color={button.textColor}>
+                {button.name}
+              </Text>
             </Button>
           ))}
         </Box>
@@ -43,8 +78,6 @@ const drawerStyle = (isOpen) => ({
   bottom: 0,
   left: 0,
   width: "100vw",
-  height: isOpen ? "30vh" : 0,
-  background: "rgba(0,0,0,0.3)",
   zIndex: 1001,
   borderTopRightRadius: 30,
   borderTopLeftRadius: 30,
