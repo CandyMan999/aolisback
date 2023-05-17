@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "../../components";
 
-const BackDrop = ({ onClose }) => {
+const BackDrop = ({ onClose, mobile }) => {
   return (
     <Box
       position="fixed"
@@ -11,7 +11,7 @@ const BackDrop = ({ onClose }) => {
       left={0}
       background="rgba(0,0,0,0.3)"
       zIndex={100}
-      onClick={onClose}
+      // onClick={mobile ? undefined : onClose}
     />
   );
 };

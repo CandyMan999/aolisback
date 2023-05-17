@@ -4,6 +4,7 @@ const {
   roomCreatedOrUpdatedSubscription,
   createCommentSubscription,
   createVideoSubscription,
+  videoChatRequestSubscription,
 } = require("./subscription/subscription");
 
 const {
@@ -29,6 +30,8 @@ const {
   addPhotoResolver,
   sendVideoResolver,
   deletePhotoResolver,
+  videoChatRequestResolver,
+  updateVideoChatRequestResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -38,6 +41,7 @@ const resolvers = {
     roomCreatedOrUpdated: roomCreatedOrUpdatedSubscription,
     createComment: createCommentSubscription,
     createVideo: createVideoSubscription,
+    videoChatRequest: videoChatRequestSubscription,
   },
   Query: {
     fetchMe: fetchMeResolver,
@@ -62,6 +66,8 @@ const resolvers = {
     addPhoto: addPhotoResolver,
     sendVideo: sendVideoResolver,
     deletePhoto: deletePhotoResolver,
+    videoChatRequest: videoChatRequestResolver,
+    updateVideoChatRequest: updateVideoChatRequestResolver,
   },
 };
 

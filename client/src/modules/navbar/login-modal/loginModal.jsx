@@ -17,7 +17,7 @@ import Context from "../../../context";
 
 const LoginModal = ({ onClose }) => {
   const client = useClient();
-  const { dispatch } = useContext(Context);
+  const { dispatch, state } = useContext(Context);
   const [authError, setAuthError] = useState("");
   const [spinner, setSpinner] = useState(false);
 
@@ -79,7 +79,7 @@ const LoginModal = ({ onClose }) => {
   };
 
   return (
-    <Modal isLoading={spinner} onClose={onClose} height={460}>
+    <Modal isLoading={spinner} onClose={onClose} height={460} state={state}>
       <Formik
         onSubmit={handleSubmit}
         validate={handleValidation}

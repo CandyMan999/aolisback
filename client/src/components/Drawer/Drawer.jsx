@@ -10,7 +10,7 @@ const Drawer = ({ isOpen, onClose, children }) => {
 
   return (
     <Fragment>
-      {isOpen && <BackDrop onClose={onClose} />}
+      {isOpen && <BackDrop onClose={onClose} mobile={mobile} />}
 
       <motion.div
         animate={{ width: isOpen ? (mobile ? "100%" : 800) : 0 }}
@@ -20,10 +20,10 @@ const Drawer = ({ isOpen, onClose, children }) => {
           backgroundColor: COLORS.white,
           boxShadow: "2px 0px 5px rgba(0,0,0,0.5)",
           position: "fixed",
-          top: mobile ? 0 : 100,
+          bottom: 0,
           left: 0,
           borderRadius: mobile ? "" : "0px 5px 5px 0px",
-          zIndex: 200,
+          zIndex: 20000,
           overflow: "scroll",
         }}
       >

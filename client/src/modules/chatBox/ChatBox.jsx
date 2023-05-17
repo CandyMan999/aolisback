@@ -119,8 +119,8 @@ const ChatBox = ({}) => {
     try {
       const { findUser } = await client.request(FIND_USER_QUERY, variables);
       // setUserClicked(findUser);
-      dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
       await dispatch({ type: "UPDATE_PROFILE", payload: findUser });
+      dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
     } catch (err) {
       console.log(err.message);
     }
@@ -205,7 +205,7 @@ const ChatBox = ({}) => {
         }}
       />
 
-      <Profile userClicked={state.profile} mobile={mobile} />
+      {/* <Profile client={client} userClicked={state.profile} mobile={mobile} /> */}
     </Wrapper>
   );
 };

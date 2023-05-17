@@ -299,3 +299,33 @@ mutation($userId: ID!, $photoId: ID!){
   }
 }
 `;
+
+export const VIDEO_CHAT_REQUEST = `
+mutation($senderID: ID!, $receiverID: ID!, $status: Status!){
+	videoChatRequest(senderID: $senderID, receiverID: $receiverID, status: $status){
+		status
+    createdAt
+    sender{
+      _id
+    }
+    receiver{
+      _id
+    }
+  }
+}
+`;
+
+export const UPDATE_VIDEO_CHAT_REQUEST = `
+mutation($_id: ID!, $senderID: ID!, $receiverID: ID!, $status: Status!){
+	updateVideoChatRequest(_id: $_id, senderID: $senderID, receiverID: $receiverID, status: $status){
+		status
+    createdAt
+    sender{
+      _id
+    }
+    receiver{
+      _id
+    }
+  }
+}
+`;

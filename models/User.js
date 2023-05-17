@@ -112,6 +112,10 @@ const UserSchema = new mongoose.Schema({
       ref: "Video",
     },
   ],
+  chatRequest: {
+    type: mongoose.Schema.ObjectId,
+    ref: "ChatRequest",
+  },
 });
 
 UserSchema.pre("save", function (next) {

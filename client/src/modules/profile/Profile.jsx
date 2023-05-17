@@ -16,10 +16,11 @@ import moment from "moment";
 
 import Context from "../../context";
 import { useHistory } from "react-router-dom";
+import { useClient } from "../../client";
+import { VIDEO_CHAT_REQUEST } from "../../graphql/mutations";
 
 const Profile = ({ userClicked, mobile }) => {
-  //eventually userClicked will be whole object
-
+  const client = useClient();
   let history = useHistory();
   const { state, dispatch } = useContext(Context);
   let user = userClicked ? userClicked : state.currentUser;
@@ -46,12 +47,23 @@ const Profile = ({ userClicked, mobile }) => {
     dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
   };
 
-  console.log("PROFILE: ", user);
+  const handleVideoChatRequest = async () => {
+    try {
+      const variables = {
+        senderID: state.currentUser._id,
+        receiverID: _id,
+        status: "Pending",
+      };
 
-  const handleVideo = () => {
-    dispatch({ type: "JOIN_CHANNEL", payload: username });
-    dispatch({ type: "TOGGLE_PROFILE", payload: false });
-    history.push("/video");
+      const { videoChatRequest } = await client.request(
+        VIDEO_CHAT_REQUEST,
+        variables
+      );
+      dispatch({ type: "TOGGLE_PROFILE", payload: false });
+      dispatch({ type: "TOGGLE_CHAT", payload: true });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleLocation = (_id, location) => {
@@ -253,13 +265,17 @@ const Profile = ({ userClicked, mobile }) => {
       <Box justifyContent="center" width={"100%"}>
         <Button
           style={{ margin: 0 }}
-          onClick={handleVideo}
-          disabled={!isLoggedIn}
-          color={!isLoggedIn ? COLORS.lightGrey : COLORS.red}
+          onClick={handleVideoChatRequest}
+          disabled={!isLoggedIn || user._id === state.currentUser._id}
+          color={
+            !isLoggedIn || user._id === state.currentUser._id
+              ? COLORS.lightGrey
+              : COLORS.red
+          }
           width="100%"
         >
           <Text margin={0} bold>
-            {username}'s Video Channel
+            Video Chat with {username}
           </Text>
         </Button>
         <Button

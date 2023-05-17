@@ -1,16 +1,16 @@
 const mongoose = require("mongoose");
 
-const VideoChatRequestSchema = new mongoose.Schema({
+const ChatRequestSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
   },
   status: {
     type: String,
-    enum: ["pending", "accept", "decline", "block"],
+    enum: ["Pending", "Accept", "Decline", "Block", "Cancel"],
   },
   sender: { type: mongoose.Schema.ObjectId, ref: "User" },
   receiver: { type: mongoose.Schema.ObjectId, ref: "User" },
 });
 
-module.exports = mongoose.model("VideoChatRequest", VideoChatRequestSchema);
+module.exports = mongoose.model("ChatRequest", ChatRequestSchema);

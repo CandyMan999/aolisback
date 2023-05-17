@@ -23,7 +23,9 @@ module.exports = gql`
     room: Room
     sentVideos: [Video]
     receivedVideos: [Video]
+    chatRequest: ChatRequest
   }
+
   type Video {
     _id: ID!
     url: String
@@ -88,6 +90,22 @@ module.exports = gql`
     comments: [Comment]
   }
 
+  type ChatRequest {
+    _id: ID
+    createdAt: String
+    status: Status
+    sender: User
+    receiver: User
+  }
+
+  enum Status {
+    Pending
+    Accept
+    Decline
+    Block
+    Cancel
+  }
+
   type AuthSignup {
     user: User
     token: String!
@@ -144,11 +162,23 @@ module.exports = gql`
       senderID: ID!
     ): Video
     deletePhoto(photoId: ID!, userId: ID!): User
+    videoChatRequest(
+      senderID: ID!
+      receiverID: ID!
+      status: Status!
+    ): ChatRequest
+    updateVideoChatRequest(
+      _id: ID!
+      senderID: ID!
+      receiverID: ID!
+      status: Status!
+    ): ChatRequest
   }
 
   type Subscription {
     roomCreatedOrUpdated: [Room]
     createComment: Comment
     createVideo: Video
+    videoChatRequest: ChatRequest
   }
 `;

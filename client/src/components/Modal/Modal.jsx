@@ -6,7 +6,15 @@ import { Box, Icon, ICON_SIZES, Loading } from "..";
 
 import { COLORS } from "../../constants";
 
-const Modal = ({ children, isLoading, onClose, height, width, classes }) => (
+const Modal = ({
+  children,
+  isLoading,
+  onClose,
+  height,
+  width,
+  classes,
+  state,
+}) => (
   <Box
     background={`${COLORS.darkestGrey}CC`}
     bottom={0}
@@ -30,16 +38,22 @@ const Modal = ({ children, isLoading, onClose, height, width, classes }) => (
         padding={16}
         justifyContent="space-around"
       >
-        <Box
-          top={0}
-          right={5}
-          position="absolute"
-          onClick={onClose}
-          className={classes.close}
-          zIndex={20}
-        >
-          <Icon color={COLORS.darkGrey} name="close" size={ICON_SIZES.MEDIUM} />
-        </Box>
+        {!state.showChatRequest && (
+          <Box
+            top={0}
+            right={5}
+            position="absolute"
+            onClick={onClose}
+            className={classes.close}
+            zIndex={20}
+          >
+            <Icon
+              color={COLORS.darkGrey}
+              name="close"
+              size={ICON_SIZES.MEDIUM}
+            />
+          </Box>
+        )}
 
         {isLoading ? (
           <Box justifyContent="center" center centerText height="100%" column>

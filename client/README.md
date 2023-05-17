@@ -71,7 +71,13 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 <!-- TODO -->
 <!-- create video chat reqest -->
-<!-- Change buttons on Report -->
 <!-- Report video to backend -->
 <!-- Block user, unblock user -->
 <!-- Forgot Password -->
+<!-- make videos auto delete after 7 days -->
+<!-- protect route -->
+<!-- fix lines on message center -->
+<!-- no video message style -->
+<!-- new video messages, cloudinary event -->
+<!-- Logout on get users -->
+<!-- URL change -->

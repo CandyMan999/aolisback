@@ -30,6 +30,11 @@ export default function reducer(state, { type, payload }) {
         ...state,
         showVideo: payload,
       };
+    case "TOGGLE_CHAT":
+      return {
+        ...state,
+        showChatRequest: payload,
+      };
     case "UPDATE_USER":
       return {
         ...state,

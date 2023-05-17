@@ -10,6 +10,8 @@ const { addPhotoResolver } = require("./addPhoto");
 const { sendVideoResolver } = require("./sendVideo");
 const { createRoomResolver } = require("./createRoom");
 const { deletePhotoResolver } = require("./deletePhoto");
+const { videoChatRequestResolver } = require("./videoChatRequest");
+const { updateVideoChatRequestResolver } = require("./updateVideoChatRequest");
 
 module.exports = {
   createRoomResolver,
@@ -25,4 +27,6 @@ module.exports = {
   addPhotoResolver,
   sendVideoResolver,
   deletePhotoResolver,
+  videoChatRequestResolver,
+  updateVideoChatRequestResolver,
 };

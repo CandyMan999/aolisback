@@ -223,7 +223,6 @@ const Map = ({ zoom, width, height }) => {
               )}
             </Box>
           ))}
-        <Profile userClicked={state.profile} mobile={mobileSize} />
       </ReactMapGL>
     </Fragment>
   );

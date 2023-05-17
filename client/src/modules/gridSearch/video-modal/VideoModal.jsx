@@ -7,14 +7,14 @@ import {
   FONT_SIZES,
 } from "../../../components";
 
-const VideoModal = ({ onClose, senderID, receiverID }) => {
+const VideoModal = ({ onClose, senderID, receiverID, state }) => {
   const [sending, setSending] = useState(false);
 
   const handleSending = (truthy) => {
     setSending(truthy);
   };
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={onClose} state={state}>
       <Text
         fontSize={FONT_SIZES.X_LARGE}
         width={"100%"}

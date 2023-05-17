@@ -1,0 +1,184 @@
+import React, { useEffect } from "react";
+import {
+  Modal,
+  Text,
+  FONT_SIZES,
+  Button,
+  Box,
+  Picture,
+} from "../../components";
+import { COLORS } from "../../constants";
+import { UPDATE_VIDEO_CHAT_REQUEST } from "../../graphql/mutations";
+import { useClient } from "../../client";
+import { useHistory } from "react-router-dom";
+
+const RequestModal = ({
+  dispatch,
+  sender,
+  receiver,
+  chatID,
+  state,
+  currentUser,
+  status,
+}) => {
+  const client = useClient();
+  let history = useHistory();
+
+  useEffect(() => {
+    handleStatus(status);
+  }, [status]);
+
+  const handleStatus = (action) => {
+    switch (action) {
+      case "Accept":
+        toggleChatRequest();
+        dispatch({ type: "JOIN_CHANNEL", payload: receiver.username });
+        history.push("/video");
+        break;
+      case "Decline":
+        dispatch({ type: "TOGGLE_CHAT", payload: false });
+        break;
+      case "Cancel":
+        dispatch({ type: "TOGGLE_CHAT", payload: false });
+        break;
+      case "Block":
+        // Code to handle "block" action
+        break;
+      default:
+      // Code to handle the default case if the action doesn't match any of the cases above
+    }
+  };
+
+  const toggleChatRequest = () => {
+    dispatch({ type: "TOGGLE_CHAT", payload: !state.showChatRequest });
+  };
+
+  const handleViewProfile = async (user) => {
+    await dispatch({ type: "UPDATE_PROFILE", payload: user });
+    dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
+  };
+
+  const handleUpdate = async (payload) => {
+    try {
+      const variables = {
+        _id: chatID,
+        senderID: sender._id,
+        receiverID: receiver._id,
+        status: payload,
+      };
+      const { updateVideoChatRequest } = await client.request(
+        UPDATE_VIDEO_CHAT_REQUEST,
+        variables
+      );
+
+      toggleChatRequest();
+    } catch (err) {}
+  };
+
+  return (
+    <Modal onClose={() => {}} state={state}>
+      {currentUser._id === sender._id ? (
+        <Box display="flex" column center>
+          <Text fontSize={FONT_SIZES.LARGE} width={"100%"} center bold>
+            Please Wait while user decides...
+          </Text>
+
+          <Button
+            width={"100%"}
+            color={COLORS.red}
+            onClick={() => handleUpdate("Cancel")}
+          >
+            Cancel
+          </Button>
+        </Box>
+      ) : (
+        <Box display="flex" column center width="100%" height="90%">
+          <Box
+            width="110%"
+            background={COLORS.lightGrey}
+            style={{ alignItems: "center" }}
+            height={110}
+            marginBottom={50}
+          >
+            <Picture height={100} width={100} profilePic={sender.pictures[0]} />
+            <Box display="flex" column width={"100%"}>
+              <Text
+                margin={0}
+                fontSize={FONT_SIZES.X_LARGE}
+                width={"100%"}
+                center
+                bold
+              >
+                Video Chat Request
+              </Text>
+              <Text center margin={0} bold fontSize={FONT_SIZES.LARGE}>
+                From
+              </Text>
+              <Text center margin={0} bold fontSize={FONT_SIZES.X_LARGE}>
+                {sender.username}
+              </Text>
+            </Box>
+          </Box>
+
+          <Button
+            width={"100%"}
+            color={COLORS.grey}
+            style={{ boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)` }}
+            onClick={() => handleViewProfile(sender)}
+          >
+            <Text color={COLORS.white} margin={0} bold>
+              View Profile
+            </Text>
+          </Button>
+          <Box width="100%" marginTop={10}>
+            <Button
+              width={"100%"}
+              color={COLORS.green}
+              style={{
+                margin: 0,
+                marginRight: 5,
+                borderBottom: `solid 2px ${COLORS.grey}`,
+                boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+              }}
+              onClick={() => handleUpdate("Accept")}
+            >
+              <Text color={COLORS.blacK} margin={0} bold>
+                Accept
+              </Text>
+            </Button>
+            <Button
+              width={"100%"}
+              color={COLORS.red}
+              style={{
+                margin: 0,
+                borderBottom: `solid 2px ${COLORS.grey}`,
+                boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+              }}
+              onClick={() => handleUpdate("Decline")}
+            >
+              <Text color={COLORS.white} margin={0} bold>
+                Decline
+              </Text>
+            </Button>
+          </Box>
+
+          <Button
+            color={COLORS.grey}
+            style={{
+              position: "absolute",
+              bottom: 0,
+              boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+            }}
+            width={"100%"}
+          >
+            <Text color={COLORS.white} margin={0} bold>
+              Block
+            </Text>
+          </Button>
+        </Box>
+      )}
+    </Modal>
+  );
+};
+
+export default RequestModal;

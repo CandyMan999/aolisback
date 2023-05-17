@@ -89,6 +89,7 @@ const SearchResults = ({
           onClose={toggleModal}
           receiverID={activeID}
           senderID={currentUser._id}
+          state={state}
         />
       )}
     </Box>

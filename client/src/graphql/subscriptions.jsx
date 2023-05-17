@@ -60,3 +60,40 @@ export const CREATE_VIDEO_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const VIDEO_CHAT_REQUEST = gql`
+  subscription {
+    videoChatRequest {
+      _id
+      createdAt
+      status
+      receiver {
+        _id
+        username
+      }
+      sender {
+        _id
+        username
+        sex
+        age
+        pictures {
+          url
+          publicId
+          _id
+        }
+        singleTime
+        kids
+        intro
+        occupation
+        drink
+        smoke
+        marijuana
+        drugs
+        location {
+          lat
+          lng
+        }
+      }
+    }
+  }
+`;

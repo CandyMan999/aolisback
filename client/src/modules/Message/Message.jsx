@@ -100,7 +100,6 @@ const Message = () => {
   };
 
   const handleToggleBottomDrawer = () => {
-    console.log("clicked");
     setOpenReport(!openReport);
   };
 
@@ -225,6 +224,7 @@ const Message = () => {
             onClose={toggleModal}
             receiverID={senderID}
             senderID={currentUser._id}
+            state={state}
           />
         )}
         <Subscription
@@ -241,7 +241,7 @@ const Message = () => {
               setGroupReceived([...groupedReceived, createVideo]);
           }}
         />
-        <Profile mobile={mobile} userClicked={state.profile} />
+        {/* <Profile mobile={mobile} userClicked={state.profile} /> */}
         <BottomDrawer isOpen={openReport} onClose={handleToggleBottomDrawer} />
       </Fragment>
     )

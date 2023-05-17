@@ -19,7 +19,7 @@ import { validateEmail } from "../../../utils/helpers";
 
 const SignupModal = ({ onClose }) => {
   const client = useClient();
-  const { dispatch } = useContext(Context);
+  const { dispatch, state } = useContext(Context);
   const [spinner, setSpinner] = useState(false);
   const [username, setUsername] = useState("");
   const [authError, setAuthError] = useState("");
@@ -109,7 +109,7 @@ const SignupModal = ({ onClose }) => {
   };
 
   return (
-    <Modal isLoading={spinner} onClose={onClose} height={460}>
+    <Modal isLoading={spinner} onClose={onClose} height={460} state={state}>
       <Formik
         onSubmit={handleSubmit}
         validate={handleValidation}
