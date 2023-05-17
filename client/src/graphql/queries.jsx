@@ -47,6 +47,9 @@ query($_id: ID!){
     username
     email
     isLoggedIn
+    blockedUsers{
+      _id
+    }
     pictures{
         url
         _id
@@ -77,6 +80,9 @@ query{
     username
     isLoggedIn
     email
+    blockedUsers{
+      _id
+    }
     pictures{
         url
         _id
@@ -152,10 +158,14 @@ query($token: String!){
                	sender{
                   username
                   _id
+                  isLoggedIn
                   pictures{
 									  _id
                     url
                     publicId
+                  }
+                  blockedUsers{
+                    _id
                   }
                   intro
                   sex
@@ -195,6 +205,9 @@ query($token: String!){
                     publicId
                   }
                 } 
+              }
+              blockedUsers{
+                _id
               }
               email
               intro

@@ -7,11 +7,13 @@ module.exports = {
       const users = await User.find({
         "location.lat": { $ne: null },
         // isLoggedIn: true,
-      })
-        .populate("room")
-        .populate("pictures")
-        .populate("sentVideos")
-        .populate("receivedVideos");
+      }).populate([
+        "room",
+        "blockedUsers",
+        "pictures",
+        "sentVideos",
+        "receivedVideos",
+      ]);
 
       return users;
     } catch (err) {

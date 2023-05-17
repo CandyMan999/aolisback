@@ -23,6 +23,7 @@ module.exports = gql`
     room: Room
     sentVideos: [Video]
     receivedVideos: [Video]
+    blockedUsers: [User]
     chatRequest: ChatRequest
   }
 
@@ -173,6 +174,8 @@ module.exports = gql`
       receiverID: ID!
       status: Status!
     ): ChatRequest
+    block(userID: ID!, blockID: ID!): User
+    unBlock(userID: ID!, blockID: ID!): User
   }
 
   type Subscription {

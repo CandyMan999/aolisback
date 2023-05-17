@@ -32,6 +32,8 @@ const {
   deletePhotoResolver,
   videoChatRequestResolver,
   updateVideoChatRequestResolver,
+  blockResolver,
+  unBlockResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -68,6 +70,8 @@ const resolvers = {
     deletePhoto: deletePhotoResolver,
     videoChatRequest: videoChatRequestResolver,
     updateVideoChatRequest: updateVideoChatRequestResolver,
+    block: blockResolver,
+    unBlock: unBlockResolver,
   },
 };
 

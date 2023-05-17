@@ -67,6 +67,7 @@ const Root = () => {
               userClicked={state.profile}
               mobile={mobile}
               state={state}
+              currentUser={state.currentUser}
             />
             <Subscription
               subscription={VIDEO_CHAT_REQUEST}

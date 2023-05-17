@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Drawer,
   Box,
@@ -19,11 +19,12 @@ import { useHistory } from "react-router-dom";
 import { useClient } from "../../client";
 import { VIDEO_CHAT_REQUEST } from "../../graphql/mutations";
 
-const Profile = ({ userClicked, mobile }) => {
+const Profile = ({ userClicked, mobile, currentUser }) => {
   const client = useClient();
   let history = useHistory();
   const { state, dispatch } = useContext(Context);
-  let user = userClicked ? userClicked : state.currentUser;
+  const [isBlocked, setIsBlocked] = useState(false);
+  let user = userClicked ? userClicked : currentUser;
 
   const {
     username,
@@ -39,9 +40,25 @@ const Profile = ({ userClicked, mobile }) => {
     smoke,
     drugs,
     pictures,
+    blockedUsers,
     _id,
     isLoggedIn,
   } = user;
+
+  useEffect(() => {
+    if (!!state.isProfile) {
+      setBlocked();
+    }
+  }, [state.isProfile]);
+
+  const setBlocked = () => {
+    setIsBlocked(false);
+    blockedUsers.find((user) => {
+      if (user._id === currentUser._id) {
+        return setIsBlocked(true);
+      }
+    });
+  };
 
   const toggleDrawer = () => {
     dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
@@ -266,9 +283,11 @@ const Profile = ({ userClicked, mobile }) => {
         <Button
           style={{ margin: 0 }}
           onClick={handleVideoChatRequest}
-          disabled={!isLoggedIn || user._id === state.currentUser._id}
+          disabled={
+            !isLoggedIn || user._id === state.currentUser._id || !!isBlocked
+          }
           color={
-            !isLoggedIn || user._id === state.currentUser._id
+            !isLoggedIn || user._id === state.currentUser._id || !!isBlocked
               ? COLORS.lightGrey
               : COLORS.red
           }

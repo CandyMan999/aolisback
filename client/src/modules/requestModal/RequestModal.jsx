@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Fragment } from "react";
 import {
   Modal,
   Text,
@@ -8,7 +8,10 @@ import {
   Picture,
 } from "../../components";
 import { COLORS } from "../../constants";
-import { UPDATE_VIDEO_CHAT_REQUEST } from "../../graphql/mutations";
+import {
+  UPDATE_VIDEO_CHAT_REQUEST,
+  BLOCK_USER_MUTATION,
+} from "../../graphql/mutations";
 import { useClient } from "../../client";
 import { useHistory } from "react-router-dom";
 
@@ -36,16 +39,35 @@ const RequestModal = ({
         history.push("/video");
         break;
       case "Decline":
-        dispatch({ type: "TOGGLE_CHAT", payload: false });
+        setTimeout(() => {
+          dispatch({ type: "TOGGLE_CHAT", payload: false });
+        }, 2000);
         break;
       case "Cancel":
         dispatch({ type: "TOGGLE_CHAT", payload: false });
         break;
       case "Block":
-        // Code to handle "block" action
+        setTimeout(() => {
+          dispatch({ type: "TOGGLE_CHAT", payload: false });
+        }, 2000);
+        handleBlockUser();
         break;
       default:
       // Code to handle the default case if the action doesn't match any of the cases above
+    }
+  };
+
+  const handleBlockUser = async () => {
+    try {
+      const variables = {
+        userID: currentUser._id,
+        blockID: sender._id,
+      };
+
+      const { block } = await client.request(BLOCK_USER_MUTATION, variables);
+      console.log("block", block);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -79,17 +101,25 @@ const RequestModal = ({
     <Modal onClose={() => {}} state={state}>
       {currentUser._id === sender._id ? (
         <Box display="flex" column center>
-          <Text fontSize={FONT_SIZES.LARGE} width={"100%"} center bold>
-            Please Wait while user decides...
-          </Text>
+          {status === "Decline" || status === "Block" ? (
+            <Text fontSize={FONT_SIZES.LARGE} width={"100%"} center bold>
+              {receiver.username} has Declined your request
+            </Text>
+          ) : (
+            <Fragment>
+              <Text fontSize={FONT_SIZES.LARGE} width={"100%"} center bold>
+                Please Wait while user decides...
+              </Text>
 
-          <Button
-            width={"100%"}
-            color={COLORS.red}
-            onClick={() => handleUpdate("Cancel")}
-          >
-            Cancel
-          </Button>
+              <Button
+                width={"100%"}
+                color={COLORS.red}
+                onClick={() => handleUpdate("Cancel")}
+              >
+                Cancel
+              </Button>
+            </Fragment>
+          )}
         </Box>
       ) : (
         <Box display="flex" column center width="100%" height="90%">
@@ -170,6 +200,7 @@ const RequestModal = ({
               boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
             }}
             width={"100%"}
+            onClick={() => handleUpdate("Block")}
           >
             <Text color={COLORS.white} margin={0} bold>
               Block

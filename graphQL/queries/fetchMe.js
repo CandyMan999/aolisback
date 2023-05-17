@@ -20,6 +20,7 @@ module.exports = {
         "pictures",
         "comments",
         "sentVideos",
+        "blockedUsers",
         "receivedVideos",
         {
           path: "sentVideos",
@@ -45,6 +46,7 @@ module.exports = {
         {
           path: "receivedVideos",
           populate: [
+            "blockedUsers",
             {
               path: "sender",
               model: "User",

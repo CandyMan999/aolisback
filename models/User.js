@@ -91,8 +91,8 @@ const UserSchema = new mongoose.Schema({
   },
   blockedUsers: [
     {
-      type: String,
-      default: null,
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
     },
   ],
   comments: [{ type: mongoose.Schema.ObjectId, ref: "Comment" }],

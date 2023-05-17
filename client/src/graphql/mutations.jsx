@@ -329,3 +329,13 @@ mutation($_id: ID!, $senderID: ID!, $receiverID: ID!, $status: Status!){
   }
 }
 `;
+
+export const BLOCK_USER_MUTATION = `
+mutation($userID: ID!, $blockID: ID!){
+  block(userID: $userID, blockID: $blockID){
+    blockedUsers{
+      _id  
+    }
+  }
+}
+`;

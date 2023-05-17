@@ -5,7 +5,10 @@ module.exports = {
   findUserResolver: async (root, args, ctx) => {
     const { _id } = args;
     try {
-      const user = await User.findById({ _id }).populate("pictures");
+      const user = await User.findById({ _id }).populate([
+        "pictures",
+        "blockedUsers",
+      ]);
 
       return user;
     } catch (err) {
