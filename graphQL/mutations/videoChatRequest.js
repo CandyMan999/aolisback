@@ -28,6 +28,7 @@ module.exports = {
       const newChatRequest = await ChatRequest.findOne({
         _id: chatRequest._id,
       }).populate([
+        "blockedUsers",
         {
           path: "sender",
           model: "User",

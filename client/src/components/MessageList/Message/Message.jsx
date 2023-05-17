@@ -158,6 +158,7 @@ const Message = ({
                     }}
                     loading="lazy"
                     publicId={picture.publicId}
+                    quality="auto:best"
                   >
                     <Transformation height={"35"} width={"35"} crop="thumb" />
                   </Image>

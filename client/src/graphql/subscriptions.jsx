@@ -76,6 +76,9 @@ export const VIDEO_CHAT_REQUEST = gql`
         username
         sex
         age
+        blockedUsers {
+          _id
+        }
         pictures {
           url
           publicId

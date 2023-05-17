@@ -16,6 +16,7 @@ const Picture = ({ profilePic, name, height, width }) => {
             marginBottom: "0px",
           }}
           loading="lazy"
+          quality="auto:best"
           publicId={profilePic.publicId}
         ></Image>
       </CloudinaryContext>
