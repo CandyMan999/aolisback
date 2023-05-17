@@ -30,7 +30,6 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
       setItems([
         { name: "Home", icon: "home", route: "/" },
         { name: "My Profile", icon: "user", route: "/profile" },
-        { name: "My Video Channel", icon: "video", route: "/video" },
         {
           name: "Message Center",
           icon: "videoMessage",
