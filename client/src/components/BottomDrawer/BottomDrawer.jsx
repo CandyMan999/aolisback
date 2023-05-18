@@ -85,10 +85,7 @@ const BottomDrawer = ({
         flagged: true,
       };
 
-      const { flagVideo } = await client.request(
-        FLAG_VIDEO_MUTATION,
-        variables
-      );
+      await client.request(FLAG_VIDEO_MUTATION, variables);
       setTimeout(() => {
         onClose(true);
       }, 1000);
@@ -109,7 +106,10 @@ const BottomDrawer = ({
       await setTimeout(() => {
         onClose(true);
       }, 1000);
-      //   dispatch({ type: "UPDATE_BLOCKED", payload: block.blockedUsers });
+
+      setTimeout(() => {
+        dispatch({ type: "UPDATE_BLOCKED", payload: block.blockedUsers });
+      }, 2000);
     } catch (err) {
       console.log(err);
     }
@@ -130,7 +130,9 @@ const BottomDrawer = ({
       await setTimeout(() => {
         onClose(true);
       }, 1000);
-      //   dispatch({ type: "UPDATE_BLOCKED", payload: unBlock.blockedUsers });
+      setTimeout(() => {
+        dispatch({ type: "UPDATE_BLOCKED", payload: unBlock.blockedUsers });
+      }, 2000);
     } catch (err) {
       console.log(err);
     }

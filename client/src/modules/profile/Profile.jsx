@@ -8,6 +8,7 @@ import {
   Icon,
   PhotoSlider,
   FONT_SIZES,
+  Loading,
 } from "../../components";
 
 import { COLORS } from "../../constants";
@@ -28,6 +29,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const { state, dispatch } = useContext(Context);
   const [imBlocked, setImBlocked] = useState(false);
   const [userBlocked, setUserBlocked] = useState(false);
+  const [loading, setLoading] = useState(false);
   let user = userClicked ? userClicked : currentUser;
 
   const {
@@ -81,6 +83,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleVideoChatRequest = async () => {
     try {
+      setLoading(true);
       const variables = {
         senderID: state.currentUser._id,
         receiverID: _id,
@@ -93,7 +96,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       );
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
       dispatch({ type: "TOGGLE_CHAT", payload: true });
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log(err);
     }
   };
@@ -107,6 +112,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleUnBlock = async () => {
     try {
+      setLoading(true);
       const variables = {
         userID: currentUser._id,
         blockID: _id,
@@ -118,7 +124,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       );
       dispatch({ type: "UPDATE_BLOCKED", payload: unBlock.blockedUsers });
       setUserBlocked(false);
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log(err);
     }
   };
@@ -323,7 +331,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               : handleVideoChatRequest
           }
           disabled={
-            (!isLoggedIn && !userBlocked) || (imBlocked && !userBlocked)
+            (!isLoggedIn && !userBlocked) ||
+            (imBlocked && !userBlocked) ||
+            loading
           }
           color={
             (!isLoggedIn && !userBlocked) || (imBlocked && !userBlocked)
@@ -332,13 +342,17 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           }
           width="100%"
         >
-          <Text margin={0} bold>
-            {userBlocked
-              ? `UnBlock  ${username}`
-              : imBlocked
-              ? `You're Blocked`
-              : `Video Chat with ${username}`}
-          </Text>
+          {loading ? (
+            <Loading bar />
+          ) : (
+            <Text margin={0} bold>
+              {userBlocked
+                ? `UnBlock  ${username}`
+                : imBlocked
+                ? `You're Blocked`
+                : `Video Chat with ${username}`}
+            </Text>
+          )}
         </Button>
         <Button
           style={{ margin: 0 }}
