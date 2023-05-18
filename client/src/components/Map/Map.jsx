@@ -15,7 +15,7 @@ import {
   OnlineDot,
 } from "../../components";
 import { COLORS } from "../../constants";
-import Profile from "../../modules/profile";
+
 import Context from "../../context";
 import { useClient } from "../../client";
 import { FONT_SIZES } from "../Text";

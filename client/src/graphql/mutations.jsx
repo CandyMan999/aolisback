@@ -259,6 +259,8 @@ mutation($url: String!, $publicId: String!, $senderID: ID!, $receiverID: ID!){
     _id
     url
     createdAt
+    viewed
+    flagged
     sender{
       _id
       username
@@ -336,6 +338,27 @@ mutation($userID: ID!, $blockID: ID!){
     blockedUsers{
       _id  
     }
+  }
+}
+`;
+
+export const FLAG_VIDEO_MUTATION = `
+mutation($_id: ID!, $flagged: Boolean!){
+  flagVideo(_id: $_id, flagged: $flagged){
+    _id
+    url
+    createdAt
+    viewed
+    flagged
+    sender{
+      _id
+      username
+    }
+    receiver{
+      _id
+      username
+    }
+    publicId
   }
 }
 `;

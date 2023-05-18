@@ -43,6 +43,8 @@ export const CREATE_VIDEO_SUBSCRIPTION = gql`
       url
       publicId
       createdAt
+      flagged
+      viewed
       sender {
         _id
         username

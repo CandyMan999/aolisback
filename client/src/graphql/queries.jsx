@@ -155,6 +155,8 @@ query($token: String!){
 								url
                 publicId
                 createdAt
+                flagged
+                viewed
                	sender{
                   username
                   _id

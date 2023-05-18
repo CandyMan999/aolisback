@@ -34,6 +34,8 @@ module.exports = gql`
     createdAt: String
     receiver: User
     publicId: String
+    viewed: Boolean
+    flagged: Boolean
   }
 
   enum Drugs {
@@ -176,6 +178,7 @@ module.exports = gql`
     ): ChatRequest
     block(userID: ID!, blockID: ID!): User
     unBlock(userID: ID!, blockID: ID!): User
+    flagVideo(_id: ID!, flagged: Boolean!): Video
   }
 
   type Subscription {

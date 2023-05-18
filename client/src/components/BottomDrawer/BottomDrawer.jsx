@@ -1,21 +1,29 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import {
+  BLOCK_USER_MUTATION,
+  FLAG_VIDEO_MUTATION,
+} from "../../graphql/mutations";
 
-import { Box, Button, Text } from "..";
+import { Box, Button, Text, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
 
-const BottomDrawer = ({ isOpen, onClose }) => {
+const BottomDrawer = ({ isOpen, onClose, client, dispatch, video }) => {
   const [mounted, setMounted] = useState(false);
   const BUTTONS = [
     {
-      name: "Report",
+      name: video && video.flagged ? "Flagged" : "Report",
       color: COLORS.white,
-      onClick: null,
+      onClick: () => handleFlagVideo(video._id),
       textColor: COLORS.red,
       marginTop: 20,
       marginBottom: 0,
       borderBottom: `solid 2px ${COLORS.black}`,
       boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+      icon:
+        video && video.flagged ? (
+          <Icon name={"flag"} size={ICON_SIZES.LARGE} color={COLORS.grey} />
+        ) : null,
     },
     {
       name: "Block",
@@ -26,6 +34,7 @@ const BottomDrawer = ({ isOpen, onClose }) => {
       marginBottom: 0,
       borderBottom: `solid 2px ${COLORS.black}`,
       boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+      icon: <Icon name={"block"} size={ICON_SIZES.LARGE} color={COLORS.grey} />,
     },
     {
       name: "Cancel",
@@ -36,12 +45,33 @@ const BottomDrawer = ({ isOpen, onClose }) => {
       marginBottom: undefined,
       borderBottom: undefined,
       boxShadow: undefined,
+      icon: null,
     },
   ];
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    console.log("video", video);
+  }, [video]);
+
+  const handleFlagVideo = async (videoID) => {
+    try {
+      const variables = {
+        _id: videoID,
+        flagged: true,
+      };
+
+      const { flagVideo } = await client.request(
+        FLAG_VIDEO_MUTATION,
+        variables
+      );
+      setTimeout(() => {
+        onClose(true);
+      }, 2000);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Fragment>
@@ -68,9 +98,12 @@ const BottomDrawer = ({ isOpen, onClose }) => {
                 }}
                 onClick={button.onClick}
               >
-                <Text bold color={button.textColor}>
-                  {button.name}
-                </Text>
+                <Box width="100%" justifyContent="center" display="flex">
+                  {button.icon}
+                  <Text bold color={button.textColor}>
+                    {button.name}
+                  </Text>
+                </Box>
               </Button>
             ))}
         </Box>

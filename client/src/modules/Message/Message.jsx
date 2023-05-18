@@ -17,7 +17,7 @@ import {
 import { COLORS } from "../../constants";
 import { useHistory, useLocation } from "react-router-dom";
 import VideoModal from "../gridSearch/video-modal";
-import Profile from "../../modules/profile";
+import { useClient } from "../../client";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import Context from "../../context";
@@ -26,6 +26,7 @@ const Message = () => {
   let history = useHistory();
   const location = useLocation();
   const { state, dispatch } = useContext(Context);
+  const client = useClient();
   const currentUser = state.currentUser;
   const { sentVideos, receivedVideos } = currentUser;
   const [loading, setLoading] = useState(false);
@@ -35,6 +36,7 @@ const Message = () => {
   const [groupedReceived, setGroupReceived] = useState(null);
   const [openReport, setOpenReport] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
+  const [video, setVideo] = useState(null);
 
   useEffect(() => {
     if (receivedVideos && !!receivedVideos.length && !!senderID) {
@@ -112,7 +114,8 @@ const Message = () => {
     dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
   };
 
-  const handleToggleBottomDrawer = () => {
+  const handleToggleBottomDrawer = (payload) => {
+    setVideo(payload);
     setOpenReport(!openReport);
   };
 
@@ -196,7 +199,7 @@ const Message = () => {
                           name="threeDot"
                           size={ICON_SIZES.LARGE}
                           color={COLORS.vividBlue}
-                          onClick={handleToggleBottomDrawer}
+                          onClick={() => handleToggleBottomDrawer(video)}
                         />
                       </Box>
                     )}
@@ -251,18 +254,44 @@ const Message = () => {
           subscription={CREATE_VIDEO_SUBSCRIPTION}
           onSubscriptionData={({ subscriptionData }) => {
             const { createVideo } = subscriptionData.data;
-
             if (
               (createVideo.sender._id === senderID &&
                 createVideo.receiver._id === currentUser._id) ||
               (createVideo.sender._id === currentUser._id &&
                 createVideo.receiver._id === senderID)
-            )
+            ) {
+              const existingVideo = groupedReceived.find(
+                (video) => video._id === createVideo._id
+              );
+
+              if (existingVideo) {
+                const updatedGroupReceived = groupedReceived.filter(
+                  (video) => video._id !== createVideo._id
+                );
+                const insertIndex = groupedReceived.findIndex(
+                  (video) => video._id === createVideo._id
+                );
+                setVideo(createVideo);
+                setGroupReceived([
+                  ...updatedGroupReceived.slice(0, insertIndex),
+                  createVideo,
+                  ...updatedGroupReceived.slice(insertIndex),
+                ]);
+                return;
+              }
+
               setGroupReceived([...groupedReceived, createVideo]);
+            }
           }}
         />
 
-        <BottomDrawer isOpen={openReport} onClose={handleToggleBottomDrawer} />
+        <BottomDrawer
+          isOpen={openReport}
+          onClose={handleToggleBottomDrawer}
+          client={client}
+          dispatch={dispatch}
+          video={video}
+        />
       </Fragment>
     )
   );

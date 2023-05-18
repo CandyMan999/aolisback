@@ -34,6 +34,7 @@ const {
   updateVideoChatRequestResolver,
   blockResolver,
   unBlockResolver,
+  flagVideoResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -72,6 +73,7 @@ const resolvers = {
     updateVideoChatRequest: updateVideoChatRequestResolver,
     block: blockResolver,
     unBlock: unBlockResolver,
+    flagVideo: flagVideoResolver,
   },
 };
 
