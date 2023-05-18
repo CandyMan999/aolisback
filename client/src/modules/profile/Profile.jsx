@@ -17,7 +17,10 @@ import moment from "moment";
 import Context from "../../context";
 import { useHistory } from "react-router-dom";
 import { useClient } from "../../client";
-import { VIDEO_CHAT_REQUEST } from "../../graphql/mutations";
+import {
+  VIDEO_CHAT_REQUEST,
+  UNBLOCK_USER_MUTATION,
+} from "../../graphql/mutations";
 
 const Profile = ({ userClicked, mobile, currentUser }) => {
   const client = useClient();
@@ -40,7 +43,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     smoke,
     drugs,
     pictures,
-    blockedUsers,
+
     _id,
     isLoggedIn,
   } = user;
@@ -53,8 +56,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const setBlocked = () => {
     setIsBlocked(false);
-    blockedUsers.find((user) => {
-      if (user._id === currentUser._id) {
+
+    currentUser.blockedUsers.find((user) => {
+      if (user._id === _id) {
         return setIsBlocked(true);
       }
     });
@@ -88,6 +92,24 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     dispatch({ type: "VIEW_LOCATION", payload });
     dispatch({ type: "TOGGLE_PROFILE", payload: false });
     history.push("/location");
+  };
+
+  const handleUnBlock = async () => {
+    try {
+      const variables = {
+        userID: currentUser._id,
+        blockID: _id,
+      };
+
+      const { unBlock } = await client.request(
+        UNBLOCK_USER_MUTATION,
+        variables
+      );
+      dispatch({ type: "UPDATE_BLOCKED", payload: unBlock.blockedUsers });
+      setIsBlocked(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -282,19 +304,21 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       <Box justifyContent="center" width={"100%"}>
         <Button
           style={{ margin: 0 }}
-          onClick={handleVideoChatRequest}
+          onClick={isBlocked ? handleUnBlock : handleVideoChatRequest}
           disabled={
-            !isLoggedIn || user._id === state.currentUser._id || !!isBlocked
+            (!isLoggedIn && !isBlocked) ||
+            (user._id === state.currentUser._id && !isBlocked)
           }
           color={
-            !isLoggedIn || user._id === state.currentUser._id || !!isBlocked
+            (!isLoggedIn && !isBlocked) ||
+            (user._id === state.currentUser._id && !isBlocked)
               ? COLORS.lightGrey
               : COLORS.red
           }
           width="100%"
         >
           <Text margin={0} bold>
-            Video Chat with {username}
+            {isBlocked ? `UnBlock  ${username}` : `Video Chat with ${username}`}
           </Text>
         </Button>
         <Button

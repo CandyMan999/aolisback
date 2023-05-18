@@ -65,6 +65,7 @@ const RequestModal = ({
       };
 
       const { block } = await client.request(BLOCK_USER_MUTATION, variables);
+      dispatch({ type: "UPDATE_BLOCKED", payload: block.blockedUsers });
     } catch (err) {
       console.log(err);
     }

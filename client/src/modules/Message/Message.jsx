@@ -291,6 +291,9 @@ const Message = () => {
           client={client}
           dispatch={dispatch}
           video={video}
+          currentUser={currentUser}
+          blockID={senderID}
+          blockedUsers={currentUser.blockedUsers}
         />
       </Fragment>
     )

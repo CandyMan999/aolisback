@@ -14,18 +14,6 @@ module.exports = {
         { new: true }
       );
 
-      //   const sender = await User.findByIdAndUpdate(
-      //     { _id: video.sender._id },
-      //     { $push: { sentVideos: video } },
-      //     { new: true }
-      //   ).populate("sentVideos");
-
-      //   const receiver = await User.findByIdAndUpdate(
-      //     { _id: video.receiver._id },
-      //     { $push: { receivedVideos: video } },
-      //     { new: true }
-      //   ).populate("receivedVideos");
-
       const newVideo = await Video.findOne({ _id: video._id }).populate([
         {
           path: "sender",

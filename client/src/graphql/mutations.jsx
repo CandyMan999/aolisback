@@ -342,6 +342,16 @@ mutation($userID: ID!, $blockID: ID!){
 }
 `;
 
+export const UNBLOCK_USER_MUTATION = `
+mutation($userID: ID!, $blockID: ID!){
+  unBlock(userID: $userID, blockID: $blockID){
+    blockedUsers{
+      _id  
+    }
+  }
+}
+`;
+
 export const FLAG_VIDEO_MUTATION = `
 mutation($_id: ID!, $flagged: Boolean!){
   flagVideo(_id: $_id, flagged: $flagged){

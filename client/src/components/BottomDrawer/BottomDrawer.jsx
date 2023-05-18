@@ -3,16 +3,27 @@ import { motion } from "framer-motion";
 import {
   BLOCK_USER_MUTATION,
   FLAG_VIDEO_MUTATION,
+  UNBLOCK_USER_MUTATION,
 } from "../../graphql/mutations";
 
 import { Box, Button, Text, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
 
-const BottomDrawer = ({ isOpen, onClose, client, dispatch, video }) => {
+const BottomDrawer = ({
+  isOpen,
+  onClose,
+  client,
+  video,
+  currentUser,
+  blockID,
+  dispatch,
+  blockedUsers,
+}) => {
   const [mounted, setMounted] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
   const BUTTONS = [
     {
-      name: video && video.flagged ? "Flagged" : "Report",
+      name: video && video.flagged ? "Flagged" : "Report Video",
       color: COLORS.white,
       onClick: () => handleFlagVideo(video._id),
       textColor: COLORS.red,
@@ -26,15 +37,17 @@ const BottomDrawer = ({ isOpen, onClose, client, dispatch, video }) => {
         ) : null,
     },
     {
-      name: "Block",
+      name: isBlocked ? "UnBlock" : "Block User",
       color: COLORS.white,
-      onClick: null,
+      onClick: isBlocked ? () => handleUnBlockUser() : () => handleBlockUser(),
       textColor: COLORS.red,
       marginTop: 0,
       marginBottom: 0,
       borderBottom: `solid 2px ${COLORS.black}`,
       boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
-      icon: <Icon name={"block"} size={ICON_SIZES.LARGE} color={COLORS.grey} />,
+      icon: isBlocked ? (
+        <Icon name={"block"} size={ICON_SIZES.LARGE} color={COLORS.grey} />
+      ) : null,
     },
     {
       name: "Cancel",
@@ -51,8 +64,19 @@ const BottomDrawer = ({ isOpen, onClose, client, dispatch, video }) => {
 
   useEffect(() => {
     setMounted(true);
-    console.log("video", video);
-  }, [video]);
+
+    setBlocked();
+  }, []);
+
+  const setBlocked = () => {
+    setIsBlocked(false);
+
+    blockedUsers.find((user) => {
+      if (user._id === blockID) {
+        return setIsBlocked(true);
+      }
+    });
+  };
 
   const handleFlagVideo = async (videoID) => {
     try {
@@ -65,6 +89,43 @@ const BottomDrawer = ({ isOpen, onClose, client, dispatch, video }) => {
         FLAG_VIDEO_MUTATION,
         variables
       );
+      setTimeout(() => {
+        onClose(true);
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleBlockUser = async () => {
+    try {
+      const variables = {
+        userID: currentUser._id,
+        blockID,
+      };
+      const { block } = await client.request(BLOCK_USER_MUTATION, variables);
+
+      setIsBlocked(true);
+      setTimeout(() => {
+        onClose(true);
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleUnBlockUser = async () => {
+    try {
+      const variables = {
+        userID: currentUser._id,
+        blockID,
+      };
+      const { unBlock } = await client.request(
+        UNBLOCK_USER_MUTATION,
+        variables
+      );
+
+      setIsBlocked(false);
       setTimeout(() => {
         onClose(true);
       }, 2000);
