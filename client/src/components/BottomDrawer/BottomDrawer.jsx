@@ -1,10 +1,11 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 import { Box, Button, Text } from "..";
 import { COLORS } from "../../constants";
 
 const BottomDrawer = ({ isOpen, onClose }) => {
+  const [mounted, setMounted] = useState(false);
   const BUTTONS = [
     {
       name: "Report",
@@ -38,6 +39,10 @@ const BottomDrawer = ({ isOpen, onClose }) => {
     },
   ];
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <Fragment>
       <motion.div
@@ -49,24 +54,25 @@ const BottomDrawer = ({ isOpen, onClose }) => {
         style={drawerStyle(isOpen)}
       >
         <Box column width="100%" alignItems="center" paddingBottom={2}>
-          {BUTTONS.map((button, index) => (
-            <Button
-              key={index}
-              width={"90%"}
-              color={button.color}
-              style={{
-                marginTop: button.marginTop,
-                marginBottom: button.marginBottom,
-                borderBottom: button.borderBottom,
-                boxShadow: button.boxShadow,
-              }}
-              onClick={button.onClick}
-            >
-              <Text bold color={button.textColor}>
-                {button.name}
-              </Text>
-            </Button>
-          ))}
+          {mounted &&
+            BUTTONS.map((button, index) => (
+              <Button
+                key={index}
+                width={"90%"}
+                color={button.color}
+                style={{
+                  marginTop: button.marginTop,
+                  marginBottom: button.marginBottom,
+                  borderBottom: button.borderBottom,
+                  boxShadow: button.boxShadow,
+                }}
+                onClick={button.onClick}
+              >
+                <Text bold color={button.textColor}>
+                  {button.name}
+                </Text>
+              </Button>
+            ))}
         </Box>
       </motion.div>
     </Fragment>

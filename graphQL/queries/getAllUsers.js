@@ -4,11 +4,13 @@ const { User } = require("../../models");
 module.exports = {
   getAllUsersResolver: async (root, args, ctx) => {
     try {
-      const users = await User.find({})
-        .populate("room")
-        .populate("pictures")
-        .populate("sentVideos")
-        .populate("receivedVideos");
+      const users = await User.find({}).populate([
+        "room",
+        "blockedUsers",
+        "pictures",
+        "sentVideos",
+        "receivedVideos",
+      ]);
 
       return users;
     } catch (err) {

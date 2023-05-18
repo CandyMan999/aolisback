@@ -29,12 +29,6 @@ const ProfileCardFront = ({
     handleDistance(user);
   }, []);
 
-  const randomVariable = () => {
-    return Math.random() < 0.5
-      ? Math.floor(Math.random() * 1000)
-      : Math.floor(Math.random() * -1000);
-  };
-
   const handleDistance = async (user) => {
     if (
       !!state.currentUser.location &&

@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Text,
-  Button,
   VideoPlayer,
   Loading,
   RoomLink,
+  Icon,
+  ICON_SIZES,
 } from "../../../components";
 import { COLORS } from "../../../constants";
 import { GET_VIDEOS_QUERY } from "../../../graphql/queries";
@@ -28,13 +29,24 @@ const ProfileCardBack = ({
 }) => {
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
 
   useEffect(() => {
     handleGetVideos();
+    setBlocked();
   }, [currentUser.sentVideos]);
 
   const handleMessage = () => {
     openModal();
+  };
+
+  const setBlocked = () => {
+    setIsBlocked(false);
+    user.blockedUsers.find((user) => {
+      if (user._id === currentUser._id) {
+        return setIsBlocked(true);
+      }
+    });
   };
 
   const handleGetVideos = async () => {
@@ -119,9 +131,12 @@ const ProfileCardBack = ({
         justifyContent="center"
         height={40}
         alignItems="center"
+        onClick={isBlocked ? undefined : handleMessage}
       >
-        {/* <Icon name="distance" color={COLORS.red} size={ICON_SIZES.LARGE} /> */}
-        <Text onClick={handleMessage}> Send Video Message</Text>{" "}
+        {isBlocked && (
+          <Icon name="block" color={COLORS.red} size={ICON_SIZES.LARGE} />
+        )}
+        <Text> {isBlocked ? "Blocked" : "Send Video Message"}</Text>
       </Box>
     </motion.div>
   );

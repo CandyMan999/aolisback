@@ -65,7 +65,6 @@ const RequestModal = ({
       };
 
       const { block } = await client.request(BLOCK_USER_MUTATION, variables);
-      console.log("block", block);
     } catch (err) {
       console.log(err);
     }

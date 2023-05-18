@@ -23,7 +23,8 @@ const GridContainer = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const { getAllUsers } = await client.request(GET_ALL_USERS, {});
+      const { getAllUsers } = await client.request(GET_ALL_USERS);
+
       const filteredUsers = await getAllUsers.filter(
         (user) => user.username !== state.currentUser.username
       );

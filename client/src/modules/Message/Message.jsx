@@ -34,6 +34,7 @@ const Message = () => {
 
   const [groupedReceived, setGroupReceived] = useState(null);
   const [openReport, setOpenReport] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
 
   useEffect(() => {
     if (receivedVideos && !!receivedVideos.length && !!senderID) {
@@ -41,7 +42,18 @@ const Message = () => {
     }
   }, [senderID, currentUser]);
 
-  useEffect(() => {}, [state]);
+  const setBlocked = async (data) => {
+    setIsBlocked(false);
+
+    const user = await data.filter((video) => video.sender._id === senderID);
+
+    user[0].sender.blockedUsers.find((user) => {
+      if (user._id === currentUser._id) {
+        setIsBlocked(true);
+      }
+    });
+  };
+
   const groupVideosBySender = async (receivedVids, sentVids) => {
     try {
       setLoading(true);
@@ -65,6 +77,7 @@ const Message = () => {
       const data = await orderByCreatedAt(array);
 
       setGroupReceived(data);
+      setBlocked(data);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -214,8 +227,15 @@ const Message = () => {
               );
             })}
           <Box width="100%">
-            <Button width="100%" onClick={toggleModal}>
-              Reply
+            <Button disabled={isBlocked} width="100%" onClick={toggleModal}>
+              {isBlocked ? (
+                <Box justifyContent={"center"} width={"100%"}>
+                  <Icon name="block" size={ICON_SIZES.LARGE} />{" "}
+                  <Text>Blocked</Text>
+                </Box>
+              ) : (
+                `Reply`
+              )}
             </Button>
           </Box>
         </Box>
@@ -241,7 +261,7 @@ const Message = () => {
               setGroupReceived([...groupedReceived, createVideo]);
           }}
         />
-        {/* <Profile mobile={mobile} userClicked={state.profile} /> */}
+
         <BottomDrawer isOpen={openReport} onClose={handleToggleBottomDrawer} />
       </Fragment>
     )

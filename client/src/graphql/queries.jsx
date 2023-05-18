@@ -235,6 +235,9 @@ query{
       _id
       name
     }
+    blockedUsers{
+      _id
+    }
     pictures{
       _id
       url
