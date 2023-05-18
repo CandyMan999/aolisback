@@ -26,7 +26,8 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const client = useClient();
   let history = useHistory();
   const { state, dispatch } = useContext(Context);
-  const [isBlocked, setIsBlocked] = useState(false);
+  const [imBlocked, setImBlocked] = useState(false);
+  const [userBlocked, setUserBlocked] = useState(false);
   let user = userClicked ? userClicked : currentUser;
 
   const {
@@ -43,23 +44,33 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     smoke,
     drugs,
     pictures,
-
     _id,
     isLoggedIn,
   } = user;
 
   useEffect(() => {
     if (!!state.isProfile) {
-      setBlocked();
+      handleImBlocked();
+      handleUserBlocked();
     }
   }, [state.isProfile]);
 
-  const setBlocked = () => {
-    setIsBlocked(false);
+  const handleImBlocked = () => {
+    setImBlocked(false);
+
+    user.blockedUsers.find((user) => {
+      if (user._id === currentUser._id) {
+        return setImBlocked(true);
+      }
+    });
+  };
+
+  const handleUserBlocked = () => {
+    setUserBlocked(false);
 
     currentUser.blockedUsers.find((user) => {
       if (user._id === _id) {
-        return setIsBlocked(true);
+        return setUserBlocked(true);
       }
     });
   };
@@ -106,7 +117,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
         variables
       );
       dispatch({ type: "UPDATE_BLOCKED", payload: unBlock.blockedUsers });
-      setIsBlocked(false);
+      setUserBlocked(false);
     } catch (err) {
       console.log(err);
     }
@@ -304,21 +315,29 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       <Box justifyContent="center" width={"100%"}>
         <Button
           style={{ margin: 0 }}
-          onClick={isBlocked ? handleUnBlock : handleVideoChatRequest}
+          onClick={
+            userBlocked
+              ? handleUnBlock
+              : imBlocked
+              ? undefined
+              : handleVideoChatRequest
+          }
           disabled={
-            (!isLoggedIn && !isBlocked) ||
-            (user._id === state.currentUser._id && !isBlocked)
+            (!isLoggedIn && !userBlocked) || (imBlocked && !userBlocked)
           }
           color={
-            (!isLoggedIn && !isBlocked) ||
-            (user._id === state.currentUser._id && !isBlocked)
+            (!isLoggedIn && !userBlocked) || (imBlocked && !userBlocked)
               ? COLORS.lightGrey
               : COLORS.red
           }
           width="100%"
         >
           <Text margin={0} bold>
-            {isBlocked ? `UnBlock  ${username}` : `Video Chat with ${username}`}
+            {userBlocked
+              ? `UnBlock  ${username}`
+              : imBlocked
+              ? `You're Blocked`
+              : `Video Chat with ${username}`}
           </Text>
         </Button>
         <Button

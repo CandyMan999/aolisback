@@ -106,9 +106,10 @@ const BottomDrawer = ({
       const { block } = await client.request(BLOCK_USER_MUTATION, variables);
 
       setIsBlocked(true);
-      setTimeout(() => {
+      await setTimeout(() => {
         onClose(true);
       }, 1000);
+      //   dispatch({ type: "UPDATE_BLOCKED", payload: block.blockedUsers });
     } catch (err) {
       console.log(err);
     }
@@ -126,9 +127,10 @@ const BottomDrawer = ({
       );
 
       setIsBlocked(false);
-      setTimeout(() => {
+      await setTimeout(() => {
         onClose(true);
-      }, 2000);
+      }, 1000);
+      //   dispatch({ type: "UPDATE_BLOCKED", payload: unBlock.blockedUsers });
     } catch (err) {
       console.log(err);
     }
