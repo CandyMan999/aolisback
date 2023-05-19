@@ -5,9 +5,10 @@ import {
   Box,
   Text,
   FONT_SIZES,
+  CompVideoUploader,
 } from "../../../components";
 
-const VideoModal = ({ onClose, senderID, receiverID, state }) => {
+const VideoModal = ({ onClose, senderID, receiverID, state, mobile }) => {
   const [sending, setSending] = useState(false);
 
   const handleSending = (truthy) => {
@@ -25,11 +26,19 @@ const VideoModal = ({ onClose, senderID, receiverID, state }) => {
       >
         {sending ? "Sending Video..." : "Send Video Message"}
       </Text>
-      <VideoUploader
-        senderID={senderID}
-        receiverID={receiverID}
-        handleSending={handleSending}
-      />
+      {mobile ? (
+        <VideoUploader
+          senderID={senderID}
+          receiverID={receiverID}
+          handleSending={handleSending}
+        />
+      ) : (
+        <CompVideoUploader
+          senderID={senderID}
+          receiverID={receiverID}
+          handleSending={handleSending}
+        />
+      )}
     </Modal>
   );
 };

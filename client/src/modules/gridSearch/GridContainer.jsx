@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import GridSearch from "./GridSearch";
 
 import Context from "../../context";
-import { GET_ALL_USERS } from "../../graphql/queries";
+import { GET_ALL_USERS, FETCH_ME } from "../../graphql/queries";
 import { Loading, Box } from "../../components";
 import { useClient } from "../../client";
 import { getDistanceFromCoords } from "../../utils/helpers";
@@ -15,10 +15,10 @@ const GridContainer = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    if (!!currentUser) {
+    if (!!currentUser.username) {
       fetchData();
     }
-  }, [currentUser]);
+  }, [currentUser.username]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -34,7 +34,7 @@ const GridContainer = () => {
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      console.log("err fetching states: ", err);
+      console.log("err fetching users: ", err);
     }
   };
 

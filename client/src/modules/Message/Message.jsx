@@ -248,6 +248,7 @@ const Message = () => {
             receiverID={senderID}
             senderID={currentUser._id}
             state={state}
+            mobile={mobile}
           />
         )}
         <Subscription

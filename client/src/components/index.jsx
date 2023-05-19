@@ -34,3 +34,4 @@ export { default as VideoPlayer } from "./VideoPlayer";
 export { default as RoomLink } from "./RoomLink";
 export { default as Picture } from "./Picture";
 export { default as BottomDrawer } from "./BottomDrawer";
+export { default as CompVideoUploader } from "./CompVideo";

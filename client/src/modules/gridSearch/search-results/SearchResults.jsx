@@ -90,6 +90,7 @@ const SearchResults = ({
           receiverID={activeID}
           senderID={currentUser._id}
           state={state}
+          mobile={mobile}
         />
       )}
     </Box>
