@@ -7,7 +7,7 @@ import {
   Icon,
   ICON_SIZES,
   VideoPlayer,
-  BottomDrawer,
+  FONT_SIZES,
 } from "../../../components";
 import { COLORS } from "../../../constants";
 import { withRouter } from "react-router-dom";
@@ -28,21 +28,16 @@ const MessageContainer = ({
 
   return receivedVideos && receivedVideos.length ? (
     receivedVideos.map((video, i) => {
+      const isLastMessage = i === receivedVideos.length - 1;
       return (
         <Box
           display="flex"
           width="100%"
-          borderTop={
-            receivedVideos.length < 2
-              ? `solid 2px ${COLORS.grey}`
-              : i === receivedVideos.length - 1
-              ? undefined
-              : `solid 2px ${COLORS.grey}`
-          }
+          borderTop={`solid 1px ${COLORS.grey}`}
           borderBottom={
-            i === 0 && receivedVideos.length > 2
-              ? undefined
-              : `solid 2px ${COLORS.grey}`
+            isLastMessage
+              ? `solid 2px ${COLORS.grey}`
+              : `solid 1px ${COLORS.grey}`
           }
           onClick={() => handleOnClick(video[0].sender._id)}
           key={`${video[0].publicId}-${i}`}
@@ -158,13 +153,23 @@ const MessageContainer = ({
       );
     })
   ) : (
-    <Box
-      display="flex"
-      width="100%"
-      borderTop={`solid 2px ${COLORS.grey}`}
-      borderBottom={`solid 2px ${COLORS.grey}`}
-    >
-      <Text>No Video Messages at this time!</Text>
+    <Box height={"calc(100vH - 60px)"} width="100%" maxHeight={1066}>
+      <Box
+        style={{ margin: "20px", textAlign: "center" }}
+        width="100%"
+        height={"60vH"}
+        justifyContent="space-around"
+        paddingBottom={"10%"}
+        card
+      >
+        <Box display={"flex"} column justifyContent="space-around">
+          <Box centerText>
+            <Text fontSize={FONT_SIZES.X_LARGE} bold>
+              No Video Messages At This Time!
+            </Text>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 };
