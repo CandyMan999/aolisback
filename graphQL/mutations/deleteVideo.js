@@ -18,7 +18,7 @@ module.exports = {
       let senderNew;
       videos.map(async (video) => {
         const pastDue = moment(video.createdAt).isBefore(
-          moment().subtract(7, "days")
+          moment().subtract(1, "days")
         );
 
         if (pastDue) {
