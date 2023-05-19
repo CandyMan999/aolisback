@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { FETCH_ME } from "../../graphql/queries";
+import { DELETE_VIDEO_MUTATION } from "../../graphql/mutations";
 import { Box, Loading } from "../../components";
 import { useHistory } from "react-router-dom";
 import MessageContainer from "./MessageContainer.jsx";
@@ -31,6 +32,10 @@ const MessageCenter = () => {
     }
   }, [receivedVideos]);
 
+  useEffect(() => {
+    handleDeleteVideos();
+  }, []);
+
   const handleFetchMe = async () => {
     try {
       setLoading(true);
@@ -46,6 +51,14 @@ const MessageCenter = () => {
       setLoading(false);
     } catch (err) {
       setLoading(false);
+      console.log(err);
+    }
+  };
+
+  const handleDeleteVideos = async () => {
+    try {
+      await client.request(DELETE_VIDEO_MUTATION);
+    } catch (err) {
       console.log(err);
     }
   };

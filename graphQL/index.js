@@ -35,6 +35,7 @@ const {
   blockResolver,
   unBlockResolver,
   flagVideoResolver,
+  deleteVideoResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -74,6 +75,7 @@ const resolvers = {
     block: blockResolver,
     unBlock: unBlockResolver,
     flagVideo: flagVideoResolver,
+    deleteVideo: deleteVideoResolver,
   },
 };
 

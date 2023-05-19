@@ -14,6 +14,7 @@ const { videoChatRequestResolver } = require("./videoChatRequest");
 const { updateVideoChatRequestResolver } = require("./updateVideoChatRequest");
 const { blockResolver, unBlockResolver } = require("./block");
 const { flagVideoResolver } = require("./flagVideo");
+const { deleteVideoResolver } = require("./deleteVideo");
 
 module.exports = {
   createRoomResolver,
@@ -34,4 +35,5 @@ module.exports = {
   blockResolver,
   unBlockResolver,
   flagVideoResolver,
+  deleteVideoResolver,
 };

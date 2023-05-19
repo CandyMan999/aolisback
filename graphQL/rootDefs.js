@@ -179,6 +179,7 @@ module.exports = gql`
     block(userID: ID!, blockID: ID!): User
     unBlock(userID: ID!, blockID: ID!): User
     flagVideo(_id: ID!, flagged: Boolean!): Video
+    deleteVideo: User
   }
 
   type Subscription {
