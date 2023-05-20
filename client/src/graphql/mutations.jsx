@@ -374,8 +374,8 @@ mutation($_id: ID!, $flagged: Boolean!){
 `;
 
 export const DELETE_VIDEO_MUTATION = `
-mutation{
-  deleteVideo{
+mutation($_id: ID!){
+  deleteVideo(_id: $_id){
     _id
     url
     createdAt

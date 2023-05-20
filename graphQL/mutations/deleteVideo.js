@@ -13,8 +13,12 @@ cloudinary.config({
 
 module.exports = {
   deleteVideoResolver: async (root, args, ctx) => {
+    const { _id } = args;
     try {
-      const videos = await Video.find();
+      const videos = await Video.find({
+        $or: [{ sender: _id }, { receiver: _id }],
+      });
+
       const publicIDs = [];
       let senderNew;
       videos.map(async (video) => {

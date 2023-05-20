@@ -32,10 +32,6 @@ const MessageCenter = () => {
     }
   }, [receivedVideos]);
 
-  useEffect(() => {
-    handleDeleteVideos();
-  }, [currentUser.receivedVideos]);
-
   const handleFetchMe = async () => {
     try {
       setLoading(true);
@@ -44,7 +40,7 @@ const MessageCenter = () => {
       };
 
       const { fetchMe } = await client.request(FETCH_ME, variables);
-
+      await handleDeleteVideos(fetchMe._id);
       await setReceivedVideos(fetchMe.receivedVideos);
 
       await dispatch({ type: "LOGIN_USER", payload: fetchMe });
@@ -55,20 +51,21 @@ const MessageCenter = () => {
     }
   };
 
-  const handleDeleteVideos = async () => {
+  const handleDeleteVideos = async (_id) => {
     try {
-      const { deleteVideo } = await client.request(DELETE_VIDEO_MUTATION);
+      const variables = {
+        _id,
+      };
+      const { deleteVideo } = await client.request(
+        DELETE_VIDEO_MUTATION,
+        variables
+      );
       const sentVideos = await deleteVideo.filter(
         (video) => video.sender._id === currentUser._id
       );
       const receivedVideos = await deleteVideo.filter(
         (video) => video.receiver._id === currentUser._id
       );
-
-      console.log("dispatch video: ", "payload: ", {
-        sentVideos,
-        receivedVideos,
-      });
 
       await dispatch({
         type: "UPDATE_VIDEOS",
