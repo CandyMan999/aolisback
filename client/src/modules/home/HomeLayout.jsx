@@ -14,10 +14,10 @@ const HomeLayout = ({ state }) => {
       width="100vW"
       display="flex"
     >
-      {state &&
+      {/* {state &&
         state.currentUser &&
         !state.currentUser.username &&
-        range(4).map((index) => <FloatingHeart key={index} />)}
+        range(4).map((index) => <FloatingHeart key={index} />)} */}
 
       <ChatBox />
     </Box>

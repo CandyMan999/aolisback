@@ -1,44 +1,92 @@
 import React from "react";
 import { motion } from "framer-motion";
-import BlinkingDot from "./BlinkingDot";
+
 import { COLORS } from "../../constants";
 
 const OnlineDot = ({ online }) => {
-  const dotVariants = {
+  const outerDotVariants = {
     start: {
       scale: 1,
       opacity: 1,
-
+      boxShadow: `0px 0px 0px 0px ${COLORS.green}`,
       transition: {
-        duration: 0.4,
-        yoyo: Infinity,
+        duration: 1.5,
+        loop: Infinity,
       },
     },
     end: {
-      scale: 1.3,
-      opacity: 0.3,
-
+      scale: 1.5,
+      opacity: 0,
+      boxShadow: `0px 0px 20px 8px ${COLORS.green}`,
       transition: {
-        duration: 0.4,
-        yoyo: Infinity,
+        duration: 2.5,
+        loop: Infinity,
+      },
+    },
+  };
+
+  const ringOverlayVariants = {
+    start: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        duration: 1.5,
+        loop: Infinity,
+      },
+    },
+    end: {
+      scale: 3,
+      opacity: 0,
+      transition: {
+        duration: 2.5,
+        loop: Infinity,
       },
     },
   };
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <motion.div
+      <div
         style={{
           width: "10px",
           height: "10px",
           borderRadius: "50%",
-          backgroundColor: online ? COLORS.green : COLORS.red,
-          marginRight: "5px",
+          backgroundColor: COLORS.green,
+          margin: "4px",
         }}
-        variants={online ? dotVariants : {}}
-        initial="start"
-        animate={online ? "end" : {}}
-      />
+      >
+        <motion.div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            textAlign: "center",
+            alignItems: "center",
+            width: "10px",
+            height: "10px",
+            borderRadius: "50%",
+            backgroundColor: online ? COLORS.green : COLORS.red,
+            marginRight: "5px",
+          }}
+          variants={online ? outerDotVariants : {}}
+          initial="start"
+          animate={online ? "end" : {}}
+        >
+          {online && (
+            <motion.div
+              style={{
+                width: "7px",
+                height: "6px",
+                borderRadius: "50%",
+                border: `2px solid ${COLORS.green}`,
+              }}
+              variants={online ? ringOverlayVariants : {}}
+              initial="start"
+              animate={online ? "end" : {}}
+            />
+          )}
+        </motion.div>
+      </div>
+
       <motion.p
         style={{
           fontSize: "14px",
