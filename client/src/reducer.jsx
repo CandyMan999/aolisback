@@ -40,6 +40,11 @@ export default function reducer(state, { type, payload }) {
         ...state,
         currentUser: payload,
       };
+    case "UPDATE_VIDEOS":
+      return {
+        ...state,
+        currentUser: { ...state.currentUser, payload },
+      };
     case "UPDATE_BLOCKED":
       return {
         ...state,

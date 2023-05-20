@@ -34,7 +34,7 @@ const MessageCenter = () => {
 
   useEffect(() => {
     handleDeleteVideos();
-  }, []);
+  }, [currentUser.receivedVideos]);
 
   const handleFetchMe = async () => {
     try {
@@ -57,7 +57,23 @@ const MessageCenter = () => {
 
   const handleDeleteVideos = async () => {
     try {
-      await client.request(DELETE_VIDEO_MUTATION);
+      const { deleteVideo } = await client.request(DELETE_VIDEO_MUTATION);
+      const sentVideos = await deleteVideo.filter(
+        (video) => video.sender._id === currentUser._id
+      );
+      const receivedVideos = await deleteVideo.filter(
+        (video) => video.receiver._id === currentUser._id
+      );
+
+      console.log("dispatch video: ", "payload: ", {
+        sentVideos,
+        receivedVideos,
+      });
+
+      await dispatch({
+        type: "UPDATE_VIDEOS",
+        payload: { sentVideos, receivedVideos },
+      });
     } catch (err) {
       console.log(err);
     }

@@ -375,16 +375,20 @@ mutation($_id: ID!, $flagged: Boolean!){
 
 export const DELETE_VIDEO_MUTATION = `
 mutation{
-      deleteVideo{
+  deleteVideo{
+    _id
+    url
+    createdAt
+    flagged
+    publicId
+    sender{
+			_id
       username
-      sentVideos{
-        publicId
-        url
-      }
-      receivedVideos{
-        publicId
-        url
-      }
     }
+    receiver{
+      _id
+      username
+    }
+  }
  }
 `;

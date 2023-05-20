@@ -125,7 +125,7 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
         <Box width="100%" column>
           {!file ? (
             <Box width={320} height={440}>
-              <video ref={videoRef} style={{ height: 440, width: 320 }} />
+              <video ref={videoRef} style={{ height: 440, width: 320 }} muted />
               <Box position="absolute" bottom={0} width={320}>
                 {!recording ? (
                   <Button

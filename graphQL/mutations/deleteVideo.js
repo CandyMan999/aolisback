@@ -1,5 +1,6 @@
 const { AuthenticationError } = require("apollo-server");
 const { User, Video } = require("../../models");
+
 const cloudinary = require("cloudinary");
 const moment = require("moment");
 require("dotenv").config();
@@ -18,7 +19,7 @@ module.exports = {
       let senderNew;
       videos.map(async (video) => {
         const pastDue = moment(video.createdAt).isBefore(
-          moment().subtract(1, "days")
+          moment().subtract(7, "days")
         );
 
         if (pastDue) {
@@ -42,7 +43,7 @@ module.exports = {
         }
       });
       if (!!publicIDs.length) {
-        cloudinary.api.delete_resources(
+        await cloudinary.api.delete_resources(
           publicIDs,
           function (result) {
             console.log(result);
@@ -51,7 +52,26 @@ module.exports = {
         );
       }
 
-      return senderNew;
+      const updatedVideos = await Video.find().populate([
+        {
+          path: "sender",
+          model: "User",
+          populate: {
+            path: "pictures",
+            model: "Picture",
+          },
+        },
+        {
+          path: "receiver",
+          model: "User",
+          populate: {
+            path: "pictures",
+            model: "Picture",
+          },
+        },
+      ]);
+
+      return updatedVideos;
     } catch (err) {
       throw new AuthenticationError(err.message);
     }
