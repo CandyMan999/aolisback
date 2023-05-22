@@ -242,7 +242,7 @@ const Message = () => {
             </Button>
           </Box>
         </Box>
-        {state.showVideo && (
+        {/* {state.showVideo && (
           <VideoModal
             onClose={toggleModal}
             receiverID={senderID}
@@ -250,7 +250,7 @@ const Message = () => {
             state={state}
             mobile={mobile}
           />
-        )}
+        )} */}
         <Subscription
           subscription={CREATE_VIDEO_SUBSCRIPTION}
           onSubscriptionData={({ subscriptionData }) => {

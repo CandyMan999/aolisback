@@ -84,7 +84,7 @@ const SearchResults = ({
             />
           ))
         : handleComponent()}
-      {state.showVideo && (
+      {/* {state.showVideo && (
         <VideoModal
           onClose={toggleModal}
           receiverID={activeID}
@@ -92,7 +92,7 @@ const SearchResults = ({
           state={state}
           mobile={mobile}
         />
-      )}
+      )} */}
     </Box>
   );
 };
