@@ -96,13 +96,13 @@
   width: -webkit-fill-available;
   height: -webkit-fill-available;
   font-size: 15px;
-  border-top: 1px solid #69ffb4;
+  /* border-top: 1px solid #69ffb4;
   border-bottom: none;
-  
+   */
 }
 
 .new-room-form {
-  background: var(--secondary-color);
+  background: var(--main-color);
   color: var(--main-text-color);
   height: 100%;
 }
@@ -121,7 +121,7 @@
   width: 100%;
   font-size: 15px;
   
-  border-bottom: none;
+  /* border-bottom: none; */
   
 }
 .new-room-form form input:focus {
