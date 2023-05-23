@@ -35,3 +35,4 @@ export { default as RoomLink } from "./RoomLink";
 export { default as Picture } from "./Picture";
 export { default as BottomDrawer } from "./BottomDrawer";
 export { default as CompVideoUploader } from "./CompVideo";
+export { default as AnimatedHand } from "./AnimatedHand";

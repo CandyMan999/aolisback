@@ -58,8 +58,8 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch }) => {
           right: "20px",
           borderRadius: "50%",
           backgroundColor: COLORS.white,
-          height: "60px",
-          width: "60px",
+          height: "55px",
+          width: "55px",
           display: touched ? "none" : undefined,
         }}
       >
@@ -107,7 +107,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch }) => {
                 width: "100%",
                 borderBottom: "none",
                 borderRadius: "20px",
-                height: "30px",
+                height: "35px",
               }}
               fontSize={"10px"}
               value={roomName}

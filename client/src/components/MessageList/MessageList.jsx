@@ -1,10 +1,28 @@
 import React, { Component } from "react";
+import { motion } from "framer-motion";
 import Message from "./Message";
-import { Loading } from "../../components";
-
+import { Loading, AnimatedHand, Text, Box, FONT_SIZES } from "../../components";
 import ReactDOM from "react-dom";
 
 class MessageList extends Component {
+  constructor(props) {
+    super(props);
+    this.letters = [
+      "J",
+      "o",
+      "i",
+      "n",
+
+      "A",
+
+      "R",
+      "o",
+      "o",
+      "m",
+      <AnimatedHand />,
+    ];
+  }
+
   componentWillUpdate() {
     const node = ReactDOM.findDOMNode(this);
     this.shouldScrollToBottom =
@@ -26,15 +44,30 @@ class MessageList extends Component {
             <Loading ring size={"150px"} />
           ) : (
             <div className="join-a-room">
-              {" "}
-              Join a Room!{" "}
-              <span
-                style={{
-                  fontSize: "100px",
-                }}
-              >
-                &rarr;
-              </span>
+              {this.letters.map((letter, index) => {
+                console.log("index: ", index);
+                return (
+                  <motion.span
+                    key={index}
+                    style={{
+                      display: "inline-block",
+                      marginRight:
+                        index === 3 || index === 4 ? "10px" : undefined,
+                    }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                      transition: { delay: index * 0.2 },
+                    }}
+                    exit={{ opacity: 0, y: -20 }}
+                  >
+                    <Text bold fontSize={FONT_SIZES.XX_LARGE}>
+                      {letter}
+                    </Text>
+                  </motion.span>
+                );
+              })}
             </div>
           )}
         </div>
