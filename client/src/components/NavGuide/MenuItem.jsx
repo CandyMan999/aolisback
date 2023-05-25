@@ -34,13 +34,13 @@ const greys = [
 ].reverse();
 
 const teals = [
-  "#007070",
-  "#008f8f",
-  "#00a8a8",
-  "#00c2c2",
-  "#00dbdb",
-  "#00f5f5",
-  "#BBF1F1",
+  "#6bccf9",
+  "#88d3f5",
+  "#a5dbf2",
+  "#c2e2ee",
+  "#dff0eb",
+  "#fcf7e7",
+  "#ffffff",
 ];
 // const reds = [
 //   COLORS.secondary,

@@ -67,8 +67,8 @@ const RoomList = ({
               room.users && room.users.length ? room.users.length : 0;
             return (
               <Button
-                borderTop={active && `solid 2px ${COLORS.themeGreen}`}
-                borderBottom={active && `solid 2px ${COLORS.themeGreen}`}
+                borderTop={active && `solid 2px ${COLORS.vividBlue}`}
+                borderBottom={active && `solid 2px ${COLORS.vividBlue}`}
                 key={room._id}
                 borderRadius={"50%"}
                 display="flex"
@@ -99,20 +99,31 @@ const RoomList = ({
                   </Box>
                 ) : (
                   <Text
-                    color={active ? COLORS.themeGreen : COLORS.lightGrey}
+                    color={active ? COLORS.vividBlue : COLORS.lightGrey}
                     textShadow={active && `-2px 2px 3px ${COLORS.textRed}`}
                     className="userNumber"
+                    fontSize={mobile ? undefined : FONT_SIZES.X_LARGE}
                     width={"100%"}
                     bold
                   >
                     {room.name}
                   </Text>
                 )}
-                <Box position="absolute" top={-9} right={0}>
+                <Box
+                  position="absolute"
+                  top={-11}
+                  right={-7}
+                  border={`solid 1px ${COLORS.white}`}
+                  backgroundColor={active ? COLORS.vividBlue : COLORS.lightGrey}
+                  borderRadius={"50%"}
+                  minWidth={20}
+                  padding={3}
+                  justifyContent="center"
+                >
                   <Text
                     margin={0}
-                    color={active ? COLORS.themeGreen : COLORS.lightGrey}
-                    textShadow={active && `-2px 2px 3px ${COLORS.textRed}`}
+                    color={active ? COLORS.black : COLORS.grey}
+                    // textShadow={active && `-2px 1px 1px ${COLORS.black}`}
                     className="userNumber"
                     fontSize={FONT_SIZES.X_LARGE}
                     width={"100%"}
