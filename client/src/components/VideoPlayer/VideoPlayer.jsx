@@ -19,23 +19,14 @@ const VideoPlayer = ({
     const videoPlayer = cloudinaryRef.current.videoPlayer(videoRef.current, {
       cloud_name: "localmassagepros",
     });
-    videoPlayer.on("play", () => {
-      const onTouchStart = () => {};
 
-      videoRef.current.addEventListener("touchstart", onTouchStart);
+    videoPlayer.on("play", () => {
       if (fullScreen) {
         videoPlayer.maximize();
       }
+    });
 
-      // Cleanup touchstart event listener on unmount
-      return () => {
-        videoRef.current.removeEventListener("touchstart", onTouchStart);
-      };
-    });
     videoPlayer.on("ended", () => {
-      videoPlayer.exitMaximize();
-    });
-    videoPlayer.on("pause", () => {
       videoPlayer.exitMaximize();
     });
   }, []);
