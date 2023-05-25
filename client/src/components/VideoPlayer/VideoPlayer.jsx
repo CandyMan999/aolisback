@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const VideoPlayer = ({
   publicId,
@@ -31,6 +31,12 @@ const VideoPlayer = ({
       return () => {
         videoRef.current.removeEventListener("touchstart", onTouchStart);
       };
+    });
+    videoPlayer.on("ended", () => {
+      videoPlayer.exitMaximize();
+    });
+    videoPlayer.on("pause", () => {
+      videoPlayer.exitMaximize();
     });
   }, []);
 

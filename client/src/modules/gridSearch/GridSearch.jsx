@@ -10,7 +10,6 @@ const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
 
   return (
     <Box
-      // justifyContent={mobile ? "" : "space-around"}
       height={"calc(100vH - 60px)"}
       width="100%"
       maxHeight={1066}
@@ -18,13 +17,12 @@ const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
       paddingBottom={mobile ? 100 : undefined}
     >
       <Box
-        // className={!!therapists.length ? gridStyle(mobile) : ""}
         style={{ display: "grid", margin: "20px" }}
         width="100%"
         height="fit-content"
         justifyContent="space-around"
         paddingBottom={"10%"}
-        card
+        card={mobile ? false : true}
       >
         {!!currentUser.username ? (
           <SearchResults
