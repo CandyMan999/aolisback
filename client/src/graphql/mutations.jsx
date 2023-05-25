@@ -182,6 +182,9 @@ mutation($_id: ID!, $intro: String, $age: String, $sex: Sex, $occupation: String
       lat
       lng
     }
+    blockedUsers{
+      _id  
+    }
       intro
       sex
       age

@@ -65,10 +65,12 @@ const CreateProfile = () => {
         variables
       );
 
+      console.log("create: ", createProfile);
+
       if (createProfile) {
+        await dispatch({ type: "UPDATE_USER", payload: createProfile });
         setSpinner(false);
         setSuccess(true);
-        dispatch({ type: "UPDATE_USER", payload: createProfile });
       }
     } catch (err) {
       setSpinner(false);
@@ -111,12 +113,8 @@ const CreateProfile = () => {
 
   return (
     <Fragment>
-      {success && <Redirect to="/" />}
-
-      {spinner ? (
-        <Box center height={"100vh"}>
-          <Loading grid color={COLORS.themeGreen} size={60} />
-        </Box>
+      {false ? (
+        <Loading fade size={150} />
       ) : (
         <ProfileProgress me={currentUser}>
           {({ completedCounts, totalCounts }) => {
@@ -160,6 +158,8 @@ const CreateProfile = () => {
                   completed={completedCounts.myDetails}
                   total={totalCounts.myDetails}
                   mobile={mobile}
+                  submitted={success}
+                  loading={spinner}
                 />
               </Box>
             );

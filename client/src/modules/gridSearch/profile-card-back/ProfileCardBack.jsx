@@ -36,7 +36,8 @@ const ProfileCardBack = ({
     setBlocked();
   }, [currentUser.sentVideos]);
 
-  const handleMessage = () => {
+  const handleMessage = async () => {
+    await dispatch({ type: "UPDATE_PROFILE", payload: user });
     openModal();
   };
 

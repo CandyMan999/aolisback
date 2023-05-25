@@ -32,7 +32,7 @@ module.exports = {
           kids,
         },
         { new: true }
-      ).populate("pictures");
+      ).populate(["pictures", "blockedUsers"]);
 
       return profile;
     } catch (err) {

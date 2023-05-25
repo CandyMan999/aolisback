@@ -8,6 +8,7 @@ import {
   Icon,
   ICON_SIZES,
   Button,
+  Loading,
 } from "../../../components";
 
 import { COLORS } from "../../../constants";
@@ -21,9 +22,16 @@ const MyDetails = ({
   total,
   completed,
   mobile,
+  submitted,
+  loading,
 }) => {
   return (
-    <CollapsableHeader title={"My Details"} total={total} completed={completed}>
+    <CollapsableHeader
+      title={"My Details"}
+      total={total}
+      completed={completed}
+      onClose={submitted}
+    >
       <Box column width={"100%"} height={"100%"}>
         <Formik
           onSubmit={handleSubmit}
@@ -186,16 +194,20 @@ const MyDetails = ({
                       }
                       style={{ zIndex: 100, width: "100%" }}
                     >
-                      {props.values.sex === "" ||
-                      props.values.kids === "" ||
-                      props.values.drink === "" ||
-                      props.values.drugs === "" ||
-                      props.values.smoke === "" ||
-                      props.values.marijuana === ""
-                        ? "Missing Values"
-                        : total === completed
-                        ? "Update"
-                        : "Submit"}
+                      {loading ? (
+                        <Loading bar color={COLORS.themeGreen} />
+                      ) : props.values.sex === "" ||
+                        props.values.kids === "" ||
+                        props.values.drink === "" ||
+                        props.values.drugs === "" ||
+                        props.values.smoke === "" ||
+                        props.values.marijuana === "" ? (
+                        "Missing Values"
+                      ) : total === completed ? (
+                        "Update"
+                      ) : (
+                        "Submit"
+                      )}
                     </Button>
                   </Box>
                 </Box>

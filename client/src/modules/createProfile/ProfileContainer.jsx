@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { FETCH_ME } from "../../graphql/queries";
 
 import CreateProfile from "./CreateProfile";
@@ -29,7 +29,7 @@ const ProfileContainer = (props) => {
     dispatch({ type: "UPDATE_USER", payload: fetchMe });
   };
 
-  return !currentUser ? (
+  return !currentUser.username ? (
     <Box
       position="absolute"
       top="50%"
@@ -42,16 +42,16 @@ const ProfileContainer = (props) => {
       <Loading fade />
     </Box>
   ) : (
-    <Box>
-      {!!currentUser.username && (
-        <CreateProfile
-          client={client}
-          dispatch={dispatch}
-          currentUser={currentUser}
-          mobile={mobile}
-        />
-      )}
-    </Box>
+    <Fragment>
+      (
+      <CreateProfile
+        client={client}
+        dispatch={dispatch}
+        currentUser={currentUser}
+        mobile={mobile}
+      />
+      )
+    </Fragment>
   );
 };
 

@@ -45,7 +45,6 @@ class MessageList extends Component {
           ) : (
             <div className="join-a-room">
               {this.letters.map((letter, index) => {
-                console.log("index: ", index);
                 return (
                   <motion.span
                     key={index}

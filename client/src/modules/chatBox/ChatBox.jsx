@@ -119,6 +119,7 @@ const ChatBox = ({}) => {
     try {
       const { findUser } = await client.request(FIND_USER_QUERY, variables);
       // setUserClicked(findUser);
+      console.log("find User: ", findUser);
       await dispatch({ type: "UPDATE_PROFILE", payload: findUser });
       dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
     } catch (err) {

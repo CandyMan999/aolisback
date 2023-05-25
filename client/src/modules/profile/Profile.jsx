@@ -32,6 +32,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const [userBlocked, setUserBlocked] = useState(false);
   const [loading, setLoading] = useState(false);
   let user = userClicked ? userClicked : currentUser;
+  const itsMe = userClicked._id === currentUser._id;
 
   const {
     username,
@@ -59,23 +60,31 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   }, [state.isProfile]);
 
   const handleImBlocked = () => {
-    setImBlocked(false);
+    try {
+      setImBlocked(false);
 
-    user.blockedUsers.find((user) => {
-      if (user._id === currentUser._id) {
-        return setImBlocked(true);
-      }
-    });
+      user.blockedUsers.find((user) => {
+        if (user._id === currentUser._id) {
+          return setImBlocked(true);
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleUserBlocked = () => {
-    setUserBlocked(false);
+    try {
+      setUserBlocked(false);
 
-    currentUser.blockedUsers.find((user) => {
-      if (user._id === _id) {
-        return setUserBlocked(true);
-      }
-    });
+      currentUser.blockedUsers.find((user) => {
+        if (user._id === _id) {
+          return setUserBlocked(true);
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const toggleDrawer = () => {
@@ -105,10 +114,14 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   };
 
   const handleLocation = (_id, location) => {
-    const payload = { _id, location };
-    dispatch({ type: "VIEW_LOCATION", payload });
-    dispatch({ type: "TOGGLE_PROFILE", payload: false });
-    history.push("/location");
+    try {
+      const payload = { _id, location };
+      dispatch({ type: "VIEW_LOCATION", payload });
+      dispatch({ type: "TOGGLE_PROFILE", payload: false });
+      history.push("/location");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleUnBlock = async () => {
@@ -137,8 +150,12 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   };
 
   const handleSendVideoMessage = () => {
-    dispatch({ type: "TOGGLE_PROFILE", payload: false });
-    toggleModal();
+    try {
+      dispatch({ type: "TOGGLE_PROFILE", payload: false });
+      toggleModal();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -348,12 +365,15 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 : handleVideoChatRequest
             }
             disabled={
-              // (!isLoggedIn && !userBlocked) ||
-              (imBlocked && !userBlocked) || loading
+              (imBlocked && !userBlocked) ||
+              loading ||
+              state.showChatRequest ||
+              itsMe
             }
             color={
-              // (!isLoggedIn && !userBlocked) ||
-              imBlocked && !userBlocked ? COLORS.lightGrey : COLORS.red
+              (imBlocked && !userBlocked) || state.showChatRequest || itsMe
+                ? COLORS.lightGrey
+                : COLORS.red
             }
             width="100%"
           >
@@ -361,7 +381,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               <Loading bar />
             ) : (
               <Text margin={0} bold>
-                {userBlocked
+                {itsMe
+                  ? "Send Video Message"
+                  : userBlocked
                   ? `UnBlock  ${username}`
                   : imBlocked
                   ? `You're Blocked`
