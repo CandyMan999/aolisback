@@ -168,6 +168,7 @@ const ChatBox = () => {
         rooms={rooms}
         currentUser={currentUser}
         loading={loading}
+        mobile={mobile}
       />
       <MessageList
         usernameClick={usernameClick}

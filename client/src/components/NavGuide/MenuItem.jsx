@@ -82,7 +82,7 @@ export const MenuItem = ({
     if (item === "My Video Channel") {
       toggle();
     }
-    if (item === "Home") {
+    if (item === "Chat Rooms") {
       toggle();
     }
     if (item === "View Users Locations") {

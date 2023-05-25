@@ -1,10 +1,25 @@
 import React, { useContext } from "react";
-import { Box, Text, Loading } from "../../components";
+import {
+  Box,
+  Text,
+  Loading,
+  Button,
+  FONT_SIZES,
+  Icon,
+  ICON_SIZES,
+} from "../../components";
 import { COLORS } from "../../constants";
 
 import Context from "../../context";
 
-const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
+const RoomList = ({
+  rooms,
+  roomId,
+  currentUser,
+  subscribeToRoom,
+  loading,
+  mobile,
+}) => {
   const { state, dispatch } = useContext(Context);
 
   const handleIsLoggedIn = async () => {
@@ -19,20 +34,55 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
 
   return (
     <div className="rooms-list" onClick={() => handleIsLoggedIn()}>
-      <ul>
-        <h3>Rooms:</h3>
+      <Box display="flex" column width="100%" alignItems="center">
+        <Box
+          width={"100%"}
+          justifyContent="space-around"
+          display="flex"
+          alignItems="center"
+        >
+          <Text
+            bold
+            margin={0}
+            fontSize={mobile ? FONT_SIZES.LARGE : FONT_SIZES.XXX_LARGE}
+            style={{
+              textShadow:
+                "-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white",
+            }}
+          >
+            Rooms
+          </Text>
+          <Icon
+            style={{ margin: 0 }}
+            size={mobile ? ICON_SIZES.XX_LARGE : ICON_SIZES.XXX_LARGE}
+            color={COLORS.white}
+            name="chat"
+          />
+        </Box>
+
         {rooms &&
           rooms.map((room) => {
             const active = roomId === room._id ? "active" : "";
             const numberOfUsers =
               room.users && room.users.length ? room.users.length : 0;
             return (
-              <Box
+              <Button
                 borderTop={active && `solid 2px ${COLORS.themeGreen}`}
                 borderBottom={active && `solid 2px ${COLORS.themeGreen}`}
                 key={room._id}
+                borderRadius={"50%"}
                 display="flex"
+                color={active ? COLORS.black : COLORS.grey}
+                style={{
+                  position: "relative",
+                  overflowWrap: "break-word",
+                  boxShadow: active
+                    ? `3px 3px 8px 2px white`
+                    : `3px 3px 8px 2px rgba(0, 0, 0, 0.3)`,
+                }}
+                justifyContent="center"
                 isDisabled={loading}
+                height={80}
                 width={"100%"}
                 onClick={
                   !loading
@@ -43,22 +93,38 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                     : undefined
                 }
               >
-                <Text
-                  color={active ? COLORS.themeGreen : COLORS.lightGrey}
-                  textShadow={active && `-2px 2px 3px ${COLORS.textRed}`}
-                  className="userNumber"
-                  width={"100%"}
-                >
-                  {active && loading ? (
+                {active && loading ? (
+                  <Box height={45} width="100%">
                     <Loading bar />
-                  ) : (
-                    `${room.name}: Online ${numberOfUsers}`
-                  )}
-                </Text>
-              </Box>
+                  </Box>
+                ) : (
+                  <Text
+                    color={active ? COLORS.themeGreen : COLORS.lightGrey}
+                    textShadow={active && `-2px 2px 3px ${COLORS.textRed}`}
+                    className="userNumber"
+                    width={"100%"}
+                    bold
+                  >
+                    {room.name}
+                  </Text>
+                )}
+                <Box position="absolute" top={-9} right={0}>
+                  <Text
+                    margin={0}
+                    color={active ? COLORS.themeGreen : COLORS.lightGrey}
+                    textShadow={active && `-2px 2px 3px ${COLORS.textRed}`}
+                    className="userNumber"
+                    fontSize={FONT_SIZES.X_LARGE}
+                    width={"100%"}
+                    bold
+                  >
+                    {numberOfUsers}
+                  </Text>
+                </Box>
+              </Button>
             );
           })}
-      </ul>
+      </Box>
     </div>
   );
 };

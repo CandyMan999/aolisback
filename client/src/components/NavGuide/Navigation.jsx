@@ -20,7 +20,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
     { name: "User Signup", icon: "signup", route: "/" },
     { name: "Message Center", icon: "videoMessage", route: "/message-center" },
     { name: "View Users Locations", icon: "search", route: "/location" },
-    { name: "Home", icon: "home", route: "/" },
+    { name: "Chat Rooms", icon: "chat", route: "/" },
     { name: "Browse Users", icon: "browseLogo", route: "/grid-search" },
     { name: "Logout", icon: "signout", route: "/" },
   ]);
@@ -28,7 +28,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
   useEffect(() => {
     if (!!currentUser && !!currentUser.username) {
       setItems([
-        { name: "Home", icon: "home", route: "/" },
+        { name: "Chat Rooms", icon: "chat", route: "/" },
         { name: "My Profile", icon: "user", route: "/profile" },
         {
           name: "Message Center",

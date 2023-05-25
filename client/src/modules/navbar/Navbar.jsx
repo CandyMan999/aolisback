@@ -102,7 +102,7 @@ const Navbar = ({ props }) => {
           color={COLORS.vividBlue}
           onClick={handleOpenProfile}
         >
-          <Text margin={2} fontSize={FONT_SIZES.SMALL}>
+          <Text bold margin={2} fontSize={FONT_SIZES.SMALL}>
             Welcome, {currentUser.username}
           </Text>
 
