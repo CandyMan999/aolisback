@@ -43,14 +43,12 @@ const ProfileContainer = (props) => {
     </Box>
   ) : (
     <Fragment>
-      (
       <CreateProfile
         client={client}
         dispatch={dispatch}
         currentUser={currentUser}
         mobile={mobile}
       />
-      )
     </Fragment>
   );
 };
