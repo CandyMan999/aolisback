@@ -72,9 +72,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 <!-- TODO -->
 
 <!-- Forgot Password -->
-<!-- make videos auto delete after 7 days -->
+
 <!-- protect route -->
 
 <!-- new video messages, cloudinary event -->
-<!-- Logout on get users -->
+
 <!-- URL change -->

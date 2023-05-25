@@ -117,6 +117,8 @@ const RoomList = ({
                   backgroundColor={active ? COLORS.vividBlue : COLORS.lightGrey}
                   borderRadius={"50%"}
                   minWidth={20}
+                  minHeight={20}
+                  alignItems="center"
                   padding={3}
                   justifyContent="center"
                 >
@@ -125,7 +127,7 @@ const RoomList = ({
                     color={active ? COLORS.black : COLORS.grey}
                     // textShadow={active && `-2px 1px 1px ${COLORS.black}`}
                     className="userNumber"
-                    fontSize={FONT_SIZES.X_LARGE}
+                    fontSize={mobile ? FONT_SIZES.SMALL : FONT_SIZES.X_LARGE}
                     width={"100%"}
                     bold
                   >
