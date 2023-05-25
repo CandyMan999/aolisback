@@ -8,17 +8,35 @@ class MessageList extends Component {
   constructor(props) {
     super(props);
     this.letters = [
-      "J",
-      "o",
-      "i",
-      "n",
+      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
+        J
+      </Text>,
+      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
+        o
+      </Text>,
+      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
+        i
+      </Text>,
+      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
+        n
+      </Text>,
 
-      "A",
+      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
+        A
+      </Text>,
 
-      "R",
-      "o",
-      "o",
-      "m",
+      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
+        R
+      </Text>,
+      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
+        o
+      </Text>,
+      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
+        o
+      </Text>,
+      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
+        m
+      </Text>,
       <AnimatedHand />,
     ];
   }
@@ -43,7 +61,16 @@ class MessageList extends Component {
           {this.props.loading ? (
             <Loading ring size={"150px"} />
           ) : (
-            <div className="join-a-room">
+            <div
+              className="join-a-room"
+              style={{
+                position:
+                  this.props.mobile && !this.props.createInput
+                    ? "absolute"
+                    : undefined,
+                top: "20%",
+              }}
+            >
               {this.letters.map((letter, index) => {
                 return (
                   <motion.span
@@ -61,9 +88,7 @@ class MessageList extends Component {
                     }}
                     exit={{ opacity: 0, y: -20 }}
                   >
-                    <Text bold fontSize={FONT_SIZES.XX_LARGE}>
-                      {letter}
-                    </Text>
+                    {letter}
                   </motion.span>
                 );
               })}

@@ -25,18 +25,17 @@ import {
   CREATE_COMMENT_SUBSCRIPTION,
 } from "../../graphql/subscriptions";
 
-import Profile from "../profile";
 import { useClient } from "../../client";
 import Context from "../../context";
 
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-const ChatBox = ({}) => {
+const ChatBox = () => {
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const [messages, setMessages] = useState([]);
   const [rooms, setRooms] = useState([]);
-  // const [roomId, setRoomId] = useState("");
+  const [createInput, setCreateInput] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const mobile = useMediaQuery("(max-width: 650px)");
@@ -157,6 +156,10 @@ const ChatBox = ({}) => {
     }
   };
 
+  const handleSetCreateInput = (input) => {
+    setCreateInput(input);
+  };
+
   return (
     <Wrapper style={{ width: "100vW" }}>
       <RoomList
@@ -172,12 +175,15 @@ const ChatBox = ({}) => {
         messages={messages}
         currentUser={!!currentUser && currentUser._id}
         loading={loading}
+        mobile={mobile}
+        createInput={createInput}
       />
 
       <CreateRoom
         createRoom={createRoom}
         currentUserID={!!currentUser && currentUser._id}
         dispatch={dispatch}
+        setCreateInput={handleSetCreateInput}
       />
 
       <SendMessage

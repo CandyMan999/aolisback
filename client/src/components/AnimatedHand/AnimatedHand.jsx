@@ -6,7 +6,7 @@ import { COLORS } from "../../constants";
 const AnimatedHand = () => {
   return (
     <motion.div
-      style={{ position: "relative" }}
+      // style={{ position: "relative" }}
       animate={{
         scale: [1, 2, 2, 1, 1],
         rotate: [0, 0, 720, 720, 0],

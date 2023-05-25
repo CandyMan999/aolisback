@@ -3,7 +3,13 @@ import { Box, Icon, ICON_SIZES } from "../../components";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
 
-const CreateRoom = ({ currentUserID, createRoom, dispatch }) => {
+const CreateRoom = ({
+  currentUserID,
+  createRoom,
+  dispatch,
+  createInput,
+  setCreateInput,
+}) => {
   const [roomName, setRoomName] = useState("");
   const [touched, setTouched] = useState(false);
 
@@ -26,6 +32,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch }) => {
     if (!currentUserID) {
       dispatch({ type: "TOGGLE_SIGNUP", payload: true });
     } else {
+      setCreateInput(!createInput);
       setTouched(!touched);
     }
   };
@@ -51,13 +58,14 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch }) => {
     >
       <Box
         onClick={handleIsLoggedIn}
+        border={`solid 1px ${COLORS.white}`}
         boxShadow={`1px 1px 1px 2px rgba(0, 0, 0, 0.2)`}
         style={{
           position: "absolute",
           bottom: "20px",
           right: "20px",
           borderRadius: "50%",
-          backgroundColor: COLORS.white,
+          backgroundColor: COLORS.black,
           height: "55px",
           width: "55px",
           display: touched ? "none" : undefined,
@@ -68,7 +76,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch }) => {
             onClick={() => setTouched(false)}
             name="pencil"
             size={ICON_SIZES.X_LARGE}
-            color={COLORS.grey}
+            color={COLORS.white}
           />
         </Box>
       </Box>
@@ -84,49 +92,51 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch }) => {
       >
         {touched && (
           <form onSubmit={handleSubmit}>
-            <Box
-              position="absolute"
-              top={-12}
-              left={-12}
-              backgroundColor={COLORS.white}
-              border={`solid 1px ${COLORS.grey}`}
-              boxShadow={`1px 1px 1px 2px rgba(0, 0, 0, 0.2)`}
-              borderRadius={"50%"}
-              padding={3}
-            >
-              <Icon
-                onClick={() => setTouched(false)}
-                name="close"
-                size={ICON_SIZES.MEDIUM}
-                color={COLORS.grey}
-              />
-            </Box>
-
-            <input
-              style={{
-                width: "100%",
-                borderBottom: "none",
-                borderRadius: "20px",
-                height: "35px",
-              }}
-              fontSize={"10px"}
-              value={roomName}
-              onChange={handleChange}
-              type="text"
-              placeholder="Create Room"
-              required
-            />
-
-            {!!roomName.length && (
-              <Box position="absolute" right={4} top={3}>
+            <Box position="absolute" bottom={-20} width="100%">
+              <Box
+                position="absolute"
+                top={-12}
+                left={-12}
+                backgroundColor={COLORS.black}
+                border={`solid 1px ${COLORS.white}`}
+                boxShadow={`1px 1px 1px 2px rgba(0, 0, 0, 0.2)`}
+                borderRadius={"50%"}
+                padding={3}
+              >
                 <Icon
-                  onClick={handleSubmit}
-                  name="send"
-                  size={ICON_SIZES.X_LARGE}
-                  color={COLORS.vividBlue}
+                  onClick={handleIsLoggedIn}
+                  name="close"
+                  size={ICON_SIZES.MEDIUM}
+                  color={COLORS.white}
                 />
               </Box>
-            )}
+
+              <input
+                style={{
+                  width: "100%",
+                  borderBottom: "none",
+                  borderRadius: "20px",
+                  height: "35px",
+                }}
+                fontSize={"10px"}
+                value={roomName}
+                onChange={handleChange}
+                type="text"
+                placeholder="Create Room"
+                required
+              />
+
+              {!!roomName.length && (
+                <Box position="absolute" right={4} top={5}>
+                  <Icon
+                    onClick={handleSubmit}
+                    name="send"
+                    size={ICON_SIZES.X_LARGE}
+                    color={COLORS.vividBlue}
+                  />
+                </Box>
+              )}
+            </Box>
           </form>
         )}
       </motion.div>

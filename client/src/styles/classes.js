@@ -2,7 +2,7 @@ import { css } from "@emotion/css";
 import { COLORS } from "../constants";
 
 export const navbar = css`
-  background: ${COLORS.darkestGrey};
+  background: ${COLORS.black};
   height: 60px;
   display: flex;
   flex: 1;
