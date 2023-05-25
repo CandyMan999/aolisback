@@ -65,8 +65,6 @@ const CreateProfile = () => {
         variables
       );
 
-      console.log("create: ", createProfile);
-
       if (createProfile) {
         await dispatch({ type: "UPDATE_USER", payload: createProfile });
         setSpinner(false);
