@@ -10,6 +10,7 @@ const VideoPlayer = ({
   borderRadius,
   fullScreen,
 }) => {
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const cloudinaryRef = useRef();
   const videoRef = useRef();
 
@@ -22,18 +23,18 @@ const VideoPlayer = ({
 
     videoPlayer.on("play", () => {
       if (fullScreen) {
-        videoPlayer.fluid();
         videoPlayer.maximize();
       }
     });
 
     videoPlayer.on("fullscreenchange", () => {
-      const maxView = videoPlayer.isMaximized();
-      if (!maxView) {
-        videoPlayer.exitMaximize();
-        videoPlayer.fluid();
-      }
+      const isMaximized = videoPlayer.isMaximized();
+      setIsFullscreen(isMaximized);
     });
+
+    return () => {
+      videoPlayer.exitMaximize();
+    };
   }, []);
 
   return (
@@ -41,11 +42,11 @@ const VideoPlayer = ({
       key={publicId}
       ref={videoRef}
       data-cld-public-id={publicId}
-      data-cld-fluid={fullScreen}
-      width={width}
-      height={height}
+      width={isFullscreen ? "100%" : width}
+      height={isFullscreen ? "100%" : height}
+      data-cld-fluid={isFullscreen ? "true" : undefined}
       controls={controls}
-      style={{ borderRadius: borderRadius ? borderRadius : undefined }} // Add border radius
+      style={{ borderRadius: borderRadius ? borderRadius : undefined }}
       {...props}
     />
   );
