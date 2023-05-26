@@ -84,9 +84,7 @@ const Navbar = ({ props }) => {
             fontSize={FONT_SIZES.X_LARGE}
             bold
           >
-            {currentUser && currentUser.username
-              ? "LoveChat"
-              : "LoveAtFirstChat"}
+            GoneChatting
           </Text>
         </NavLink>
       </Box>

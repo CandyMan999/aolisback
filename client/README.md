@@ -76,5 +76,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 <!-- protect route -->
 
 <!-- new video messages, cloudinary event -->
-
+<!-- agreement terms of service -->
 <!-- URL change -->
