@@ -22,14 +22,17 @@ const VideoPlayer = ({
 
     videoPlayer.on("play", () => {
       if (fullScreen) {
+        videoPlayer.fluid();
         videoPlayer.maximize();
-        // document.body.style.overflow = "hidden";
       }
     });
 
-    videoPlayer.on("ended", () => {
-      // videoPlayer.exitMaximize();
-      // document.body.style.overflow = "hidden";
+    videoPlayer.on("fullscreenchange", () => {
+      const maxView = videoPlayer.isMaximized();
+      if (!maxView) {
+        videoPlayer.exitMaximize();
+        videoPlayer.fluid();
+      }
     });
   }, []);
 
@@ -38,6 +41,7 @@ const VideoPlayer = ({
       key={publicId}
       ref={videoRef}
       data-cld-public-id={publicId}
+      data-cld-fluid={fullScreen}
       width={width}
       height={height}
       controls={controls}
