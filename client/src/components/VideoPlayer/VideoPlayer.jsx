@@ -23,13 +23,13 @@ const VideoPlayer = ({
     videoPlayer.on("play", () => {
       if (fullScreen) {
         videoPlayer.maximize();
-        document.body.style.overflow = "hidden";
+        // document.body.style.overflow = "hidden";
       }
     });
 
     videoPlayer.on("ended", () => {
-      videoPlayer.exitMaximize();
-      document.body.style.overflow = "hidden";
+      // videoPlayer.exitMaximize();
+      // document.body.style.overflow = "hidden";
     });
   }, []);
 

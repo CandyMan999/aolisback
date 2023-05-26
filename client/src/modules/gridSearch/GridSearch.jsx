@@ -14,6 +14,7 @@ const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
       width="100%"
       maxHeight={1066}
       // flexWrap={mobile ? "wrap" : ""}
+      overflowY="scroll"
       paddingBottom={mobile ? 100 : undefined}
     >
       <Box
