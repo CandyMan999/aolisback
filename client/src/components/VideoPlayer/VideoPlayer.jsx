@@ -10,9 +10,9 @@ const VideoPlayer = ({
   borderRadius,
   fullScreen,
 }) => {
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const cloudinaryRef = useRef();
   const videoRef = useRef();
+  const containerRef = useRef();
 
   useEffect(() => {
     if (cloudinaryRef.current) return;
@@ -21,16 +21,20 @@ const VideoPlayer = ({
       cloud_name: "localmassagepros",
     });
 
+    const resetContainerDimensions = () => {
+      if (containerRef.current && !videoPlayer.isMaximized()) {
+        containerRef.current.style.width = width;
+        containerRef.current.style.height = height;
+      }
+    };
+
     videoPlayer.on("play", () => {
       if (fullScreen) {
         videoPlayer.maximize();
       }
     });
 
-    videoPlayer.on("fullscreenchange", () => {
-      const isMaximized = videoPlayer.isMaximized();
-      setIsFullscreen(isMaximized);
-    });
+    videoPlayer.on("fullscreenchange", resetContainerDimensions);
 
     return () => {
       videoPlayer.exitMaximize();
@@ -38,17 +42,25 @@ const VideoPlayer = ({
   }, []);
 
   return (
-    <video
-      key={publicId}
-      ref={videoRef}
-      data-cld-public-id={publicId}
-      width={isFullscreen ? "100%" : width}
-      height={isFullscreen ? "100%" : height}
-      data-cld-fluid={isFullscreen ? "true" : undefined}
-      controls={controls}
-      style={{ borderRadius: borderRadius ? borderRadius : undefined }}
-      {...props}
-    />
+    <div
+      ref={containerRef}
+      style={{
+        width: width,
+        height: height,
+        borderRadius: borderRadius ? borderRadius : undefined,
+        overflow: "hidden",
+      }}
+    >
+      <video
+        key={publicId}
+        ref={videoRef}
+        data-cld-public-id={publicId}
+        width={width}
+        height={height}
+        controls={controls}
+        {...props}
+      />
+    </div>
   );
 };
 
