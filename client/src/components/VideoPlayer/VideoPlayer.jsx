@@ -12,7 +12,6 @@ const VideoPlayer = ({
 }) => {
   const cloudinaryRef = useRef();
   const videoRef = useRef();
-  const containerRef = useRef();
 
   useEffect(() => {
     if (cloudinaryRef.current) return;
@@ -21,20 +20,30 @@ const VideoPlayer = ({
       cloud_name: "localmassagepros",
     });
 
-    const resetContainerDimensions = () => {
-      if (containerRef.current && !videoPlayer.isMaximized()) {
-        containerRef.current.style.width = width;
-        containerRef.current.style.height = height;
-      }
-    };
-
     videoPlayer.on("play", () => {
       if (fullScreen) {
         videoPlayer.maximize();
       }
     });
+    videoPlayer.on("fullscreenchange", () => {
+      const maxView = videoPlayer.isMaximized();
+      if (!maxView) {
+        resetVideoDimensions(); // Reset video dimensions after closing
+        videoPlayer.exitMaximize();
+      }
+    });
 
-    videoPlayer.on("fullscreenchange", resetContainerDimensions);
+    const resetVideoDimensions = () => {
+      const videoElement = videoPlayer.el();
+      if (videoElement) {
+        videoElement.style.width = ""; // Reset width
+        videoElement.style.height = "";
+        videoElement.style.overflow = "hidden";
+
+        videoElement.style.className =
+          "video-js vjs_video_738-dimensions vjs-controls-enabled vjs-workinghover vjs-v7 cld-video-player cld-video-player-vjs_video_738 cld-video-player-skin-dark vjs-contextmenu vjs-context-menu vjs-http-source-selector vjs-has-started vjs-paused vjs-ended vjs-user-inactive";
+      }
+    };
 
     return () => {
       videoPlayer.exitMaximize();
@@ -42,25 +51,16 @@ const VideoPlayer = ({
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        width: width,
-        height: height,
-        borderRadius: borderRadius ? borderRadius : undefined,
-        overflow: "hidden",
-      }}
-    >
-      <video
-        key={publicId}
-        ref={videoRef}
-        data-cld-public-id={publicId}
-        width={width}
-        height={height}
-        controls={controls}
-        {...props}
-      />
-    </div>
+    <video
+      key={publicId}
+      ref={videoRef}
+      data-cld-public-id={publicId}
+      width={width}
+      height={height}
+      controls={controls}
+      style={{ borderRadius: borderRadius ? borderRadius : undefined }} // Add border radius
+      {...props}
+    />
   );
 };
 
