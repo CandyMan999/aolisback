@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 import axios from "axios";
-import { Loading, Text, Button, Box } from "..";
+import { Loading, Text, Button, Box, Icon, ICON_SIZES } from "..";
 import Context from "../../context";
 import { COLORS } from "../../constants";
 import { useClient } from "../../client";
@@ -133,6 +133,11 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
                     onClick={startRecording}
                     disabled={submitting || recording}
                   >
+                    <Icon
+                      name="record"
+                      size={ICON_SIZES.LARGE}
+                      color={COLORS.white}
+                    />
                     <Text bold center>
                       Record Video
                     </Text>

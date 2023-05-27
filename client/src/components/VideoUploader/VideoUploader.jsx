@@ -93,6 +93,7 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
                 left: 70,
               }}
             />
+
             <Text bold center>
               Record Video
             </Text>

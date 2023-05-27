@@ -13,10 +13,9 @@ const VideoPlayer = ({
   const cloudinaryRef = useRef();
   const videoRef = useRef();
 
-  const isChromeMobile =
-    /CriOS|iPhone/.test(navigator.userAgent) &&
-    !/Safari/.test(navigator.userAgent) &&
-    mobile;
+  const isChromeMobile = /CriOS|iPhone/.test(navigator.userAgent);
+  // !/Safari/.test(navigator.userAgent) &&
+  // mobile;
 
   useEffect(() => {
     if (cloudinaryRef.current) return;
@@ -26,6 +25,7 @@ const VideoPlayer = ({
     });
 
     videoPlayer.on("play", () => {
+      console.log("chrome: ", isChromeMobile, navigator.userAgent);
       if (fullScreen && !isChromeMobile) {
         videoPlayer.maximize();
       }
