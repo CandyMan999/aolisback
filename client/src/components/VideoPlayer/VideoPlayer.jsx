@@ -15,7 +15,7 @@ const VideoPlayer = ({
 
   const isChromeMobile =
     /CriOS|iPhone/.test(navigator.userAgent) &&
-    /Chrome/.test(navigator.userAgent) &&
+    !/Safari/.test(navigator.userAgent) &&
     mobile;
 
   useEffect(() => {

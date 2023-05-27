@@ -11,7 +11,7 @@ const BackDrop = ({ onClose, mobile }) => {
       left={0}
       background="rgba(0,0,0,0.3)"
       zIndex={100}
-      // onClick={mobile ? undefined : onClose}
+      onClick={mobile ? undefined : onClose}
     />
   );
 };
