@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Box } from "../../components";
 
 const VideoPlayer = ({
   publicId,
@@ -12,6 +13,7 @@ const VideoPlayer = ({
 }) => {
   const cloudinaryRef = useRef();
   const videoRef = useRef();
+  const isChrome = /Chrome/.test(navigator.userAgent);
 
   useEffect(() => {
     if (cloudinaryRef.current) return;
@@ -21,17 +23,36 @@ const VideoPlayer = ({
     });
 
     videoPlayer.on("play", () => {
-      if (fullScreen) {
+      if (fullScreen && (!isChrome || !mobile)) {
         videoPlayer.maximize();
+      } else if (fullScreen && isChrome && mobile) {
+        mobileDimensions();
       }
     });
+
     videoPlayer.on("fullscreenchange", () => {
       const maxView = videoPlayer.isMaximized();
-      if (!maxView) {
-        resetVideoDimensions(); // Reset video dimensions after closing
+      if (!maxView && (!isChrome || !mobile)) {
         videoPlayer.exitMaximize();
+      } else if (isChrome && mobile) {
+        resetVideoDimensions();
       }
     });
+
+    const mobileDimensions = () => {
+      const videoElement = videoPlayer.el();
+      if (videoElement) {
+        videoElement.style.width = "100vw"; // Reset width
+        videoElement.style.height = "100vh";
+        videoElement.style.position = "absolute";
+        videoElement.style.top = 0;
+        videoElement.style.left = "-20px";
+        videoElement.style.justifyContent = "center";
+        videoElement.style.alignItems = "center";
+        videoElement.style.overflow = "hidden";
+        videoElement.style.zIndex = 3000;
+      }
+    };
 
     const resetVideoDimensions = () => {
       const videoElement = videoPlayer.el();
@@ -39,9 +60,6 @@ const VideoPlayer = ({
         videoElement.style.width = ""; // Reset width
         videoElement.style.height = "";
         videoElement.style.overflow = "hidden";
-
-        videoElement.style.className =
-          "video-js vjs_video_738-dimensions vjs-controls-enabled vjs-workinghover vjs-v7 cld-video-player cld-video-player-vjs_video_738 cld-video-player-skin-dark vjs-contextmenu vjs-context-menu vjs-http-source-selector vjs-has-started vjs-paused vjs-ended vjs-user-inactive";
       }
     };
 
@@ -51,6 +69,7 @@ const VideoPlayer = ({
   }, []);
 
   return (
+    // <Box key={`${publicId}-container`} height={"auto"} width="auto">
     <video
       key={publicId}
       ref={videoRef}
@@ -61,6 +80,7 @@ const VideoPlayer = ({
       style={{ borderRadius: borderRadius ? borderRadius : undefined }} // Add border radius
       {...props}
     />
+    // </Box>
   );
 };
 
