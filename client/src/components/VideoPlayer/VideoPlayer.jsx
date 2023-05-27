@@ -13,9 +13,9 @@ const VideoPlayer = ({
   const cloudinaryRef = useRef();
   const videoRef = useRef();
 
-  const isChromeMobile = /CriOS|iPhone/.test(navigator.userAgent);
-  // !/Safari/.test(navigator.userAgent) &&
-  // mobile;
+  const isChromeMobile =
+    // /CriOS|iPhone/.test(navigator.userAgent) &&
+    !/Safari/.test(navigator.userAgent) && mobile;
 
   useEffect(() => {
     if (cloudinaryRef.current) return;
