@@ -47,9 +47,18 @@ const VideoPlayer = ({
         element = document.fullscreenElement.id;
       } else {
         const videoElement = document.getElementById(element);
-        console.log("!!: ", videoElement);
 
         if (videoElement) {
+          if (videoElement) {
+            // Reset width and height
+            videoElement.style.width = "";
+            videoElement.style.height = "";
+
+            // Reset any other properties that need to be restored
+
+            // Reset class name
+            videoElement.className = `video-js vjs-paused ${element}-dimensions vjs-controls-enabled vjs-touch-enabled vjs-workinghover vjs-v7 vjs-user-active cld-video-player cld-video-player-${element} cld-video-player-skin-dark vjs-contextmenu vjs-context-menu vjs-http-source-selector`;
+          }
           if (videoElement.exitFullscreen) {
             videoElement
               .exitFullscreen()
