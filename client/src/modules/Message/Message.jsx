@@ -44,14 +44,6 @@ const Message = () => {
     }
   }, [senderID, currentUser]);
 
-  useEffect(() => {
-    if (!!openReport) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [openReport]);
-
   const setBlocked = async (data) => {
     setIsBlocked(false);
 

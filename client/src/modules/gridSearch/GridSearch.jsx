@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { Box, Text, Wrapper, Loading } from "../../components";
+import React from "react";
+import { Box, Loading } from "../../components";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { css } from "@emotion/css";
+
 import SearchResults from "./search-results/SearchResults";
-import VideoModal from "./video-modal";
 
 const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
   const mobile = useMediaQuery("(max-width: 740px)");
@@ -41,19 +40,5 @@ const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
     </Box>
   );
 };
-
-const gridStyle = (mobile) =>
-  css({
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr",
-    justifyItems: "center",
-    paddingBottom: "0px",
-    marginBottom: "0px",
-    maxHeight: mobile ? undefined : "1220px",
-    overflowY: !mobile ? "scroll" : undefined,
-    "@media (max-width: 1180px)": {
-      gridTemplateColumns: "1fr 1fr",
-    },
-  });
 
 export default GridSearch;

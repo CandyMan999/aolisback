@@ -13,7 +13,6 @@ const HomeLayout = ({ state }) => {
       height={height - 64}
       width="100vW"
       display="flex"
-      style={{ overflow: "hidden" }}
     >
       {/* {state &&
         state.currentUser &&

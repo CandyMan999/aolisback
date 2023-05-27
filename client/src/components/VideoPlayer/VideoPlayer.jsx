@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { Box } from "../../components";
+import { useEffect, useRef } from "react";
 
 const VideoPlayer = ({
   publicId,
@@ -17,7 +16,6 @@ const VideoPlayer = ({
   const isChromeMobile =
     /CriOS|iPhone/.test(navigator.userAgent) &&
     /Chrome/.test(navigator.userAgent) &&
-    !/Android/.test(navigator.userAgent) &&
     mobile;
 
   useEffect(() => {
