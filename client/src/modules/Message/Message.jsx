@@ -44,7 +44,6 @@ const Message = () => {
     }
   }, [senderID, currentUser]);
 
-  console.log("mobile: ", mobile);
   useEffect(() => {
     if (!!openReport) {
       document.body.style.overflow = "hidden";

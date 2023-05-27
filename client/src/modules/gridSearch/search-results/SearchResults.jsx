@@ -100,16 +100,34 @@ const SearchResults = ({
 const gridStyle = (mobile) =>
   css({
     // display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+    gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
     justifyItems: "center",
     paddingBottom: "0px",
     marginBottom: "0px",
     maxHeight: mobile ? undefined : "1220px",
     overflowY: !mobile ? "scroll" : undefined,
-    "@media (max-width: 1180px)": {
+    "@media (max-width: 1757px)": {
+      gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
+    },
+    "@media (max-width: 1589px)": {
+      gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
+    },
+    "@media (max-width: 1412px)": {
+      gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr",
+    },
+    "@media (max-width: 1245px)": {
+      gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr",
+    },
+    "@media (max-width: 1090px)": {
+      gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+    },
+    "@media (max-width: 907px)": {
+      gridTemplateColumns: "1fr 1fr 1fr 1fr",
+    },
+    "@media (max-width: 743px)": {
       gridTemplateColumns: "1fr 1fr 1fr",
     },
-    "@media (max-width: 840px)": {
+    "@media (max-width: 543px)": {
       gridTemplateColumns: "1fr 1fr",
     },
     "::-webkit-scrollbar": {

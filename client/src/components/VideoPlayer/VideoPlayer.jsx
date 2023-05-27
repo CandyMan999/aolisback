@@ -12,7 +12,6 @@ const VideoPlayer = ({
 }) => {
   const cloudinaryRef = useRef();
   const videoRef = useRef();
-  const isChrome = /CriOS|Android.*Chrome/.test(navigator.userAgent);
 
   useEffect(() => {
     if (cloudinaryRef.current) return;
@@ -22,56 +21,15 @@ const VideoPlayer = ({
     });
 
     videoPlayer.on("play", () => {
-      if (fullScreen && (!isChrome || !mobile)) {
-        videoPlayer.maximize();
-      } else if (fullScreen && isChrome && mobile) {
-        mobileDimensions();
-      }
+      videoPlayer.maximize();
     });
 
     videoPlayer.on("fullscreenchange", () => {
       const maxView = videoPlayer.isMaximized();
-      if (!maxView && (!isChrome || !mobile)) {
+      if (!maxView) {
         videoPlayer.exitMaximize();
-      } else if (isChrome && mobile) {
-        resetVideoDimensions();
       }
     });
-
-    const mobileDimensions = () => {
-      const videoElement = videoPlayer.el();
-      if (videoElement) {
-        videoElement.style.width = "100vw"; // Reset width
-        videoElement.style.height = "100vh";
-        videoElement.style.position = "absolute";
-        videoElement.style.top = 0;
-        videoElement.style.left = "-20px";
-        videoElement.style.justifyContent = "center";
-        videoElement.style.alignItems = "center";
-        videoElement.style.overflow = "hidden";
-        videoElement.style.zIndex = 3000;
-      }
-    };
-
-    const resetVideoDimensions = () => {
-      const videoElement = videoPlayer.el();
-      if (videoElement) {
-        videoElement.style.width = ""; // Reset width
-        videoElement.style.height = "";
-        videoElement.style.overflow = "hidden";
-        videoElement.style.position = "";
-        videoElement.style.top = "";
-        videoElement.style.left = "";
-        videoElement.style.justifyContent = "";
-        videoElement.style.alignItems = "";
-        videoElement.style.overflow = "";
-        videoElement.style.zIndex = "";
-      }
-    };
-
-    return () => {
-      videoPlayer.exitMaximize();
-    };
   }, []);
 
   return (

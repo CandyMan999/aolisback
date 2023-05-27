@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   BLOCK_USER_MUTATION,
@@ -139,41 +139,39 @@ const BottomDrawer = ({
   };
 
   return (
-    <Fragment>
-      <motion.div
-        animate={{
-          height: !isOpen ? 0 : "30vh",
-          background: !isOpen ? "rgba(0,0,0,0.0)" : "rgba(0,0,0,0.3)",
-        }}
-        transition={{ ease: "linear", duration: 0.7 }}
-        style={drawerStyle(isOpen)}
-      >
-        <Box column width="100%" alignItems="center" paddingBottom={2}>
-          {mounted &&
-            BUTTONS.map((button, index) => (
-              <Button
-                key={index}
-                width={"90%"}
-                color={button.color}
-                style={{
-                  marginTop: button.marginTop,
-                  marginBottom: button.marginBottom,
-                  borderBottom: button.borderBottom,
-                  boxShadow: button.boxShadow,
-                }}
-                onClick={button.onClick}
-              >
-                <Box width="100%" justifyContent="center" display="flex">
-                  {button.icon}
-                  <Text bold color={button.textColor}>
-                    {button.name}
-                  </Text>
-                </Box>
-              </Button>
-            ))}
-        </Box>
-      </motion.div>
-    </Fragment>
+    <motion.div
+      animate={{
+        height: !isOpen ? 0 : "30vh",
+        background: !isOpen ? "rgba(0,0,0,0.0)" : "rgba(0,0,0,0.3)",
+      }}
+      transition={{ ease: "linear", duration: 0.7 }}
+      style={drawerStyle(isOpen)}
+    >
+      <Box column width="100%" alignItems="center" paddingBottom={2}>
+        {mounted &&
+          BUTTONS.map((button, index) => (
+            <Button
+              key={index}
+              width={"90%"}
+              color={button.color}
+              style={{
+                marginTop: button.marginTop,
+                marginBottom: button.marginBottom,
+                borderBottom: button.borderBottom,
+                boxShadow: button.boxShadow,
+              }}
+              onClick={button.onClick}
+            >
+              <Box width="100%" justifyContent="center" display="flex">
+                {button.icon}
+                <Text bold color={button.textColor}>
+                  {button.name}
+                </Text>
+              </Box>
+            </Button>
+          ))}
+      </Box>
+    </motion.div>
   );
 };
 
