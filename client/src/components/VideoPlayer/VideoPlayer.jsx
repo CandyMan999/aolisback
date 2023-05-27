@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Box } from "../../components";
 
 const VideoPlayer = ({
   publicId,
@@ -12,7 +13,8 @@ const VideoPlayer = ({
 }) => {
   const cloudinaryRef = useRef();
   const videoRef = useRef();
-  let element;
+
+  const isChromeMobile = /CriOS|Android.*Chrome/.test(navigator.userAgent);
 
   useEffect(() => {
     if (cloudinaryRef.current) return;
@@ -22,7 +24,7 @@ const VideoPlayer = ({
     });
 
     videoPlayer.on("play", () => {
-      if (fullScreen) {
+      if (fullScreen && !isChromeMobile) {
         videoPlayer.maximize();
       }
     });
@@ -31,85 +33,22 @@ const VideoPlayer = ({
       const maxView = videoPlayer.isMaximized();
       if (!maxView) {
         videoPlayer.exitMaximize();
-
-        document
-          .exitFullscreen()
-          .then(() => console.log("Document Exited from Full screen mode"))
-          .catch((err) => console.error(err));
       }
     });
-
-    function fullscreenchanged(event) {
-      if (document.fullscreenElement) {
-        console.log(
-          `Element: ${document.fullscreenElement.id} entered fullscreen mode.`
-        );
-        element = document.fullscreenElement.id;
-      } else {
-        const videoElement = document.getElementById(element);
-
-        if (videoElement) {
-          if (videoElement) {
-            // Reset width and height
-            videoElement.style.width = "";
-            videoElement.style.height = "";
-
-            // Reset any other properties that need to be restored
-
-            // Reset class name
-            videoElement.className = `video-js vjs-paused ${element}-dimensions vjs-controls-enabled vjs-touch-enabled vjs-workinghover vjs-v7 vjs-user-active cld-video-player cld-video-player-${element} cld-video-player-skin-dark vjs-contextmenu vjs-context-menu vjs-http-source-selector`;
-          }
-          if (videoElement.exitFullscreen) {
-            videoElement
-              .exitFullscreen()
-              .then(() => console.log("Document Exited from Full screen mode"))
-              .catch((err) => console.error(err));
-          } else if (videoElement.mozCancelFullScreen) {
-            videoElement
-              .mozCancelFullScreen()
-              .then(() => console.log("Document Exited from Full screen mode"))
-              .catch((err) => console.error(err));
-          } else if (videoElement.webkitExitFullscreen) {
-            videoElement
-              .webkitExitFullscreen()
-              .then(() => console.log("Document Exited from Full screen mode"))
-              .catch((err) => console.error(err));
-          } else if (videoElement.msExitFullscreen) {
-            videoElement
-              .msExitFullscreen()
-              .then(() => console.log("Document Exited from Full screen mode"))
-              .catch((err) => console.error(err));
-          }
-        }
-
-        if (document.exitFullscreen) {
-          document
-            .exitFullscreen()
-            .then(() => console.log("Document Exited from Full screen mode"))
-            .catch((err) => console.error(err));
-        } else if (document.mozCancelFullScreen) {
-          document
-            .mozCancelFullScreen()
-            .then(() => console.log("Document Exited from Full screen mode"))
-            .catch((err) => console.error(err));
-        } else if (document.webkitExitFullscreen) {
-          document
-            .webkitExitFullscreen()
-            .then(() => console.log("Document Exited from Full screen mode"))
-            .catch((err) => console.error(err));
-        } else if (document.msExitFullscreen) {
-          document
-            .msExitFullscreen()
-            .then(() => console.log("Document Exited from Full screen mode"))
-            .catch((err) => console.error(err));
-        }
-      }
-    }
-
-    document.addEventListener("fullscreenchange", fullscreenchanged);
   }, []);
 
-  return (
+  return isChromeMobile && !fullScreen ? (
+    <video
+      key={publicId}
+      ref={videoRef}
+      data-cld-public-id={publicId}
+      width={width}
+      height={250}
+      controls={controls}
+      style={{ borderRadius: borderRadius ? borderRadius : undefined }} // Add border radius
+      {...props}
+    />
+  ) : (
     <video
       key={publicId}
       ref={videoRef}

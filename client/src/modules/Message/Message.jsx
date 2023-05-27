@@ -216,6 +216,7 @@ const Message = () => {
                       publicId={video.publicId}
                       controls={true}
                       height={100}
+                      width={"auto"}
                       borderRadius={"10px"}
                       fullScreen={true}
                       mobile={mobile}
