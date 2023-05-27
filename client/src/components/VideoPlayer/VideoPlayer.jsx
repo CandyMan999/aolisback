@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { browserName, isIOS } from "react-device-detect";
 
 const VideoPlayer = ({
   publicId,
@@ -13,7 +14,7 @@ const VideoPlayer = ({
   const cloudinaryRef = useRef();
   const videoRef = useRef();
 
-  const isChromeMobile = true;
+  const isChromeMobile = isIOS && browserName === "Chrome" && mobile;
 
   useEffect(() => {
     if (cloudinaryRef.current) return;
