@@ -14,7 +14,11 @@ const VideoPlayer = ({
   const cloudinaryRef = useRef();
   const videoRef = useRef();
 
-  const isChromeMobile = /CriOS|Android.*Chrome/.test(navigator.userAgent);
+  const isChromeMobile =
+    /CriOS|iPhone/.test(navigator.userAgent) &&
+    /Chrome/.test(navigator.userAgent) &&
+    !/Android/.test(navigator.userAgent) &&
+    mobile;
 
   useEffect(() => {
     if (cloudinaryRef.current) return;
@@ -37,7 +41,7 @@ const VideoPlayer = ({
     });
   }, []);
 
-  return isChromeMobile && !fullScreen ? (
+  return isChromeMobile ? (
     <video
       key={publicId}
       ref={videoRef}
