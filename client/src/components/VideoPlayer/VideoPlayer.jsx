@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Box } from "../../components";
 
 const VideoPlayer = ({
   publicId,
@@ -60,6 +59,13 @@ const VideoPlayer = ({
         videoElement.style.width = ""; // Reset width
         videoElement.style.height = "";
         videoElement.style.overflow = "hidden";
+        videoElement.style.position = "";
+        videoElement.style.top = "";
+        videoElement.style.left = "";
+        videoElement.style.justifyContent = "";
+        videoElement.style.alignItems = "";
+        videoElement.style.overflow = "";
+        videoElement.style.zIndex = "";
       }
     };
 

@@ -16,7 +16,7 @@ import {
 } from "../../components";
 import { COLORS } from "../../constants";
 import { useHistory, useLocation } from "react-router-dom";
-import VideoModal from "../gridSearch/video-modal";
+
 import { useClient } from "../../client";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -44,6 +44,7 @@ const Message = () => {
     }
   }, [senderID, currentUser]);
 
+  console.log("mobile: ", mobile);
   useEffect(() => {
     if (!!openReport) {
       document.body.style.overflow = "hidden";
@@ -218,6 +219,7 @@ const Message = () => {
                       height={100}
                       borderRadius={"10px"}
                       fullScreen={true}
+                      mobile={mobile}
                     />
 
                     <Text center bold margin={0}>
