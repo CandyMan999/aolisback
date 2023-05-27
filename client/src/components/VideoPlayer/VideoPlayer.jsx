@@ -12,7 +12,7 @@ const VideoPlayer = ({
 }) => {
   const cloudinaryRef = useRef();
   const videoRef = useRef();
-  const isChrome = /Chrome/.test(navigator.userAgent);
+  const isChrome = /CriOS|Android.*Chrome/.test(navigator.userAgent);
 
   useEffect(() => {
     if (cloudinaryRef.current) return;
