@@ -87,21 +87,21 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
               boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
             }}
           >
-            <input
-              type="file"
-              accept="video/*"
-              capture="user"
-              placeholder="Take Video"
-              onChange={handleFileChange}
-              style={{
-                position: "absolute",
-                opacity: 0,
-                top: 30,
-                left: 70,
-              }}
-            />
-
             <Box justifyContent="center">
+              <input
+                type="file"
+                accept="video/*"
+                capture="user"
+                placeholder="Take Video"
+                onChange={handleFileChange}
+                style={{
+                  position: "absolute",
+                  opacity: 0,
+                  top: 15,
+                  left: 50,
+                }}
+              />
+
               <Icon
                 name="record"
                 size={ICON_SIZES.X_LARGE}
