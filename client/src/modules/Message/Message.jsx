@@ -14,6 +14,8 @@ import {
   Picture,
   BottomDrawer,
 } from "../../components";
+
+import VideoModal from "../../modules/gridSearch/video-modal";
 import { COLORS } from "../../constants";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -123,7 +125,13 @@ const Message = () => {
     <Loading fade size={100} />
   ) : (
     groupedReceived && !!groupedReceived.length && (
-      <Fragment>
+      <Box
+        display="flex"
+        column
+        minHeight={"90vh"}
+        width="100%"
+        justifyContent="space-between"
+      >
         <Box
           display="flex"
           justifyContent="space-around"
@@ -173,7 +181,7 @@ const Message = () => {
           margin={20}
           justifyContent="space-around"
           height={"auto"}
-          minHeight={"60vH"}
+          // minHeight={"60vH"}
           width="auto"
           column
         >
@@ -231,20 +239,33 @@ const Message = () => {
                 </Box>
               );
             })}
-          <Box width="100%">
-            <Button disabled={isBlocked} width="100%" onClick={toggleModal}>
-              {isBlocked ? (
-                <Box justifyContent={"center"} width={"100%"}>
-                  <Icon name="block" size={ICON_SIZES.LARGE} />{" "}
-                  <Text>Blocked</Text>
-                </Box>
-              ) : (
-                `Reply`
-              )}
-            </Button>
-          </Box>
         </Box>
-        {/* {state.showVideo && (
+        <Box width="100%">
+          <Button
+            disabled={isBlocked}
+            width="100%"
+            onClick={toggleModal}
+            style={{
+              borderBottom: `solid 2px ${COLORS.grey}`,
+              boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+            }}
+          >
+            {isBlocked ? (
+              <Box justifyContent={"center"} width={"100%"}>
+                <Icon name="block" size={ICON_SIZES.LARGE} />{" "}
+                <Text fontSize={FONT_SIZES.LARGE} bold>
+                  Blocked
+                </Text>
+              </Box>
+            ) : (
+              <Text fontSize={FONT_SIZES.LARGE} bold>
+                Reply
+              </Text>
+            )}
+          </Button>
+        </Box>
+
+        {state.showVideo && location.pathname === "/message" && (
           <VideoModal
             onClose={toggleModal}
             receiverID={senderID}
@@ -252,7 +273,7 @@ const Message = () => {
             state={state}
             mobile={mobile}
           />
-        )} */}
+        )}
         <Subscription
           subscription={CREATE_VIDEO_SUBSCRIPTION}
           onSubscriptionData={({ subscriptionData }) => {
@@ -298,7 +319,7 @@ const Message = () => {
           blockID={senderID}
           blockedUsers={currentUser.blockedUsers}
         />
-      </Fragment>
+      </Box>
     )
   );
 };

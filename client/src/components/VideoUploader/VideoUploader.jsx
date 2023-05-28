@@ -1,6 +1,6 @@
-import React, { Fragment, useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { Loading, Text, Button, Box } from "..";
+import { Loading, Text, Button, Box, Icon, ICON_SIZES } from "..";
 import Context from "../../context";
 import { COLORS } from "../../constants";
 import { useClient } from "../../client";
@@ -79,7 +79,14 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
         <Loading ring size={150} />
       ) : (
         <Box width="100%" column>
-          <Button width={"200px"} disabled={submitting}>
+          <Button
+            width={"200px"}
+            disabled={submitting}
+            style={{
+              borderBottom: `solid 2px ${COLORS.grey}`,
+              boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+            }}
+          >
             <input
               type="file"
               accept="video/*"
@@ -94,9 +101,16 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
               }}
             />
 
-            <Text bold center>
-              Record Video
-            </Text>
+            <Box justifyContent="center">
+              <Icon
+                name="record"
+                size={ICON_SIZES.X_LARGE}
+                color={COLORS.white}
+              />
+              <Text bold center>
+                Record Video
+              </Text>
+            </Box>
           </Button>
           {file && (
             <Box display="flex" justifyContent="center">

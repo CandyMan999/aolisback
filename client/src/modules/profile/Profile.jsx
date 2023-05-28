@@ -17,7 +17,7 @@ import moment from "moment";
 import VideoModal from "../../modules/gridSearch/video-modal";
 
 import Context from "../../context";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useClient } from "../../client";
 import {
   VIDEO_CHAT_REQUEST,
@@ -27,6 +27,7 @@ import {
 const Profile = ({ userClicked, mobile, currentUser }) => {
   const client = useClient();
   let history = useHistory();
+  const { pathname } = useLocation();
   const { state, dispatch } = useContext(Context);
   const [imBlocked, setImBlocked] = useState(false);
   const [userBlocked, setUserBlocked] = useState(false);
@@ -408,7 +409,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           </Button>
         </Box>
       </Drawer>
-      {state.showVideo && (
+      {state.showVideo && pathname !== "/message" && (
         <VideoModal
           onClose={toggleModal}
           receiverID={_id}

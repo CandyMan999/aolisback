@@ -132,15 +132,21 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
                     width={"100%"}
                     onClick={startRecording}
                     disabled={submitting || recording}
+                    style={{
+                      borderBottom: `solid 2px ${COLORS.grey}`,
+                      boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+                    }}
                   >
-                    <Icon
-                      name="record"
-                      size={ICON_SIZES.LARGE}
-                      color={COLORS.white}
-                    />
-                    <Text bold center>
-                      Record Video
-                    </Text>
+                    <Box justifyContent="center">
+                      <Icon
+                        name="record"
+                        size={ICON_SIZES.X_LARGE}
+                        color={COLORS.white}
+                      />
+                      <Text bold center>
+                        Record Video
+                      </Text>
+                    </Box>
                   </Button>
                 ) : (
                   <Button
@@ -148,6 +154,10 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
                     onClick={stopRecording}
                     disabled={submitting}
                     color={COLORS.red}
+                    style={{
+                      borderBottom: `solid 2px ${COLORS.grey}`,
+                      boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+                    }}
                   >
                     <Text bold center>
                       Stop Recording
