@@ -128,7 +128,7 @@ const Message = () => {
       <Box
         display="flex"
         column
-        minHeight={"90vh"}
+        minHeight={"80vh"}
         width="100%"
         justifyContent="space-between"
       >

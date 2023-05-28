@@ -14,6 +14,7 @@ import {
 } from "../../graphql/mutations";
 import { useClient } from "../../client";
 import { useHistory } from "react-router-dom";
+import notification from "../../sounds/notification.mp3";
 
 const RequestModal = ({
   dispatch,
@@ -29,7 +30,15 @@ const RequestModal = ({
 
   useEffect(() => {
     handleStatus(status);
+
+    playSound();
   }, [status]);
+
+  const playSound = () => {
+    const audio = new Audio(notification);
+
+    audio.play();
+  };
 
   const handleStatus = (action) => {
     switch (action) {
