@@ -30,8 +30,9 @@ const RequestModal = ({
 
   useEffect(() => {
     handleStatus(status);
-
-    playSound();
+    if (currentUser._id !== sender._id && status === "Pending") {
+      playSound();
+    }
   }, [status]);
 
   const playSound = () => {
