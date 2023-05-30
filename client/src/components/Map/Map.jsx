@@ -10,9 +10,9 @@ import {
   Icon,
   ICON_SIZES,
   Text,
-  Button,
   RoomLink,
   OnlineDot,
+  Picture,
 } from "../../components";
 import { COLORS } from "../../constants";
 
@@ -91,10 +91,10 @@ const Map = ({ zoom, width, height }) => {
     });
   };
 
-  const handleVideoLink = async (username) => {
-    await dispatch({ type: "JOIN_CHANNEL", payload: username });
-    history.push("/video");
-  };
+  // const handleVideoLink = async (username) => {
+  //   await dispatch({ type: "JOIN_CHANNEL", payload: username });
+  //   history.push("/video");
+  // };
 
   const handleSetProfile = async (user) => {
     await dispatch({ type: "UPDATE_PROFILE", payload: user });
@@ -139,7 +139,7 @@ const Map = ({ zoom, width, height }) => {
                 />
               </Marker>
               {popup.id && popup.id === user._id ? (
-                <Box width="100%" display="flex">
+                <Box width="100%" display="flex" zIndex={100}>
                   <Popup
                     key={user._id + i + "1"}
                     anchor="bottom"
@@ -152,67 +152,29 @@ const Map = ({ zoom, width, height }) => {
                     <Text bold fontSize={FONT_SIZES.X_LARGE} margin={0} center>
                       {user.username}
                     </Text>
-                    {user.pictures.length && (
-                      <Box
-                        onClick={() => handleSetProfile(user)}
-                        justifyContent="center"
-                      >
-                        <Box
-                          justifyContent="center"
-                          style={{
-                            backgroundColor: "black",
-                            borderRadius: "5px",
-                            width: "90%",
-                          }}
-                        >
-                          {user.pictures[0].publicId ? (
-                            <CloudinaryContext cloudName="localmassagepros">
-                              <Image
-                                alt={`${user.pictures[0]._id}-avatar`}
-                                style={{
-                                  height: "96px",
-                                  width: "auto",
-                                }}
-                                loading="lazy"
-                                publicId={user.pictures[0].publicId}
-                              >
-                                <Transformation
-                                  height={"96"}
-                                  width={"auto"}
-                                  crop="thumb"
-                                />
-                              </Image>
-                            </CloudinaryContext>
-                          ) : (
-                            <img
-                              style={{
-                                height: "96px",
-                                width: "auto",
-                              }}
-                              className={"classes.popupImage"}
-                              src={user.pictures[0].url}
-                              alt={"popup.title"}
-                            />
-                          )}
-                        </Box>
-                      </Box>
-                    )}
-                    <Button
-                      size="small"
-                      fontSize={FONT_SIZES.X_SMALL}
-                      width="90%"
-                      paddingX={0}
-                      style={{ marginLeft: "5%" }}
-                      disabled={!user.isLoggedIn}
-                      color={
-                        !user.isLoggedIn ? COLORS.lighterGrey : COLORS.black
-                      }
-                      onClick={() => handleVideoLink(user.username)}
+                    <Box
+                      onClick={() => handleSetProfile(user)}
+                      justifyContent="center"
+                      marginBottom={20}
                     >
-                      <Text margin={0} bold color={COLORS.themeGreen}>
-                        {user.username}'s Video Channel
-                      </Text>
-                    </Button>
+                      <Box
+                        justifyContent="center"
+                        style={{
+                          backgroundColor: "black",
+                          borderRadius: "5px",
+                          width: "fit-content",
+                          padding: 10,
+                        }}
+                      >
+                        <Picture
+                          profilePic={user.pictures[0]}
+                          name={user.username}
+                          height={"120px"}
+                          width={120}
+                        />
+                      </Box>
+                    </Box>
+
                     {!!user.room && user.isLoggedIn && user.room.name && (
                       <RoomLink dispatch={dispatch} user={user} />
                     )}
