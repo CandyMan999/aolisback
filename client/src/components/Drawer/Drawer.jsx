@@ -6,7 +6,7 @@ import { Box, BackDrop, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
 
 const Drawer = ({ isOpen, onClose, children }) => {
-  const mobile = useMediaQuery("(max-width: 650px)");
+  const mobile = useMediaQuery("(max-width: 770px)");
 
   return (
     <Fragment>
@@ -37,7 +37,12 @@ const Drawer = ({ isOpen, onClose, children }) => {
           />
         </Box>
         {isOpen && (
-          <Box column width="100%" justifyContent="center">
+          <Box
+            column
+            width="100%"
+            justifyContent="center"
+            minHeight={"fit-content"}
+          >
             {children}
           </Box>
         )}
