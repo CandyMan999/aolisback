@@ -358,7 +358,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             width="auto"
             justifyContent="space-between"
             style={{
-              borderBottom: `solid 2px ${COLORS.lighterGrey}`,
+              // borderBottom: `solid 2px ${COLORS.lighterGrey}`,
               paddingBottom: "4px",
             }}
             paddingY={5}
@@ -413,7 +413,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     : imBlocked
                     ? `You're Blocked`
                     : !isLoggedIn
-                    ? `Send ${username} Video Message`
+                    ? `Send Video Message`
                     : `Video Chat with ${username}`}
                 </Text>
               )}

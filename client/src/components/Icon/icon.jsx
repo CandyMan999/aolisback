@@ -27,7 +27,7 @@ class Icon extends React.Component {
           background={this.props.active ? COLORS.lightGrey : undefined}
           hoverBackground={
             this.props.clickable || this.props.onClick
-              ? this.props.hoverColor || COLORS.lightGrey
+              ? this.props.hoverColor || COLORS.white
               : undefined
           }
           center

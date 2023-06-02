@@ -152,6 +152,7 @@ const Message = () => {
               }
               height={mobile ? 120 : 140}
               width={mobile ? 120 : 140}
+              marginBottom={8}
             />
             <Text
               paddingLeft={"2%"}
@@ -240,10 +241,10 @@ const Message = () => {
               );
             })}
         </Box>
-        <Box width="100%">
+        <Box width="100%" justifyContent="center" marginBottom={22}>
           <Button
             disabled={isBlocked}
-            width="100%"
+            width="70%"
             onClick={toggleModal}
             style={{
               borderBottom: `solid 2px ${COLORS.grey}`,
@@ -251,14 +252,14 @@ const Message = () => {
             }}
           >
             {isBlocked ? (
-              <Box justifyContent={"center"} width={"100%"}>
+              <Box justifyContent={"center"} width={"90%"}>
                 <Icon name="block" size={ICON_SIZES.LARGE} />{" "}
-                <Text fontSize={FONT_SIZES.LARGE} bold>
+                <Text fontSize={FONT_SIZES.LARGE} bold margin={2}>
                   Blocked
                 </Text>
               </Box>
             ) : (
-              <Text fontSize={FONT_SIZES.LARGE} bold>
+              <Text fontSize={FONT_SIZES.LARGE} bold margin={2}>
                 Reply
               </Text>
             )}

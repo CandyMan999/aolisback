@@ -3,7 +3,7 @@ import { Image, CloudinaryContext } from "cloudinary-react";
 import { Box, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
 
-const Picture = ({ profilePic, name, height, width }) => {
+const Picture = ({ profilePic, name, height, width, marginBottom }) => {
   return !!profilePic ? (
     !!profilePic.publicId ? (
       <CloudinaryContext cloudName="localmassagepros">
@@ -13,7 +13,7 @@ const Picture = ({ profilePic, name, height, width }) => {
             borderRadius: "50%",
             height,
             width,
-            marginBottom: "0px",
+            marginBottom: marginBottom ? marginBottom : undefined,
           }}
           loading="lazy"
           quality="auto:best"
@@ -27,7 +27,7 @@ const Picture = ({ profilePic, name, height, width }) => {
           borderRadius: "50%",
           height,
           width,
-          marginBottom: "8px",
+          marginBottom: marginBottom ? marginBottom : undefined,
         }}
         src={profilePic.url}
       />
@@ -41,7 +41,7 @@ const Picture = ({ profilePic, name, height, width }) => {
         center
         background={COLORS.lightGrey}
         justifyContent="center"
-        marginBottom={8}
+        marginBottom={marginBottom ? marginBottom : undefined}
       >
         <Icon name="user" size={ICON_SIZES.XX_LARGE} color={COLORS.black} />
       </Box>
