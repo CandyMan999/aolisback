@@ -32,4 +32,5 @@ export const COLORS = {
   gold: "#FFBF00",
   pink: "#FF69B4",
   magenta: "#e90076",
+  main: "#5ea3d0",
 };

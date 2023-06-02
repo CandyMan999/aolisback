@@ -98,6 +98,11 @@ const ProfileCardBack = ({
       }}
       onClick={() => onClick(user._id)}
     >
+      {!!user.room && online && user.room.name && !video && (
+        <Box marginTop={30}>
+          <RoomLink dispatch={dispatch} user={user} video={video} />
+        </Box>
+      )}
       {!video && (
         <Box height="100%" display="flex" alignItems="center">
           <Box
@@ -105,19 +110,20 @@ const ProfileCardBack = ({
             card
             column
             padding={5}
-            marginTop={25}
+            marginX={3}
             onClick={handleMessage}
+            background={COLORS.main}
           >
-            <Text bold margin={0}>
+            <Text color={COLORS.white} bold margin={0}>
               No Messages!
             </Text>
-            <Text bold margin={0}>
+            <Text color={COLORS.white} bold margin={0}>
               Try sending a Video Message!
             </Text>
           </Box>
         </Box>
       )}
-      {!!user.room && online && user.room.name && (
+      {!!user.room && online && user.room.name && video && (
         <RoomLink dispatch={dispatch} user={user} video={video} />
       )}
       {loading ? (
