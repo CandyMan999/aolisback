@@ -3,6 +3,7 @@ const { User } = require("../../models");
 const bcrypt = require("bcrypt");
 
 const { createToken } = require("../../utils/middleware");
+const moment = require("moment");
 
 module.exports = {
   loginResolver: async (root, args, ctx) => {
@@ -11,7 +12,7 @@ module.exports = {
     try {
       const user = await User.findOneAndUpdate(
         { username },
-        { isLoggedIn: true },
+        { isLoggedIn: true, roomInfo: { subscribedAt: moment() } },
         { new: true }
       )
         .populate("pictures")

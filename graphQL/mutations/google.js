@@ -2,6 +2,7 @@ const { AuthenticationError, gql, PubSub } = require("apollo-server");
 const { User, Picture } = require("../../models");
 const { OAuth2Client } = require("google-auth-library");
 const { createToken } = require("../../utils/middleware");
+const moment = require("moment");
 
 require("dotenv").config();
 const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID);
@@ -46,6 +47,7 @@ module.exports = {
       email,
       username,
       isLoggedIn: true,
+      roomInfo: { subscribedAt: moment() },
     }).save();
 
     const newPhoto = await Picture.create({ url: picture, user: user._id });
@@ -81,7 +83,7 @@ module.exports = {
       const { email } = await verifyAuthToken(idToken);
       const user = await User.findOneAndUpdate(
         { email },
-        { isLoggedIn: true },
+        { isLoggedIn: true, roomInfo: { subscribedAt: moment() } },
         { new: true }
       )
         .populate("pictures")

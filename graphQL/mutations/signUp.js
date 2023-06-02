@@ -2,6 +2,7 @@ const { AuthenticationError } = require("apollo-server");
 const { User } = require("../../models");
 
 const { createToken } = require("../../utils/middleware");
+moment = require("moment");
 
 module.exports = {
   signupResolver: async (root, args, ctx) => {
@@ -30,6 +31,7 @@ module.exports = {
         password,
         email,
         isLoggedIn: true,
+        roomInfo: { subscribedAt: moment() },
       }).save();
 
       const token = await createToken(user._id);
