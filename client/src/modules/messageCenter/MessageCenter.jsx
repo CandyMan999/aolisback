@@ -112,6 +112,7 @@ const MessageCenter = () => {
           dispatch={dispatch}
           currentUser={currentUser}
           receivedVideos={groupedReceived}
+          mobile={mobile}
         />
       )}
     </Box>

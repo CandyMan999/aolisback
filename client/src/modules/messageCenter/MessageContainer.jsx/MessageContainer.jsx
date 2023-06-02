@@ -19,6 +19,7 @@ const MessageContainer = ({
   dispatch,
   currentUser,
   receivedVideos,
+  mobile,
 }) => {
   const handleOnClick = (senderID) => {
     history.push({
@@ -51,7 +52,7 @@ const MessageContainer = ({
               paddingX={"5%"}
               paddingY={3}
             >
-              <Box alignItems="center">
+              <Box alignItems="center" width={!mobile ? "100%" : undefined}>
                 <Picture
                   height={84}
                   width={84}
@@ -63,15 +64,15 @@ const MessageContainer = ({
                   {video[0].sender.username}
                 </Text>
               </Box>
-
-              <VideoPlayer
-                publicId={video[video.length - 1].publicId}
-                height={90}
-                controls={false}
-                fullScreen={true}
-                borderRadius={"10px"}
-                onClick={() => handleOnClick(video[0].sender._id)}
-              />
+              <Box onClick={() => handleOnClick(video[0].sender._id)}>
+                <VideoPlayer
+                  publicId={video[video.length - 1].publicId}
+                  height={90}
+                  controls={false}
+                  fullScreen={true}
+                  borderRadius={"10px"}
+                />
+              </Box>
             </Box>
           </Box>
         );

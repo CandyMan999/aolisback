@@ -241,7 +241,7 @@ const Message = () => {
               );
             })}
         </Box>
-        <Box width="100%" justifyContent="center" marginBottom={22}>
+        <Box width="100%" justifyContent="center">
           <Button
             disabled={isBlocked}
             width="70%"
