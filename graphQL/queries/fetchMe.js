@@ -1,6 +1,7 @@
 const { AuthenticationError, gql } = require("apollo-server");
 const { User } = require("../../models");
 const { verifyToken } = require("../../utils/middleware");
+const moment = require("moment");
 
 module.exports = {
   fetchMeResolver: async (root, args, ctx) => {
@@ -14,7 +15,7 @@ module.exports = {
 
       const user = await User.findOneAndUpdate(
         { _id: id },
-        { isLoggedIn: true },
+        { isLoggedIn: true, roomInfo: { subscribedAt: moment() } },
         { new: true }
       ).populate([
         "pictures",

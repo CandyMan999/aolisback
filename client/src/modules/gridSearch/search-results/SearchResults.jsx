@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Box, Text, FONT_SIZES, FlipCard } from "../../../components";
 import ProfileCardFront from "../profile-card-front";
 import ProfileCardBack from "../profile-card-back/ProfileCardBack";
-import VideoModal from "../video-modal";
 
 import { css } from "@emotion/css";
 
@@ -84,15 +83,6 @@ const SearchResults = ({
             />
           ))
         : handleComponent()}
-      {/* {state.showVideo && (
-        <VideoModal
-          onClose={toggleModal}
-          receiverID={activeID}
-          senderID={currentUser._id}
-          state={state}
-          mobile={mobile}
-        />
-      )} */}
     </Box>
   );
 };

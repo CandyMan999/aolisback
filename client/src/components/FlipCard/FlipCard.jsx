@@ -83,7 +83,7 @@ const FlipCard = ({
           >
             <Icon
               name="back"
-              size={ICON_SIZES.LARGE}
+              size={ICON_SIZES.X_LARGE}
               color={COLORS.vividBlue}
             />
           </Box>

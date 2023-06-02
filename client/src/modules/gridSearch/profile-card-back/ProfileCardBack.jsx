@@ -88,7 +88,7 @@ const ProfileCardBack = ({
         paddingLeft: 2,
         paddingRight: 2,
         cursor: "pointer",
-
+        borderRadius: "10px",
         justifyContent: "space-between",
         boxShadow: `0px 0px 5px 1px ${COLORS.lightGrey}`,
         border:
@@ -99,13 +99,22 @@ const ProfileCardBack = ({
       onClick={() => onClick(user._id)}
     >
       {!video && (
-        <Box card column padding={5} marginTop={25} onClick={handleMessage}>
-          <Text bold margin={0}>
-            No Messages!
-          </Text>
-          <Text bold margin={0}>
-            Try sending a Video Message!
-          </Text>
+        <Box height="100%" display="flex" alignItems="center">
+          <Box
+            height={"fit-content"}
+            card
+            column
+            padding={5}
+            marginTop={25}
+            onClick={handleMessage}
+          >
+            <Text bold margin={0}>
+              No Messages!
+            </Text>
+            <Text bold margin={0}>
+              Try sending a Video Message!
+            </Text>
+          </Box>
         </Box>
       )}
       {!!user.room && online && user.room.name && (
@@ -121,6 +130,7 @@ const ProfileCardBack = ({
             height={280}
             controls={true}
             mobile={mobile}
+            borderRadius="10px 10px 0px 0px"
           />
         </Box>
       ) : undefined}
@@ -132,6 +142,7 @@ const ProfileCardBack = ({
         justifyContent="center"
         height={40}
         alignItems="center"
+        borederRadius="0px 0px 10px 10px"
         onClick={isBlocked ? undefined : handleMessage}
       >
         {isBlocked && (

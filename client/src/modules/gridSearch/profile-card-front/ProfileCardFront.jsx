@@ -66,6 +66,7 @@ const ProfileCardFront = ({
         paddingLeft: 2,
         paddingRight: 2,
         cursor: "pointer",
+        borderRadius: "10px",
 
         justifyContent: "space-between",
         boxShadow: `0px 0px 5px 1px ${COLORS.lightGrey}`,
@@ -89,6 +90,7 @@ const ProfileCardFront = ({
         width="105%"
         background={`${COLORS.darkestGrey}22`}
         bottom={0}
+        borderRadius={"0px 0px 10px 10px"}
         justifyContent="center"
         height={40}
         alignItems="center"

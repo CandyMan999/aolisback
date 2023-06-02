@@ -1,11 +1,8 @@
 import React from "react";
-import { Image, CloudinaryContext } from "cloudinary-react";
 
 import {
   Box,
   Text,
-  Icon,
-  ICON_SIZES,
   VideoPlayer,
   FONT_SIZES,
   Picture,
@@ -13,14 +10,7 @@ import {
 import { COLORS } from "../../../constants";
 import { withRouter } from "react-router-dom";
 
-const MessageContainer = ({
-  history,
-  client,
-  dispatch,
-  currentUser,
-  receivedVideos,
-  mobile,
-}) => {
+const MessageContainer = ({ history, receivedVideos, mobile }) => {
   const handleOnClick = (senderID) => {
     history.push({
       pathname: "/message",
