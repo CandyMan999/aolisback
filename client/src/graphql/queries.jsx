@@ -249,9 +249,16 @@ export const GET_ALL_USERS = gql`
         lat
         lng
       }
-      age
-      sex
       intro
+      sex
+      age
+      occupation
+      singleTime
+      drink
+      smoke
+      marijuana
+      drugs
+      kids
     }
   }
 `;
