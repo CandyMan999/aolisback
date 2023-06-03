@@ -26,6 +26,7 @@ const ProfileCardBack = ({
   dispatch,
   client,
   mobile,
+  state,
 }) => {
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -71,6 +72,11 @@ const ProfileCardBack = ({
     }
   };
 
+  const handleSetProfile = async () => {
+    await dispatch({ type: "UPDATE_PROFILE", payload: user });
+    dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
+  };
+
   return (
     <motion.div
       style={{
@@ -99,12 +105,27 @@ const ProfileCardBack = ({
       onClick={() => onClick(user._id)}
     >
       {!!user.room && online && user.room.name && !video && (
-        <Box marginTop={30}>
+        <Box marginTop={40}>
           <RoomLink dispatch={dispatch} user={user} video={video} />
         </Box>
       )}
+      <Box
+        position="absolute"
+        top={12}
+        right={5}
+        zIndex={20}
+        onClick={handleSetProfile}
+      >
+        <Icon name="user" color={video ? COLORS.white : COLORS.main} />
+      </Box>
       {!video && (
-        <Box height="100%" display="flex" alignItems="center">
+        <Box
+          height="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="space-around"
+          column
+        >
           <Box
             height={"fit-content"}
             card

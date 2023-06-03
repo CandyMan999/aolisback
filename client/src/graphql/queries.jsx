@@ -1,275 +1,276 @@
-export const GET_ROOMS_QUERY = `
-query{
-    getRooms{
-          name
+import gql from "graphql-tag";
+
+export const GET_ROOMS_QUERY = gql`
+  query {
+    getRooms {
+      name
       _id
-        users{
+      users {
         _id
         username
-      
       }
-      comments{
+      comments {
         _id
         createdAt
         text
-        
       }
     }
   }
 `;
 
-export const GET_COMMENTS_QUERY = `
-query($roomId: ID!){
-	getComments(roomId: $roomId){
-    _id
-    createdAt
-    text
-    author{
+export const GET_COMMENTS_QUERY = gql`
+  query ($roomId: ID!) {
+    getComments(roomId: $roomId) {
+      _id
+      createdAt
+      text
+      author {
+        _id
+        username
+        pictures {
+          url
+          _id
+          publicId
+        }
+      }
+      room {
+        _id
+      }
+    }
+  }
+`;
+
+export const FIND_USER_QUERY = gql`
+  query ($_id: ID!) {
+    findUser(_id: $_id) {
       _id
       username
-      pictures{
+      email
+      isLoggedIn
+      blockedUsers {
+        _id
+      }
+      pictures {
         url
         _id
         publicId
       }
-    }
-    room{
-      _id
-    }
-  }
-}
-`;
-
-export const FIND_USER_QUERY = `
-query($_id: ID!){
-  findUser(_id: $_id){
-    _id
-    username
-    email
-    isLoggedIn
-    blockedUsers{
-      _id
-    }
-    pictures{
-        url
-        _id
-        publicId
-    }
-    intro
-    sex
-    age
-    occupation
-    singleTime
-    drink
-    smoke
-    marijuana
-    drugs
-    kids
-    location {
-      lat
-      lng
-    }
-  }
-}
-`;
-
-export const GET_USERS_MAP_QUERY = `
-query{
-  getUsersMap{
-    _id
-    username
-    isLoggedIn
-    email
-    blockedUsers{
-      _id
-    }
-    pictures{
-        url
-        _id
-        publicId
-    }
-    intro
-    sex
-    age
-    room{
-      _id
-      name
-    }
-    occupation
-    singleTime
-    drink
-    smoke
-    marijuana
-    drugs
-    kids
-    location {
-      lat
-      lng
-    }
-  }
-}
-`;
-
-export const FETCH_ME = `
-query($token: String!){
-  fetchMe(token: $token){
-              _id
-              name
-              isLoggedIn
-              username
-              pictures{
-                _id
-                url
-                publicId
-              }
-              location{
-                lat
-                lng
-              }
-              sentVideos{
-                _id
-								url
-                publicId
-                createdAt
-               	sender{
-                  username
-                  _id
-                  pictures{
-                    _id
-                    url
-                    publicId
-                  }
-                }
-                receiver{
-                  _id
-                  username
-                  pictures{
-									  _id
-                    url
-                    publicId
-                  }
-                } 
-              }
-    					receivedVideos{
-                _id
-								url
-                publicId
-                createdAt
-                flagged
-                viewed
-               	sender{
-                  username
-                  _id
-                  isLoggedIn
-                  pictures{
-									  _id
-                    url
-                    publicId
-                  }
-                  blockedUsers{
-                    _id
-                  }
-                  intro
-                  sex
-                  location{
-                    lat
-                    lng
-                  }
-                  age
-                  occupation
-                  singleTime
-                  drink
-                  smoke
-                  marijuana
-                  drugs
-                  kids
-                }
-                receiver{
-                  _id
-                  username
-                  intro
-                  sex
-                  age
-                  occupation
-                  singleTime
-                  drink
-                  smoke
-                  marijuana
-                  drugs
-                  kids
-                  location{
-                    lat
-                    lng
-                  }
-                  pictures{
-									  _id
-                    url
-                    publicId
-                  }
-                } 
-              }
-              blockedUsers{
-                _id
-              }
-              email
-              intro
-              sex
-              age
-              occupation
-              singleTime
-              drink
-              smoke
-              marijuana
-              drugs
-              kids
-    
+      intro
+      sex
+      age
+      occupation
+      singleTime
+      drink
+      smoke
+      marijuana
+      drugs
+      kids
+      location {
+        lat
+        lng
       }
+    }
   }
 `;
 
-export const GET_ALL_USERS = `
-query{
-  getAllUsers{
-    _id
-    name
-    username
-    room{
+export const GET_USERS_MAP_QUERY = gql`
+  query {
+    getUsersMap {
+      _id
+      username
+      isLoggedIn
+      email
+      blockedUsers {
+        _id
+      }
+      pictures {
+        url
+        _id
+        publicId
+      }
+      intro
+      sex
+      age
+      room {
+        _id
+        name
+      }
+      occupation
+      singleTime
+      drink
+      smoke
+      marijuana
+      drugs
+      kids
+      location {
+        lat
+        lng
+      }
+    }
+  }
+`;
+
+export const FETCH_ME = gql`
+  query ($token: String!) {
+    fetchMe(token: $token) {
       _id
       name
+      isLoggedIn
+      username
+      pictures {
+        _id
+        url
+        publicId
+      }
+      location {
+        lat
+        lng
+      }
+      sentVideos {
+        _id
+        url
+        publicId
+        createdAt
+        sender {
+          username
+          _id
+          pictures {
+            _id
+            url
+            publicId
+          }
+        }
+        receiver {
+          _id
+          username
+          pictures {
+            _id
+            url
+            publicId
+          }
+        }
+      }
+      receivedVideos {
+        _id
+        url
+        publicId
+        createdAt
+        flagged
+        viewed
+        sender {
+          username
+          _id
+          isLoggedIn
+          pictures {
+            _id
+            url
+            publicId
+          }
+          blockedUsers {
+            _id
+          }
+          intro
+          sex
+          location {
+            lat
+            lng
+          }
+          age
+          occupation
+          singleTime
+          drink
+          smoke
+          marijuana
+          drugs
+          kids
+        }
+        receiver {
+          _id
+          username
+          intro
+          sex
+          age
+          occupation
+          singleTime
+          drink
+          smoke
+          marijuana
+          drugs
+          kids
+          location {
+            lat
+            lng
+          }
+          pictures {
+            _id
+            url
+            publicId
+          }
+        }
+      }
+      blockedUsers {
+        _id
+      }
+      email
+      intro
+      sex
+      age
+      occupation
+      singleTime
+      drink
+      smoke
+      marijuana
+      drugs
+      kids
     }
-    blockedUsers{
+  }
+`;
+
+export const GET_ALL_USERS = gql`
+  query {
+    getAllUsers {
       _id
+      name
+      username
+      room {
+        _id
+        name
+      }
+      blockedUsers {
+        _id
+      }
+      pictures {
+        _id
+        url
+        publicId
+      }
+      isLoggedIn
+      location {
+        lat
+        lng
+      }
+      age
+      sex
+      intro
     }
-    pictures{
+  }
+`;
+
+export const GET_VIDEOS_QUERY = gql`
+  query ($senderID: ID!, $receiverID: ID!) {
+    getVideos(senderID: $senderID, receiverID: $receiverID) {
       _id
       url
       publicId
+      createdAt
+      sender {
+        _id
+        username
+      }
+      receiver {
+        _id
+        username
+      }
     }
-    isLoggedIn
-    location{
-      lat
-      lng
-    }
-    age
-    sex
-    intro
   }
-}`;
-
-export const GET_VIDEOS_QUERY = `
-query($senderID: ID!, $receiverID: ID!){
-  getVideos(senderID: $senderID, receiverID: $receiverID){
-   _id
-   url
-   publicId
-   createdAt
-   sender{
-     _id
-     username
-   }
-   receiver{
-     _id
-     username
-   }
- }
-}`;
+`;

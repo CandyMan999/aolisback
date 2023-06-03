@@ -13,7 +13,7 @@ const RoomLink = ({ dispatch, video, user }) => {
   return (
     <Text
       position={video ? "absolute" : undefined}
-      style={!video ? undefined : { zIndex: 20, top: 40 }}
+      style={!video ? undefined : { zIndex: 20, top: 50 }}
       margin={0}
       onClick={() => handleRoomClick(user.room._id)}
       center
