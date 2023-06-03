@@ -16,8 +16,6 @@ import { motion } from "framer-motion";
 
 const ProfileCardBack = ({
   online,
-  photos,
-  name,
   currentUser,
   user,
   activeID,
@@ -89,10 +87,9 @@ const ProfileCardBack = ({
         alignItems: "center",
         textAlign: "center",
         marginTop: 12,
-
         marginBottom: 12,
-        paddingLeft: 2,
-        paddingRight: 2,
+        paddingLeft: video ? 0 : 2,
+        paddingRight: video ? 0 : 2,
         cursor: "pointer",
         borderRadius: "10px",
         justifyContent: "space-between",
@@ -109,6 +106,14 @@ const ProfileCardBack = ({
           <RoomLink dispatch={dispatch} user={user} video={video} />
         </Box>
       )}
+      <Box position="absolute" zIndex={19} top={10} left={10}>
+        <Icon
+          name="back"
+          size={ICON_SIZES.XX_LARGE}
+          color={video ? COLORS.white : COLORS.vividBlue}
+        />
+      </Box>
+
       <Box
         position="absolute"
         top={12}
@@ -116,7 +121,11 @@ const ProfileCardBack = ({
         zIndex={20}
         onClick={handleSetProfile}
       >
-        <Icon name="user" color={video ? COLORS.white : COLORS.main} />
+        <Icon
+          name="user"
+          size={ICON_SIZES.X_LARGE}
+          color={video ? COLORS.white : COLORS.main}
+        />
       </Box>
       {!video && (
         <Box
@@ -136,7 +145,7 @@ const ProfileCardBack = ({
             background={COLORS.main}
           >
             <Text color={COLORS.white} bold margin={0}>
-              No Messages!
+              No Messages...
             </Text>
             <Text color={COLORS.white} bold margin={0}>
               Try sending a Video Message!
