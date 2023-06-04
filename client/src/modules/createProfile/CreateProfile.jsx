@@ -12,6 +12,7 @@ import { SingleTime } from "./single-time";
 import { GetLocation } from "./get-location";
 import { MyPhotos } from "./my-photos";
 import { MyDetails } from "./my-details";
+import { LookingFor } from "./looking-for";
 
 import { useClient } from "../../client";
 import Context from "../../context";
@@ -76,6 +77,8 @@ const CreateProfile = () => {
     }
   };
 
+  console.log("state: ", state);
+
   const handleValidation = (values) => {
     const err = {};
     if (!values.age.length) err.age = "Required";
@@ -109,6 +112,25 @@ const CreateProfile = () => {
     setProfile({ ...profile, [e.target.name]: updatedValue });
   };
 
+  const handleLookingSubmit = async ({
+    ageRange,
+
+    sex,
+    kids,
+  }) => {
+    try {
+      const variables = {
+        ageRange,
+        sex,
+        kids,
+      };
+
+      console.log("looking for data: ", variables);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Fragment>
       {false ? (
@@ -116,6 +138,7 @@ const CreateProfile = () => {
       ) : (
         <ProfileProgress me={currentUser}>
           {({ completedCounts, totalCounts }) => {
+            console.log("completed: ", completedCounts);
             return (
               <Box
                 display="flex"
@@ -158,6 +181,17 @@ const CreateProfile = () => {
                   mobile={mobile}
                   submitted={success}
                   loading={spinner}
+                />
+
+                <LookingFor
+                  profile={profile}
+                  client={client}
+                  dispatch={dispatch}
+                  currentUser={currentUser}
+                  authError={authError}
+                  completed={completedCounts.lookingFor}
+                  total={totalCounts.lookingFor}
+                  mobile={mobile}
                 />
               </Box>
             );

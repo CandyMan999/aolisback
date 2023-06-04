@@ -46,6 +46,14 @@ export const FIND_USER_QUERY = gql`
       _id
       username
       email
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
       isLoggedIn
       blockedUsers {
         _id
@@ -80,6 +88,14 @@ export const GET_USERS_MAP_QUERY = gql`
       username
       isLoggedIn
       email
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
       blockedUsers {
         _id
       }
@@ -117,6 +133,14 @@ export const FETCH_ME = gql`
       name
       isLoggedIn
       username
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
       pictures {
         _id
         url
@@ -232,6 +256,14 @@ export const GET_ALL_USERS = gql`
       _id
       name
       username
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
       room {
         _id
         name

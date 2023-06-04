@@ -51,6 +51,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     pictures,
     _id,
     isLoggedIn,
+    lookingFor,
   } = user;
 
   useEffect(() => {
@@ -358,7 +359,10 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             width="auto"
             justifyContent="space-between"
             style={{
-              // borderBottom: `solid 2px ${COLORS.lighterGrey}`,
+              borderBottom:
+                !!lookingFor && !!lookingFor.sex
+                  ? `solid 2px ${COLORS.lighterGrey}`
+                  : undefined,
               paddingBottom: "4px",
             }}
             paddingY={5}
@@ -376,6 +380,39 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
             {kids && <Text>{kids}</Text>}
           </Box>
+          {!!lookingFor && !!lookingFor.sex && (
+            <Box
+              display="flex"
+              width="auto"
+              justifyContent="space-between"
+              style={{
+                // borderBottom: `solid 2px ${COLORS.lighterGrey}`,
+                paddingBottom: "4px",
+              }}
+              paddingY={5}
+              paddingLeft="5%"
+              paddingRight="5%"
+            >
+              <Box>
+                <Text bold>Looking For: </Text>
+                <Icon
+                  name="curious"
+                  color={COLORS.black}
+                  size={ICON_SIZES.XX_LARGE}
+                />
+              </Box>
+
+              <Text>
+                {lookingFor.sex === "Female"
+                  ? "Women"
+                  : lookingFor.sex === "Male"
+                  ? "Men"
+                  : lookingFor.sex === "Gender_Diverse"
+                  ? "Gender Diverse"
+                  : "Gender Diverse"}
+              </Text>
+            </Box>
+          )}
 
           <Box justifyContent="center" width={"100%"} minHeight={60}>
             <Button

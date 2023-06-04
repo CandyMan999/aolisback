@@ -32,6 +32,12 @@ const missingFields = {
     oneOf: [],
     oneOfLength: [],
   },
+  lookingFor: {
+    required: ["lookingFor.sex", "lookingFor.kids"],
+    hasLength: [],
+    oneOf: [],
+    oneOfLength: [],
+  },
 };
 
 export default missingFields;

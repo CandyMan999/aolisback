@@ -26,9 +26,9 @@ const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
     }
   }, [userCoords.lat]);
 
-  useEffect(() => {
-    handleGetLocation();
-  }, []);
+  // useEffect(() => {
+  //   handleGetLocation();
+  // }, []);
 
   const handleGetLocation = async () => {
     try {
@@ -45,8 +45,10 @@ const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
         variables
       );
 
+      console.log("update location: ", updateLocation);
+
       if (updateLocation) {
-        dispatch({ type: "UPDATE_USER", payload: updateLocation });
+        dispatch({ type: "UPDATE_LOCATION", payload: updateLocation });
         setSpinner(false);
         setSubmitted(true);
         setLocationSuccess(true);
@@ -63,6 +65,7 @@ const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
 
   const handleLocation = () => {
     try {
+      setSpinner(true);
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition((position) => {
           const { latitude, longitude } = position.coords;
@@ -70,6 +73,7 @@ const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
         });
       }
     } catch (err) {
+      setSpinner(false);
       console.log(err);
     }
   };

@@ -55,7 +55,17 @@ export default function reducer(state, { type, payload }) {
         ...state,
         profile: payload,
       };
+    case "UPDATE_LOOKING_FOR":
+      return {
+        ...state,
+        currentUser: { ...state.currentUser, lookingFor: payload },
+      };
 
+    case "UPDATE_LOCATION":
+      return {
+        ...state,
+        currentUser: { ...state.currentUser, location: payload },
+      };
     case "UPDATE_USER_VIDEO":
       return {
         ...state,

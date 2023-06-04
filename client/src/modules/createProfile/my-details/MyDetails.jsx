@@ -63,13 +63,7 @@ const MyDetails = ({
                   </p>
                 )}
 
-                <Box
-                  column
-                  height={200}
-                  width="75%"
-                  justifyContent="space-between"
-                  center
-                >
+                <Box column width="75%" justifyContent="space-between" center>
                   <Textarea
                     width={"90%"}
                     maxLength={400}
@@ -180,7 +174,12 @@ const MyDetails = ({
                     </Field>
                   </Box>
 
-                  <Box width="140%" justifyContent="center" paddingBottom={100}>
+                  <Box
+                    width={mobile ? "140%" : "60%"}
+                    justifyContent="center"
+                    paddingBottom={100}
+                    height={mobile ? 60 : 80}
+                  >
                     <Button
                       type="submit"
                       disabled={

@@ -16,18 +16,18 @@ const ProfileContainer = (props) => {
   const currentUser = state.currentUser;
   const mobile = useMediaQuery("(max-width: 650px)");
 
-  useEffect(() => {
-    handleFetchUser();
-  }, []);
+  // useEffect(() => {
+  //   handleFetchUser();
+  // }, []);
 
-  const handleFetchUser = async () => {
-    const varibales = {
-      token,
-    };
-    const { fetchMe } = await client.request(FETCH_ME, varibales);
+  // const handleFetchUser = async () => {
+  //   const varibales = {
+  //     token,
+  //   };
+  //   const { fetchMe } = await client.request(FETCH_ME, varibales);
 
-    dispatch({ type: "UPDATE_USER", payload: fetchMe });
-  };
+  //   dispatch({ type: "UPDATE_USER", payload: fetchMe });
+  // };
 
   return !currentUser.username ? (
     <Box

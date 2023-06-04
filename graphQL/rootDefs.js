@@ -25,6 +25,7 @@ module.exports = gql`
     receivedVideos: [Video]
     blockedUsers: [User]
     chatRequest: ChatRequest
+    lookingFor: LookingFor
   }
 
   type Video {
@@ -36,6 +37,17 @@ module.exports = gql`
     publicId: String
     viewed: Boolean
     flagged: Boolean
+  }
+
+  type LookingFor {
+    ageRange: AgeRange
+    kids: String
+    sex: Sex
+  }
+
+  type AgeRange {
+    lowEnd: Float
+    highEnd: Float
   }
 
   enum Drugs {
@@ -156,7 +168,7 @@ module.exports = gql`
       drugs: Drugs
       kids: String
     ): User
-    updateLocation(_id: ID!, lat: Float!, lng: Float!): User
+    updateLocation(_id: ID!, lat: Float!, lng: Float!): Location
     addPhoto(_id: ID!, url: String!, publicId: String!): User
     sendVideo(
       url: String!
@@ -176,6 +188,13 @@ module.exports = gql`
       receiverID: ID!
       status: Status!
     ): ChatRequest
+    lookingFor(
+      _id: ID!
+      lowEnd: Float
+      highEnd: Float
+      kids: String
+      sex: Sex
+    ): LookingFor
     block(userID: ID!, blockID: ID!): User
     unBlock(userID: ID!, blockID: ID!): User
     flagVideo(_id: ID!, flagged: Boolean!): Video

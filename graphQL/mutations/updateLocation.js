@@ -10,9 +10,9 @@ module.exports = {
         { _id },
         { location: { lat, lng } },
         { new: true }
-      ).populate("pictures");
+      );
 
-      return user;
+      return user.location;
     } catch (err) {
       throw new AuthenticationError(err.message);
     }

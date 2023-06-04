@@ -25,7 +25,7 @@ const CollapsableHeader = ({
   };
 
   return (
-    <Box column width={"90vW"}>
+    <Box column display="flex" width={"90vW"}>
       <Box
         paddingY={4}
         onClick={handleHeaderToggle}

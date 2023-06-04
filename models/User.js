@@ -22,6 +22,26 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  lookingFor: {
+    ageRange: {
+      lowEnd: {
+        type: Number,
+        default: 18,
+      },
+      highEnd: {
+        type: Number,
+        default: 80,
+      },
+    },
+    kids: {
+      type: String,
+      default: "",
+    },
+    sex: {
+      type: String,
+      enum: ["Male", "Female", "Gender_Diverse"],
+    },
+  },
   roomInfo: {
     subscribedAt: {
       type: Date,

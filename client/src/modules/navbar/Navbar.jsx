@@ -40,15 +40,12 @@ const Navbar = ({ props }) => {
   }, [token]);
 
   const handleFetchMe = async () => {
-    console.log("firing, fetch me");
     try {
       const variables = {
         token,
       };
 
       const { fetchMe } = await client.request(FETCH_ME, variables);
-
-      console.log("data: ", fetchMe);
 
       await dispatch({ type: "LOGIN_USER", payload: fetchMe });
     } catch (err) {

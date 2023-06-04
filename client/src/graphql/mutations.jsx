@@ -201,6 +201,14 @@ export const CREATE_PROFILE_MUTATION = gql`
     ) {
       _id
       username
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
       pictures {
         _id
         url
@@ -230,27 +238,8 @@ export const CREATE_PROFILE_MUTATION = gql`
 export const UPDATE_LOCATION_MUTATION = gql`
   mutation ($_id: ID!, $lat: Float!, $lng: Float!) {
     updateLocation(_id: $_id, lat: $lat, lng: $lng) {
-      _id
-      username
-      pictures {
-        _id
-        url
-        publicId
-      }
-      intro
-      sex
-      age
-      occupation
-      singleTime
-      drink
-      smoke
-      marijuana
-      drugs
-      kids
-      location {
-        lat
-        lng
-      }
+      lat
+      lng
     }
   }
 `;
@@ -438,6 +427,31 @@ export const DELETE_VIDEO_MUTATION = gql`
         _id
         username
       }
+    }
+  }
+`;
+
+export const LOOKING_FOR_MUTATION = gql`
+  mutation (
+    $_id: ID!
+    $lowEnd: Float
+    $highEnd: Float
+    $kids: String
+    $sex: Sex
+  ) {
+    lookingFor(
+      _id: $_id
+      lowEnd: $lowEnd
+      highEnd: $highEnd
+      kids: $kids
+      sex: $sex
+    ) {
+      ageRange {
+        lowEnd
+        highEnd
+      }
+      sex
+      kids
     }
   }
 `;
