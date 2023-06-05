@@ -2,7 +2,6 @@ import React, { Fragment, useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import moment from "moment";
 import { Box, ProfileProgress, Loading } from "../../components";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import { COLORS } from "../../constants";
 
@@ -14,14 +13,7 @@ import { MyPhotos } from "./my-photos";
 import { MyDetails } from "./my-details";
 import { LookingFor } from "./looking-for";
 
-import { useClient } from "../../client";
-import Context from "../../context";
-
-const CreateProfile = () => {
-  const client = useClient();
-  const { state, dispatch } = useContext(Context);
-  const { currentUser } = state;
-  const mobile = useMediaQuery("(max-width: 650px)");
+const CreateProfile = ({ client, dispatch, state, currentUser, mobile }) => {
   const [authError, setAuthError] = useState("");
   const [profile, setProfile] = useState({
     singleTime: currentUser.singleTime
@@ -77,8 +69,6 @@ const CreateProfile = () => {
     }
   };
 
-  console.log("state: ", state);
-
   const handleValidation = (values) => {
     const err = {};
     if (!values.age.length) err.age = "Required";
@@ -112,25 +102,6 @@ const CreateProfile = () => {
     setProfile({ ...profile, [e.target.name]: updatedValue });
   };
 
-  const handleLookingSubmit = async ({
-    ageRange,
-
-    sex,
-    kids,
-  }) => {
-    try {
-      const variables = {
-        ageRange,
-        sex,
-        kids,
-      };
-
-      console.log("looking for data: ", variables);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
     <Fragment>
       {false ? (
@@ -138,7 +109,6 @@ const CreateProfile = () => {
       ) : (
         <ProfileProgress me={currentUser}>
           {({ completedCounts, totalCounts }) => {
-            console.log("completed: ", completedCounts);
             return (
               <Box
                 display="flex"

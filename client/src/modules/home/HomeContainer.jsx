@@ -8,25 +8,25 @@ const HomeContainer = ({ queryParams, history }) => {
   const { dispatch, state } = useContext(Context);
 
   useEffect(() => {
-    handleLocation();
+    // handleLocation();
   }, []);
 
-  const handleLocation = () => {
-    try {
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const { latitude, longitude } = position.coords;
+  // const handleLocation = () => {
+  //   try {
+  //     if ("geolocation" in navigator) {
+  //       navigator.geolocation.getCurrentPosition((position) => {
+  //         const { latitude, longitude } = position.coords;
 
-          dispatch({
-            type: "SET_USER_COORDS",
-            payload: { lat: latitude, lng: longitude },
-          });
-        });
-      }
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
+  //         dispatch({
+  //           type: "SET_USER_COORDS",
+  //           payload: { lat: latitude, lng: longitude },
+  //         });
+  //       });
+  //     }
+  //   } catch (err) {
+  //     console.log(err.message);
+  //   }
+  // };
   return <HomeLayout state={state}>{Children}</HomeLayout>;
 };
 

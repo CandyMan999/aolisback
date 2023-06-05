@@ -95,8 +95,7 @@ export const VIDEO_CHAT_REQUEST = gql`
         marijuana
         drugs
         location {
-          lat
-          lng
+          coordinates
         }
       }
     }

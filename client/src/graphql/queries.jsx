@@ -74,8 +74,7 @@ export const FIND_USER_QUERY = gql`
       drugs
       kids
       location {
-        lat
-        lng
+        coordinates
       }
     }
   }
@@ -119,8 +118,7 @@ export const GET_USERS_MAP_QUERY = gql`
       drugs
       kids
       location {
-        lat
-        lng
+        coordinates
       }
     }
   }
@@ -147,8 +145,7 @@ export const FETCH_ME = gql`
         publicId
       }
       location {
-        lat
-        lng
+        coordinates
       }
       sentVideos {
         _id
@@ -196,8 +193,7 @@ export const FETCH_ME = gql`
           intro
           sex
           location {
-            lat
-            lng
+            coordinates
           }
           age
           occupation
@@ -222,8 +218,7 @@ export const FETCH_ME = gql`
           drugs
           kids
           location {
-            lat
-            lng
+            coordinates
           }
           pictures {
             _id
@@ -251,8 +246,8 @@ export const FETCH_ME = gql`
 `;
 
 export const GET_ALL_USERS = gql`
-  query {
-    getAllUsers {
+  query ($latitude: Float!, $longitude: Float!) {
+    getAllUsers(latitude: $latitude, longitude: $longitude) {
       _id
       name
       username
@@ -278,8 +273,7 @@ export const GET_ALL_USERS = gql`
       }
       isLoggedIn
       location {
-        lat
-        lng
+        coordinates
       }
       intro
       sex

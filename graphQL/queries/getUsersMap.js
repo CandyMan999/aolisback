@@ -5,7 +5,7 @@ module.exports = {
   getUsersMapResolver: async (root, args, ctx) => {
     try {
       const users = await User.find({
-        "location.lat": { $ne: null },
+        "location.coordinates": { $ne: null },
         // isLoggedIn: true,
       }).populate([
         "room",

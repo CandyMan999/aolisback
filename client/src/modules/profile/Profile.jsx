@@ -117,8 +117,14 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleLocation = (_id, location) => {
     try {
-      const payload = { _id, location };
-      dispatch({ type: "VIEW_LOCATION", payload });
+      dispatch({
+        type: "VIEW_LOCATION",
+        payload: {
+          _id,
+          lat: location.coordinates[1],
+          lng: location.coordinates[0],
+        },
+      });
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
       history.push("/location");
     } catch (err) {
@@ -457,10 +463,12 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             </Button>
             <Button
               style={{ margin: 0 }}
-              disabled={location && !location.lat}
+              disabled={location && !location.coordinates}
               onClick={() => handleLocation(_id, location)}
               color={
-                location && !location.lat ? COLORS.lightGrey : COLORS.vividBlue
+                location && !location.coordinates
+                  ? COLORS.lightGrey
+                  : COLORS.vividBlue
               }
               width="100%"
             >

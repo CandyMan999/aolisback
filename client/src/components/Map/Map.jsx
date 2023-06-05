@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
 import ReactMapGL, { NavigationControl, Marker, Popup } from "react-map-gl";
-import { useHistory } from "react-router-dom";
-import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
+
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { GET_USERS_MAP_QUERY } from "../../graphql/queries";
 
@@ -30,16 +29,18 @@ const INITIAL_VIEWPORT = {
   zoom: 4,
 };
 
-const Map = ({ zoom, width, height }) => {
+const Map = ({ zoom, width, height, currentUser }) => {
   const mobileSize = useMediaQuery("(max-width: 650px)");
-  let history = useHistory();
+
   const [popup, setPopup] = useState({ isOpen: false, id: null });
   const [users, setUsers] = useState([]);
 
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const { state, dispatch } = useContext(Context);
   const client = useClient();
-  const { location } = state.currentUser;
+  const {
+    location: { coordinates },
+  } = currentUser;
 
   useEffect(() => {
     handleGetUsers();
@@ -49,11 +50,10 @@ const Map = ({ zoom, width, height }) => {
     const { _id, lat, lng } = state.userLocation;
     if (state.userLocation._id) {
       setPopup({ isOpen: true, id: _id });
-      setViewport({
-        latitude: lat,
-        longitude: lng,
-        zoom: 12,
-      });
+
+      setTimeout(() => {
+        handleFlyTo(lat, lng, 8);
+      }, 1000);
     }
   }, [state.userLocation._id]);
 
@@ -62,19 +62,19 @@ const Map = ({ zoom, width, height }) => {
       const { getUsersMap } = await client.request(GET_USERS_MAP_QUERY, {});
 
       setUsers([...getUsersMap]);
-      if (!!location && location.lat && !state.userLocation._id) {
+      if (!!coordinates.length) {
         setViewport({
           ...INITIAL_VIEWPORT,
-          latitude: location.lat,
-          longitude: location.lng,
+          latitude: coordinates[1],
+          longitude: coordinates[0],
         });
 
         if (zoom) {
           setViewport({
             ...INITIAL_VIEWPORT,
             zoom,
-            latitude: location.lat,
-            longitude: location.lng,
+            latitude: coordinates[1],
+            longitude: coordinates[0],
           });
         }
       }
@@ -82,31 +82,54 @@ const Map = ({ zoom, width, height }) => {
       console.log(err);
     }
   };
-
-  const handleMapClick = () => {
-    setPopup({ isOpen: false, id: null });
-    dispatch({
-      type: "VIEW_LOCATION",
-      payload: { _id: null, location: { lat: null, lng: null } },
-    });
+  const noLocation = (array) => {
+    if (
+      Array.isArray(array) &&
+      array.length === 2 &&
+      array[0] === 0 &&
+      array[1] === 0
+    ) {
+      return true;
+    }
+    return false;
   };
 
-  // const handleVideoLink = async (username) => {
-  //   await dispatch({ type: "JOIN_CHANNEL", payload: username });
-  //   history.push("/video");
-  // };
+  const handleMapClick = () => {
+    const { coordinates } = currentUser.location;
+
+    setPopup({ isOpen: false, id: null });
+    if (noLocation(coordinates)) {
+      handleFlyTo(INITIAL_VIEWPORT.latitude, INITIAL_VIEWPORT.longitude, 4);
+    } else {
+      handleFlyTo(coordinates[1], coordinates[0], 4);
+    }
+  };
 
   const handleSetProfile = async (user) => {
     await dispatch({ type: "UPDATE_PROFILE", payload: user });
     dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
   };
 
+  const handleFlyTo = (lat, lng, zoom) => {
+    const newViewport = {
+      latitude: lat,
+      longitude: lng,
+      zoom,
+      transitionDuration: 2000,
+    };
+    setViewport(newViewport);
+  };
+
+  const handleMarkerClick = (id, lat, lng) => {
+    setPopup({ isOpen: true, id });
+    handleFlyTo(lat, lng, 8);
+  };
   return (
     <Fragment>
       <ReactMapGL
         width={width ? width : "100vw"}
         height={height ? height : "calc(100vh - 64px)"}
-        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapStyle={"mapbox://styles/mapbox/streets-v12"}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
         onViewportChange={(newViewport) => setViewport(newViewport)}
         {...viewport}
@@ -123,12 +146,18 @@ const Map = ({ zoom, width, height }) => {
             <Box key={"box" + i} textAlign="center">
               <Marker
                 key={user._id}
-                latitude={user.location.lat}
-                longitude={user.location.lng}
+                latitude={user.location.coordinates[1]}
+                longitude={user.location.coordinates[0]}
               >
                 <Icon
                   key={user._id + i}
-                  onClick={() => setPopup({ isOpen: true, id: user._id })}
+                  onClick={() =>
+                    handleMarkerClick(
+                      user._id,
+                      user.location.coordinates[1],
+                      user.location.coordinates[0]
+                    )
+                  }
                   name="pin"
                   size={ICON_SIZES.X_LARGE}
                   color={
@@ -143,8 +172,8 @@ const Map = ({ zoom, width, height }) => {
                   <Popup
                     key={user._id + i + "1"}
                     anchor="bottom"
-                    latitude={user.location.lat}
-                    longitude={user.location.lng}
+                    latitude={user.location.coordinates[1]}
+                    longitude={user.location.coordinates[0]}
                     closeOnClick={false}
                     onClose={() => setPopup({ isOpen: false, id: null })}
                   >
@@ -188,37 +217,6 @@ const Map = ({ zoom, width, height }) => {
       </ReactMapGL>
     </Fragment>
   );
-};
-
-const styles = {
-  root: {
-    display: "flex",
-  },
-  rootMobile: {
-    display: "flex",
-    flexDirection: "column-reverse",
-  },
-  navigationControl: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    margin: "1em",
-  },
-  deleteIcon: {
-    color: "red",
-  },
-  popupImage: {
-    padding: "0.4em",
-    height: 200,
-    width: 200,
-    objectFit: "cover",
-  },
-  popupTab: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-  },
 };
 
 export default Map;

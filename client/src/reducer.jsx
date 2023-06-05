@@ -64,7 +64,10 @@ export default function reducer(state, { type, payload }) {
     case "UPDATE_LOCATION":
       return {
         ...state,
-        currentUser: { ...state.currentUser, location: payload },
+        currentUser: {
+          ...state.currentUser,
+          location: { ...state.currentUser.location, coordinates: payload },
+        },
       };
     case "UPDATE_USER_VIDEO":
       return {
@@ -91,8 +94,8 @@ export default function reducer(state, { type, payload }) {
         ...state,
         userLocation: {
           _id: payload._id,
-          lat: payload.location.lat,
-          lng: payload.location.lng,
+          lat: payload.lat,
+          lng: payload.lng,
         },
       };
 

@@ -15,8 +15,7 @@ export const GOOGLE_SIGNUP_MUTATION = gql`
           publicId
         }
         location {
-          lat
-          lng
+          coordinates
         }
         email
         intro
@@ -49,8 +48,7 @@ export const GOOGLE_LOGIN_MUTATION = gql`
           publicId
         }
         location {
-          lat
-          lng
+          coordinates
         }
         email
         intro
@@ -96,8 +94,7 @@ export const LOGIN_MUTATION = gql`
           publicId
         }
         location {
-          lat
-          lng
+          coordinates
         }
         email
         intro
@@ -215,8 +212,7 @@ export const CREATE_PROFILE_MUTATION = gql`
         publicId
       }
       location {
-        lat
-        lng
+        coordinates
       }
       blockedUsers {
         _id
@@ -236,10 +232,9 @@ export const CREATE_PROFILE_MUTATION = gql`
 `;
 
 export const UPDATE_LOCATION_MUTATION = gql`
-  mutation ($_id: ID!, $lat: Float!, $lng: Float!) {
-    updateLocation(_id: $_id, lat: $lat, lng: $lng) {
-      lat
-      lng
+  mutation ($_id: ID!, $latitude: Float!, $longitude: Float!) {
+    updateLocation(_id: $_id, latitude: $latitude, longitude: $longitude) {
+      coordinates
     }
   }
 `;
@@ -264,9 +259,16 @@ export const ADD_PHOTO_MUTATION = gql`
       marijuana
       drugs
       kids
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
       location {
-        lat
-        lng
+        coordinates
       }
     }
   }
@@ -323,9 +325,16 @@ export const DELETE_PHOTO_MUTATION = gql`
       marijuana
       drugs
       kids
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
       location {
-        lat
-        lng
+        coordinates
       }
     }
   }

@@ -17,7 +17,7 @@ const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
   const [userCoords, setUserCoords] = useState({ lat: null, lng: null });
   const [spinner, setSpinner] = useState(false);
   const [locationSuccess, setLocationSuccess] = useState(
-    !!currentUser.location.lat
+    !!currentUser.location.coordinates
   );
 
   useEffect(() => {
@@ -35,8 +35,8 @@ const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
       setSpinner(true);
       setSubmitted(false);
       const variables = {
-        lat: userCoords.lat ? userCoords.lat : currentUser.location.lat,
-        lng: userCoords.lng ? userCoords.lng : currentUser.location.lng,
+        latitude: userCoords.lat ? userCoords.lat : currentUser.location.lat,
+        longitude: userCoords.lng ? userCoords.lng : currentUser.location.lng,
         _id: currentUser._id,
       };
 
@@ -45,10 +45,11 @@ const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
         variables
       );
 
-      console.log("update location: ", updateLocation);
-
       if (updateLocation) {
-        dispatch({ type: "UPDATE_LOCATION", payload: updateLocation });
+        dispatch({
+          type: "UPDATE_LOCATION",
+          payload: updateLocation.coordinates,
+        });
         setSpinner(false);
         setSubmitted(true);
         setLocationSuccess(true);
@@ -86,7 +87,7 @@ const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
       completed={completed}
     >
       <Box width={"100%"} height={"100%"} column alignItems="center">
-        <Map width={"100vW"} height={250} zoom={12} />
+        <Map currentUser={currentUser} width={"100vW"} height={250} zoom={12} />
 
         <Box padding={10}>
           <Button

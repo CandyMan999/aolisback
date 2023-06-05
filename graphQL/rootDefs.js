@@ -46,8 +46,8 @@ module.exports = gql`
   }
 
   type AgeRange {
-    lowEnd: Float
-    highEnd: Float
+    lowEnd: Int
+    highEnd: Int
   }
 
   enum Drugs {
@@ -80,8 +80,8 @@ module.exports = gql`
   }
 
   type Location {
-    lat: Float
-    lng: Float
+    type: String
+    coordinates: [Float]
   }
 
   type Comment {
@@ -133,7 +133,7 @@ module.exports = gql`
     getComments(roomId: ID!): [Comment]
     findUser(_id: ID!): User
     getUsersMap: [User]
-    getAllUsers: [User]
+    getAllUsers(latitude: Float!, longitude: Float!): [User]
     getVideos(senderID: ID!, receiverID: ID!): [Video]
   }
 
@@ -168,7 +168,7 @@ module.exports = gql`
       drugs: Drugs
       kids: String
     ): User
-    updateLocation(_id: ID!, lat: Float!, lng: Float!): Location
+    updateLocation(_id: ID!, latitude: Float!, longitude: Float!): Location
     addPhoto(_id: ID!, url: String!, publicId: String!): User
     sendVideo(
       url: String!

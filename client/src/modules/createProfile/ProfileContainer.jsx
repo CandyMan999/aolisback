@@ -1,17 +1,16 @@
-import React, { Fragment, useContext, useEffect } from "react";
-import { FETCH_ME } from "../../graphql/queries";
+import React, { Fragment, useContext } from "react";
 
 import CreateProfile from "./CreateProfile";
 
 import { Box, Loading } from "../../components";
 import { useClient } from "../../client";
 import Context from "../../context";
-import { getToken } from "../../utils/helpers";
+
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const ProfileContainer = (props) => {
   const client = useClient();
-  const token = getToken();
+
   const { state, dispatch } = useContext(Context);
   const currentUser = state.currentUser;
   const mobile = useMediaQuery("(max-width: 650px)");
@@ -48,6 +47,7 @@ const ProfileContainer = (props) => {
         dispatch={dispatch}
         currentUser={currentUser}
         mobile={mobile}
+        state={state}
       />
     </Fragment>
   );

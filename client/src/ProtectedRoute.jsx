@@ -14,7 +14,11 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       render={(props) =>
-        !state.currentUser ? <Redirect to="/" /> : <Component {...props} />
+        !state.currentUser.username ? (
+          <Redirect to="/" />
+        ) : (
+          <Component currentUser={state.currentUser} {...props} />
+        )
       }
       {...rest}
     />

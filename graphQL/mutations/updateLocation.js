@@ -3,12 +3,12 @@ const { User } = require("../../models");
 
 module.exports = {
   updateLocationResolver: async (root, args, ctx) => {
-    const { lat, lng, _id } = args;
+    const { latitude, longitude, _id } = args;
 
     try {
       const user = await User.findByIdAndUpdate(
-        { _id },
-        { location: { lat, lng } },
+        _id,
+        { "location.coordinates": [longitude, latitude] },
         { new: true }
       );
 

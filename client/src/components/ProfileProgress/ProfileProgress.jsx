@@ -13,11 +13,22 @@ class ProfileProgress extends React.PureComponent {
 
     const completedCounts = Object.keys(missingFields).reduce(
       (counts, field) => {
-        const { required, hasLength, oneOf, oneOfLength } =
+        const { required, hasLength, oneOf, oneOfLength, matches } =
           missingFields[field];
 
         let count = 0;
 
+        //matches
+        if (!!matches && !!matches.length) {
+          matches.forEach((requiredField) => {
+            if (
+              get(me, requiredField)[0] !== 0 &&
+              get(me, requiredField)[1] !== 0
+            ) {
+              count++;
+            }
+          });
+        }
         // required
         if (!!required && !!required.length) {
           required.forEach((requiredField) => {
@@ -71,8 +82,10 @@ class ProfileProgress extends React.PureComponent {
 
   calculateTotalCounts = () => {
     const totalCounts = Object.keys(missingFields).reduce((counts, field) => {
-      const { required, hasLength, oneOf, oneOfLength } = missingFields[field];
+      const { required, hasLength, oneOf, oneOfLength, matches } =
+        missingFields[field];
       counts[field] =
+        matches.length +
         required.length +
         hasLength.length +
         oneOf.length +

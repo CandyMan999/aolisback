@@ -29,19 +29,31 @@ const ProfileCardFront = ({
     handleDistance(user);
   }, []);
 
+  const noLocation = (array) => {
+    if (
+      Array.isArray(array) &&
+      array.length === 2 &&
+      array[0] === 0 &&
+      array[1] === 0
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const handleDistance = async (user) => {
     if (
-      !!state.currentUser.location &&
-      !!state.currentUser.location.lat &&
-      !!user.location &&
-      !!user.location.lat
+      !noLocation(state.currentUser.location.coordinates) &&
+      !noLocation(user.location.coordinates.coordinates)
     ) {
-      const { lat, lng } = state.currentUser.location;
+      const {
+        location: { coordinates },
+      } = state.currentUser;
       const miles = await getDistanceFromCoords(
-        lat,
-        lng,
-        user.location.lat,
-        user.location.lng
+        coordinates[1],
+        coordinates[0],
+        user.location.coordinates[1],
+        user.location.coordinates[0]
       );
 
       setDistance(`${miles} miles away`);

@@ -100,13 +100,15 @@ const UserSchema = new mongoose.Schema({
     enum: ["Yes", "No", "Recreational"],
   },
   location: {
-    lat: {
-      type: Number,
-      default: null,
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
     },
-    lng: {
-      type: Number,
-      default: null,
+    coordinates: {
+      type: [Number],
+      default: [0, 0], // Default coordinates if not specified
+      index: "2dsphere", // Specify the index type as 2dsphere for geospatial indexing
     },
   },
   blockedUsers: [
@@ -137,6 +139,8 @@ const UserSchema = new mongoose.Schema({
     ref: "ChatRequest",
   },
 });
+
+UserSchema.index({ location: "2dsphere" }); // Create the geospatial index on the 'location' field
 
 UserSchema.pre("save", function (next) {
   const user = this;

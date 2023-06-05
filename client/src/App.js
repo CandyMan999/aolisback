@@ -22,7 +22,7 @@ class App extends React.PureComponent {
           <Route exact path="/" component={HomeContainer} />
           <ProtectedRoute exact path="/profile" component={CreateProfile} />
           <ProtectedRoute path="/video" component={Video} />
-          <ProtectedRoute path="/location" component={Map} />
+          <ProtectedRoute props={this.props} path="/location" component={Map} />
           <ProtectedRoute path="/message-center" component={MessageCenter} />
           <ProtectedRoute path="/message" component={Message} />
           <Route path="/grid-search" component={GridSearch} />

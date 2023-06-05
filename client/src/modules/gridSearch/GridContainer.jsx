@@ -22,8 +22,15 @@ const GridContainer = () => {
 
   const fetchData = async () => {
     setLoading(true);
+
     try {
-      const { getAllUsers } = await client.request(GET_ALL_USERS);
+      const variables = {
+        latitude: currentUser.location.coordinates[1],
+        longitude: currentUser.location.coordinates[0],
+      };
+      const { getAllUsers } = await client.request(GET_ALL_USERS, variables);
+
+      console.log("users: ", getAllUsers);
 
       const filteredUsers = await getAllUsers.filter(
         (user) => user.username !== state.currentUser.username
@@ -43,14 +50,13 @@ const GridContainer = () => {
 
       .map((user) => ({
         ...user,
-
         distanceAway: Math.abs(
           Math.round(
             getDistanceFromCoords(
-              currentUser.location.lat,
-              currentUser.location.lng,
-              user.location.lat,
-              user.location.lng
+              currentUser.location.coordinates[1],
+              currentUser.location.coordinates[0],
+              user.location.coordinates[1],
+              user.location.coordinates[0]
             )
           )
         ),
