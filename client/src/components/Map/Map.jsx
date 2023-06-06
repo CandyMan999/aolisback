@@ -49,10 +49,10 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
   } = currentUser;
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     handleGetUsers();
   }, []);
-
-  console.log("location: ", location);
 
   useEffect(() => {
     const { _id, lat, lng } = state.userLocation;
