@@ -188,7 +188,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
                 />
               </Marker>
               {popup.id && popup.id === user._id ? (
-                <Box width="100%" display="flex" zIndex={100}>
+                <Box width="100%" display="flex" zIndex={99}>
                   <Popup
                     key={user._id + i + "1"}
                     anchor="bottom"
