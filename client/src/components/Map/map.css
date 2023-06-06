@@ -1,15 +1,11 @@
 .mapboxgl-popup-close-button {
     font-size: 25px;
-    background-color: lightgrey;
     margin: 2px;
-    border: solid 1px black;
-    border-radius: 50%;
-    color: black;
     width: 28px !important;
     height: 28px;
     display: flex;
     align-items: center;
-    justify-content: center;
+   
 }
 
 .mapboxgl-popup-content {
@@ -18,7 +14,3 @@
 
 }
 
-button {
-    appearance:unset;
-    width: 28px
-}
