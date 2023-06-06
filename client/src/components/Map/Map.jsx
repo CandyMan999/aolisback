@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
+import "./map.css";
 import ReactMapGL, {
   NavigationControl,
   Marker,
@@ -31,10 +32,10 @@ mapboxgl.workerClass =
 const INITIAL_VIEWPORT = {
   latitude: 37.6521549856949,
   longitude: -97.14298803846937,
-  zoom: 3,
+  zoom: 2,
 };
 
-const Map = ({ zoom, width, height, currentUser }) => {
+const Map = ({ zoom, width, height, currentUser, location }) => {
   const mobileSize = useMediaQuery("(max-width: 650px)");
 
   const [popup, setPopup] = useState({ isOpen: false, id: null });
@@ -51,6 +52,8 @@ const Map = ({ zoom, width, height, currentUser }) => {
     handleGetUsers();
   }, []);
 
+  console.log("location: ", location);
+
   useEffect(() => {
     const { _id, lat, lng } = state.userLocation;
     if (!!_id && !!lat && !!lng) {
@@ -58,6 +61,16 @@ const Map = ({ zoom, width, height, currentUser }) => {
 
       setTimeout(() => {
         handleFlyTo(lat, lng, 8);
+      }, 1000);
+    }
+    if (location.pathname === "/profile") {
+      setPopup({ isOpen: true, id: currentUser._id });
+      setTimeout(() => {
+        handleFlyTo(
+          currentUser.location.coordinates[1],
+          currentUser.location.coordinates[0],
+          8
+        );
       }, 1000);
     }
   }, [state.userLocation._id]);
@@ -106,7 +119,7 @@ const Map = ({ zoom, width, height, currentUser }) => {
     if (noLocation(coordinates)) {
       handleFlyTo(INITIAL_VIEWPORT.latitude, INITIAL_VIEWPORT.longitude, 4);
     } else {
-      handleFlyTo(coordinates[1], coordinates[0], 3);
+      handleFlyTo(coordinates[1], coordinates[0], viewport.zoom);
     }
   };
 
@@ -134,8 +147,9 @@ const Map = ({ zoom, width, height, currentUser }) => {
   };
 
   const handleMarkerClick = (id, lat, lng) => {
+    const markerZoom = viewport.zoom > 8 ? viewport.zoom : 8;
     setPopup({ isOpen: true, id });
-    handleFlyTo(lat, lng, 8);
+    handleFlyTo(lat, lng, markerZoom);
   };
   return (
     <Fragment>
@@ -190,8 +204,17 @@ const Map = ({ zoom, width, height, currentUser }) => {
                     closeOnClick={false}
                     onClose={() => setPopup({ isOpen: false, id: null })}
                   >
-                    <OnlineDot online={user.isLoggedIn} />
-                    <Text bold fontSize={FONT_SIZES.X_LARGE} margin={0} center>
+                    <OnlineDot
+                      online={user.isLoggedIn}
+                      style={{ marginTop: 0 }}
+                    />
+                    <Text
+                      bold
+                      fontSize={FONT_SIZES.X_LARGE}
+                      margin={0}
+                      center
+                      marginBottom={4}
+                    >
                       {user.username}
                     </Text>
                     <Box

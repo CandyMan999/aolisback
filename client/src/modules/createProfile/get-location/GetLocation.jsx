@@ -9,26 +9,43 @@ import {
   Map,
 } from "../../../components";
 import { COLORS } from "../../../constants";
+import { useLocation } from "react-router-dom";
 
 import { UPDATE_LOCATION_MUTATION } from "../../../graphql/mutations";
 
-const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
+const GetLocation = ({
+  dispatch,
+  client,
+  currentUser,
+  total,
+  completed,
+  mobile,
+}) => {
   const [submitted, setSubmitted] = useState(false);
   const [userCoords, setUserCoords] = useState({ lat: null, lng: null });
   const [spinner, setSpinner] = useState(false);
-  const [locationSuccess, setLocationSuccess] = useState(
-    !!currentUser.location.coordinates
-  );
+  const location = useLocation();
+  const [locationSuccess, setLocationSuccess] = useState(false);
 
   useEffect(() => {
     if (userCoords.lat) {
       handleGetLocation();
+      dispatch({
+        type: "VIEW_LOCATION",
+        payload: {
+          _id: currentUser._id,
+          lat: userCoords.lat,
+          lng: userCoords.lng,
+        },
+      });
     }
   }, [userCoords.lat]);
 
-  // useEffect(() => {
-  //   handleGetLocation();
-  // }, []);
+  useEffect(() => {
+    if (currentUser.username) {
+      setLocationSuccess(!noLocation(currentUser.location.coordinates));
+    }
+  }, [currentUser.username]);
 
   const handleGetLocation = async () => {
     try {
@@ -51,7 +68,10 @@ const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
           payload: updateLocation.coordinates,
         });
         setSpinner(false);
-        setSubmitted(true);
+        // setTimeout(() => {
+        //   setSubmitted(true);
+        // }, 2000);
+
         setLocationSuccess(true);
       }
       if (!updateLocation) {
@@ -62,6 +82,18 @@ const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
       setSpinner(false);
       console.log(err);
     }
+  };
+
+  const noLocation = (array) => {
+    if (
+      Array.isArray(array) &&
+      array.length === 2 &&
+      array[0] === 0 &&
+      array[1] === 0
+    ) {
+      return true;
+    }
+    return false;
   };
 
   const handleLocation = () => {
@@ -82,12 +114,17 @@ const GetLocation = ({ dispatch, client, currentUser, total, completed }) => {
   return (
     <CollapsableHeader
       title={"Get Location"}
-      onClose={submitted}
+      // onClose={submitted}
       total={total}
       completed={completed}
     >
       <Box width={"100%"} height={"100%"} column alignItems="center">
-        <Map currentUser={currentUser} width={"100vW"} height={250} zoom={12} />
+        <Map
+          currentUser={currentUser}
+          width={mobile ? "100vw" : "80%"}
+          height={400}
+          location={location}
+        />
 
         <Box padding={10}>
           <Button

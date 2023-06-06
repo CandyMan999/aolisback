@@ -133,6 +133,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser, mobile }) => {
                   dispatch={dispatch}
                   completed={completedCounts.myLocation}
                   total={totalCounts.myLocation}
+                  mobile={mobile}
                 />
                 <MyPhotos
                   currentUser={currentUser}
