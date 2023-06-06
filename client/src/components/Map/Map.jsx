@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
-import ReactMapGL, { NavigationControl, Marker, Popup } from "react-map-gl";
+import ReactMapGL, {
+  NavigationControl,
+  Marker,
+  Popup,
+  FlyToInterpolator,
+} from "react-map-gl";
 
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { GET_USERS_MAP_QUERY } from "../../graphql/queries";
@@ -26,7 +31,7 @@ mapboxgl.workerClass =
 const INITIAL_VIEWPORT = {
   latitude: 37.6521549856949,
   longitude: -97.14298803846937,
-  zoom: 4,
+  zoom: 3,
 };
 
 const Map = ({ zoom, width, height, currentUser }) => {
@@ -48,7 +53,7 @@ const Map = ({ zoom, width, height, currentUser }) => {
 
   useEffect(() => {
     const { _id, lat, lng } = state.userLocation;
-    if (state.userLocation._id) {
+    if (!!_id && !!lat && !!lng) {
       setPopup({ isOpen: true, id: _id });
 
       setTimeout(() => {
@@ -101,7 +106,7 @@ const Map = ({ zoom, width, height, currentUser }) => {
     if (noLocation(coordinates)) {
       handleFlyTo(INITIAL_VIEWPORT.latitude, INITIAL_VIEWPORT.longitude, 4);
     } else {
-      handleFlyTo(coordinates[1], coordinates[0], 4);
+      handleFlyTo(coordinates[1], coordinates[0], 3);
     }
   };
 
@@ -110,12 +115,20 @@ const Map = ({ zoom, width, height, currentUser }) => {
     dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
   };
 
+  const flyToOptions = {
+    duration: "auto", // Transition duration in milliseconds
+    easing: (t) => t, // Easing function for the transition
+    transitionInterpolator: new FlyToInterpolator(), // Specify the FlyToInterpolator
+  };
+
   const handleFlyTo = (lat, lng, zoom) => {
     const newViewport = {
       latitude: lat,
       longitude: lng,
       zoom,
-      transitionDuration: 2000,
+      transitionDuration: flyToOptions.duration,
+      transitionEasing: flyToOptions.easing,
+      transitionInterpolator: flyToOptions.transitionInterpolator,
     };
     setViewport(newViewport);
   };
