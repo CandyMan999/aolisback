@@ -100,17 +100,6 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
       console.log(err);
     }
   };
-  const noLocation = (array) => {
-    if (
-      Array.isArray(array) &&
-      array.length === 2 &&
-      array[0] === 0 &&
-      array[1] === 0
-    ) {
-      return true;
-    }
-    return false;
-  };
 
   const handleMapClick = () => {
     setPopup({ isOpen: false, id: null });
@@ -155,6 +144,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
         {...viewport}
         onClick={handleMapClick}
         scrollZoom={!mobileSize}
+        style={{ overflow: "hidden", overscrollBehavior: "none" }}
       >
         <div>
           <NavigationControl

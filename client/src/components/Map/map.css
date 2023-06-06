@@ -17,3 +17,8 @@
     padding-top: 0px;
 
 }
+
+button {
+    appearance:unset;
+    width: 28px
+}
