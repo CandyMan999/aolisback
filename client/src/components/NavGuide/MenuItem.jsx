@@ -86,6 +86,10 @@ export const MenuItem = ({
       toggle();
     }
     if (item === "View Users Locations") {
+      dispatch({
+        type: "VIEW_LOCATION",
+        payload: { _id: null, lat: null, lng: null },
+      });
       toggle();
     }
     if (item === "Browse Users") {
