@@ -113,14 +113,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
   };
 
   const handleMapClick = () => {
-    const { coordinates } = currentUser.location;
-
     setPopup({ isOpen: false, id: null });
-    if (noLocation(coordinates)) {
-      handleFlyTo(INITIAL_VIEWPORT.latitude, INITIAL_VIEWPORT.longitude, 4);
-    } else {
-      handleFlyTo(coordinates[1], coordinates[0], viewport.zoom);
-    }
   };
 
   const handleSetProfile = async (user) => {
