@@ -84,8 +84,14 @@
 .message-list {
   grid-area: m;
   overflow-y: scroll;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none;
   overflow-x: hidden;
   
+}
+
+.message-list::-webkit-scrollbar {
+  display: none; /* Hide the scrollbar for WebKit based browsers */
 }
 .send-message-form {
   grid-area: f;
