@@ -30,8 +30,6 @@ const GridContainer = () => {
       };
       const { getAllUsers } = await client.request(GET_ALL_USERS, variables);
 
-      console.log("users: ", getAllUsers);
-
       const filteredUsers = await getAllUsers.filter(
         (user) => user.username !== state.currentUser.username
       );
@@ -43,6 +41,17 @@ const GridContainer = () => {
       setLoading(false);
       console.log("err fetching users: ", err);
     }
+  };
+  const noLocation = (array) => {
+    if (
+      Array.isArray(array) &&
+      array.length === 2 &&
+      array[0] === 0 &&
+      array[1] === 0
+    ) {
+      return true;
+    }
+    return false;
   };
 
   const sortByDistance = (array) => {

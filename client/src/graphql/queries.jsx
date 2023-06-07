@@ -81,8 +81,8 @@ export const FIND_USER_QUERY = gql`
 `;
 
 export const GET_USERS_MAP_QUERY = gql`
-  query {
-    getUsersMap {
+  query ($latitude: Float!, $longitude: Float!) {
+    getUsersMap(latitude: $latitude, longitude: $longitude) {
       _id
       username
       isLoggedIn

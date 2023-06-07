@@ -43,8 +43,8 @@ const ProfileCardFront = ({
 
   const handleDistance = async (user) => {
     if (
-      !noLocation(state.currentUser.location.coordinates) ||
-      !noLocation(user.location.coordinates.coordinates)
+      !noLocation(state.currentUser.location.coordinates) &&
+      !noLocation(user.location.coordinates)
     ) {
       const {
         location: { coordinates },

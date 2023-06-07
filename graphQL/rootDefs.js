@@ -132,7 +132,7 @@ module.exports = gql`
     getRooms: [Room]
     getComments(roomId: ID!): [Comment]
     findUser(_id: ID!): User
-    getUsersMap: [User]
+    getUsersMap(latitude: Float!, longitude: Float!): [User]
     getAllUsers(latitude: Float!, longitude: Float!): [User]
     getVideos(senderID: ID!, receiverID: ID!): [Video]
   }

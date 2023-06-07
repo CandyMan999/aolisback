@@ -18,6 +18,7 @@ import {
   RoomLink,
   OnlineDot,
   Picture,
+  Loading,
 } from "../../components";
 import { COLORS } from "../../constants";
 
@@ -40,6 +41,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
 
   const [popup, setPopup] = useState({ isOpen: false, id: null });
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const { state, dispatch } = useContext(Context);
@@ -77,7 +79,15 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
 
   const handleGetUsers = async () => {
     try {
-      const { getUsersMap } = await client.request(GET_USERS_MAP_QUERY, {});
+      setLoading(true)
+      const variables = {
+        latitude: currentUser.location.coordinates[1],
+        longitude: currentUser.location.coordinates[0],
+      };
+      const { getUsersMap } = await client.request(
+        GET_USERS_MAP_QUERY,
+        variables
+      );
 
       setUsers([...getUsersMap]);
       if (!!coordinates.length) {
@@ -96,7 +106,9 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
           });
         }
       }
+      setLoading(false)
     } catch (err) {
+      setLoading(false)
       console.log(err);
     }
   };
@@ -135,105 +147,114 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
   };
   return (
     <Fragment>
-      <ReactMapGL
-        width={width ? width : "100vw"}
-        height={height ? height : "calc(100vh - 64px)"}
-        mapStyle={"mapbox://styles/mapbox/streets-v12"}
-        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
-        onViewportChange={(newViewport) => setViewport(newViewport)}
-        {...viewport}
-        onClick={handleMapClick}
-        scrollZoom={!mobileSize}
-        style={{ overflow: "hidden", overscrollBehavior: "none" }}
-      >
-        <div>
-          <NavigationControl
-            onViewportChange={(newViewport) => setViewport(newViewport)}
-          />
-        </div>
-        {users.length &&
-          users.map((user, i) => (
-            <Box key={"box" + i} textAlign="center">
-              <Marker
-                key={user._id}
-                latitude={user.location.coordinates[1]}
-                longitude={user.location.coordinates[0]}
-              >
-                <Icon
-                  key={user._id + i}
-                  onClick={() =>
-                    handleMarkerClick(
-                      user._id,
-                      user.location.coordinates[1],
-                      user.location.coordinates[0]
-                    )
-                  }
-                  name="pin"
-                  size={ICON_SIZES.X_LARGE}
-                  color={
-                    state.currentUser._id === user._id
-                      ? COLORS.vividBlue
-                      : COLORS.red
-                  }
-                />
-              </Marker>
-              {popup.id && popup.id === user._id ? (
-                <Box width="100%" display="flex" zIndex={99}>
-                  <Popup
-                    key={user._id + i + "1"}
-                    anchor="bottom"
-                    latitude={user.location.coordinates[1]}
-                    longitude={user.location.coordinates[0]}
-                    closeOnClick={false}
-                    onClose={() => setPopup({ isOpen: false, id: null })}
-                  >
-                    <OnlineDot
-                      online={user.isLoggedIn}
-                      style={{ marginTop: 0 }}
-                    />
-                    <Text
-                      bold
-                      fontSize={FONT_SIZES.X_LARGE}
-                      margin={0}
-                      center
-                      marginBottom={4}
+      {loading ? (
+        <Box
+          width={width ? width : "100vw"}
+          height={height ? height : "calc(100vh - 64px)"}
+        >
+          <Loading fade size={150} />
+        </Box>
+      ) : (
+        <ReactMapGL
+          width={width ? width : "100vw"}
+          height={height ? height : "calc(100vh - 64px)"}
+          mapStyle={"mapbox://styles/mapbox/streets-v12"}
+          mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
+          onViewportChange={(newViewport) => setViewport(newViewport)}
+          {...viewport}
+          onClick={handleMapClick}
+          scrollZoom={!mobileSize}
+          style={{ overflow: "hidden", overscrollBehavior: "none" }}
+        >
+          <div>
+            <NavigationControl
+              onViewportChange={(newViewport) => setViewport(newViewport)}
+            />
+          </div>
+          {users.length &&
+            users.map((user, i) => (
+              <Box key={"box" + i} textAlign="center">
+                <Marker
+                  key={user._id}
+                  latitude={user.location.coordinates[1]}
+                  longitude={user.location.coordinates[0]}
+                >
+                  <Icon
+                    key={user._id + i}
+                    onClick={() =>
+                      handleMarkerClick(
+                        user._id,
+                        user.location.coordinates[1],
+                        user.location.coordinates[0]
+                      )
+                    }
+                    name="pin"
+                    size={ICON_SIZES.X_LARGE}
+                    color={
+                      state.currentUser._id === user._id
+                        ? COLORS.vividBlue
+                        : COLORS.red
+                    }
+                  />
+                </Marker>
+                {popup.id && popup.id === user._id ? (
+                  <Box width="100%" display="flex" zIndex={99}>
+                    <Popup
+                      key={user._id + i + "1"}
+                      anchor="bottom"
+                      latitude={user.location.coordinates[1]}
+                      longitude={user.location.coordinates[0]}
+                      closeOnClick={false}
+                      onClose={() => setPopup({ isOpen: false, id: null })}
                     >
-                      {user.username}
-                    </Text>
-                    <Box
-                      onClick={() => handleSetProfile(user)}
-                      justifyContent="center"
-                      marginBottom={20}
-                    >
-                      <Box
-                        justifyContent="center"
-                        style={{
-                          backgroundColor: "black",
-                          borderRadius: "5px",
-                          width: "fit-content",
-                          padding: 10,
-                        }}
+                      <OnlineDot
+                        online={user.isLoggedIn}
+                        style={{ marginTop: 0 }}
+                      />
+                      <Text
+                        bold
+                        fontSize={FONT_SIZES.X_LARGE}
+                        margin={0}
+                        center
+                        marginBottom={4}
                       >
-                        <Picture
-                          profilePic={user.pictures[0]}
-                          name={user.username}
-                          height={"120px"}
-                          width={120}
-                        />
+                        {user.username}
+                      </Text>
+                      <Box
+                        onClick={() => handleSetProfile(user)}
+                        justifyContent="center"
+                        marginBottom={20}
+                      >
+                        <Box
+                          justifyContent="center"
+                          style={{
+                            backgroundColor: "black",
+                            borderRadius: "5px",
+                            width: "fit-content",
+                            padding: 10,
+                          }}
+                        >
+                          <Picture
+                            profilePic={user.pictures[0]}
+                            name={user.username}
+                            height={"120px"}
+                            width={120}
+                          />
+                        </Box>
                       </Box>
-                    </Box>
 
-                    {!!user.room && user.isLoggedIn && user.room.name && (
-                      <RoomLink dispatch={dispatch} user={user} />
-                    )}
-                  </Popup>
-                </Box>
-              ) : (
-                ""
-              )}
-            </Box>
-          ))}
-      </ReactMapGL>
+                      {!!user.room && user.isLoggedIn && user.room.name && (
+                        <RoomLink dispatch={dispatch} user={user} />
+                      )}
+                    </Popup>
+                  </Box>
+                ) : (
+                  ""
+                )}
+              </Box>
+            ))}
+        </ReactMapGL>
+      )}
     </Fragment>
   );
 };
