@@ -58,7 +58,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
 
   useEffect(() => {
     const { _id, lat, lng } = state.userLocation;
-    if (!!_id && !!lat && !!lng) {
+    if (!!_id && !!lat && !!lng && !loading) {
       setPopup({ isOpen: true, id: _id });
 
       setTimeout(() => {
@@ -75,11 +75,11 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
         );
       }, 1000);
     }
-  }, [state.userLocation._id]);
+  }, [state.userLocation._id, loading]);
 
   const handleGetUsers = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const variables = {
         latitude: currentUser.location.coordinates[1],
         longitude: currentUser.location.coordinates[0],
@@ -106,9 +106,9 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
           });
         }
       }
-      setLoading(false)
+      setLoading(false);
     } catch (err) {
-      setLoading(false)
+      setLoading(false);
       console.log(err);
     }
   };
