@@ -37,10 +37,10 @@ module.exports = {
             ? { $exists: true }
             : ctx.currentUser.kids,
         "lookingFor.ageRange.lowEnd": {
-          $lte: !!ctx.currentUser.age ? ctx.currentUser.age : { $exists: true },
+          $lte: !!ctx.currentUser.age ? ctx.currentUser.age : 80,
         },
         "lookingFor.ageRange.highEnd": {
-          $gte: !!ctx.currentUser.age ? ctx.currentUser.age : { $exists: true },
+          $gte: !!ctx.currentUser.age ? ctx.currentUser.age : 18,
         },
       })
         .limit(200)

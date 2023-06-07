@@ -19,7 +19,7 @@ const SearchResults = ({
   const onUserCardClick = (id) => {
     setActiveID(id);
   };
-  console.log("users: ", users);
+
   const toggleModal = () => {
     dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
   };
