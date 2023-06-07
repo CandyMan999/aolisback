@@ -8,14 +8,12 @@ export const BASE_URL =
     : "http://localhost:4000/graphql";
 
 export const useClient = () => {
-  const [idToken, setIdToken] = useState("");
-
-  useEffect(() => {
-    const token = getToken();
-    setIdToken(token);
-  }, []);
+  // useEffect(() => {
+  //   const token = getToken();
+  //   setIdToken(token);
+  // }, []);
 
   return new GraphQLClient(BASE_URL, {
-    headers: { authorization: idToken },
+    headers: { authorization: getToken() },
   });
 };

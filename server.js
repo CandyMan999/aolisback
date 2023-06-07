@@ -4,6 +4,8 @@ const { typeDefs, resolvers } = require("./graphQL");
 const { findOrCreateUser } = require("./controllers/userController");
 
 const mongoose = require("mongoose");
+const { verifyToken } = require("./utils/middleware");
+const { fetchMeResolver } = require("./graphQL/queries");
 
 require("dotenv").config();
 
@@ -35,8 +37,21 @@ const startServer = async () => {
 
         try {
           authToken = req.headers.authorization;
+
+          if (!!authToken) {
+            const result = await verifyToken({ token: authToken });
+            if (result.id) {
+              currentUser = await fetchMeResolver({}, { token: authToken });
+
+              return { currentUser };
+            }
+          }
+          return { currentUser };
         } catch (err) {
-          console.error(`Uanable to authenticate user with token ${authToken}`);
+          console.error(
+            `Uanable to authenticate user with token ${authToken}`,
+            err
+          );
         }
         return { currentUser };
       }

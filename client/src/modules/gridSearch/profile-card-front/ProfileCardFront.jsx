@@ -95,7 +95,7 @@ const ProfileCardFront = ({
         {name}
       </Text>
       <Text>
-        {user.sex} {user.age}
+        {user.sex === "Gender_Diverse" ? "Gender Diverse" : user.sex} {user.age}
       </Text>
 
       <Box

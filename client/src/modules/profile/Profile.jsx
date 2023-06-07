@@ -207,7 +207,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 {username}
               </Text>
               <Text margin={2}>
-                {sex} {age}
+                {sex === "Gender_Diverse" ? "Gender Diverse" : sex} {age}
               </Text>
             </Box>
             <Box display="flex" column paddingRight="5%">

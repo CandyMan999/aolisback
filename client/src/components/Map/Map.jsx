@@ -8,7 +8,7 @@ import ReactMapGL, {
 } from "react-map-gl";
 
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { GET_USERS_MAP_QUERY } from "../../graphql/queries";
+import { GET_USERS_MAP_QUERY, FIND_USER_QUERY } from "../../graphql/queries";
 
 import {
   Box,
@@ -19,6 +19,7 @@ import {
   OnlineDot,
   Picture,
   Loading,
+  Button,
 } from "../../components";
 import { COLORS } from "../../constants";
 
@@ -26,6 +27,7 @@ import Context from "../../context";
 import { useClient } from "../../client";
 import { FONT_SIZES } from "../Text";
 import mapboxgl from "mapbox-gl";
+import { PossibleTypeExtensionsRule } from "graphql";
 
 mapboxgl.workerClass =
   require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -42,6 +44,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
   const [popup, setPopup] = useState({ isOpen: false, id: null });
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [mapLoading, setMapLoading] = useState(false);
 
   const [viewport, setViewport] = useState(INITIAL_VIEWPORT);
   const { state, dispatch } = useContext(Context);
@@ -57,27 +60,53 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
   }, []);
 
   useEffect(() => {
-    const { _id, lat, lng } = state.userLocation;
-    if (!!_id && !!lat && !!lng && !loading) {
-      setPopup({ isOpen: true, id: _id });
+    const mapLoad = async () => {
+      const { _id, lat, lng } = state.userLocation;
+      if (!!_id && !!lat && !!lng && !loading) {
+        await handleGetUsers(_id);
+        setPopup({ isOpen: true, id: _id });
 
-      setTimeout(() => {
-        handleFlyTo(lat, lng, 8);
-      }, 1000);
-    }
-    if (location.pathname === "/profile") {
-      setPopup({ isOpen: true, id: currentUser._id });
-      setTimeout(() => {
-        handleFlyTo(
-          currentUser.location.coordinates[1],
-          currentUser.location.coordinates[0],
-          8
-        );
-      }, 1000);
-    }
-  }, [state.userLocation._id, loading]);
+        setTimeout(() => {
+          handleFlyTo(lat, lng, 8);
+        }, 1000);
+      }
+      if (location.pathname === "/profile" && !loading) {
+        setPopup({ isOpen: true, id: currentUser._id });
+        await handleGetUsers(currentUser._id);
+        setTimeout(() => {
+          handleFlyTo(
+            currentUser.location.coordinates[1],
+            currentUser.location.coordinates[0],
+            8
+          );
+        }, 1000);
+      }
+    };
+    mapLoad();
+  }, [state.userLocation._id]);
 
-  const handleGetUsers = async () => {
+  const handleMapMove = async () => {
+    try {
+      setMapLoading(true);
+      const variables = {
+        latitude: viewport.latitude,
+        longitude: viewport.longitude,
+      };
+
+      const { getUsersMap } = await client.request(
+        GET_USERS_MAP_QUERY,
+        variables
+      );
+
+      setUsers([...getUsersMap]);
+      setMapLoading(false);
+    } catch (err) {
+      setMapLoading(false);
+      console.log(err);
+    }
+  };
+
+  const handleGetUsers = async (_id) => {
     try {
       setLoading(true);
       const variables = {
@@ -88,8 +117,24 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
         GET_USERS_MAP_QUERY,
         variables
       );
+      let foundUser = null;
+      if (!!_id) {
+        const found = await getUsersMap.find((user) => user._id === _id);
+        if (!found) {
+          const variables = {
+            _id,
+          };
+          const { findUser } = await client.request(FIND_USER_QUERY, variables);
+          foundUser = findUser;
+        }
+      }
 
-      setUsers([...getUsersMap]);
+      if (!!foundUser) {
+        setUsers([...getUsersMap, foundUser]);
+      } else {
+        setUsers([...getUsersMap]);
+      }
+
       if (!!coordinates.length) {
         setViewport({
           ...INITIAL_VIEWPORT,
@@ -106,6 +151,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
           });
         }
       }
+
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -146,33 +192,6 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
     handleFlyTo(lat, lng, markerZoom);
   };
 
-  const buildMarker = () => {
-    return (
-      <Marker
-        key={`${state.userLocation._id}-marker`}
-        latitude={state.userLocation.lat}
-        longitude={state.userLocation.lng}
-      >
-        <Icon
-          key={`${state.userLocation._id}-marker-icon`}
-          onClick={() =>
-            handleMarkerClick(
-              state.userLocation._id,
-              state.userLocation.lat,
-              state.userLocation.lng
-            )
-          }
-          name="pin"
-          size={ICON_SIZES.X_LARGE}
-          color={
-            state.currentUser._id === state.userLocation._id
-              ? COLORS.vividBlue
-              : COLORS.red
-          }
-        />
-      </Marker>
-    );
-  };
   return (
     <Fragment>
       {loading ? (
@@ -198,6 +217,19 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
             <NavigationControl
               onViewportChange={(newViewport) => setViewport(newViewport)}
             />
+            {location.pathname !== "/profile" && (
+              <Box
+                width={"40%"}
+                position="absolute"
+                bottom={0}
+                left={0}
+                zIndex={900}
+              >
+                <Button width={"100%"} onClick={handleMapMove}>
+                  {mapLoading ? <Loading bar /> : <Text bold>UPDATE MAP</Text>}
+                </Button>
+              </Box>
+            )}
           </div>
           {users.length &&
             users.map((user, i) => (

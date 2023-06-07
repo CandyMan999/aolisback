@@ -19,7 +19,7 @@ const SearchResults = ({
   const onUserCardClick = (id) => {
     setActiveID(id);
   };
-
+  console.log("users: ", users);
   const toggleModal = () => {
     dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
   };
@@ -30,8 +30,8 @@ const SearchResults = ({
         <Box display={"flex"} column justifyContent="space-around">
           <Box centerText>
             <Text fontSize={FONT_SIZES.X_LARGE} bold>
-              Sorry, there currently aren't any users as we are in BETA. Please
-              sign-up for our NewsLetter to be notified when new users arrive!
+              Sorry, there currently aren't any users, try broading your filter
+              in your profile as we are in BETA.
             </Text>
           </Box>
         </Box>
@@ -44,7 +44,6 @@ const SearchResults = ({
       className={gridStyle(mobile)}
       style={{ display: users.length ? "grid" : "" }}
       width="100%"
-      justifyContent="space-around"
     >
       {!!users.length
         ? users.map((user, i) => (
@@ -93,6 +92,7 @@ const gridStyle = (mobile) =>
     gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
     justifyItems: "center",
     paddingBottom: "0px",
+
     marginBottom: "0px",
     maxHeight: mobile ? undefined : "1220px",
     overflowY: !mobile ? "scroll" : undefined,

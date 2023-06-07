@@ -18,8 +18,8 @@ const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
         style={{ display: "grid", margin: "20px" }}
         width="100%"
         height="fit-content"
-        justifyContent="space-around"
-        paddingBottom={"10%"}
+        minHeight={"100%"}
+        justifyContent="stretch"
         card={mobile ? false : true}
       >
         {!!currentUser.username ? (

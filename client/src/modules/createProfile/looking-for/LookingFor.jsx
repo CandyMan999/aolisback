@@ -48,12 +48,22 @@ const LookingFor = ({
     e.preventDefault();
     try {
       setLoading(true);
-      const varibales = {
-        ...formValues,
-        _id: currentUser._id,
-        lowEnd: ageRange.lowEnd,
-        highEnd: ageRange.highEnd,
-      };
+      let varibales;
+      if (formValues.sex === "") {
+        varibales = {
+          _id: currentUser._id,
+          lowEnd: ageRange.lowEnd,
+          highEnd: ageRange.highEnd,
+          kids: formValues.kids,
+        };
+      } else {
+        varibales = {
+          ...formValues,
+          _id: currentUser._id,
+          lowEnd: ageRange.lowEnd,
+          highEnd: ageRange.highEnd,
+        };
+      }
 
       const { lookingFor } = await client.request(
         LOOKING_FOR_MUTATION,
