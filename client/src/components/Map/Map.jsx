@@ -204,7 +204,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
       ) : (
         <ReactMapGL
           width={width ? width : "100vw"}
-          height={height ? height : "calc(100vh - 64px)"}
+          height={height ? height : `calc(${window.innerHeight}px - 64px)`}
           mapStyle={"mapbox://styles/mapbox/streets-v12"}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
           onViewportChange={(newViewport) => setViewport(newViewport)}
