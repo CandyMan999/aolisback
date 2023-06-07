@@ -80,15 +80,13 @@ const GridContainer = () => {
 
   return !!loading ? (
     <Box
-      position="absolute"
-      top="50%"
-      left="50%"
-      marginTop={-50}
-      marginLeft={-50}
-      width={100}
-      height={100}
+      width={"100%"}
+      height={"50vh"}
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
     >
-      <Loading fade />
+      <Loading fade size={200} />
     </Box>
   ) : (
     <GridSearch

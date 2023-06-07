@@ -23,7 +23,7 @@ module.exports = {
           $gte: ageRange.lowEnd,
           $lte: ageRange.highEnd,
         },
-        $or: [{ kids: kids }, { kids: kids === "" ? { $exists: true } : null }],
+        kids: kids === "" ? { $exists: true } : kids,
         $or: [
           { sex: sex },
           { sex: !sex || sex === "Gender_Diverse" ? { $exists: true } : null },

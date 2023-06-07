@@ -197,9 +197,11 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
       {loading ? (
         <Box
           width={width ? width : "100vw"}
-          height={height ? height : "calc(100vh - 64px)"}
+          height={height ? height : "70vh"}
+          display="flex"
+          justifyContent="center"
         >
-          <Loading fade size={150} />
+          <Loading ring size={200} />
         </Box>
       ) : (
         <ReactMapGL

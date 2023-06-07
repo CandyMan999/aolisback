@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Loading } from "../../components";
+import { Box } from "../../components";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import SearchResults from "./search-results/SearchResults";
@@ -20,20 +20,16 @@ const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
         height="fit-content"
         minHeight={"100%"}
         justifyContent="stretch"
-        card={mobile ? false : true}
+        card={!users.length ? true : mobile ? false : true}
       >
-        {!!currentUser.username ? (
-          <SearchResults
-            state={state}
-            client={client}
-            dispatch={dispatch}
-            currentUser={currentUser}
-            mobile={mobile}
-            users={users}
-          />
-        ) : (
-          <Loading ring />
-        )}
+        <SearchResults
+          state={state}
+          client={client}
+          dispatch={dispatch}
+          currentUser={currentUser}
+          mobile={mobile}
+          users={users}
+        />
       </Box>
     </Box>
   );

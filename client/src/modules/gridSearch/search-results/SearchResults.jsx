@@ -27,11 +27,19 @@ const SearchResults = ({
   const handleComponent = () => {
     if (!users.length) {
       return (
-        <Box display={"flex"} column justifyContent="space-around">
-          <Box centerText>
-            <Text fontSize={FONT_SIZES.X_LARGE} bold>
-              Sorry, there currently aren't any users, try broading your filter
-              in your profile as we are in BETA.
+        <Box
+          display={"flex"}
+          height={"50%"}
+          column
+          width="100%"
+          justifyContent="space-around"
+          alignItems="center"
+        >
+          <Box centerText padding={"5%"}>
+            <Text center fontSize={FONT_SIZES.X_LARGE} bold>
+              Sorry, there currently aren't any users. Try broadening what you
+              are looking for in your profile. More users should be arriving
+              soon as we are in BETA.
             </Text>
           </Box>
         </Box>
