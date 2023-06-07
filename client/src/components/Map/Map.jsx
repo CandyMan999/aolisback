@@ -145,6 +145,34 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
     setPopup({ isOpen: true, id });
     handleFlyTo(lat, lng, markerZoom);
   };
+
+  const buildMarker = () => {
+    return (
+      <Marker
+        key={`${state.userLocation._id}-marker`}
+        latitude={state.userLocation.lat}
+        longitude={state.userLocation.lng}
+      >
+        <Icon
+          key={`${state.userLocation._id}-marker-icon`}
+          onClick={() =>
+            handleMarkerClick(
+              state.userLocation._id,
+              state.userLocation.lat,
+              state.userLocation.lng
+            )
+          }
+          name="pin"
+          size={ICON_SIZES.X_LARGE}
+          color={
+            state.currentUser._id === state.userLocation._id
+              ? COLORS.vividBlue
+              : COLORS.red
+          }
+        />
+      </Marker>
+    );
+  };
   return (
     <Fragment>
       {loading ? (
@@ -197,6 +225,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
                     }
                   />
                 </Marker>
+
                 {popup.id && popup.id === user._id ? (
                   <Box width="100%" display="flex" zIndex={99}>
                     <Popup
