@@ -166,6 +166,18 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     }
   };
 
+  const noLocation = (array) => {
+    if (
+      Array.isArray(array) &&
+      array.length === 2 &&
+      array[0] === 0 &&
+      array[1] === 0
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <Fragment>
       <Drawer onClose={toggleDrawer} isOpen={state.isProfile}>
@@ -463,10 +475,10 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             </Button>
             <Button
               style={{ margin: 0 }}
-              disabled={location && !location.coordinates}
+              disabled={location && noLocation(location.coordinates)}
               onClick={() => handleLocation(_id, location)}
               color={
-                location && !location.coordinates
+                location && noLocation(location.coordinates)
                   ? COLORS.lightGrey
                   : COLORS.vividBlue
               }

@@ -127,7 +127,7 @@ const ProfileCardBack = ({
           color={video ? COLORS.white : COLORS.main}
         />
       </Box>
-      {!video && (
+      {!video && !loading && (
         <Box
           height="100%"
           display="flex"

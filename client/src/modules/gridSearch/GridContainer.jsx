@@ -56,19 +56,22 @@ const GridContainer = () => {
 
   const sortByDistance = (array) => {
     const newArray = array
-
       .map((user) => ({
         ...user,
-        distanceAway: Math.abs(
-          Math.round(
-            getDistanceFromCoords(
-              currentUser.location.coordinates[1],
-              currentUser.location.coordinates[0],
-              user.location.coordinates[1],
-              user.location.coordinates[0]
-            )
-          )
-        ),
+        distanceAway:
+          user.location.coordinates[0] === 0 &&
+          user.location.coordinates[1] === 0
+            ? 300000
+            : Math.abs(
+                Math.round(
+                  getDistanceFromCoords(
+                    currentUser.location.coordinates[1],
+                    currentUser.location.coordinates[0],
+                    user.location.coordinates[1],
+                    user.location.coordinates[0]
+                  )
+                )
+              ),
       }))
       .sort((a, b) => a.distanceAway - b.distanceAway);
 
