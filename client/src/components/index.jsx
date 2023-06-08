@@ -37,3 +37,6 @@ export { default as BottomDrawer } from "./BottomDrawer";
 export { default as CompVideoUploader } from "./CompVideo";
 export { default as AnimatedHand } from "./AnimatedHand";
 export { default as AgeRangeSlider } from "./AgeSlider";
+export { default as ProfileProgressSummary } from "./ProfileProgressSummary";
+export { default as ProgressBar } from "./ProgressBar";
+export { default as Banner } from "./Banner";

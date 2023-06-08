@@ -22,7 +22,7 @@ export const COLORS = {
   googleRed: "#DB4437",
   facebookBlue: "#3b5998",
   backgroundGreen: "#BFE2B3",
-  textGreen: "rgb(35 250 57)",
+  textGreen: "#005a00",
   backgroundRed: "#e59797",
   textRed: "#8B0000",
   backgroundYellow: "#eae5ab",

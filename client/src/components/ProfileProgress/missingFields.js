@@ -29,7 +29,7 @@ const missingFields = {
     oneOfLength: [],
     matches: [],
   },
-  mySobriety: {
+  singleTime: {
     required: ["singleTime"],
     hasLength: [],
     oneOf: [],

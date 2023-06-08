@@ -18,6 +18,11 @@ const AgeRangeSlider = ({ handleSliderChange, ageRange }) => {
 
   return (
     <div style={{ width: "100%" }}>
+      <div>
+        <Text center bold>
+          Age Range: {ageRange.lowEnd} - {ageRange.highEnd}
+        </Text>
+      </div>
       <Slider
         range={Range}
         min={18}
@@ -29,12 +34,6 @@ const AgeRangeSlider = ({ handleSliderChange, ageRange }) => {
         dotStyle={dotStyle}
         dotActiveStyle={dotActiveStyle}
       />
-
-      <div>
-        <Text center bold>
-          Age Range: {ageRange.lowEnd} - {ageRange.highEnd}
-        </Text>
-      </div>
     </div>
   );
 };

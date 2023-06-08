@@ -1,7 +1,15 @@
-import React, { Fragment, useState, useContext } from "react";
-import { Redirect } from "react-router-dom";
+import React, { Fragment, useState } from "react";
+
 import moment from "moment";
-import { Box, ProfileProgress, Loading } from "../../components";
+import {
+  Box,
+  ProfileProgress,
+  Loading,
+  ProfileProgressSummary,
+  Text,
+  Banner,
+  FONT_SIZES,
+} from "../../components";
 
 import { COLORS } from "../../constants";
 
@@ -121,7 +129,65 @@ const CreateProfile = ({ client, dispatch, state, currentUser, mobile }) => {
                 justifyContent="center"
                 alignItems="center"
               >
-                <h3 style={{ marginBottom: 5 }}>Create Profile</h3>
+                <Banner
+                  mobile={mobile}
+                  show={completedCounts.total < 8}
+                  message={
+                    "Get to it! Your profile won't appear in search results until it is complete"
+                  }
+                  type="info"
+                  duration={6000}
+                />
+                <Banner
+                  mobile={mobile}
+                  show={completedCounts.total >= 8}
+                  message={
+                    "Congratulations! Your profile will now show in search results, for best results be sure to fill out what you are looking for"
+                  }
+                  duration={6000}
+                  type="success"
+                />
+                <Box
+                  width="100%"
+                  height={mobile ? 150 : 200}
+                  alignItems="center"
+                  marginBottom={20}
+                >
+                  <Box
+                    position="absolute"
+                    top={mobile ? 5 : 32}
+                    left={mobile ? 5 : "5%"}
+                  >
+                    <ProfileProgressSummary
+                      mobile={mobile}
+                      completed={completedCounts.total}
+                      total={totalCounts.total}
+                      client={client}
+                      dispatch={dispatch}
+                      currentUser={currentUser}
+                    />
+                  </Box>
+
+                  <Box
+                    width="100%"
+                    display="flex"
+                    height={mobile ? 150 : undefined}
+                    justifyContent={"center"}
+                  >
+                    <Text
+                      position={mobile ? "absolute" : undefined}
+                      marginTop={0}
+                      bottom={mobile ? 0 : undefined}
+                      center
+                      bold
+                      fontSize={
+                        mobile ? FONT_SIZES.X_LARGE : FONT_SIZES.XX_LARGE
+                      }
+                    >
+                      Create Profile
+                    </Text>
+                  </Box>
+                </Box>
                 <SingleTime
                   handleChange={handleChange}
                   profile={profile}
@@ -129,8 +195,8 @@ const CreateProfile = ({ client, dispatch, state, currentUser, mobile }) => {
                   dispatch={dispatch}
                   currentUser={currentUser}
                   handleSubmit={handleSubmit}
-                  completed={completedCounts.mySobriety}
-                  total={totalCounts.mySobriety}
+                  completed={completedCounts.singleTime}
+                  total={totalCounts.singleTime}
                 />
                 <GetLocation
                   client={client}
@@ -158,7 +224,6 @@ const CreateProfile = ({ client, dispatch, state, currentUser, mobile }) => {
                   submitted={success}
                   loading={spinner}
                 />
-
                 <LookingFor
                   profile={profile}
                   client={client}

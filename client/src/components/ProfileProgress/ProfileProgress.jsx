@@ -90,10 +90,10 @@ class ProfileProgress extends React.PureComponent {
         hasLength.length +
         oneOf.length +
         Number(!!oneOfLength.length);
-
       return counts;
     }, {});
 
+    totalCounts.total = this.calculateTotal(totalCounts); // Add the 'total' key with the total count
     return totalCounts;
   };
 
