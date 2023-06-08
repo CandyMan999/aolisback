@@ -133,7 +133,10 @@ class Banner extends React.PureComponent {
         paddingY={mobile ? 4 : 16}
         borderRadius={8}
         marginTop={5}
+        position="fixed"
+        bottom={20}
         zIndex={30}
+        boxShadow={`2px 2px 4px 2px rgba(0, 0, 0, 0.3)`}
       >
         <Box center marginRight={mobile ? 15 : undefined}>
           <Box paddingRight={mobile ? 8 : 16}>

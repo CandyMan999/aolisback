@@ -7,6 +7,7 @@ import {
   Text,
   Loading,
   Map,
+  ICON_SIZES,
 } from "../../../components";
 import { COLORS } from "../../../constants";
 import { useLocation } from "react-router-dom";
@@ -128,29 +129,42 @@ const GetLocation = ({
 
         <Box padding={10}>
           <Button
-            style={{ display: "flex", alignItems: "center" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+              borderRadius: "10px",
+            }}
+            color={COLORS.black}
             onClick={handleLocation}
             width="fit-content"
           >
             {spinner ? (
-              <Loading bar color={COLORS.themeGreen} />
+              <Loading bar color={COLORS.vividBlue} />
             ) : !currentUser.location.lat ? (
-              "Get Location"
+              <Text bold>Get Location</Text>
             ) : (
-              "Update Location"
+              <Text bold>Update Location</Text>
             )}
             <Icon name="pin" color={COLORS.red} style={{ padding: "0px" }} />
           </Button>
           {locationSuccess && (
             <Box alignItems="center">
-              <Icon name="thumbsUp" color={COLORS.themeGreen} />
-              <Text>Got yo ass</Text>
+              <Icon
+                name="thumbsUp"
+                color={COLORS.green}
+                size={ICON_SIZES.XX_LARGE}
+              />
             </Box>
           )}
           {!locationSuccess && (
             <Box alignItems="center">
-              <Icon name="thumbsDown" color={COLORS.textRed} />
-              <Text>Couldn't find you</Text>
+              <Icon
+                name="thumbsDown"
+                color={COLORS.textRed}
+                size={ICON_SIZES.XX_LARGE}
+              />
+              <Text>Where are you?</Text>
             </Box>
           )}
         </Box>

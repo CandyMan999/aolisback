@@ -8,6 +8,7 @@ import {
   Button,
   Loading,
   AgeRangeSlider,
+  Text,
 } from "../../../components";
 import { COLORS } from "../../../constants";
 
@@ -173,15 +174,24 @@ const LookingFor = ({
             <Box width="100%" justifyContent="center" paddingBottom={100}>
               <Button
                 type="submit"
-                style={{ zIndex: 100, marginLeft: mobile ? undefined : 50 }}
+                style={{
+                  zIndex: 100,
+                  marginLeft: mobile ? undefined : 50,
+                  display: "flex",
+                  justifyContent: "center",
+                  boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+                  borderRadius: "10px",
+                  width: 150,
+                }}
+                color="black"
                 disabled={loading}
               >
                 {loading ? (
                   <Loading bar color={COLORS.themeGreen} />
                 ) : sex || kids ? (
-                  "Update"
+                  <Text bold>Update</Text>
                 ) : (
-                  "Submit"
+                  <Text bold>Submit</Text>
                 )}
               </Button>
             </Box>

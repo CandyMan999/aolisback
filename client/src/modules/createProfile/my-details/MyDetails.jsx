@@ -9,6 +9,7 @@ import {
   ICON_SIZES,
   Button,
   Loading,
+  Text,
 } from "../../../components";
 
 import { COLORS } from "../../../constants";
@@ -182,6 +183,13 @@ const MyDetails = ({
                   >
                     <Button
                       type="submit"
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+                        borderRadius: "10px",
+                      }}
+                      width="100%"
                       disabled={
                         !props.isValid ||
                         props.values.sex === "" ||
@@ -191,7 +199,6 @@ const MyDetails = ({
                         props.values.kids === "" ||
                         props.values.marijuana === ""
                       }
-                      style={{ zIndex: 100, width: "100%" }}
                     >
                       {loading ? (
                         <Loading bar color={COLORS.themeGreen} />
@@ -203,9 +210,9 @@ const MyDetails = ({
                         props.values.marijuana === "" ? (
                         "Missing Values"
                       ) : total === completed ? (
-                        "Update"
+                        <Text bold>Update</Text>
                       ) : (
-                        "Submit"
+                        <Text>Submit</Text>
                       )}
                     </Button>
                   </Box>

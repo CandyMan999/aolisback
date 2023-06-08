@@ -6,6 +6,8 @@ import {
   Button,
   FONT_SIZES,
   Loading,
+  Icon,
+  ICON_SIZES,
 } from "../../../components";
 import { COLORS } from "../../../constants";
 
@@ -57,35 +59,52 @@ const SingleTime = ({
       completed={completed}
     >
       <Box column width={"100%"} marginY={15} alignItems="center">
-        {" "}
         {profile.singleTime && (
           <Text
             fontSize={FONT_SIZES.X_LARGE}
-            color={COLORS.vividBlue}
+            color={COLORS.main}
             marginTop={0}
             marginBottom={15}
+            bold
           >
-            {profile.singleTime}
+            Single Since: {profile.singleTime}
           </Text>
-        )}{" "}
+        )}
         <label htmlFor="sobreityTime">
-          Single Since:{" "}
-          <input
-            style={{ margin: "30px" }}
-            type="date"
-            id="singleTime"
-            name="singleTime"
-            value={profile.singleTime}
-            onChange={handleChange}
-          />
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Icon
+              size={ICON_SIZES.XX_LARGE}
+              name="calendarAdd"
+              color={COLORS.main}
+            />
+
+            <input
+              style={{ margin: "30px" }}
+              type="date"
+              id="singleTime"
+              name="singleTime"
+              value={profile.singleTime}
+              onChange={handleChange}
+            />
+          </div>
         </label>
-        <Button padding={30} onClick={handleSubmit}>
+        <Button
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+            borderRadius: "10px",
+          }}
+          width="300px"
+          color={COLORS.black}
+          onClick={handleSubmit}
+        >
           {loading ? (
-            <Loading bar color={COLORS.themeGreen} />
+            <Loading bar color={COLORS.vividBlue} />
           ) : !currentUser.singleTime && !loading ? (
-            "Submit"
+            <Text bold>Submit</Text>
           ) : (
-            "Update"
+            <Text bold>Update</Text>
           )}
         </Button>
       </Box>

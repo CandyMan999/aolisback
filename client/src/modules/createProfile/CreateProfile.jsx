@@ -136,7 +136,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser, mobile }) => {
                     "Get to it! Your profile won't appear in search results until it is complete"
                   }
                   type="info"
-                  duration={6000}
+                  duration={8000}
                 />
                 <Banner
                   mobile={mobile}
@@ -144,7 +144,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser, mobile }) => {
                   message={
                     "Congratulations! Your profile will now show in search results, for best results be sure to fill out what you are looking for"
                   }
-                  duration={6000}
+                  duration={8000}
                   type="success"
                 />
                 <Box
