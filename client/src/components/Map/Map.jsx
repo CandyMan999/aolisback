@@ -27,7 +27,7 @@ import Context from "../../context";
 import { useClient } from "../../client";
 import { FONT_SIZES } from "../Text";
 import mapboxgl from "mapbox-gl";
-import { PossibleTypeExtensionsRule } from "graphql";
+
 
 mapboxgl.workerClass =
   require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -70,7 +70,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
           handleFlyTo(lat, lng, 8);
         }, 1000);
       }
-      if (location.pathname === "/profile" && !loading) {
+      if (location.pathname === "/profile" && !loading && !noLocation(currentUser.location.coordinates)) {
         setPopup({ isOpen: true, id: currentUser._id });
         await handleGetUsers(currentUser._id);
         setTimeout(() => {
@@ -83,7 +83,19 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
       }
     };
     mapLoad();
-  }, [state.userLocation._id]);
+  }, [state.userLocation._id, state.currentUser.location.coordinates]);
+
+  const noLocation = (array) => {
+    if (
+      Array.isArray(array) &&
+      array.length === 2 &&
+      array[0] === 0 &&
+      array[1] === 0
+    ) {
+      return true;
+    }
+    return false;
+  };
 
   const handleMapMove = async () => {
     try {

@@ -43,8 +43,6 @@ const GridContainer = () => {
     }
   };
 
-  console.log("users: ", users);
-
   const sortByDistance = (array) => {
     const newArray = array
       .map((user) => ({
