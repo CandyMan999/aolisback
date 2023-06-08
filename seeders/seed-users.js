@@ -6,7 +6,7 @@ const { findCoords } = require("./randomCoords");
 
 require("dotenv").config();
 
-const TOTAL_USERS = 1000;
+const TOTAL_USERS = 10000;
 
 const seedUsers = async () => {
   try {
@@ -31,7 +31,12 @@ const seedUsers = async () => {
       var max = 80;
       return Math.floor(Math.random() * (max - min + 1)) + min;
     };
-    const getRandomGender = () => {
+    const getRandomGender = (gender) => {
+      var genders = ["Female", "Male", "Gender_Diverse"];
+      const getGender = gender === "female" ? "Female" : "Male";
+      return Math.random() < 0.5 ? getGender : "Gender_Diverse";
+    };
+    const getRandomSex = () => {
       var genders = ["Female", "Male", "Gender_Diverse"];
       var randomIndex = Math.floor(Math.random() * genders.length);
       return genders[randomIndex];
@@ -71,11 +76,12 @@ const seedUsers = async () => {
         radius: 50,
       });
 
-      return Math.random() < 0.5 ? [0, 0] : [randomCoords[1], randomCoords[0]];
+      return Math.random() < 0.1 ? [0, 0] : [randomCoords[1], randomCoords[0]];
     };
 
     const getRandomAgeRange = () => {
       var lowEnd = Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+
       var highEnd = Math.floor(Math.random() * (80 - lowEnd + 1)) + lowEnd;
 
       var ageRange = {
@@ -89,6 +95,9 @@ const seedUsers = async () => {
     for (let i = 0; i < TOTAL_USERS; i++) {
       const randomCoords = await handleCoordinates();
 
+      const ageRange = await getRandomAgeRange();
+      const { data } = await axios.get("https://randomuser.me/api/");
+
       const newUser = await User.create({
         username: faker.internet.userName(),
         isLoggedIn: handleIsLoggedIn(),
@@ -96,7 +105,7 @@ const seedUsers = async () => {
         password: "Katie1221",
         intro: faker.person.bio(),
         age: handleAge(),
-        sex: getRandomGender(),
+        sex: getRandomGender(data.results[0].gender),
         kids: handleKids(),
         occupation: faker.person.jobTitle(),
         singleTime: faker.date.past(),
@@ -108,18 +117,11 @@ const seedUsers = async () => {
           coordinates: randomCoords,
         },
         lookingFor: {
-          ageRange: {
-            lowEnd: getRandomAgeRange().lowEnd,
-            highEnd: getRandomAgeRange().highEnd,
-          },
+          ageRange,
           kids: handleKids(),
-          sex: getRandomGender(),
+          sex: getRandomSex(),
         },
       });
-
-      const { data } = await axios.get(
-        "https://randomuser.me/api/?inc=picture"
-      );
 
       const url = data.results[0].picture.large;
 

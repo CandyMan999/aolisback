@@ -95,7 +95,7 @@ module.exports = {
         ? { user, token }
         : new AuthenticationError("Google User Dosen't Exist");
     } catch (err) {
-      throw new AuthenticationError(err.message);
+      throw new AuthenticationError("Google User Dosen't Exist");
     }
   },
 };

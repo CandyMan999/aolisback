@@ -101,7 +101,7 @@ module.exports = {
         );
 
         const authorAI = await User.findByIdAndUpdate(
-          { _id: "647fba5de261867068fc6391" },
+          { _id: "648131bb35e013ea02e8935d" },
           { $push: { comments: commentAI } },
           { new: true }
         ).populate("pictures");

@@ -4,7 +4,9 @@ const ChatRequestSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
+    expires: 3700,
   },
+
   status: {
     type: String,
     enum: ["Pending", "Accept", "Decline", "Block", "Cancel"],

@@ -30,7 +30,7 @@ module.exports = {
         ],
         "lookingFor.sex":
           !!ctx.currentUser.sex && ctx.currentUser.sex !== "Gender_Diverse"
-            ? ctx.currentUser.sex
+            ? { $in: [ctx.currentUser.sex, "Gender_Diverse"] }
             : { $exists: true },
         "lookingFor.kids":
           ctx.currentUser.kids === "No" || !ctx.currentUser.kids

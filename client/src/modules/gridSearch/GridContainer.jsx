@@ -42,17 +42,8 @@ const GridContainer = () => {
       console.log("err fetching users: ", err);
     }
   };
-  const noLocation = (array) => {
-    if (
-      Array.isArray(array) &&
-      array.length === 2 &&
-      array[0] === 0 &&
-      array[1] === 0
-    ) {
-      return true;
-    }
-    return false;
-  };
+
+  console.log("users: ", users);
 
   const sortByDistance = (array) => {
     const newArray = array
