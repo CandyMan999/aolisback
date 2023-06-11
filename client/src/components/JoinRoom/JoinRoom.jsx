@@ -1,15 +1,16 @@
 import React from "react";
-import { Text, FONT_SIZES, AnimatedHand, Box } from "../../components";
+import { Text, FONT_SIZES, AnimatedHand } from "../../components";
 import { motion } from "framer-motion";
+import { COLORS } from "../../constants";
 
 const JoinARoom = ({ isPointingDown }) => {
   const styles = () => {
     let style = {};
     if (!isPointingDown) {
       style = {
-        textShadow:
-          "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-        color: "white",
+        // textShadow:
+        //   "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
+        color: COLORS.vividBlue,
       };
     } else {
       style = {
@@ -58,8 +59,6 @@ const JoinARoom = ({ isPointingDown }) => {
       <motion.span
         key={index}
         style={{
-          zIndex: 200,
-
           display: "inline-block",
           marginRight: index === 3 || index === 4 ? "10px" : undefined,
         }}

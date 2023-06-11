@@ -32,13 +32,16 @@ class MessageList extends Component {
               width={"100%"}
               alignItems="center"
             >
-              <img
-                height={this.props.mobile ? undefined : "100%"}
-                width={"100%"}
-                style={{ opacity: 0.3 }}
-                src={goneChattingSVG}
-                alt="Gone Chatting"
-              />
+              {(!this.props.currentUser || !this.props.mobile) && (
+                <img
+                  height={this.props.mobile ? undefined : "100%"}
+                  width={"100%"}
+                  style={{ opacity: 0.3 }}
+                  src={goneChattingSVG}
+                  alt="Gone Chatting"
+                />
+              )}
+
               <div
                 className="join-a-room"
                 style={{
@@ -46,7 +49,9 @@ class MessageList extends Component {
                   top: "20%",
                 }}
               >
-                {this.props.mobile && <JoinARoom isPointingDown={false} />}
+                {this.props.mobile && this.props.currentUser && (
+                  <JoinARoom isPointingDown={false} />
+                )}
               </div>
             </Box>
           )}

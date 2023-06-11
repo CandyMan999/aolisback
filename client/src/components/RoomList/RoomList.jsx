@@ -108,6 +108,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                     fontSize={mobile ? undefined : FONT_SIZES.X_LARGE}
                     width={"100%"}
                     bold
+                    margin={0}
                   >
                     {room.name}
                   </Text>
