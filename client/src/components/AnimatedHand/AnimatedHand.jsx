@@ -24,7 +24,7 @@ const AnimatedHand = ({ isPointingDown }) => {
         style={{ bottom: 0 }}
         name={isPointingDown ? "handPointDown" : "handpointRight"}
         size={ICON_SIZES.XXX_LARGE}
-        color={isPointingDown ? "#CCCCCC" : COLORS.vividBlue}
+        color={isPointingDown ? COLORS.white : COLORS.vividBlue}
       />
     </motion.div>
   );

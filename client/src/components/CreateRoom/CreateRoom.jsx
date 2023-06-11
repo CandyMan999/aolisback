@@ -3,13 +3,7 @@ import { Box, Icon, ICON_SIZES } from "../../components";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
 
-const CreateRoom = ({
-  currentUserID,
-  createRoom,
-  dispatch,
-  createInput,
-  setCreateInput,
-}) => {
+const CreateRoom = ({ currentUserID, createRoom, dispatch }) => {
   const [roomName, setRoomName] = useState("");
   const [touched, setTouched] = useState(false);
 
@@ -32,7 +26,6 @@ const CreateRoom = ({
     if (!currentUserID) {
       dispatch({ type: "TOGGLE_SIGNUP", payload: true });
     } else {
-      setCreateInput(!createInput);
       setTouched(!touched);
     }
   };
