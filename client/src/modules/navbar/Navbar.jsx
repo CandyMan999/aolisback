@@ -1,10 +1,9 @@
 import React, { useContext, useEffect } from "react";
-import { NavLink, withRouter, useHistory } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 import { getToken } from "../../utils/helpers";
 
 import { Box, FONT_SIZES, Text, NavGuide } from "../../components";
-import Profile from "../../modules/profile";
 
 import { navbar } from "../../styles/classes";
 import SignupModal from "./signup-modal";
@@ -12,15 +11,14 @@ import LoginModal from "./login-modal";
 import { FETCH_ME } from "../../graphql/queries";
 
 import { COLORS } from "../../constants";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 import { useClient } from "../../client";
 
 import Context from "../../context";
 
 const Navbar = ({ props }) => {
-  const mobile = useMediaQuery("(max-width: 650px)");
   const { state, dispatch } = useContext(Context);
-  const history = useHistory();
+
   const client = useClient();
   const token = getToken();
 

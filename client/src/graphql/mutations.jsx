@@ -420,6 +420,27 @@ export const FLAG_VIDEO_MUTATION = gql`
   }
 `;
 
+export const VIEWED_VIDEO_MUTATION = gql`
+  mutation ($_id: ID!, $viewed: Boolean!) {
+    viewVideo(_id: $_id, viewed: $viewed) {
+      _id
+      url
+      createdAt
+      viewed
+      flagged
+      sender {
+        _id
+        username
+      }
+      receiver {
+        _id
+        username
+      }
+      publicId
+    }
+  }
+`;
+
 export const DELETE_VIDEO_MUTATION = gql`
   mutation ($_id: ID!) {
     deleteVideo(_id: $_id) {

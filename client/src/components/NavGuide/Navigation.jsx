@@ -43,7 +43,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
     }
     if (!currentUser || !currentUser.username) {
       setItems([
-        { name: "Login", icon: "login", route: "/" },
+        { name: "Login", icon: "user", route: "/" },
         { name: "User Signup", icon: "signup", route: "/" },
       ]);
     }

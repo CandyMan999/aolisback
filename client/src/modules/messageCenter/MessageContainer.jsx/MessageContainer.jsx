@@ -6,6 +6,8 @@ import {
   VideoPlayer,
   FONT_SIZES,
   Picture,
+  Icon,
+  ICON_SIZES,
 } from "../../../components";
 import { COLORS } from "../../../constants";
 import { withRouter } from "react-router-dom";
@@ -43,12 +45,29 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
               paddingY={3}
             >
               <Box alignItems="center" width={!mobile ? "100%" : undefined}>
-                <Picture
-                  height={84}
-                  width={84}
-                  profilePic={video[0].sender.pictures[0]}
-                  name={video[0].sender.username}
-                />
+                <Box>
+                  <Picture
+                    height={84}
+                    width={84}
+                    profilePic={video[0].sender.pictures[0]}
+                    name={video[0].sender.username}
+                  />
+                  <Box
+                    position="absolute"
+                    top={-20}
+                    right={-30}
+                    borderRadius={"50%"}
+                  >
+                    <Icon
+                      style={{ zIndex: 1000 }}
+                      name="new"
+                      size={ICON_SIZES.XXX_LARGE}
+                      color={COLORS.red}
+                      fill={COLORS.white}
+                    />
+                  </Box>
+                </Box>
+
                 <Text paddingLeft={"5%"} bold>
                   Video Message{video.length > 1 ? "s" : undefined} from{" "}
                   {video[0].sender.username}

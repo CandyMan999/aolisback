@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Icon, ICON_SIZES } from "../../components";
 import { COLORS } from "../../constants";
 
-const AnimatedHand = () => {
+const AnimatedHand = ({ isPointingDown }) => {
   return (
     <motion.div
       animate={{
@@ -21,9 +21,10 @@ const AnimatedHand = () => {
       }}
     >
       <Icon
-        name="handpointRight"
+        style={{ bottom: 0 }}
+        name={isPointingDown ? "handPointDown" : "handpointRight"}
         size={ICON_SIZES.XXX_LARGE}
-        color={COLORS.vividBlue}
+        color={isPointingDown ? COLORS.black : COLORS.vividBlue}
       />
     </motion.div>
   );

@@ -1,46 +1,11 @@
 import React, { Component } from "react";
-import { motion } from "framer-motion";
+
 import Message from "./Message";
-import { Loading, AnimatedHand, Text, Box, FONT_SIZES } from "../../components";
+import { Loading, Box, JoinARoom } from "../../components";
 import ReactDOM from "react-dom";
+import goneChattingSVG from "../../pictures/goneChatting.svg";
 
 class MessageList extends Component {
-  constructor(props) {
-    super(props);
-    this.letters = [
-      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
-        J
-      </Text>,
-      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
-        o
-      </Text>,
-      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
-        i
-      </Text>,
-      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
-        n
-      </Text>,
-
-      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
-        A
-      </Text>,
-
-      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
-        R
-      </Text>,
-      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
-        o
-      </Text>,
-      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
-        o
-      </Text>,
-      <Text bold fontSize={FONT_SIZES.XX_LARGE}>
-        m
-      </Text>,
-      <AnimatedHand />,
-    ];
-  }
-
   componentWillUpdate() {
     const node = ReactDOM.findDOMNode(this);
     this.shouldScrollToBottom =
@@ -61,45 +26,39 @@ class MessageList extends Component {
           {this.props.loading ? (
             <Loading ring size={"150px"} />
           ) : (
-            <div
-              className="join-a-room"
-              style={{
-                position:
-                  this.props.mobile && !this.props.createInput
-                    ? "absolute"
-                    : undefined,
-                top: "20%",
-              }}
+            <Box
+              justifyContent="center"
+              height={"100%"}
+              width={"100%"}
+              alignItems="center"
             >
-              {this.letters.map((letter, index) => {
-                return (
-                  <motion.span
-                    key={index}
-                    style={{
-                      display: "inline-block",
-                      marginRight:
-                        index === 3 || index === 4 ? "10px" : undefined,
-                    }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                      transition: { delay: index * 0.2 },
-                    }}
-                    exit={{ opacity: 0, y: -20 }}
-                  >
-                    {letter}
-                  </motion.span>
-                );
-              })}
-            </div>
+              <img
+                height={this.props.mobile ? undefined : "100%"}
+                width={"100%"}
+                style={{ opacity: 0.3 }}
+                src={goneChattingSVG}
+                alt="Gone Chatting"
+              />
+              <div
+                className="join-a-room"
+                style={{
+                  position: "absolute",
+                  top: "20%",
+                }}
+              >
+                {this.props.mobile && <JoinARoom isPointingDown={false} />}
+              </div>
+            </Box>
           )}
         </div>
       );
     }
 
     return (
-      <div className="message-list">
+      <div
+        className="message-list"
+        style={{ overflowY: "scroll", overflowX: "hidden" }}
+      >
         {this.props.loading ? (
           <Loading ring size={"150px"} />
         ) : (

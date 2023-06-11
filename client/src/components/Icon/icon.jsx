@@ -41,6 +41,30 @@ class Icon extends React.Component {
             height={iconSizes[this.props.size || "medium"]}
             viewBox={icons[this.props.name].viewBox}
           >
+            {icons[this.props.name].poly && (
+              <polygon
+                stroke={this.props.stroke}
+                strokeWidth={this.props.strokeWidth}
+                fill={this.props.fill || COLORS.darkGrey}
+                points={icons[this.props.name].poly}
+              />
+            )}
+            {icons[this.props.name].poly2 && (
+              <polygon
+                stroke={this.props.stroke}
+                strokeWidth={this.props.strokeWidth}
+                fill={this.props.fill || COLORS.darkGrey}
+                points={icons[this.props.name].poly2}
+              />
+            )}
+            {icons[this.props.name].poly3 && (
+              <polygon
+                stroke={this.props.stroke}
+                strokeWidth={this.props.strokeWidth}
+                fill={this.props.fill || COLORS.darkGrey}
+                points={icons[this.props.name].poly3}
+              />
+            )}
             <path
               stroke={this.props.stroke}
               strokeWidth={this.props.strokeWidth}

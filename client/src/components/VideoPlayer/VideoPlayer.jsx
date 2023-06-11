@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { browserName, isIOS } from "react-device-detect";
+import { VIEWED_VIDEO_MUTATION } from "../../graphql/mutations";
 
 const VideoPlayer = ({
   publicId,
@@ -10,6 +11,9 @@ const VideoPlayer = ({
   mobile,
   borderRadius,
   fullScreen,
+  receiverWatching,
+  _id,
+  client,
 }) => {
   const cloudinaryRef = useRef();
   const videoRef = useRef();
@@ -27,6 +31,9 @@ const VideoPlayer = ({
       if (fullScreen && !isChromeMobile) {
         videoPlayer.maximize();
       }
+      if (receiverWatching) {
+        handleViewVideo();
+      }
     });
 
     videoPlayer.on("fullscreenchange", () => {
@@ -36,6 +43,22 @@ const VideoPlayer = ({
       }
     });
   }, []);
+
+  const handleViewVideo = async () => {
+    try {
+      const variables = {
+        _id,
+        viewed: true,
+      };
+      const { viewVideo } = await client.request(
+        VIEWED_VIDEO_MUTATION,
+        variables
+      );
+      console.log("data: ", viewVideo);
+    } catch (err) {
+      console.log("err setting video watched: ", err);
+    }
+  };
 
   return isChromeMobile ? (
     <video

@@ -221,6 +221,9 @@ const Message = () => {
                       borderRadius={"10px"}
                       fullScreen={true}
                       mobile={mobile}
+                      receiverWatching={video.receiver._id === currentUser._id}
+                      _id={video._id}
+                      client={client}
                     />
 
                     <Text center bold margin={0}>

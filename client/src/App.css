@@ -83,11 +83,9 @@
 
 .message-list {
   grid-area: m;
-  overflow-y: scroll;
+
   scrollbar-width: none; /* For Firefox */
   -ms-overflow-style: none;
-  overflow-x: hidden;
-  
 }
 
 .message-list::-webkit-scrollbar {
@@ -152,7 +150,7 @@
   text-shadow: 1px 1px white;
 }
 .join-a-room {
-  margin-top: 10%;
+ 
   margin-left: 5%;
   font-size: 40px;
   justify-content: center;

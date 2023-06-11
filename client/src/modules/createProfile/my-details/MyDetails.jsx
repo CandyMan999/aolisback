@@ -186,6 +186,7 @@ const MyDetails = ({
                       style={{
                         display: "flex",
                         justifyContent: "center",
+                        alignItems: "center",
                         boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
                         borderRadius: "10px",
                       }}
@@ -212,7 +213,7 @@ const MyDetails = ({
                       ) : total === completed ? (
                         <Text bold>Update</Text>
                       ) : (
-                        <Text>Submit</Text>
+                        <Text bold>Submit</Text>
                       )}
                     </Button>
                   </Box>

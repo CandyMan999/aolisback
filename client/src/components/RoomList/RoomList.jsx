@@ -7,20 +7,16 @@ import {
   FONT_SIZES,
   Icon,
   ICON_SIZES,
+  JoinARoom,
 } from "../../components";
 import { COLORS } from "../../constants";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import Context from "../../context";
 
-const RoomList = ({
-  rooms,
-  roomId,
-  currentUser,
-  subscribeToRoom,
-  loading,
-  mobile,
-}) => {
+const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
   const { state, dispatch } = useContext(Context);
+  const mobile = useMediaQuery("(max-width: 950px)");
 
   const handleIsLoggedIn = async () => {
     try {
@@ -35,30 +31,37 @@ const RoomList = ({
   return (
     <div className="rooms-list" onClick={() => handleIsLoggedIn()}>
       <Box display="flex" column width="100%" alignItems="center">
-        <Box
-          width={"100%"}
-          justifyContent="space-around"
-          display="flex"
-          alignItems="center"
-        >
-          <Text
-            bold
-            margin={0}
-            fontSize={mobile ? FONT_SIZES.LARGE : FONT_SIZES.XXX_LARGE}
-            style={{
-              textShadow:
-                "-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white",
-            }}
+        {(roomId || mobile) && (
+          <Box
+            width={"100%"}
+            justifyContent="space-around"
+            display="flex"
+            alignItems="center"
           >
-            Rooms
-          </Text>
-          <Icon
-            style={{ margin: 0 }}
-            size={mobile ? ICON_SIZES.XX_LARGE : ICON_SIZES.XXX_LARGE}
-            color={COLORS.white}
-            name="chat"
-          />
-        </Box>
+            <Text
+              bold
+              margin={0}
+              fontSize={mobile ? FONT_SIZES.LARGE : FONT_SIZES.XXX_LARGE}
+              style={{
+                textShadow:
+                  "-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white",
+              }}
+            >
+              Rooms
+            </Text>
+            <Icon
+              style={{ margin: 0 }}
+              size={mobile ? ICON_SIZES.XX_LARGE : ICON_SIZES.XXX_LARGE}
+              color={COLORS.white}
+              name="chat"
+            />
+          </Box>
+        )}
+        {!roomId && !mobile && (
+          <Box alignItems="center">
+            <JoinARoom isPointingDown={true} />
+          </Box>
+        )}
 
         {rooms &&
           rooms.map((room) => {
