@@ -16,11 +16,17 @@ const Video = () => {
   const mobile = useMediaQuery("(max-width: 650px)");
 
   let history = useHistory();
-
+  const appUrl = `org.jitsi.meet://meet.jit.si/AOLisBack-noi8ioj7r/${state.currentUser.username}`;
   useEffect(() => {
     if (state.userChannel || state.currentUser.username) {
       setSpinner(true);
       setTimeout(() => setSpinner(false), 2000);
+      try {
+        window.location.href = appUrl;
+      } catch (error) {
+        console.log("Jitsi Meet app is not installed");
+        // window.location.href = appStoreUrl;
+      }
     }
   }, [state.currentUser, state.userChannel]);
 
