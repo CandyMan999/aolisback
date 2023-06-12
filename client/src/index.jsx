@@ -1,5 +1,6 @@
-import React, { useContext, useReducer, useState } from "react";
+import React, { useContext, useReducer, useState, useEffect } from "react";
 import { BrowserRouter, BrowserRouter as Router } from "react-router-dom";
+
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
@@ -40,6 +41,7 @@ const Root = () => {
   const intialState = useContext(Context);
   const [state, dispatch] = useReducer(reducer, intialState);
   const [videoChat, setVideoChat] = useState(null);
+
   const mobile = useMediaQuery("(max-width: 650px)");
 
   const toggleChatRequest = (payload) => {
