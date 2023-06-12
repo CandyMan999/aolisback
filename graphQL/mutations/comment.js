@@ -41,12 +41,9 @@ module.exports = {
         })
         .populate("room");
 
-      //   pubsub.publish(CREATE_COMMENT, {
-      //     createComment: newComment,
-      //   });
       publishCreateComment(newComment);
 
-      if (room.users.length === 1) {
+      if (room.users.length <= 3) {
         let mainRoom = await Room.find({ _id: roomId }).populate({
           path: "comments",
           populate: [{ path: "author", model: "User" }],
@@ -54,7 +51,8 @@ module.exports = {
 
         const findHumanComments = async () => {
           let comments = [];
-          await mainRoom[0].comments.forEach((comment) => {
+
+          await mainRoom[0].comments.map((comment) => {
             if (comment.author._id == userId) {
               comments.push(comment.text);
             }
@@ -78,31 +76,43 @@ module.exports = {
 
         const AIcomments = await findAIComments();
 
-        const createPrompt = () => {
+        const createPrompt = async () => {
           try {
+            const humanLastThree = await humanComments.slice(-3); // Get the last three human comments
+            const AILastThree = AIcomments.slice(
+              -(humanLastThree.length > 2 ? humanLastThree.length - 1 : 1)
+            );
+
             const mostComment =
-              humanComments.length > AIcomments.length
+              humanLastThree.length > AILastThree.length
                 ? {
                     type: "Human: ",
-                    comments: humanComments,
+                    comments: humanLastThree,
                     otherType: "AI: ",
-                    otherComments: AIcomments,
+                    otherComments: AILastThree,
                   }
                 : {
                     type: "AI: ",
-                    comments: AIcomments,
+                    comments: AILastThree,
                     otherType: "Human: ",
-                    otherComments: humanComments,
+                    otherComments: humanLastThree,
                   };
 
             let prompt = "";
+
             for (let i = 0; i < mostComment.comments.length; i++) {
-              prompt += mostComment.otherComments[i]
-                ? `\n${mostComment.type}${mostComment.comments[i]}\n${mostComment.otherType}${mostComment.otherComments[i]}`
-                : `\n${mostComment.type}${mostComment.comments[i]}`;
+              prompt += `\n${mostComment.type}${mostComment.comments[
+                i
+              ].trim()}`;
+
+              if (mostComment.otherComments[i]) {
+                prompt += `\n${
+                  mostComment.otherType
+                }${mostComment.otherComments[i].trim()}`;
+              }
             }
 
-            return prompt;
+            return prompt.trim();
           } catch (err) {
             console.log(err);
           }
@@ -113,16 +123,16 @@ module.exports = {
         const responseAI = await openai.createCompletion({
           model: "text-davinci-002",
           prompt,
-          temperature: 0.9,
-          max_tokens: 250,
+          temperature: 0,
+          max_tokens: 3000,
           top_p: 1,
-          frequency_penalty: 0,
-          presence_penalty: 0.6,
+          frequency_penalty: 0.3,
+          presence_penalty: 0.9,
           stop: [" Human:", " AI:"],
         });
 
         const commentAI = await new Comment({
-          text: responseAI.data.choices[0].text,
+          text: responseAI.data.choices[0].text.replace(/^AI:\s*/, ""),
         }).save();
 
         const roomAI = await Room.findByIdAndUpdate(
@@ -150,9 +160,6 @@ module.exports = {
           })
           .populate("room");
 
-        // pubsub.publish(CREATE_COMMENT, {
-        //   createComment: newCommentAI,
-        // });
         publishCreateComment(newCommentAI);
       }
 

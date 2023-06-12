@@ -81,10 +81,10 @@ module.exports = {
           model: "text-davinci-002",
           prompt,
           temperature: 0.9,
-          max_tokens: 250,
+          max_tokens: 3000,
           top_p: 1,
           frequency_penalty: 0,
-          presence_penalty: 0.6,
+          presence_penalty: 0.8,
           stop: [" Human:", " AI:"],
         });
 

@@ -158,9 +158,9 @@ class Banner extends React.PureComponent {
 
         <Box
           style={{ alignItems: "flex-start" }}
-          marginTop={mobile ? 5 : 15}
+          marginTop={mobile ? 5 : -12}
           position="absolute"
-          right={mobile ? 12 : 24}
+          right={mobile ? 12 : 2}
           height="100%"
           center
           margin={mobile ? 0 : undefined}

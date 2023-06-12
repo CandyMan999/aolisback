@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   Box,
@@ -13,6 +13,12 @@ import { COLORS } from "../../../constants";
 import { withRouter } from "react-router-dom";
 
 const MessageContainer = ({ history, receivedVideos, mobile }) => {
+  useEffect(() => {
+    if (receivedVideos && !!receivedVideos.length) {
+      sortByNewest();
+    }
+  }, [receivedVideos]);
+
   const handleOnClick = (senderID) => {
     history.push({
       pathname: "/message",
@@ -20,9 +26,24 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
     });
   };
 
+  const sortByNewest = () => {
+    return receivedVideos.sort((a, b) => {
+      const viewedA = a.some((video) => !video.viewed);
+      const viewedB = b.some((video) => !video.viewed);
+
+      if (viewedA && !viewedB) {
+        return -1; // Move group with viewed videos to a lower index
+      } else if (!viewedA && viewedB) {
+        return 1; // Move group with unviewed videos to a higher index
+      } else {
+        return 0; // Keep the order unchanged
+      }
+    });
+  };
+
   return receivedVideos && receivedVideos.length > 0 ? (
     <Box width="100%" column display="flex">
-      {receivedVideos.map((video, i) => {
+      {receivedVideos.map((group, i) => {
         const isLastMessage = i === receivedVideos.length - 1;
         return (
           <Box
@@ -34,8 +55,8 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
                 ? `solid 2px ${COLORS.grey}`
                 : `solid 1px ${COLORS.grey}`
             }
-            onClick={() => handleOnClick(video[0].sender._id)}
-            key={`${video[0].publicId}-${i}`}
+            onClick={() => handleOnClick(group[0].sender._id)}
+            key={`${group[0].publicId}-${i}`}
           >
             <Box
               display="flex"
@@ -49,8 +70,8 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
                   <Picture
                     height={84}
                     width={84}
-                    profilePic={video[0].sender.pictures[0]}
-                    name={video[0].sender.username}
+                    profilePic={group[0].sender.pictures[0]}
+                    name={group[0].sender.username}
                   />
                   <Box
                     position="absolute"
@@ -58,24 +79,26 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
                     right={-30}
                     borderRadius={"50%"}
                   >
-                    <Icon
-                      style={{ zIndex: 1000 }}
-                      name="new"
-                      size={ICON_SIZES.XXX_LARGE}
-                      color={COLORS.red}
-                      fill={COLORS.white}
-                    />
+                    {group.some((video) => !video.viewed) && (
+                      <Icon
+                        style={{ zIndex: 100 }}
+                        name="new"
+                        size={ICON_SIZES.XXX_LARGE}
+                        color={COLORS.red}
+                        fill={COLORS.white}
+                      />
+                    )}
                   </Box>
                 </Box>
 
                 <Text paddingLeft={"5%"} bold>
-                  Video Message{video.length > 1 ? "s" : undefined} from{" "}
-                  {video[0].sender.username}
+                  Video Message{group.length > 1 ? "s" : undefined} from{" "}
+                  {group[0].sender.username}
                 </Text>
               </Box>
-              <Box onClick={() => handleOnClick(video[0].sender._id)}>
+              <Box onClick={() => handleOnClick(group[0].sender._id)}>
                 <VideoPlayer
-                  publicId={video[video.length - 1].publicId}
+                  publicId={group[group.length - 1].publicId}
                   height={90}
                   controls={false}
                   fullScreen={true}

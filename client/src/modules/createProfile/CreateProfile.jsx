@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import moment from "moment";
 import {
   Box,
@@ -21,7 +21,7 @@ import { MyPhotos } from "./my-photos";
 import { MyDetails } from "./my-details";
 import { LookingFor } from "./looking-for";
 
-const CreateProfile = ({ client, dispatch, state, currentUser, mobile }) => {
+const CreateProfile = ({ client, dispatch, state, currentUser }) => {
   const [authError, setAuthError] = useState("");
   const [profile, setProfile] = useState({
     singleTime: currentUser.singleTime
@@ -30,6 +30,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser, mobile }) => {
   });
   const [spinner, setSpinner] = useState(false);
   const [success, setSuccess] = useState(false);
+  const mobile = useMediaQuery("(max-width: 860px)");
 
   const handleSubmit = async ({
     intro,
@@ -149,7 +150,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser, mobile }) => {
                 />
                 <Box
                   width="100%"
-                  height={mobile ? 150 : 200}
+                  height={mobile ? 100 : 200}
                   alignItems="center"
                   marginBottom={20}
                 >
@@ -171,17 +172,18 @@ const CreateProfile = ({ client, dispatch, state, currentUser, mobile }) => {
                   <Box
                     width="100%"
                     display="flex"
-                    height={mobile ? 150 : undefined}
+                    height={mobile ? 110 : undefined}
                     justifyContent={"center"}
                   >
                     <Text
                       position={mobile ? "absolute" : undefined}
                       marginTop={0}
+                      style={{ top: mobile ? 70 : undefined }}
                       bottom={mobile ? 0 : undefined}
                       center
                       bold
                       fontSize={
-                        mobile ? FONT_SIZES.X_LARGE : FONT_SIZES.XX_LARGE
+                        mobile ? FONT_SIZES.XX_LARGE : FONT_SIZES.XX_LARGE
                       }
                     >
                       Create Profile
