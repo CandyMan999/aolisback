@@ -32,14 +32,18 @@ const RequestModal = ({
     handleStatus(status);
     if (currentUser._id !== sender._id && status === "Pending") {
       playSound();
-      handleUpdateAppUsername(receiver.username);
     }
+    handleUpdateAppUsername(receiver.username);
   }, [status]);
 
   const playSound = () => {
-    const audio = new Audio(notification);
+    try {
+      const audio = new Audio(notification);
 
-    audio.play();
+      audio.play();
+    } catch (err) {
+      console.log("err plyaing sound:", err);
+    }
   };
 
   const handleUpdateAppUsername = (username) => {
