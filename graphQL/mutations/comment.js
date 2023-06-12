@@ -82,12 +82,21 @@ module.exports = {
             const AILastThree = AIcomments.slice(
               -(humanLastThree.length > 2 ? humanLastThree.length - 1 : 1)
             );
+            let mostComment;
 
-            const mostComment =
+            mostComment =
               humanLastThree.length > AILastThree.length
                 ? {
                     type: "Human: ",
-                    comments: humanLastThree,
+                    comments: humanLastThree.length
+                      ? [
+                          `Pretend you are in a chatroom in the app GoneChatting.com named ${mainRoom[0].name}, your username is J_Money. You are a Tech CEO 37 year old male and creator of this site. You are witty and like to razz other users, go with the flow!`,
+                          ...humanLastThree,
+                        ]
+                      : [
+                          `Pretend you are in a chatroom in the app GoneChatting.com named ${mainRoom[0].name}, your username is J_Money. You are a Tech CEO 37 year old male and creator of this site. You are witty and like to razz other users, go with the flow!`,
+                        ],
+
                     otherType: "AI: ",
                     otherComments: AILastThree,
                   }
@@ -101,14 +110,10 @@ module.exports = {
             let prompt = "";
 
             for (let i = 0; i < mostComment.comments.length; i++) {
-              prompt += `\n${mostComment.type}${mostComment.comments[
-                i
-              ].trim()}`;
+              prompt += `\n${mostComment.type}${mostComment.comments[i]}`;
 
               if (mostComment.otherComments[i]) {
-                prompt += `\n${
-                  mostComment.otherType
-                }${mostComment.otherComments[i].trim()}`;
+                prompt += `\n${mostComment.otherType}${mostComment.otherComments[i]}`;
               }
             }
 
@@ -131,8 +136,13 @@ module.exports = {
           stop: [" Human:", " AI:"],
         });
 
+        let newResponse = responseAI.data.choices[0].text.slice(
+          5,
+          responseAI.data.choices[0].text.length
+        );
+
         const commentAI = await new Comment({
-          text: responseAI.data.choices[0].text.replace(/^AI:\s*/, ""),
+          text: newResponse,
         }).save();
 
         const roomAI = await Room.findByIdAndUpdate(
