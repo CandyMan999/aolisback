@@ -32,6 +32,7 @@ const RequestModal = ({
     handleStatus(status);
     if (currentUser._id !== sender._id && status === "Pending") {
       playSound();
+      handleUpdateAppUsername(receiver.username);
     }
   }, [status]);
 
@@ -41,12 +42,19 @@ const RequestModal = ({
     audio.play();
   };
 
+  const handleUpdateAppUsername = (username) => {
+    history.push({
+      pathname: history.location.pathname,
+      search: `?username=${username}`,
+    });
+  };
+
   const handleStatus = (action) => {
     switch (action) {
       case "Accept":
         toggleChatRequest();
         dispatch({ type: "JOIN_CHANNEL", payload: receiver.username });
-        history.push("/video");
+        history.push(`/video?username=${receiver.username}`);
         break;
       case "Decline":
         setTimeout(() => {

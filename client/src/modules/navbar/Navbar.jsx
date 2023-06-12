@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { NavLink, withRouter, useHistory } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 import { getToken } from "../../utils/helpers";
 
@@ -19,7 +19,6 @@ import Context from "../../context";
 const Navbar = ({ props }) => {
   const { state, dispatch } = useContext(Context);
 
-  let history = useHistory();
   const client = useClient();
   const token = getToken();
 
@@ -37,19 +36,6 @@ const Navbar = ({ props }) => {
       handleFetchMe();
     }
   }, [token]);
-
-  useEffect(() => {
-    if (currentUser) {
-      handleUpdateAppUsername(currentUser.username);
-    }
-  }, [history.location.pathname, currentUser]);
-
-  const handleUpdateAppUsername = (username) => {
-    history.push({
-      pathname: history.location.pathname,
-      search: `?username=${username}`,
-    });
-  };
 
   const handleFetchMe = async () => {
     try {

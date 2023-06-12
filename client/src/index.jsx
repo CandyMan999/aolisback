@@ -80,6 +80,7 @@ const Root = () => {
                   videoChatRequest.sender._id === state.currentUser._id
                 ) {
                   setVideoChat(videoChatRequest);
+
                   toggleChatRequest(true);
                 }
               }}
