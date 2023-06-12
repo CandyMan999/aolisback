@@ -29,6 +29,7 @@ class Banner extends React.PureComponent {
 
     this.state = {
       show: props.show,
+      appStoreUrl: "https://apps.apple.com/us/app/jitsi-meet/id1165103905",
     };
   }
 
@@ -134,7 +135,7 @@ class Banner extends React.PureComponent {
         borderRadius={8}
         marginTop={5}
         position="fixed"
-        bottom={20}
+        bottom={this.props.type === "alert" ? "40%" : 20}
         zIndex={30}
         boxShadow={`2px 2px 4px 2px rgba(0, 0, 0, 0.3)`}
       >
@@ -146,14 +147,30 @@ class Banner extends React.PureComponent {
               size={ICON_SIZES.X_LARGE}
             />
           </Box>
+          <Box display="flex" column>
+            <Text
+              marginRight={mobile ? 15 : 5}
+              fontSize={mobile ? FONT_SIZES.SMALL : FONT_SIZES.LARGE}
+              color={this.color}
+              margin={0}
+            >
+              {this.props.message}
+            </Text>
+            {this.props.type === "alert" && (
+              <a
+                href={this.state.appStoreUrl}
+                style={{
+                  width: "100%",
 
-          <Text
-            marginRight={mobile ? 15 : 5}
-            fontSize={mobile ? FONT_SIZES.SMALL : FONT_SIZES.LARGE}
-            color={this.color}
-          >
-            {this.props.message}
-          </Text>
+                  textAlign: "center",
+                }}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open App Store
+              </a>
+            )}
+          </Box>
         </Box>
 
         <Box

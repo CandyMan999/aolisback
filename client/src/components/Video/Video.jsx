@@ -5,8 +5,8 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { Loading } from "..";
 import { useHistory } from "react-router-dom";
 
-import { Box } from "../../components";
-import Banner from "./banner";
+import { Box, Banner } from "../../components";
+import VideoChannel from "./videoChannel";
 
 import Context from "../../context";
 
@@ -17,15 +17,25 @@ const Video = () => {
 
   let history = useHistory();
   const appUrl = `org.jitsi.meet://meet.jit.si/AOLisBack-noi8ioj7r/${state.currentUser.username}`;
+
   useEffect(() => {
     if (state.userChannel || state.currentUser.username) {
       setSpinner(true);
       setTimeout(() => setSpinner(false), 2000);
-      try {
-        window.location.href = appUrl;
-      } catch (error) {
-        console.log("Jitsi Meet app is not installed");
-        // window.location.href = appStoreUrl;
+
+      const isSafari = /^((?!chrome|android).)*safari/i.test(
+        navigator.userAgent
+      );
+      if (isSafari) {
+        console.log("Safari detected. Unsupported URL scheme.");
+        // Handle the unsupported URL scheme in Safari (e.g., show a message to the user)
+      } else {
+        try {
+          window.location.href = appUrl;
+        } catch (error) {
+          console.log("Jitsi Meet app is not installed");
+          // Handle the case where the Jitsi Meet app is not installed (e.g., show a message to the user)
+        }
       }
     }
   }, [state.currentUser, state.userChannel]);
@@ -34,7 +44,14 @@ const Video = () => {
     <Box display="flex" column center>
       {state.userChannel ? (
         <Fragment>
-          <Banner channelOwner={state.userChannel} />
+          <Banner
+            mobile={mobile}
+            show={true}
+            message={"Download Jitsi App for best Video Chat experience, FREE!"}
+            // duration={8000}
+            type="alert"
+          />
+          <VideoChannel channelOwner={state.userChannel} />
           <Jutsu
             containerStyles={{
               width: mobile ? "375px" : "1200px",
@@ -49,7 +66,7 @@ const Video = () => {
         </Fragment>
       ) : (
         <Fragment>
-          <Banner channelOwner={state.currentUser.username} />
+          <VideoChannel channelOwner={state.currentUser.username} />
           {spinner && <Loading />}
           <Jutsu
             containerStyles={{
