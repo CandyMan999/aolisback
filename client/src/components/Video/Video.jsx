@@ -26,21 +26,20 @@ const Video = () => {
       setSpinner(true);
       setTimeout(() => setSpinner(false), 2000);
 
-      if (isChromeMobile || iosMobile) {
-        try {
-          window.location.href = appUrl;
-          // Open the app on app IOS or chrome IOS mobile
-        } catch (err) {
-          console.log("err: ", err);
-        }
-      } else {
-        // open app on android
-        try {
-        } catch (error) {
-          console.log("Jitsi Meet app is not installed");
-          // Handle the case where the Jitsi Meet app is not installed (e.g., show a message to the user)
-        }
+      try {
+        window.location.href = appUrl;
+        // Open the app on app IOS or chrome IOS mobile
+      } catch (err) {
+        console.log("err: ", err);
       }
+      // } else {
+      //   // open app on android
+      //   try {
+      //   } catch (error) {
+      //     console.log("Jitsi Meet app is not installed");
+      //     // Handle the case where the Jitsi Meet app is not installed (e.g., show a message to the user)
+      //   }
+      // }
     }
   }, [state.currentUser, state.userChannel]);
 
