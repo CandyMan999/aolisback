@@ -130,16 +130,25 @@ class Banner extends React.PureComponent {
       <Box
         width="95%"
         justifyContent="center"
+        display="flex"
         background={this.backgroundColor}
         paddingY={mobile ? 4 : 16}
         borderRadius={8}
         marginTop={5}
-        position="fixed"
-        bottom={this.props.type === "alert" ? "40%" : 20}
+        position={this.props.fixed ? "fixed" : undefined}
+        bottom={this.props.fixed ? 20 : undefined}
         zIndex={30}
         boxShadow={`2px 2px 4px 2px rgba(0, 0, 0, 0.3)`}
       >
-        <Box center marginRight={mobile ? 15 : undefined}>
+        <Box
+          center
+          width="100%"
+          display="flex"
+          justifyContent={
+            this.props.type === "alert" ? "space-between" : "center"
+          }
+          marginRight={mobile ? 15 : undefined}
+        >
           <Box paddingRight={mobile ? 8 : 16}>
             <Icon
               name={this.iconName}
@@ -171,6 +180,16 @@ class Banner extends React.PureComponent {
               </a>
             )}
           </Box>
+          {this.props.type === "alert" && (
+            <Icon
+              margin={0}
+              padding={0}
+              marginRight={this.props.mobile ? 10 : 60}
+              name={"jitsi"}
+              color={COLORS.vividBlue}
+              size={ICON_SIZES.XXX_LARGE}
+            />
+          )}
         </Box>
 
         <Box

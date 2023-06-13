@@ -131,6 +131,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser }) => {
                 alignItems="center"
               >
                 <Banner
+                  fixed
                   mobile={mobile}
                   show={completedCounts.total < 8}
                   message={
@@ -140,6 +141,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser }) => {
                   duration={8000}
                 />
                 <Banner
+                  fixed
                   mobile={mobile}
                   show={completedCounts.total >= 8}
                   message={
