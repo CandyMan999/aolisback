@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useContext, Fragment } from "react";
+import React, { useEffect, useContext } from "react";
 import { browserName, isIOS, isDesktop } from "react-device-detect";
 import { Jutsu } from "react-jutsu";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-import { Loading } from "..";
 import { useHistory } from "react-router-dom";
 
 import { Box, Banner } from "../../components";
@@ -13,7 +12,7 @@ import Context from "../../context";
 
 const Video = () => {
   const { state } = useContext(Context);
-  const [spinner, setSpinner] = useState(false);
+
   const mobile = useMediaQuery("(max-width: 650px)");
   const isChromeMobile = isIOS && browserName === "Chrome" && mobile;
   const iosMobile = isIOS && mobile;
@@ -24,9 +23,6 @@ const Video = () => {
 
   useEffect(() => {
     if (state.userChannel || state.currentUser.username) {
-      setSpinner(true);
-      setTimeout(() => setSpinner(false), 2000);
-
       try {
         if (!isDesktop) {
           window.location.href = appUrl;
@@ -47,7 +43,7 @@ const Video = () => {
   }, [state.currentUser, state.userChannel]);
 
   return (
-    <Box display="flex" column center width="100%" height="100%" padding={5}>
+    <Box display="flex" column center width="100%" height="100%">
       {!isDesktop && (
         <Banner
           mobile={mobile}

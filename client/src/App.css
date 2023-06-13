@@ -56,6 +56,11 @@
   background-color: var(--main-color);
   overflow: scroll;
   height: 100%;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none;
+}
+.rooms-list::-webkit-scrollbar {
+  display: none; /* Hide the scrollbar for WebKit based browsers */
 }
 .rooms-list ul {
   list-style-type: none;
