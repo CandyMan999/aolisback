@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext, Fragment } from "react";
+import { browserName, isIOS } from "react-device-detect";
 import { Jutsu } from "react-jutsu";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -14,6 +15,8 @@ const Video = () => {
   const { state } = useContext(Context);
   const [spinner, setSpinner] = useState(false);
   const mobile = useMediaQuery("(max-width: 650px)");
+  const isChromeMobile = isIOS && browserName === "Chrome" && mobile;
+  const iosMobile = isIOS && mobile;
 
   let history = useHistory();
   const appUrl = `org.jitsi.meet://meet.jit.si/AOLisBack-noi8ioj7r/${state.currentUser.username}`;
@@ -23,15 +26,16 @@ const Video = () => {
       setSpinner(true);
       setTimeout(() => setSpinner(false), 2000);
 
-      const isSafari = /^((?!chrome|android).)*safari/i.test(
-        navigator.userAgent
-      );
-      if (isSafari) {
-        console.log("Safari detected. Unsupported URL scheme.");
-        // Handle the unsupported URL scheme in Safari (e.g., show a message to the user)
-      } else {
+      if (isChromeMobile || iosMobile) {
         try {
           window.location.href = appUrl;
+          // Open the app on app IOS or chrome IOS mobile
+        } catch (err) {
+          console.log("err: ", err);
+        }
+      } else {
+        // open app on android
+        try {
         } catch (error) {
           console.log("Jitsi Meet app is not installed");
           // Handle the case where the Jitsi Meet app is not installed (e.g., show a message to the user)
