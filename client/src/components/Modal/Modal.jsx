@@ -1,10 +1,11 @@
-import React from "react";
+import React, { Fragment } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { withStyles } from "@material-ui/core/styles";
 
-import { Box, Icon, ICON_SIZES, Loading } from "..";
+import { Box, Icon, ICON_SIZES, Loading, BackDrop } from "..";
 
 import { COLORS } from "../../constants";
+import "./modal.css";
 
 const Modal = ({
   children,
@@ -14,25 +15,32 @@ const Modal = ({
   width,
   classes,
   state,
+  dark,
 }) => (
-  <Box
-    background={`${COLORS.darkestGrey}CC`}
-    bottom={0}
-    center
-    justifyContent="center"
-    left={0}
-    position="fixed"
-    right={0}
-    top={0}
-    zIndex={10000}
-  >
-    <OutsideClickHandler onOutsideClick={onClose}>
+  <Fragment>
+    <BackDrop onClose={onClose} />
+    <Box
+      bottom={0}
+      center
+      justifyContent="center"
+      left={0}
+      position="fixed"
+      right={0}
+      top={0}
+      zIndex={10000}
+    >
       <Box
-        background={COLORS.white}
-        border={`1px solid ${COLORS.grey}`}
+        background={dark ? COLORS.darkestGrey : COLORS.white}
+        border={dark ? `1px solid ${COLORS.black}` : `1px solid ${COLORS.grey}`}
         borderRadius={8}
+        style={{ opacity: dark ? 0.7 : 1 }}
         width={width || 320}
         height={height || 440}
+        boxShadow={
+          dark
+            ? `2px 2px 4px 2px ${COLORS.white}`
+            : `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`
+        }
         center
         column
         padding={16}
@@ -48,7 +56,7 @@ const Modal = ({
             zIndex={20}
           >
             <Icon
-              color={COLORS.darkGrey}
+              color={dark ? COLORS.white : COLORS.darkGrey}
               name="close"
               size={ICON_SIZES.MEDIUM}
             />
@@ -64,8 +72,8 @@ const Modal = ({
           children
         )}
       </Box>
-    </OutsideClickHandler>
-  </Box>
+    </Box>
+  </Fragment>
 );
 
 const styles = {

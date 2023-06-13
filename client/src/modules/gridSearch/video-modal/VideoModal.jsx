@@ -7,6 +7,7 @@ import {
   FONT_SIZES,
   CompVideoUploader,
 } from "../../../components";
+import { COLORS } from "../../../constants";
 
 const VideoModal = ({ onClose, senderID, receiverID, state, mobile }) => {
   const [sending, setSending] = useState(false);
@@ -15,12 +16,13 @@ const VideoModal = ({ onClose, senderID, receiverID, state, mobile }) => {
     setSending(truthy);
   };
   return (
-    <Modal onClose={onClose} state={state}>
+    <Modal dark={sending} onClose={onClose} state={state}>
       <Text
         fontSize={FONT_SIZES.X_LARGE}
         width={"100%"}
         center
         bold
+        color={sending ? COLORS.white : COLORS.black}
         position={"absolute"}
         style={{ top: sending ? 60 : 20 }}
       >

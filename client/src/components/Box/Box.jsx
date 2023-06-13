@@ -7,6 +7,7 @@ const Box = (props) => <StyledDiv {...props}>{props.children}</StyledDiv>;
 
 const StyledDiv = styled.div(
   ({
+    id,
     alignItems,
     background,
     backgroundColor,
@@ -64,6 +65,7 @@ const StyledDiv = styled.div(
     width,
     zIndex,
   }) => ({
+    id: id ? id : undefined,
     alignItems: center ? "center" : alignItems,
     background,
     backgroundColor,

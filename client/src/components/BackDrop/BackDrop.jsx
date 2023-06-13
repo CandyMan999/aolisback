@@ -1,9 +1,11 @@
 import React from "react";
 import { Box } from "../../components";
+import "./backDrop.css";
 
 const BackDrop = ({ onClose, mobile }) => {
   return (
     <Box
+      id="backDrop"
       position="fixed"
       width="100%"
       height="100%"
