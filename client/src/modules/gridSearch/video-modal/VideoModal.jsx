@@ -1,15 +1,15 @@
 import React, { useState } from "react";
+import { isDesktop } from "react-device-detect";
 import {
   Modal,
   VideoUploader,
-  Box,
   Text,
   FONT_SIZES,
   CompVideoUploader,
 } from "../../../components";
 import { COLORS } from "../../../constants";
 
-const VideoModal = ({ onClose, senderID, receiverID, state, mobile }) => {
+const VideoModal = ({ onClose, senderID, receiverID, state }) => {
   const [sending, setSending] = useState(false);
 
   const handleSending = (truthy) => {
@@ -28,14 +28,14 @@ const VideoModal = ({ onClose, senderID, receiverID, state, mobile }) => {
       >
         {sending ? "Sending Video..." : "Send Video Message"}
       </Text>
-      {mobile ? (
-        <VideoUploader
+      {isDesktop ? (
+        <CompVideoUploader
           senderID={senderID}
           receiverID={receiverID}
           handleSending={handleSending}
         />
       ) : (
-        <CompVideoUploader
+        <VideoUploader
           senderID={senderID}
           receiverID={receiverID}
           handleSending={handleSending}
