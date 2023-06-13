@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, Fragment } from "react";
-import { browserName, isIOS } from "react-device-detect";
+import { browserName, isIOS, isDesktop } from "react-device-detect";
 import { Jutsu } from "react-jutsu";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -19,8 +19,8 @@ const Video = () => {
   const iosMobile = isIOS && mobile;
 
   let history = useHistory();
-  const appUrl = `org.jitsi.meet://meet.jit.si/AOLisBack-noi8ioj7r/${state.currentUser.username}`;
-  const webApp = `jitsi-meet://${state.currentUser.username}`;
+  const appUrl = `org.jitsi.meet://meet.jit.si/AOLisBack-noi8ioj7r/${state.userChannel}`;
+  const webApp = `jitsi-meet://${state.userChannel}`;
 
   useEffect(() => {
     if (state.userChannel || state.currentUser.username) {
@@ -28,11 +28,8 @@ const Video = () => {
       setTimeout(() => setSpinner(false), 2000);
 
       try {
-        if (mobile) {
+        if (!isDesktop) {
           window.location.href = appUrl;
-        }
-        if (!mobile) {
-          window.location.href = webApp;
         }
         // Open the app on app IOS or chrome IOS mobile
       } catch (err) {
@@ -50,45 +47,27 @@ const Video = () => {
   }, [state.currentUser, state.userChannel]);
 
   return (
-    <Box display="flex" column center>
-      {state.userChannel ? (
-        <Fragment>
-          <Banner
-            mobile={mobile}
-            show={true}
-            message={"Download Jitsi App for best Video Chat experience, FREE!"}
-            type="alert"
-          />
-          <VideoChannel channelOwner={state.userChannel} />
-          <Jutsu
-            containerStyles={{
-              width: mobile ? "375px" : "1200px",
-              height: mobile ? "400px" : "800px",
-            }}
-            roomName={process.env.REACT_APP_ROOM + state.userChannel}
-            displayName={state.currentUser.username}
-            onMeetingEnd={() => history.push("/")}
-            loadingComponent={<p>Loading...</p>}
-            errorComponent={<p>Oops, something went wrong</p>}
-          />
-        </Fragment>
-      ) : (
-        <Fragment>
-          <VideoChannel channelOwner={state.currentUser.username} />
-          {spinner && <Loading />}
-          <Jutsu
-            containerStyles={{
-              width: mobile ? "375px" : "1200px",
-              height: mobile ? "400px" : "800px",
-            }}
-            roomName={process.env.REACT_APP_ROOM + state.currentUser.username}
-            displayName={state.currentUser.username}
-            onMeetingEnd={() => history.push("/")}
-            loadingComponent={<Loading />}
-            errorComponent={<p>Oops, something went wrong</p>}
-          />
-        </Fragment>
+    <Box display="flex" column center width="100%" height="100%" padding={5}>
+      {!isDesktop && (
+        <Banner
+          mobile={mobile}
+          show={true}
+          message={"Download Jitsi App for best Video Chat experience, FREE!"}
+          type="alert"
+        />
       )}
+      <VideoChannel channelOwner={state.userChannel} />
+      <Jutsu
+        containerStyles={{
+          width: "95%",
+          height: "80vh",
+        }}
+        roomName={process.env.REACT_APP_ROOM + state.userChannel}
+        displayName={state.currentUser.username}
+        onMeetingEnd={() => history.push("/")}
+        loadingComponent={<p>Loading...</p>}
+        errorComponent={<p>Oops, something went wrong</p>}
+      />
     </Box>
   );
 };
