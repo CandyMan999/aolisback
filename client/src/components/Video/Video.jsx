@@ -5,7 +5,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import { useHistory } from "react-router-dom";
 
-import { Box, Banner } from "../../components";
+import { Box, Banner, Loading } from "../../components";
 import VideoChannel from "./videoChannel";
 
 import Context from "../../context";
@@ -53,17 +53,21 @@ const Video = () => {
         />
       )}
       <VideoChannel channelOwner={state.userChannel} />
-      <Jutsu
-        containerStyles={{
-          width: "95%",
-          height: "80vh",
-        }}
-        roomName={process.env.REACT_APP_ROOM + state.userChannel}
-        displayName={state.currentUser.username}
-        onMeetingEnd={() => history.push("/")}
-        loadingComponent={<p>Loading...</p>}
-        errorComponent={<p>Oops, something went wrong</p>}
-      />
+      {state.currentUser ? (
+        <Jutsu
+          containerStyles={{
+            width: "95%",
+            height: "80vh",
+          }}
+          roomName={process.env.REACT_APP_ROOM + state.userChannel}
+          displayName={state.currentUser.username}
+          onMeetingEnd={() => history.push("/")}
+          loadingComponent={<p>Loading...</p>}
+          errorComponent={<p>Oops, something went wrong</p>}
+        />
+      ) : (
+        <Loading fade size={150} />
+      )}
     </Box>
   );
 };
