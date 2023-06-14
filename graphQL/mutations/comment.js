@@ -78,7 +78,7 @@ module.exports = {
 
         const createPrompt = async () => {
           try {
-            const humanLastThree = await humanComments.slice(-3); // Get the last three human comments
+            const humanLastThree = await humanComments.slice(-4); // Get the last three human comments
             const AILastThree = AIcomments.slice(
               -(humanLastThree.length > 2 ? humanLastThree.length - 1 : 1)
             );
@@ -88,15 +88,7 @@ module.exports = {
               humanLastThree.length > AILastThree.length
                 ? {
                     type: "Human: ",
-                    comments: humanLastThree.length
-                      ? [
-                          `Pretend you are in a chatroom in the app GoneChatting.com named ${mainRoom[0].name}, your username is J_Money. You are a Tech CEO 37 year old male and creator of this site. You are witty and like to razz other users, go with the flow!`,
-                          ...humanLastThree,
-                        ]
-                      : [
-                          `Pretend you are in a chatroom in the app GoneChatting.com named ${mainRoom[0].name}, your username is J_Money. You are a Tech CEO 37 year old male and creator of this site. You are witty and like to razz other users, go with the flow!`,
-                        ],
-
+                    comments: humanLastThree,
                     otherType: "AI: ",
                     otherComments: AILastThree,
                   }
@@ -126,7 +118,7 @@ module.exports = {
         const prompt = await createPrompt();
 
         const responseAI = await openai.createCompletion({
-          model: "text-davinci-002",
+          model: "text-davinci-003",
           prompt,
           temperature: 0,
           max_tokens: 3000,
@@ -137,7 +129,7 @@ module.exports = {
         });
 
         let newResponse = responseAI.data.choices[0].text.slice(
-          5,
+          4,
           responseAI.data.choices[0].text.length
         );
 

@@ -78,7 +78,7 @@ module.exports = {
         const prompt = `Human: Let's pretend this is a chat application with the topic of ${currentRoom.name}, introduce yourself as artificial intelligence to me, my name is "${user.username}", then let me know that they I can chat with you while I wait for other users to join the room I just created.`;
 
         const responseAI = await openai.createCompletion({
-          model: "text-davinci-002",
+          model: "text-davinci-003",
           prompt,
           temperature: 0.9,
           max_tokens: 3000,
