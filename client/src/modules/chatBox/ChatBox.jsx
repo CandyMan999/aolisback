@@ -38,6 +38,7 @@ const ChatBox = () => {
 
   const [loading, setLoading] = useState(false);
   const mobile = useMediaQuery("(max-width: 650px)");
+  const roomMobile = useMediaQuery("(max-width: 950px)");
   const { currentUser } = state;
 
   useEffect(() => {
@@ -171,7 +172,7 @@ const ChatBox = () => {
         messages={messages}
         currentUser={!!currentUser && currentUser._id}
         loading={loading}
-        mobile={mobile}
+        mobile={roomMobile}
       />
 
       <CreateRoom

@@ -176,7 +176,7 @@ class Banner extends React.PureComponent {
                 }}
                 data-view-component="true"
               >
-                Download Jitsi Meet for Desktop
+                Download Jitsi Meet for Mac
               </a>
             ) : (
               <a
