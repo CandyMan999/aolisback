@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { browserName, isIOS, isDesktop } from "react-device-detect";
+import { browserName, isIOS, isDesktop, isMacOs } from "react-device-detect";
 import { Jutsu } from "react-jutsu";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -19,7 +19,7 @@ const Video = () => {
 
   let history = useHistory();
   const appUrl = `org.jitsi.meet://meet.jit.si/AOLisBack-noi8ioj7r/${state.userChannel}`;
-  const webApp = `jitsi-meet://${state.userChannel}`;
+  const webAppMac = `jitsi-meet://${state.userChannel}`;
 
   useEffect(() => {
     if (state.userChannel || state.currentUser.username) {
@@ -27,7 +27,9 @@ const Video = () => {
         if (!isDesktop) {
           window.location.href = appUrl;
         }
-        // Open the app on app IOS or chrome IOS mobile
+        if (isDesktop && isMacOs) {
+          window.location.href = webAppMac;
+        }
       } catch (err) {
         console.log("err: ", err);
       }
@@ -44,14 +46,13 @@ const Video = () => {
 
   return (
     <Box display="flex" column center width="100%" height="100%">
-      {!isDesktop && (
-        <Banner
-          mobile={mobile}
-          show={true}
-          message={"Download Jitsi App for best Video Chat experience, FREE!"}
-          type="alert"
-        />
-      )}
+      <Banner
+        mobile={mobile}
+        show={true}
+        message={"Download Jitsi App for best Video Chat experience, FREE!"}
+        type="alert"
+      />
+
       <VideoChannel channelOwner={state.userChannel} />
       {state.currentUser ? (
         <Jutsu

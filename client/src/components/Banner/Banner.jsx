@@ -1,5 +1,5 @@
 import React from "react";
-
+import { isDesktop, isMacOs } from "react-device-detect";
 import { Box, Text, Icon } from "..";
 import { COLORS } from "../../constants";
 import { FONT_SIZES, ICON_SIZES } from "..";
@@ -165,12 +165,24 @@ class Banner extends React.PureComponent {
             >
               {this.props.message}
             </Text>
-            {this.props.type === "alert" && (
+            {this.props.type === "alert" && isDesktop && isMacOs ? (
+              <a
+                href="https://github.com/jitsi/jitsi-meet-electron/releases/download/v2023.5.3/jitsi-meet.dmg"
+                rel="nofollow"
+                data-turbo="false"
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                }}
+                data-view-component="true"
+              >
+                Download Jitsi Meet for Desktop
+              </a>
+            ) : (
               <a
                 href={this.state.appStoreUrl}
                 style={{
                   width: "100%",
-
                   textAlign: "center",
                 }}
                 target="_blank"
