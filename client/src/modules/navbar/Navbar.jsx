@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from "react";
-import { NavLink, withRouter } from "react-router-dom";
+import { NavLink, withRouter, useLocation } from "react-router-dom";
 import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 import { getToken } from "../../utils/helpers";
-import TestLogo from "../../pictures/TestLogo.png";
+import TestLogo from "../../pictures/Logo.png";
 
 import { Box, FONT_SIZES, Text, NavGuide } from "../../components";
 
@@ -19,6 +19,7 @@ import Context from "../../context";
 
 const Navbar = ({ props }) => {
   const { state, dispatch } = useContext(Context);
+  const location = useLocation();
 
   const client = useClient();
   const token = getToken();
@@ -80,6 +81,11 @@ const Navbar = ({ props }) => {
         column
         display="flex"
         marginTop={props.mobile ? 20 : 38}
+        zIndex={
+          location.pathname === "/location" || location.pathname === "/message"
+            ? 2
+            : undefined
+        }
       >
         <NavLink style={{ textDecoration: "none" }} to="/">
           <img

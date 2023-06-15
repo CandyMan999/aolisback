@@ -28,7 +28,6 @@ import { useClient } from "../../client";
 import { FONT_SIZES } from "../Text";
 import mapboxgl from "mapbox-gl";
 
-
 mapboxgl.workerClass =
   require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
@@ -70,7 +69,11 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
           handleFlyTo(lat, lng, 8);
         }, 1000);
       }
-      if (location.pathname === "/profile" && !loading && !noLocation(currentUser.location.coordinates)) {
+      if (
+        location.pathname === "/profile" &&
+        !loading &&
+        !noLocation(currentUser.location.coordinates)
+      ) {
         setPopup({ isOpen: true, id: currentUser._id });
         await handleGetUsers(currentUser._id);
         setTimeout(() => {
@@ -229,6 +232,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
         >
           <div>
             <NavigationControl
+              style={{ position: "absolute", top: 10, right: 10 }}
               onViewportChange={(newViewport) => setViewport(newViewport)}
             />
             {location.pathname !== "/profile" && (

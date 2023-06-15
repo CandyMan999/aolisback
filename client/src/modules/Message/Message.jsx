@@ -138,7 +138,13 @@ const Message = () => {
           paddingX={"3%"}
           backgroundColor={COLORS.lighterGrey}
         >
-          <Box marginTop={5} onClick={handleProfileClick} center width={"70%"}>
+          <Box
+            zIndex={4}
+            marginTop={5}
+            onClick={handleProfileClick}
+            center
+            width={"70%"}
+          >
             <Picture
               profilePic={
                 groupedReceived[0].sender._id === currentUser._id
