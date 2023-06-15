@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 import { getToken } from "../../utils/helpers";
+import TestLogo from "../../pictures/TestLogo.png";
 
 import { Box, FONT_SIZES, Text, NavGuide } from "../../components";
 
@@ -74,16 +75,19 @@ const Navbar = ({ props }) => {
           onClose={() => dispatch({ type: "TOGGLE_LOGIN", payload: false })}
         />
       )}
-      <Box flexWrap="wrap" column display="flex">
+      <Box
+        flexWrap="wrap"
+        column
+        display="flex"
+        marginTop={props.mobile ? 20 : 38}
+      >
         <NavLink style={{ textDecoration: "none" }} to="/">
-          <Text
-            margin={0}
-            color={COLORS.white}
-            fontSize={FONT_SIZES.X_LARGE}
-            bold
-          >
-            GoneChatting
-          </Text>
+          <img
+            height={props.mobile ? 150 : 200}
+            width={"100%"}
+            src={TestLogo}
+            alt="Gone-Chatting-Logo"
+          />
         </NavLink>
       </Box>
 

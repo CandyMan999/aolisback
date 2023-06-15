@@ -53,7 +53,7 @@ const Root = () => {
       <ApolloProvider client={client}>
         <Context.Provider value={{ state, dispatch }}>
           <BrowserRouter>
-            <App />
+            <App mobile={mobile} />
             {state.showChatRequest && !!videoChat && (
               <RequestModal
                 currentUser={state.currentUser}
