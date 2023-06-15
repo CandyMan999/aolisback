@@ -43,6 +43,7 @@ const Root = () => {
   const [videoChat, setVideoChat] = useState(null);
 
   const mobile = useMediaQuery("(max-width: 650px)");
+  const navLogo = useMediaQuery("(max-width: 950px)");
 
   const toggleChatRequest = (payload) => {
     dispatch({ type: "TOGGLE_CHAT", payload });
@@ -53,7 +54,7 @@ const Root = () => {
       <ApolloProvider client={client}>
         <Context.Provider value={{ state, dispatch }}>
           <BrowserRouter>
-            <App mobile={mobile} />
+            <App mobile={navLogo} />
             {state.showChatRequest && !!videoChat && (
               <RequestModal
                 currentUser={state.currentUser}
