@@ -1,8 +1,9 @@
 const { AuthenticationError, gql, PubSub } = require("apollo-server");
-const { User, Picture } = require("../../models");
+const { User, Picture, Video } = require("../../models");
 const { OAuth2Client } = require("google-auth-library");
 const { createToken } = require("../../utils/middleware");
 const moment = require("moment");
+const { publishCreateVideo } = require("../subscription/subscription");
 
 require("dotenv").config();
 const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID);
@@ -51,6 +52,40 @@ module.exports = {
     }).save();
 
     const newPhoto = await Picture.create({ url: picture, user: user._id });
+
+    const video = await Video.create({
+      url: "http://res.cloudinary.com/localmassagepros/video/upload/v1686791832/no3jierdzpkyftt4pnc1.mov",
+      publicId: "no3jierdzpkyftt4pnc1",
+      sender: "648131bb35e013ea02e8935d",
+      receiver: user._id,
+    });
+
+    await User.findByIdAndUpdate(
+      { _id: user._id },
+      { $push: { receivedVideos: video } },
+      { new: true }
+    ).populate("receivedVideos");
+
+    const newVideo = await Video.findOne({ _id: video._id }).populate([
+      {
+        path: "sender",
+        model: "User",
+        populate: {
+          path: "pictures",
+          model: "Picture",
+        },
+      },
+      {
+        path: "receiver",
+        model: "User",
+        populate: {
+          path: "pictures",
+          model: "Picture",
+        },
+      },
+    ]);
+
+    publishCreateVideo(newVideo);
 
     const currentUser = await User.findByIdAndUpdate(
       {
