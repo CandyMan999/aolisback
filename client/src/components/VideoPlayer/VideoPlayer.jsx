@@ -28,7 +28,7 @@ const VideoPlayer = ({
     });
 
     videoPlayer.on("play", () => {
-      if (fullScreen && !isChromeMobile) {
+      if (fullScreen) {
         videoPlayer.maximize();
       }
       if (receiverWatching) {
@@ -70,6 +70,7 @@ const VideoPlayer = ({
       controls={controls}
       style={{
         borderRadius: borderRadius ? borderRadius : undefined,
+        maxWidth: mobile ? 300 : undefined,
       }} // Add border radius
       {...props}
     />
@@ -83,6 +84,7 @@ const VideoPlayer = ({
       controls={controls}
       style={{
         borderRadius: borderRadius ? borderRadius : undefined,
+        maxWidth: mobile ? 300 : undefined,
       }} // Add border radius
       {...props}
     />
