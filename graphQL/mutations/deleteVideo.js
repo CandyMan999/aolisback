@@ -47,8 +47,11 @@ module.exports = {
         }
       });
       if (!!publicIDs.length) {
+        const filterIDs = publicIDs.filter(
+          (id) => id !== "no3jierdzpkyftt4pnc1"
+        );
         await cloudinary.api.delete_resources(
-          publicIDs,
+          filterIDs,
           function (result) {
             console.log(result);
           },
