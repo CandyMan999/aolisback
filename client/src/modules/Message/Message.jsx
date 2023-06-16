@@ -206,13 +206,7 @@ const Message = () => {
                       : undefined
                   }
                 >
-                  <Box
-                    maxWidth="80%"
-                    column
-                    alignItems="center"
-                    display="flex"
-                    marginTop={20}
-                  >
+                  <Box column alignItems="center" display="flex" marginTop={20}>
                     {video.sender._id !== currentUser._id && (
                       <Box position={"absolute"} top={-20} right={0}>
                         <Icon
@@ -224,19 +218,22 @@ const Message = () => {
                         />
                       </Box>
                     )}
-
-                    <VideoPlayer
-                      publicId={video.publicId}
-                      controls={true}
-                      height={100}
-                      width={"auto"}
-                      borderRadius={"10px"}
-                      fullScreen={true}
-                      mobile={mobile}
-                      receiverWatching={video.receiver._id === currentUser._id}
-                      _id={video._id}
-                      client={client}
-                    />
+                    <Box maxWidth="100%">
+                      <VideoPlayer
+                        publicId={video.publicId}
+                        controls={true}
+                        height={100}
+                        width={"auto"}
+                        borderRadius={"10px"}
+                        fullScreen={true}
+                        mobile={mobile}
+                        receiverWatching={
+                          video.receiver._id === currentUser._id
+                        }
+                        _id={video._id}
+                        client={client}
+                      />
+                    </Box>
 
                     <Text center bold margin={0}>
                       {video.sender._id === currentUser._id
