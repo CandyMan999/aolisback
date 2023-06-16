@@ -47,9 +47,7 @@ module.exports = {
         }
       });
       if (!!publicIDs.length) {
-        const filterIDs = publicIDs.filter(
-          (id) => id !== "no3jierdzpkyftt4pnc1"
-        );
+        const filterIDs = publicIDs.filter((id) => id !== "GoneChatting");
         await cloudinary.api.delete_resources(
           filterIDs,
           function (result) {

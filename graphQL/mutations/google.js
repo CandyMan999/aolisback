@@ -54,8 +54,8 @@ module.exports = {
     const newPhoto = await Picture.create({ url: picture, user: user._id });
 
     const video = await Video.create({
-      url: "http://res.cloudinary.com/localmassagepros/video/upload/v1686791832/no3jierdzpkyftt4pnc1.mov",
-      publicId: "no3jierdzpkyftt4pnc1",
+      url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
+      publicId: "GoneChatting",
       sender: "648ba740bbb5cf00146ab4eb",
       receiver: user._id,
     });
