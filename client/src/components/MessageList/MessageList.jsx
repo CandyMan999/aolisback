@@ -4,6 +4,7 @@ import Message from "./Message";
 import { Loading, Box, JoinARoom } from "../../components";
 import ReactDOM from "react-dom";
 import goneChattingSVG from "../../pictures/goneChatting.svg";
+import MainLogo from "../../pictures/MainLogo.png";
 
 class MessageList extends Component {
   componentWillUpdate() {
@@ -31,13 +32,13 @@ class MessageList extends Component {
               height={"100%"}
               width={"100%"}
               alignItems="center"
+              margin="auto"
             >
               {(!this.props.currentUser || !this.props.mobile) && (
                 <img
-                  height={this.props.mobile ? undefined : "100%"}
-                  width={"100%"}
+                  width={"95%"}
                   style={{ opacity: 0.3 }}
-                  src={goneChattingSVG}
+                  src={MainLogo}
                   alt="Gone Chatting"
                 />
               )}

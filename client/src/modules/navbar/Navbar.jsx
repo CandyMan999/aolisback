@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { NavLink, withRouter, useLocation } from "react-router-dom";
 import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 import { getToken } from "../../utils/helpers";
-import TestLogo from "../../pictures/Logo.png";
+import NavLogo from "../../pictures/NavLogo.png";
 
 import { Box, FONT_SIZES, Text, NavGuide } from "../../components";
 
@@ -80,7 +80,7 @@ const Navbar = ({ props }) => {
         flexWrap="wrap"
         column
         display="flex"
-        marginTop={props.mobile ? 20 : 38}
+        marginTop={props.mobile ? 25 : 38}
         zIndex={
           location.pathname === "/location" || location.pathname === "/message"
             ? 2
@@ -89,9 +89,9 @@ const Navbar = ({ props }) => {
       >
         <NavLink style={{ textDecoration: "none" }} to="/">
           <img
-            height={props.mobile ? 150 : 200}
-            width={props.mobile ? 150 : 200}
-            src={TestLogo}
+            height={props.mobile ? 160 : 200}
+            width={props.mobile ? 160 : 200}
+            src={NavLogo}
             alt="Gone-Chatting-Logo"
           />
         </NavLink>
