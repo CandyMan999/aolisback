@@ -197,6 +197,14 @@ export const FETCH_ME = gql`
           }
           age
           occupation
+          lookingFor {
+            ageRange {
+              lowEnd
+              highEnd
+            }
+            sex
+            kids
+          }
           singleTime
           drink
           smoke

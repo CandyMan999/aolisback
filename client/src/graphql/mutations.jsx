@@ -408,8 +408,38 @@ export const FLAG_VIDEO_MUTATION = gql`
       viewed
       flagged
       sender {
-        _id
         username
+        _id
+        isLoggedIn
+        pictures {
+          _id
+          url
+          publicId
+        }
+        blockedUsers {
+          _id
+        }
+        intro
+        sex
+        location {
+          coordinates
+        }
+        age
+        occupation
+        singleTime
+        lookingFor {
+          ageRange {
+            lowEnd
+            highEnd
+          }
+          sex
+          kids
+        }
+        drink
+        smoke
+        marijuana
+        drugs
+        kids
       }
       receiver {
         _id
@@ -429,8 +459,38 @@ export const VIEWED_VIDEO_MUTATION = gql`
       viewed
       flagged
       sender {
-        _id
         username
+        _id
+        isLoggedIn
+        pictures {
+          _id
+          url
+          publicId
+        }
+        blockedUsers {
+          _id
+        }
+        intro
+        sex
+        location {
+          coordinates
+        }
+        age
+        lookingFor {
+          ageRange {
+            lowEnd
+            highEnd
+          }
+          sex
+          kids
+        }
+        occupation
+        singleTime
+        drink
+        smoke
+        marijuana
+        drugs
+        kids
       }
       receiver {
         _id
