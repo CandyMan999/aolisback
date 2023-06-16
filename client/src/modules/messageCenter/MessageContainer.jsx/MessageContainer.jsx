@@ -96,7 +96,10 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
                   {group[0].sender.username}
                 </Text>
               </Box>
-              <Box onClick={() => handleOnClick(group[0].sender._id)}>
+              <Box
+                onClick={() => handleOnClick(group[0].sender._id)}
+                maxWidth={120}
+              >
                 <VideoPlayer
                   publicId={group[group.length - 1].publicId}
                   height={90}

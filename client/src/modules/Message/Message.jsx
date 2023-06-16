@@ -224,6 +224,7 @@ const Message = () => {
                       controls={true}
                       height={100}
                       width={"auto"}
+                      style={{ maxWidth: "80%" }}
                       borderRadius={"10px"}
                       fullScreen={true}
                       mobile={mobile}
