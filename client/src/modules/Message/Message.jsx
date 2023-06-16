@@ -206,7 +206,13 @@ const Message = () => {
                       : undefined
                   }
                 >
-                  <Box column alignItems="center" display="flex" marginTop={20}>
+                  <Box
+                    maxWidth="80%"
+                    column
+                    alignItems="center"
+                    display="flex"
+                    marginTop={20}
+                  >
                     {video.sender._id !== currentUser._id && (
                       <Box position={"absolute"} top={-20} right={0}>
                         <Icon
@@ -224,7 +230,6 @@ const Message = () => {
                       controls={true}
                       height={100}
                       width={"auto"}
-                      style={{ maxWidth: "80%" }}
                       borderRadius={"10px"}
                       fullScreen={true}
                       mobile={mobile}

@@ -90,7 +90,7 @@ const Navbar = ({ props }) => {
         <NavLink style={{ textDecoration: "none" }} to="/">
           <img
             height={props.mobile ? 150 : 200}
-            width={props.mobile ? 150 : "100%"}
+            width={props.mobile ? 150 : 200}
             src={TestLogo}
             alt="Gone-Chatting-Logo"
           />

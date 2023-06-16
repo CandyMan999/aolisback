@@ -68,7 +68,9 @@ const VideoPlayer = ({
       width={width}
       height={250}
       controls={controls}
-      style={{ borderRadius: borderRadius ? borderRadius : undefined }} // Add border radius
+      style={{
+        borderRadius: borderRadius ? borderRadius : undefined,
+      }} // Add border radius
       {...props}
     />
   ) : (
@@ -79,7 +81,9 @@ const VideoPlayer = ({
       width={width}
       height={height}
       controls={controls}
-      style={{ borderRadius: borderRadius ? borderRadius : undefined }} // Add border radius
+      style={{
+        borderRadius: borderRadius ? borderRadius : undefined,
+      }} // Add border radius
       {...props}
     />
   );
