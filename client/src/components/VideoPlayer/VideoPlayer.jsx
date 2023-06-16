@@ -28,7 +28,7 @@ const VideoPlayer = ({
     });
 
     videoPlayer.on("play", () => {
-      if (fullScreen) {
+      if (fullScreen && !isChromeMobile) {
         videoPlayer.maximize();
       }
       if (receiverWatching) {
