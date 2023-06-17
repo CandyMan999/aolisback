@@ -42,6 +42,8 @@ const GetLocation = ({
     }
   }, [userCoords.lat]);
 
+  console.log("currentUser: ", currentUser);
+
   useEffect(() => {
     if (currentUser.username) {
       setLocationSuccess(!noLocation(currentUser.location.coordinates));
@@ -64,14 +66,12 @@ const GetLocation = ({
       );
 
       if (updateLocation) {
-        dispatch({
+        await dispatch({
           type: "UPDATE_LOCATION",
           payload: updateLocation.coordinates,
         });
+
         setSpinner(false);
-        // setTimeout(() => {
-        //   setSubmitted(true);
-        // }, 2000);
 
         setLocationSuccess(true);
       }
@@ -141,7 +141,7 @@ const GetLocation = ({
           >
             {spinner ? (
               <Loading bar color={COLORS.vividBlue} />
-            ) : !currentUser.location.lat ? (
+            ) : noLocation(currentUser.location.coordinates) ? (
               <Text bold>Get Location</Text>
             ) : (
               <Text bold>Update Location</Text>

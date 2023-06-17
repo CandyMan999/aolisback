@@ -76,6 +76,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
       ) {
         setPopup({ isOpen: true, id: currentUser._id });
         await handleGetUsers(currentUser._id);
+
         setTimeout(() => {
           handleFlyTo(
             currentUser.location.coordinates[1],
@@ -86,7 +87,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
       }
     };
     mapLoad();
-  }, [state.userLocation._id, state.currentUser.location.coordinates]);
+  }, [state.userLocation._id, currentUser.location.coordinates]);
 
   const noLocation = (array) => {
     if (
@@ -113,7 +114,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
         variables
       );
 
-      setUsers([...getUsersMap]);
+      await setUsers([...getUsersMap]);
       setMapLoading(false);
     } catch (err) {
       setMapLoading(false);

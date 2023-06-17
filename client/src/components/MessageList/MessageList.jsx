@@ -33,6 +33,12 @@ class MessageList extends Component {
               width={"100%"}
               alignItems="center"
               margin="auto"
+              style={{
+                overflow:
+                  this.props.mobile && this.props.currentUser
+                    ? undefined
+                    : "hidden",
+              }}
             >
               {(!this.props.currentUser || !this.props.mobile) && (
                 <img
