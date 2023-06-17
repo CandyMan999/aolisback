@@ -42,8 +42,6 @@ const GetLocation = ({
     }
   }, [userCoords.lat]);
 
-  console.log("currentUser: ", currentUser);
-
   useEffect(() => {
     if (currentUser.username) {
       setLocationSuccess(!noLocation(currentUser.location.coordinates));

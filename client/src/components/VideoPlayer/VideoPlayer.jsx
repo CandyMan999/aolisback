@@ -54,7 +54,6 @@ const VideoPlayer = ({
         VIEWED_VIDEO_MUTATION,
         variables
       );
-      console.log("data: ", viewVideo);
     } catch (err) {
       console.log("err setting video watched: ", err);
     }

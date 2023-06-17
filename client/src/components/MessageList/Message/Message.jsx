@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Box, Text, FONT_SIZES } from "../../../components";
+import { Box, Text, FONT_SIZES, Picture } from "../../../components";
 import { COLORS } from "../../../constants";
 import { formatDistanceToNow } from "date-fns";
 import Speech from "react-speech";
@@ -43,7 +43,7 @@ const Message = ({
             display={"flex"}
             justifyContent={"flex-end"}
             height={"fit-content"}
-            minHeight={45}
+            minHeight={55}
             className="message"
             margin="auto"
             flexWrap="wrap"
@@ -54,7 +54,7 @@ const Message = ({
             <Box
               flexWrap="wrap"
               height={"fit-content"}
-              marginRight={47}
+              marginRight={50}
               // textAlign={"center"}
               className="message-text"
             >
@@ -85,37 +85,18 @@ const Message = ({
               position={"absolute"}
               flexWrap="wrap"
               height={35}
+              paddingX={1}
               textAlign={"center"}
               justifyContent={"center"}
               onClick={() => usernameClick(authorId)}
             >
-              {!!picture && picture.publicId && (
-                <CloudinaryContext cloudName="localmassagepros">
-                  <Image
-                    alt={`${picture._id}-avatar`}
-                    style={{
-                      height: "35px",
-                      borderRadius: "90%",
-                      border: `dotted 2px ${COLORS.vividBlue}`,
-                    }}
-                    loading="lazy"
-                    publicId={picture.publicId}
-                  >
-                    <Transformation height={"35"} width={"35"} crop="thumb" />
-                  </Image>
-                </CloudinaryContext>
-              )}
-              {!!picture.url && !picture.publicId && (
-                <img
-                  style={{
-                    height: "35px",
-                    borderRadius: "90%",
-                    border: `dotted 2px ${COLORS.vividBlue}`,
-                  }}
-                  src={picture.url}
-                  alt={currentUser}
-                />
-              )}
+              <Picture
+                profilePic={picture}
+                name={picture._id}
+                height={45}
+                width={45}
+                border
+              />
 
               <Text
                 margin={0}
@@ -132,7 +113,7 @@ const Message = ({
             display={"flex"}
             height={"fit-content"}
             className="message"
-            minHeight={45}
+            minHeight={55}
             margin="auto"
             flexWrap="wrap"
             paddingTop={10}
@@ -147,35 +128,13 @@ const Message = ({
               justifyContent={"center"}
               onClick={() => usernameClick(authorId)}
             >
-              {!!picture && picture.publicId && (
-                <CloudinaryContext cloudName="localmassagepros">
-                  <Image
-                    alt={`${picture._id}-avatar`}
-                    style={{
-                      height: "35px",
-                      borderRadius: "90%",
-                      border: `dotted 2px ${COLORS.vividBlue}`,
-                    }}
-                    loading="lazy"
-                    publicId={picture.publicId}
-                    quality="auto:best"
-                  >
-                    <Transformation height={"35"} width={"35"} crop="thumb" />
-                  </Image>
-                </CloudinaryContext>
-              )}
-              {!!picture.url && !picture.publicId && (
-                <img
-                  style={{
-                    height: "35px",
-                    borderRadius: "90%",
-                    border: `dotted 2px ${COLORS.vividBlue}`,
-                  }}
-                  src={picture.url}
-                  alt={currentUser}
-                />
-              )}
-
+              <Picture
+                profilePic={picture}
+                name={picture._id}
+                height={45}
+                width={45}
+                border
+              />
               <Text
                 margin={0}
                 fontSize={FONT_SIZES.X_SMALL}
@@ -190,7 +149,7 @@ const Message = ({
               height={"fit-content"}
               // textAlign={"center"}
               className="others-message-text"
-              marginLeft={47}
+              marginLeft={50}
             >
               <Text
                 paddingLeft={2}

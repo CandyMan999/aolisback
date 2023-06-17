@@ -97,7 +97,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                 }
               >
                 {active && loading ? (
-                  <Box height={45} width="100%">
+                  <Box height={20} width="100%">
                     <Loading bar />
                   </Box>
                 ) : (
@@ -129,7 +129,6 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                   <Text
                     margin={0}
                     color={active ? COLORS.black : COLORS.grey}
-                    // textShadow={active && `-2px 1px 1px ${COLORS.black}`}
                     className="userNumber"
                     fontSize={mobile ? FONT_SIZES.SMALL : FONT_SIZES.X_LARGE}
                     width={"100%"}

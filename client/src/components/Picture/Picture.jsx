@@ -3,7 +3,7 @@ import { Image, CloudinaryContext } from "cloudinary-react";
 import { Box, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
 
-const Picture = ({ profilePic, name, height, width, marginBottom }) => {
+const Picture = ({ profilePic, name, height, width, marginBottom, border }) => {
   return !!profilePic ? (
     !!profilePic.publicId ? (
       <CloudinaryContext cloudName="localmassagepros">
@@ -11,14 +11,19 @@ const Picture = ({ profilePic, name, height, width, marginBottom }) => {
           alt={`${name}-profile-pic`}
           style={{
             borderRadius: "50%",
-            height,
-            width,
+            height: "auto",
+            width: "100%",
             marginBottom: marginBottom ? marginBottom : undefined,
+            border: border ? `dotted 2px ${COLORS.vividBlue}` : undefined,
           }}
           loading="lazy"
           quality="auto:best"
           publicId={profilePic.publicId}
-        ></Image>
+          width={width}
+          height={height}
+          crop="thumb" // Use the thumb crop mode for face detection
+          gravity="face" // Set the gravity to focus on a detected face
+        />
       </CloudinaryContext>
     ) : (
       <img
