@@ -1,5 +1,5 @@
 import React from "react";
-import { isDesktop, isMacOs, isIOS } from "react-device-detect";
+import { isDesktop, isMacOs, isIOS, isAndroid } from "react-device-detect";
 import { Box, Text, Icon } from "..";
 import { COLORS } from "../../constants";
 import { FONT_SIZES, ICON_SIZES } from "..";
@@ -30,6 +30,7 @@ class Banner extends React.PureComponent {
     this.state = {
       show: props.show,
       appStoreUrl: "https://apps.apple.com/us/app/jitsi-meet/id1165103905",
+      googlePlayUrl: `https://play.google.com/store/apps/details?id=org.jitsi.meet`,
     };
   }
 
@@ -179,19 +180,23 @@ class Banner extends React.PureComponent {
                 Download Jitsi Meet for Mac
               </a>
             )}
-            {this.props.type === "alert" && !isDesktop && isIOS && (
-              <a
-                href={this.state.appStoreUrl}
-                style={{
-                  width: "100%",
-                  textAlign: "center",
-                }}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Open App Store
-              </a>
-            )}
+            {this.props.type === "alert" &&
+              !isDesktop &&
+              (isIOS || isAndroid)(
+                <a
+                  href={
+                    isIOS ? this.state.appStoreUrl : this.state.googlePlayUrl
+                  }
+                  style={{
+                    width: "100%",
+                    textAlign: "center",
+                  }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {isAndroid ? "Open Google Play" : " Open App Store"}
+                </a>
+              )}
           </Box>
           {this.props.type === "alert" && (
             <Icon
