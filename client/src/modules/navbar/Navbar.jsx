@@ -41,7 +41,7 @@ const Navbar = ({ props }) => {
     } else if (token) {
       handleFetchMe(token);
     }
-  }, [token]);
+  }, [token, appToken]);
 
   const handleFetchMe = async (value) => {
     try {
