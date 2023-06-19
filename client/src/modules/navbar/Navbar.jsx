@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { NavLink, withRouter, useLocation } from "react-router-dom";
 import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
-import { getToken } from "../../utils/helpers";
+import { getToken, setToken } from "../../utils/helpers";
 import NavLogo from "../../pictures/NavLogo.png";
 
 import { Box, FONT_SIZES, Text, NavGuide } from "../../components";
@@ -20,6 +20,7 @@ import Context from "../../context";
 const Navbar = ({ props }) => {
   const { state, dispatch } = useContext(Context);
   const location = useLocation();
+  const appToken = new URLSearchParams(location.search).get("token");
 
   const client = useClient();
   const token = getToken();
@@ -34,15 +35,18 @@ const Navbar = ({ props }) => {
   }, [currentUser]);
 
   useEffect(() => {
-    if (token) {
-      handleFetchMe();
+    if (appToken) {
+      handleFetchMe(appToken);
+      setToken(appToken);
+    } else if (token) {
+      handleFetchMe(token);
     }
   }, [token]);
 
-  const handleFetchMe = async () => {
+  const handleFetchMe = async (value) => {
     try {
       const variables = {
-        token,
+        token: value,
       };
 
       const { fetchMe } = await client.request(FETCH_ME, variables);
