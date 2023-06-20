@@ -4,6 +4,7 @@ module.exports = gql`
   type User {
     _id: ID!
     name: String
+    googleId: String
     username: String!
     isLoggedIn: Boolean
     email: String
@@ -152,6 +153,7 @@ module.exports = gql`
     login(username: String!, password: String!): Auth
     logout(username: String!): User
     googleLogin(idToken: String!): GoogleAuth
+    googleAppLogin(googleId: String!): GoogleAuth
     createRoom(name: String!, _id: ID): Room
     changeRoom(roomId: ID!, userId: ID!): Room
     createComment(text: String!, userId: ID!, roomId: ID!): Comment

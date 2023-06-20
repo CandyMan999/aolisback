@@ -1,6 +1,10 @@
 const { changeRoomResolver } = require("./changeRoom");
 const { logoutResolver } = require("./logout");
-const { googleSignupResolver, googleLoginResolver } = require("./google");
+const {
+  googleSignupResolver,
+  googleLoginResolver,
+  googleAppLoginResolver,
+} = require("./google");
 const { signupResolver } = require("./signUp");
 const { loginResolver } = require("./login");
 const { createCommentResolver } = require("./comment");
@@ -40,4 +44,5 @@ module.exports = {
   deleteVideoResolver,
   lookingForResolver,
   viewVideoResolver,
+  googleAppLoginResolver,
 };

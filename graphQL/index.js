@@ -38,6 +38,7 @@ const {
   deleteVideoResolver,
   lookingForResolver,
   viewVideoResolver,
+  googleAppLoginResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -80,6 +81,7 @@ const resolvers = {
     deleteVideo: deleteVideoResolver,
     lookingFor: lookingForResolver,
     viewVideo: viewVideoResolver,
+    googleAppLogin: googleAppLoginResolver,
   },
 };
 

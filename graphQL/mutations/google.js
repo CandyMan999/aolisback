@@ -24,7 +24,7 @@ module.exports = {
       }
     };
 
-    const { email, name, picture } = await verifyAuthToken(idToken);
+    const { email, name, picture, sub } = await verifyAuthToken(idToken);
 
     const checkIfUserExists = async (email, username) => {
       const user = await User.findOne({ email });
@@ -47,6 +47,7 @@ module.exports = {
       name,
       email,
       username,
+      googleId: sub,
       isLoggedIn: true,
       roomInfo: { subscribedAt: moment() },
     }).save();
@@ -115,10 +116,39 @@ module.exports = {
         }
       };
 
-      const { email } = await verifyAuthToken(idToken);
+      const { email, sub } = await verifyAuthToken(idToken);
+      ç;
       const user = await User.findOneAndUpdate(
         { email },
-        { isLoggedIn: true, roomInfo: { subscribedAt: moment() } },
+        {
+          isLoggedIn: true,
+          googleId: sub,
+          roomInfo: { subscribedAt: moment() },
+        },
+        { new: true }
+      )
+        .populate("pictures")
+        .populate("comments");
+
+      const token = await createToken(user._id);
+
+      return !!user
+        ? { user, token }
+        : new AuthenticationError("Google User Dosen't Exist");
+    } catch (err) {
+      throw new AuthenticationError("Google User Dosen't Exist");
+    }
+  },
+  googleAppLoginResolver: async (root, args, ctx) => {
+    const { googleId } = args;
+    try {
+      const user = await User.findOneAndUpdate(
+        { googleId },
+        {
+          isLoggedIn: true,
+
+          roomInfo: { subscribedAt: moment() },
+        },
         { new: true }
       )
         .populate("pictures")
