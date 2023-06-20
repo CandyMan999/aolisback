@@ -152,7 +152,13 @@ const RequestModal = ({
             height={110}
             marginBottom={50}
           >
-            <Picture height={100} width={100} profilePic={sender.pictures[0]} />
+            <Picture
+              marginLeft={20}
+              height={100}
+              width={100}
+              profilePic={sender.pictures[0]}
+            />
+
             <Box display="flex" column width={"100%"}>
               <Text
                 margin={0}

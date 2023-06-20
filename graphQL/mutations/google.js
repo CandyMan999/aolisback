@@ -117,7 +117,7 @@ module.exports = {
       };
 
       const { email, sub } = await verifyAuthToken(idToken);
-      ç;
+
       const user = await User.findOneAndUpdate(
         { email },
         {

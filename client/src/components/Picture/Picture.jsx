@@ -4,7 +4,15 @@ import { Image, CloudinaryContext } from "cloudinary-react";
 import { Box, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
 
-const Picture = ({ profilePic, name, height, width, marginBottom, border }) => {
+const Picture = ({
+  profilePic,
+  name,
+  height,
+  width,
+  marginBottom,
+  border,
+  marginLeft,
+}) => {
   const location = useLocation();
   return !!profilePic ? (
     !!profilePic.publicId ? (
@@ -16,6 +24,7 @@ const Picture = ({ profilePic, name, height, width, marginBottom, border }) => {
               borderRadius: "50%",
               height,
               width,
+
               marginBottom: marginBottom ? marginBottom : undefined,
               border: border ? `dotted 2px ${COLORS.vividBlue}` : undefined,
             }}
@@ -29,7 +38,9 @@ const Picture = ({ profilePic, name, height, width, marginBottom, border }) => {
             style={{
               borderRadius: "50%",
               height: "auto",
-              width: "100%",
+              width: "auto",
+
+              marginLeft: marginLeft ? marginLeft : undefined,
               marginBottom: marginBottom ? marginBottom : undefined,
               border: border ? `dotted 2px ${COLORS.vividBlue}` : undefined,
             }}
