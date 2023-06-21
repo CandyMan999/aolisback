@@ -163,4 +163,81 @@ module.exports = {
       throw new AuthenticationError("Google User Dosen't Exist");
     }
   },
+  googleAppSignupResolver: async (root, args, ctx) => {
+    const { username, email, name, picture, googleId } = args;
+
+    const checkIfUserExists = async (email, username) => {
+      const user = await User.findOne({ email });
+      if (user) {
+        throw new AuthenticationError("Google User Already Exists");
+      } else {
+        const user = await User.findOne({ username });
+        if (user) {
+          throw new AuthenticationError("Username Already Exists");
+        }
+      }
+    };
+
+    const validate = await checkIfUserExists(email, username);
+    if (validate) {
+      return;
+    }
+
+    const user = await new User({
+      name,
+      email,
+      username,
+      googleId,
+      isLoggedIn: true,
+      roomInfo: { subscribedAt: moment() },
+    }).save();
+
+    const newPhoto = await Picture.create({ url: picture, user: user._id });
+
+    const video = await Video.create({
+      url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
+      publicId: "GoneChatting",
+      sender: "648ba740bbb5cf00146ab4eb",
+      receiver: user._id,
+    });
+
+    await User.findByIdAndUpdate(
+      { _id: user._id },
+      { $push: { receivedVideos: video } },
+      { new: true }
+    ).populate("receivedVideos");
+
+    const newVideo = await Video.findOne({ _id: video._id }).populate([
+      {
+        path: "sender",
+        model: "User",
+        populate: {
+          path: "pictures",
+          model: "Picture",
+        },
+      },
+      {
+        path: "receiver",
+        model: "User",
+        populate: {
+          path: "pictures",
+          model: "Picture",
+        },
+      },
+    ]);
+
+    publishCreateVideo(newVideo);
+
+    const currentUser = await User.findByIdAndUpdate(
+      {
+        _id: user._id,
+      },
+      { $push: { pictures: newPhoto } },
+      { new: true }
+    ).populate("pictures");
+
+    const token = await createToken(currentUser._id);
+
+    return { user: currentUser, token };
+  },
 };

@@ -4,6 +4,7 @@ const {
   googleSignupResolver,
   googleLoginResolver,
   googleAppLoginResolver,
+  googleAppSignupResolver,
 } = require("./google");
 const { signupResolver } = require("./signUp");
 const { loginResolver } = require("./login");
@@ -45,4 +46,5 @@ module.exports = {
   lookingForResolver,
   viewVideoResolver,
   googleAppLoginResolver,
+  googleAppSignupResolver,
 };
