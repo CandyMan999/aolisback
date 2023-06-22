@@ -165,6 +165,7 @@ module.exports = {
   },
   googleAppSignupResolver: async (root, args, ctx) => {
     const { username, email, name, picture, googleId } = args;
+    console.log("args: ", args);
 
     const checkIfUserExists = async (email, username) => {
       const user = await User.findOne({ email });
