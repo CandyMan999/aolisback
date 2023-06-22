@@ -154,10 +154,13 @@ module.exports = gql`
     logout(username: String!): User
     googleLogin(idToken: String!): GoogleAuth
     googleAppLogin(googleId: String!): GoogleAuth
-    googleAppSignUp( email:String!,
-      name: String!,
-      username: String!,
-      picture: userInfo.picture, googleId: String!): GoogleAuth
+    googleAppSignup(
+      email: String!
+      name: String!
+      username: String!
+      picture: String!
+      googleId: String!
+    ): GoogleAuth
     createRoom(name: String!, _id: ID): Room
     changeRoom(roomId: ID!, userId: ID!): Room
     createComment(text: String!, userId: ID!, roomId: ID!): Comment
