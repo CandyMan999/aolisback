@@ -202,7 +202,7 @@ class Banner extends React.PureComponent {
             )}
             {this.props.type === "alert" &&
               !isDesktop &&
-              (isIOS || isAndroid)(
+              (isIOS || isAndroid) && (
                 <a
                   href={
                     isIOS ? this.state.appStoreUrl : this.state.googlePlayUrl
