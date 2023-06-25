@@ -1,5 +1,11 @@
 import React from "react";
-import { isDesktop, isMacOs, isIOS, isAndroid } from "react-device-detect";
+import {
+  isDesktop,
+  isMacOs,
+  isIOS,
+  isAndroid,
+  isWindows,
+} from "react-device-detect";
 import { Box, Text, Icon } from "..";
 import { COLORS } from "../../constants";
 import { FONT_SIZES, ICON_SIZES } from "..";
@@ -178,6 +184,20 @@ class Banner extends React.PureComponent {
                 data-view-component="true"
               >
                 Download Jitsi Meet for Mac
+              </a>
+            )}
+            {this.props.type === "alert" && isDesktop && isWindows && (
+              <a
+                href="https://github.com/jitsi/jitsi-meet-electron/releases/download/v2023.5.3/jitsi-meet.exe"
+                rel="nofollow"
+                data-turbo="false"
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                }}
+                data-view-component="true"
+              >
+                Download Jitsi Meet for Windows
               </a>
             )}
             {this.props.type === "alert" &&
