@@ -18,8 +18,8 @@ const Video = () => {
   const iosMobile = isIOS && mobile;
 
   let history = useHistory();
-  const appUrl = `org.jitsi.meet://meet.jit.si/AOLisBack-noi8ioj7r/${state.userChannel}-328723!^*#@`;
-  const webAppMac = `jitsi-meet://meet.jit.si/AOLisBack-noi8ioj7r/${state.userChannel}-328723!^*#@`;
+  const appUrl = `https://meet.jit.si/AOLisBack-noi8ioj7r/${state.userChannel}-328232%5E`;
+  const webAppMac = `jitsi-meet://meet.jit.si/AOLisBack-noi8ioj7r/${state.userChannel}-328232%5E`;
 
   useEffect(() => {
     if (state.userChannel || state.currentUser.username) {
@@ -63,7 +63,7 @@ const Video = () => {
             height: "80vh",
           }}
           roomName={
-            process.env.REACT_APP_ROOM + state.userChannel + "-328723!^*#@"
+            process.env.REACT_APP_ROOM + state.userChannel + "-328232%5E"
           }
           displayName={state.currentUser.username}
           onMeetingEnd={() => history.push("/")}
