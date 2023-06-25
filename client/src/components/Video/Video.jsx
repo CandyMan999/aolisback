@@ -22,28 +22,22 @@ const Video = () => {
   const webAppMac = `jitsi-meet://meet.jit.si/AOLisBack-noi8ioj7r/${state.userChannel}-328232%5E`;
 
   useEffect(() => {
-    if (state.userChannel || state.currentUser.username) {
-      try {
-        if (!isDesktop) {
-          window.location.href = appUrl;
+    setTimeout(() => {
+      if (state.userChannel || state.currentUser.username) {
+        try {
+          if (!isDesktop) {
+            window.location.href = appUrl;
+          }
+          if (isDesktop) {
+            window.location.href = webAppMac;
+          } else {
+            window.open(webAppMac, "_blank");
+          }
+        } catch (err) {
+          console.log("err: ", err);
         }
-        if (isDesktop) {
-          window.location.href = webAppMac;
-        } else {
-          window.open(webAppMac, "_blank");
-        }
-      } catch (err) {
-        console.log("err: ", err);
       }
-      // } else {
-      //   // open app on android
-      //   try {
-      //   } catch (error) {
-      //     console.log("Jitsi Meet app is not installed");
-      //     // Handle the case where the Jitsi Meet app is not installed (e.g., show a message to the user)
-      //   }
-      // }
-    }
+    }, 2000);
   }, [state.currentUser, state.userChannel]);
 
   return (
