@@ -220,7 +220,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
       ) : (
         <ReactMapGL
           width={width ? width : "100vw"}
-          height={height ? height : `calc(${window.innerHeight}px - 64px)`}
+          height={height ? height : `calc(${window.innerHeight}px - 60px)`}
           mapStyle={"mapbox://styles/mapbox/streets-v12"}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
           onViewportChange={(newViewport) => setViewport(newViewport)}
@@ -239,10 +239,10 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
                 width={"40%"}
                 position="absolute"
                 bottom={0}
-                left={0}
+                left={-10}
                 zIndex={900}
               >
-                <Button width={"100%"} onClick={handleMapMove}>
+                <Button coolStyle width={"100%"} onClick={handleMapMove}>
                   {mapLoading ? <Loading bar /> : <Text bold>UPDATE MAP</Text>}
                 </Button>
               </Box>

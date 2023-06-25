@@ -12,7 +12,17 @@ const Button = (props) => (
 );
 
 const StyledButton = styled.button(
-  ({ active, disabled, minimal, inverse, color, width, size, fontSize }) => ({
+  ({
+    active,
+    disabled,
+    minimal,
+    inverse,
+    color,
+    width,
+    size,
+    fontSize,
+    coolStyle,
+  }) => ({
     border: "none",
     borderRadius: "4px",
     fontSize: fontSize ? fontSize : "14px",
@@ -21,6 +31,7 @@ const StyledButton = styled.button(
     width: width || "86px",
     cursor: disabled ? "not-allowed" : "pointer",
     color: !minimal ? COLORS.white : undefined,
+    boxShadow: coolStyle ? `2px 2px 4px 2px rgba(0, 0, 0, 0.3)` : undefined,
     backgroundColor: color
       ? color
       : minimal

@@ -103,7 +103,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                 ) : (
                   <Text
                     color={active ? COLORS.vividBlue : COLORS.lightGrey}
-                    textShadow={active && `-2px 2px 3px ${COLORS.textRed}`}
+                    textShadow={active && `-3px 1px 2px ${COLORS.main}`}
                     className="userNumber"
                     fontSize={mobile ? undefined : FONT_SIZES.X_LARGE}
                     width={"100%"}

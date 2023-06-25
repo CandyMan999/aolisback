@@ -134,6 +134,7 @@ const RequestModal = ({
               </Text>
 
               <Button
+                coolStyle
                 width={"100%"}
                 color={COLORS.red}
                 onClick={() => handleUpdate("Cancel")}

@@ -115,6 +115,7 @@ const LoginModal = ({ onClose }) => {
                 <Input name="password" type="password" placeholder="Password" />
 
                 <Button
+                  coolStyle
                   type="submit"
                   disabled={!props.isValid || !props.dirty}
                   style={{ zIndex: 100 }}
