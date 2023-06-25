@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { browserName, isIOS, isDesktop, isMacOs } from "react-device-detect";
+import { isIOS, isDesktop, isAndroid } from "react-device-detect";
 import { Jutsu } from "react-jutsu";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -14,8 +14,6 @@ const Video = () => {
   const { state } = useContext(Context);
 
   const mobile = useMediaQuery("(max-width: 650px)");
-  const isChromeMobile = isIOS && browserName === "Chrome" && mobile;
-  const iosMobile = isIOS && mobile;
 
   let history = useHistory();
   const appUrl = `org.jitsi.meet://meet.jit.si/AOLisBack-noi8ioj7r/${state.userChannel}-328723!^*#@`;
@@ -24,25 +22,15 @@ const Video = () => {
   useEffect(() => {
     if (state.userChannel || state.currentUser.username) {
       try {
-        if (!isDesktop) {
+        if (isIOS || isAndroid) {
           window.location.href = appUrl;
         }
         if (isDesktop) {
           window.location.href = webAppMac;
-        } else {
-          window.open(webAppMac, "_blank");
         }
       } catch (err) {
         console.log("err: ", err);
       }
-      // } else {
-      //   // open app on android
-      //   try {
-      //   } catch (error) {
-      //     console.log("Jitsi Meet app is not installed");
-      //     // Handle the case where the Jitsi Meet app is not installed (e.g., show a message to the user)
-      //   }
-      // }
     }
   }, [state.currentUser, state.userChannel]);
 
