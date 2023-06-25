@@ -81,6 +81,7 @@ const VideoPlayer = ({
       width={width}
       height={height}
       controls={controls}
+      playsInline={!fullScreen ? "webkit-playsinline" : undefined}
       style={{
         borderRadius: borderRadius ? borderRadius : undefined,
         maxWidth: mobile ? 300 : undefined,

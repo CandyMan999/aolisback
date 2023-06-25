@@ -10,19 +10,6 @@ import { Box, Text, Icon } from "..";
 import { COLORS } from "../../constants";
 import { FONT_SIZES, ICON_SIZES } from "..";
 
-// interface Props {
-//   show: boolean;
-//   duration?: number;
-//   message: string;
-//   closable?: boolean;
-//   type?: "alert" | "success" | "error" | "info";
-// }
-
-// interface State {
-//   show: boolean;
-//   timeout?: any;
-// }
-
 class Banner extends React.PureComponent {
   constructor(props) {
     super(props);
