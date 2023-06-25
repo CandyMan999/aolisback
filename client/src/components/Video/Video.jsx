@@ -36,12 +36,12 @@ const Video = () => {
 
   return (
     <Box display="flex" column center width="100%" height="100%">
-      <Banner
+      {/* <Banner
         mobile={mobile}
         show={true}
         message={"Download Jitsi App for best Video Chat experience, FREE!"}
         type="alert"
-      />
+      /> */}
 
       <VideoChannel channelOwner={state.userChannel} />
       {state.currentUser ? (
