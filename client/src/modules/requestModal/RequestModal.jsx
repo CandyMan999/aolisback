@@ -33,7 +33,7 @@ const RequestModal = ({
     if (currentUser._id !== sender._id && status === "Pending") {
       playSound();
     }
-    handleUpdateAppUsername(receiver.username);
+    // handleUpdateAppUsername(receiver.username);
   }, [status]);
 
   const playSound = () => {
@@ -46,12 +46,12 @@ const RequestModal = ({
     }
   };
 
-  const handleUpdateAppUsername = (username) => {
-    history.push({
-      pathname: history.location.pathname,
-      search: `?username=${username}`,
-    });
-  };
+  // const handleUpdateAppUsername = (username) => {
+  //   history.push({
+  //     pathname: history.location.pathname,
+  //     search: `?username=${username}`,
+  //   });
+  // };
 
   const handleStatus = (action) => {
     switch (action) {
