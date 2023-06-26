@@ -2,7 +2,7 @@ const { AuthenticationError } = require("apollo-server");
 const { User, Video } = require("../../models");
 const { publishCreateVideo } = require("../subscription/subscription");
 
-const { createToken, sendPushNotification } = require("../../utils/middleware");
+const { createToken } = require("../../utils/middleware");
 moment = require("moment");
 
 module.exports = {
@@ -66,10 +66,6 @@ module.exports = {
           },
         },
       ]);
-
-      if (user?.expoToken) {
-        sendPushNotification(user.expoToken, "J_Money$");
-      }
 
       publishCreateVideo(newVideo);
 

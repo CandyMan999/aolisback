@@ -46,7 +46,8 @@ module.exports = {
           },
         },
       ]);
-      if (receiver?.expoToken) {
+
+      if (receiver && receiver.expoToken) {
         sendPushNotification(receiver.expoToken, sender.username);
       }
       publishCreateVideo(newVideo);
