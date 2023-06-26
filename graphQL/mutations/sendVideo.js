@@ -1,5 +1,6 @@
 const { AuthenticationError, PubSub } = require("apollo-server");
 const { User, Video } = require("../../models");
+const { sendPushNotification } = require("../../utils/middleware");
 
 const { publishCreateVideo } = require("../subscription/subscription");
 
@@ -45,7 +46,9 @@ module.exports = {
           },
         },
       ]);
-
+      if (receiver?.expoToken) {
+        sendPushNotification(receiver.expoToken, sender.username);
+      }
       publishCreateVideo(newVideo);
 
       return newVideo;

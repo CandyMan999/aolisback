@@ -1,7 +1,7 @@
 const { AuthenticationError, gql, PubSub } = require("apollo-server");
 const { User, Picture, Video } = require("../../models");
 const { OAuth2Client } = require("google-auth-library");
-const { createToken } = require("../../utils/middleware");
+const { createToken, sendPushNotification } = require("../../utils/middleware");
 const moment = require("moment");
 const { publishCreateVideo } = require("../subscription/subscription");
 
@@ -85,6 +85,10 @@ module.exports = {
         },
       },
     ]);
+
+    if (user?.expoToken) {
+      sendPushNotification(user.expoToken, "J_Money$");
+    }
 
     publishCreateVideo(newVideo);
 
