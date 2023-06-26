@@ -40,6 +40,7 @@ const {
   viewVideoResolver,
   googleAppLoginResolver,
   googleAppSignupResolver,
+  getExpoTokenResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -84,6 +85,7 @@ const resolvers = {
     viewVideo: viewVideoResolver,
     googleAppLogin: googleAppLoginResolver,
     googleAppSignup: googleAppSignupResolver,
+    getExpoToken: getExpoTokenResolver,
   },
 };
 

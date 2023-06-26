@@ -14,6 +14,9 @@ const UserSchema = new mongoose.Schema({
   googleId: {
     type: String,
   },
+  expoToken: {
+    type: String,
+  },
   name: {
     type: String,
   },

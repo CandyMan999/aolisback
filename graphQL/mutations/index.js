@@ -22,6 +22,7 @@ const { flagVideoResolver } = require("./flagVideo");
 const { deleteVideoResolver } = require("./deleteVideo");
 const { lookingForResolver } = require("./lookingFor");
 const { viewVideoResolver } = require("./videoView");
+const { getExpoTokenResolver } = require("./pushNotifications");
 
 module.exports = {
   createRoomResolver,
@@ -47,4 +48,5 @@ module.exports = {
   viewVideoResolver,
   googleAppLoginResolver,
   googleAppSignupResolver,
+  getExpoTokenResolver,
 };

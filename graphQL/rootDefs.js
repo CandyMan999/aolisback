@@ -27,6 +27,7 @@ module.exports = gql`
     blockedUsers: [User]
     chatRequest: ChatRequest
     lookingFor: LookingFor
+    expoToken: String
   }
 
   type Video {
@@ -209,6 +210,7 @@ module.exports = gql`
     flagVideo(_id: ID!, flagged: Boolean!): Video
     deleteVideo(_id: ID!): [Video]
     viewVideo(_id: ID!, viewed: Boolean!): Video
+    getExpoToken(token: String!, userId: ID!): User
   }
 
   type Subscription {
