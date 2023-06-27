@@ -53,13 +53,13 @@ module.exports = {
         ]);
 
       users.map(async (user) => {
-        const isAfterHour = !user.roomInfo.subscribedAt
+        const isProbablyOffline = !user.roomInfo.subscribedAt
           ? true
           : moment(user.roomInfo.subscribedAt).isBefore(
-              moment().subtract(2, "hours")
+              moment().subtract(30, "minutes")
             );
 
-        if (isAfterHour) {
+        if (isProbablyOffline) {
           await Room.updateMany({ $pull: { users: user._id } });
           await User.findByIdAndUpdate(
             { _id: user._id },

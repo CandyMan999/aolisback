@@ -9,6 +9,19 @@ module.exports = {
 
       await Promise.all(
         rooms.map(async (room) => {
+          await room.users.map(async (user) => {
+            const isProbablyOffline = moment(
+              user.roomInfo.subscribedAt
+            ).isBefore(moment().subtract(30, "minutes"));
+            if (isProbablyOffline) {
+              await Room.updateMany({ $pull: { users: user._id } });
+              await User.updateOne(
+                { _id: user._id },
+                { $set: { comments: [], isLoggedIn: false } }
+              );
+            }
+          });
+
           const isAfterMin = moment(room.createdAt).isBefore(
             moment().subtract(30, "minutes")
           );
@@ -24,18 +37,6 @@ module.exports = {
           if (!room.users.length && !!isAfterMin && room.name !== "Main") {
             await room.deleteOne({ _id: room._id });
           }
-          await room.users.map(async (user) => {
-            const isAfterHour = moment(user.roomInfo.subscribedAt).isBefore(
-              moment().subtract(2, "hours")
-            );
-            if (isAfterHour) {
-              await Room.updateMany({ $pull: { users: user._id } });
-              await User.updateOne(
-                { _id: user._id },
-                { $set: { comments: [], isLoggedIn: false } }
-              );
-            }
-          });
         })
       );
 

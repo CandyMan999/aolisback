@@ -1,5 +1,5 @@
 const { AuthenticationError, gql } = require("apollo-server");
-const { User } = require("../../models");
+const { User, Room } = require("../../models");
 
 module.exports = {
   getUsersMapResolver: async (root, args, ctx) => {
@@ -25,6 +25,23 @@ module.exports = {
           "sentVideos",
           "receivedVideos",
         ]);
+
+      users.map(async (user) => {
+        const isProbablyOffline = !user.roomInfo.subscribedAt
+          ? true
+          : moment(user.roomInfo.subscribedAt).isBefore(
+              moment().subtract(30, "minutes")
+            );
+
+        if (isProbablyOffline) {
+          await Room.updateMany({ $pull: { users: user._id } });
+          await User.findByIdAndUpdate(
+            { _id: user._id },
+            { $set: { comments: [], isLoggedIn: false } },
+            { new: true }
+          );
+        }
+      });
 
       return users;
     } catch (err) {

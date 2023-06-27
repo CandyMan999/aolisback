@@ -67,8 +67,8 @@ const sendPushNotification = async (expoToken, username) => {
       to: expoToken,
       sound: "default",
       title: "Gone Chatting",
-      subtitle: "Never Catch a Catfish",
-      body: `You have a new message from ${username}`,
+      subtitle: "Never Catch a Catfish 🎣",
+      body: `🚨 ${username} sent you a new video message`,
       data: { expoToken, username },
     });
 
