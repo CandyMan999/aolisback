@@ -294,6 +294,7 @@ const Message = () => {
           subscription={CREATE_VIDEO_SUBSCRIPTION}
           onSubscriptionData={({ subscriptionData }) => {
             const { createVideo } = subscriptionData.data;
+
             if (
               (createVideo.sender._id === senderID &&
                 createVideo.receiver._id === currentUser._id) ||

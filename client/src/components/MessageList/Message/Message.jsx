@@ -95,7 +95,6 @@ const Message = ({
                 name={picture._id}
                 height={45}
                 width={45}
-                border
               />
 
               <Text
@@ -133,7 +132,6 @@ const Message = ({
                 name={picture._id}
                 height={45}
                 width={45}
-                border
               />
               <Text
                 margin={0}

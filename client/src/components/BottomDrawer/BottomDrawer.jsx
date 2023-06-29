@@ -85,7 +85,11 @@ const BottomDrawer = ({
         flagged: true,
       };
 
-      await client.request(FLAG_VIDEO_MUTATION, variables);
+      const { flagVideo } = await client.request(
+        FLAG_VIDEO_MUTATION,
+        variables
+      );
+
       setTimeout(() => {
         onClose(true);
       }, 1000);

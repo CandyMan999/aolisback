@@ -98,7 +98,6 @@ const sendPushNotification = async (expoToken, username) => {
       for (let chunk of receiptIdChunks) {
         try {
           let receipts = await expo.getPushNotificationReceiptsAsync(chunk);
-          console.log(receipts);
 
           for (let receiptId in receipts) {
             let { status, message, details } = receipts[receiptId];

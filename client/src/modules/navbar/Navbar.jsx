@@ -4,7 +4,7 @@ import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 import { getToken, setToken } from "../../utils/helpers";
 import NavLogo from "../../pictures/NavLogo.png";
 
-import { Box, FONT_SIZES, Text, NavGuide } from "../../components";
+import { Box, FONT_SIZES, Text, NavGuide, Picture } from "../../components";
 
 import { navbar } from "../../styles/classes";
 import SignupModal from "./signup-modal";
@@ -108,41 +108,25 @@ const Navbar = ({ props }) => {
           textAlign="center"
           alignItems="center"
           column
-          width="fit-content"
           color={COLORS.vividBlue}
           onClick={handleOpenProfile}
         >
-          <Text bold margin={2} fontSize={FONT_SIZES.SMALL}>
+          <Text
+            bold
+            margin={0}
+            padding={0}
+            style={{ width: 150 }}
+            fontSize={FONT_SIZES.SMALL}
+          >
             Welcome, {currentUser.username}
           </Text>
 
           {!!profilePic && profilePic.publicId && (
-            <CloudinaryContext cloudName="localmassagepros">
-              <Image
-                alt={`${profilePic._id}-avatar`}
-                style={{
-                  borderRadius: "90%",
-                  marginTop: 2,
-                  border: `dotted 2px ${COLORS.vividBlue}`,
-                }}
-                loading="lazy"
-                publicId={profilePic.publicId}
-              >
-                <Transformation height={"30"} width={"30"} crop="thumb" />
-              </Image>
-            </CloudinaryContext>
-          )}
-
-          {profilePic && !profilePic.publicId && (
-            <img
-              style={{
-                height: "30px",
-                width: "30px",
-                borderRadius: "90%",
-                border: `dotted 2px ${COLORS.vividBlue}`,
-              }}
-              src={profilePic.url}
-              alt={profilePic.username}
+            <Picture
+              profilePic={profilePic}
+              name={currentUser.username}
+              height={40}
+              width={40}
             />
           )}
         </Box>

@@ -46,11 +46,38 @@ export const CREATE_VIDEO_SUBSCRIPTION = gql`
       flagged
       viewed
       sender {
-        _id
         username
+        _id
+        isLoggedIn
         pictures {
+          _id
+          url
           publicId
         }
+        blockedUsers {
+          _id
+        }
+        intro
+        sex
+        location {
+          coordinates
+        }
+        age
+        occupation
+        singleTime
+        lookingFor {
+          ageRange {
+            lowEnd
+            highEnd
+          }
+          sex
+          kids
+        }
+        drink
+        smoke
+        marijuana
+        drugs
+        kids
       }
       receiver {
         _id
