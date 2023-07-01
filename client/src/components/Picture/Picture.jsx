@@ -17,42 +17,24 @@ const Picture = ({
   return !!profilePic ? (
     !!profilePic.publicId ? (
       <CloudinaryContext cloudName="localmassagepros">
-        {location.pathname === "/location" ? (
-          <Image
-            alt={`${name}-profile-pic`}
-            style={{
-              borderRadius: "50%",
-              height,
-              width,
-
-              marginBottom: marginBottom ? marginBottom : undefined,
-              border: border ? `dotted 2px ${COLORS.vividBlue}` : undefined,
-            }}
-            loading="lazy"
-            quality="auto:best"
-            publicId={profilePic.publicId}
-          />
-        ) : (
-          <Image
-            alt={`${name}-profile-pic`}
-            style={{
-              borderRadius: "50%",
-              height: "auto",
-              width: "auto",
-
-              marginLeft: marginLeft ? marginLeft : undefined,
-              marginBottom: marginBottom ? marginBottom : undefined,
-              border: border ? `dotted 2px ${COLORS.vividBlue}` : undefined,
-            }}
-            loading="lazy"
-            quality="auto:best"
-            publicId={profilePic.publicId}
-            width={width}
-            height={height}
-            crop="thumb" // Use the thumb crop mode for face detection
-            gravity="face" // Set the gravity to focus on a detected face
-          />
-        )}
+        <Image
+          alt={`${name}-profile-pic`}
+          style={{
+            borderRadius: "50%",
+            backgroundColor: COLORS.black,
+            marginLeft: marginLeft ? marginLeft : undefined,
+            marginBottom: marginBottom ? marginBottom : undefined,
+            border: `solid 1px ${COLORS.vividBlue}`,
+            objectFit: "scale-down",
+          }}
+          // loading="lazy"
+          quality={100}
+          publicId={profilePic.publicId}
+          width={width}
+          height={height}
+          // crop="thumb" // Use the thumb crop mode for face detection
+          // gravity="face" // Set the gravity to focus on a detected face
+        />
       </CloudinaryContext>
     ) : (
       <img
@@ -61,7 +43,11 @@ const Picture = ({
           borderRadius: "50%",
           height,
           width,
+
           marginBottom: marginBottom ? marginBottom : undefined,
+          imageRendering: "auto", // or "crisp-edges" or "pixelated"
+          objectFit: "cover", // or "contain" or "none"
+          objectPosition: "center",
         }}
         src={profilePic.url}
       />

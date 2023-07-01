@@ -2,9 +2,8 @@ import React, { useEffect, useState, Fragment, useContext } from "react";
 import axios from "axios";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhotoTwoTone";
 
-import { Icon, Box, Loading, Checkbox, Button, Text } from "..";
+import { Box, Text } from "..";
 
-import { css } from "@emotion/css";
 import { COLORS } from "../../constants";
 import { ADD_PHOTO_MUTATION } from "../../graphql/mutations";
 import Context from "../../context";
@@ -77,14 +76,5 @@ const PhotoUploader = () => {
     </Fragment>
   );
 };
-const dropzoneStyles = css({
-  ["width"]: "300px",
-  ["height"]: "300px",
-  ["border"]: `1px dashed ${COLORS.darkestGrey}`,
-  ["borderRadius"]: "25px",
-  [":hover"]: {
-    ["cursor"]: "pointer",
-  },
-});
 
 export default PhotoUploader;
