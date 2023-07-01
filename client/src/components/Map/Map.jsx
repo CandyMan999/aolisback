@@ -53,39 +53,39 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
   } = currentUser;
 
   useEffect(() => {
-    handleGetUsers();
+    if (!state.userLocation._id) {
+      handleGetUsers();
+    }
   }, []);
 
   useEffect(() => {
-    const mapLoad = async () => {
-      const { _id, lat, lng } = state.userLocation;
-      if (!!_id && !!lat && !!lng && !loading) {
-        await handleGetUsers(_id);
-        setPopup({ isOpen: true, id: _id });
-
-        setTimeout(() => {
-          handleFlyTo(lat, lng, 8);
-        }, 1000);
-      }
-      if (
-        location.pathname === "/profile" &&
-        !loading &&
-        !noLocation(currentUser.location.coordinates)
-      ) {
-        setPopup({ isOpen: true, id: currentUser._id });
-        await handleGetUsers(currentUser._id);
-
-        setTimeout(() => {
-          handleFlyTo(
-            currentUser.location.coordinates[1],
-            currentUser.location.coordinates[0],
-            8
-          );
-        }, 1000);
-      }
-    };
     mapLoad();
   }, [state.userLocation._id, currentUser.location.coordinates]);
+
+  const mapLoad = async () => {
+    const { _id, lat, lng } = state.userLocation;
+    if (
+      location.pathname === "/profile" &&
+      !noLocation(currentUser.location.coordinates)
+    ) {
+      setPopup({ isOpen: true, id: currentUser._id });
+      await handleGetUsers(currentUser._id);
+
+      setTimeout(() => {
+        handleFlyTo(
+          currentUser.location.coordinates[1],
+          currentUser.location.coordinates[0],
+          8
+        );
+      }, 1000);
+    } else if (!!_id && !!lat && !!lng) {
+      await handleGetUsers(_id);
+      setPopup({ isOpen: true, id: _id });
+      setTimeout(() => {
+        handleFlyTo(lat, lng, 8);
+      }, 1000);
+    }
+  };
 
   const noLocation = (array) => {
     if (
