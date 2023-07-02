@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { browserName, isIOS } from "react-device-detect";
+import { browserName, isIOS, isAndroid } from "react-device-detect";
 import { VIEWED_VIDEO_MUTATION } from "../../graphql/mutations";
 
 const VideoPlayer = ({
@@ -28,7 +28,7 @@ const VideoPlayer = ({
     });
 
     videoPlayer.on("play", () => {
-      if (fullScreen && !isChromeMobile) {
+      if ((fullScreen && !isChromeMobile) || isAndroid) {
         videoPlayer.maximize();
       }
       if (receiverWatching) {
