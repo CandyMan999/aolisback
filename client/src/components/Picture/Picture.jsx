@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+
 import { Image, CloudinaryContext } from "cloudinary-react";
 import { Box, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
@@ -13,7 +13,6 @@ const Picture = ({
   border,
   marginLeft,
 }) => {
-  const location = useLocation();
   return !!profilePic ? (
     !!profilePic.publicId ? (
       <CloudinaryContext cloudName="localmassagepros">

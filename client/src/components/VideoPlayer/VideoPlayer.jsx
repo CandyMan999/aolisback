@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { browserName, isIOS, isAndroid } from "react-device-detect";
 import { VIEWED_VIDEO_MUTATION } from "../../graphql/mutations";
+import { useLocation } from "react-router-dom";
 
 const VideoPlayer = ({
   publicId,
@@ -17,6 +18,7 @@ const VideoPlayer = ({
 }) => {
   const cloudinaryRef = useRef();
   const videoRef = useRef();
+  const location = useLocation();
 
   const isChromeMobile = isIOS && browserName === "Chrome" && mobile;
 
@@ -65,7 +67,7 @@ const VideoPlayer = ({
       ref={videoRef}
       data-cld-public-id={publicId}
       width={width}
-      height={250}
+      height={location.pathname === "/message-center" ? height : 250}
       controls={controls}
       style={{
         borderRadius: borderRadius ? borderRadius : undefined,
