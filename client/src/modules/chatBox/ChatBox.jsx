@@ -157,7 +157,7 @@ const ChatBox = () => {
   };
 
   return (
-    <Wrapper style={{ width: "100vW" }}>
+    <Wrapper style={{ width: "100vw" }}>
       <RoomList
         roomId={state.roomId}
         subscribeToRoom={subscribeToRoom}
