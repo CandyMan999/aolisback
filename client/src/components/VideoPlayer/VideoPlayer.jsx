@@ -59,7 +59,7 @@ const VideoPlayer = ({
     }
   };
 
-  return isChromeMobile ? (
+  return isChromeMobile || isAndroid ? (
     <video
       key={publicId}
       ref={videoRef}
