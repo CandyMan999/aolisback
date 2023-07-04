@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { browserName, isIOS, isAndroid } from "react-device-detect";
 import { VIEWED_VIDEO_MUTATION } from "../../graphql/mutations";
 import { useLocation } from "react-router-dom";
@@ -19,6 +19,7 @@ const VideoPlayer = ({
   const cloudinaryRef = useRef();
   const videoRef = useRef();
   const location = useLocation();
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   const isChromeMobile = isIOS && browserName === "Chrome" && mobile;
 
@@ -32,6 +33,7 @@ const VideoPlayer = ({
     videoPlayer.on("play", () => {
       if ((fullScreen && !isChromeMobile) || isAndroid) {
         videoPlayer.maximize();
+        setIsFullScreen(true);
       }
       if (receiverWatching) {
         handleViewVideo();
@@ -42,6 +44,7 @@ const VideoPlayer = ({
       const maxView = videoPlayer.isMaximized();
       if (!maxView) {
         videoPlayer.exitMaximize();
+        setIsFullScreen(false);
       }
     });
   }, []);
@@ -71,7 +74,7 @@ const VideoPlayer = ({
       controls={controls}
       style={{
         borderRadius: borderRadius ? borderRadius : undefined,
-        maxWidth: mobile ? 300 : undefined,
+        maxWidth: mobile && !isFullScreen ? 300 : undefined,
       }} // Add border radius
       {...props}
     />
