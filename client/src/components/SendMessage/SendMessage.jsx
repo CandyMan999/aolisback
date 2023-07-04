@@ -43,6 +43,7 @@ class SendMessageForm extends Component {
           <input
             disabled={this.props.disabled}
             onChange={this.handleChange}
+            style={{ boxShadow: `0px 1px 8px 4px rgba(0, 0, 0, 0.3)` }}
             value={this.state.message}
             placeholder="Type your message and hit ENTER"
             type="text"

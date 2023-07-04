@@ -1,6 +1,5 @@
 import React from "react";
-import { Box, FloatingHeart } from "../../components";
-import { range } from "lodash";
+import { Box } from "../../components";
 
 import ChatBox from "../chatBox";
 
@@ -14,11 +13,6 @@ const HomeLayout = ({ state }) => {
       width="100vW"
       display="flex"
     >
-      {/* {state &&
-        state.currentUser &&
-        !state.currentUser.username &&
-        range(4).map((index) => <FloatingHeart key={index} />)} */}
-
       <ChatBox />
     </Box>
   );
