@@ -13,6 +13,7 @@ const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
       width="100%"
       maxHeight={1066}
       paddingBottom={mobile ? 100 : undefined}
+      justifyContent="center"
     >
       <Box
         style={{ display: "grid", margin: "20px" }}
