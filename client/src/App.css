@@ -106,10 +106,12 @@
   font-size: 15px;
   border-radius: 20px;
   margin-left: 1%;
-  
-  /* border-top: 1px solid #69ffb4;
-  border-bottom: none;
-   */
+
+}
+.send-message-form input:focus {
+  outline: none; /* Remove the default focus outline */
+  border: none; /* Remove the border */
+  /* Additional styling if desired */
 }
 
 .new-room-form {

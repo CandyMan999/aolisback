@@ -9,7 +9,7 @@ const HomeLayout = ({ state }) => {
   return (
     <Box
       justifyContent="space-around"
-      height={height - 64}
+      height={height - 60}
       width="100vW"
       display="flex"
     >
