@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
   },
+  seeder: {
+    type: Boolean,
+    default: false,
+  },
   googleId: {
     type: String,
   },

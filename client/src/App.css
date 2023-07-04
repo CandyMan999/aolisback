@@ -52,7 +52,7 @@
   grid-area: r;
   box-sizing: border-box;
   padding: 10px;
-  background-color: var(--main-color);
+  background: linear-gradient(to right, white ,var(--main-color) 80%);
   overflow: scroll;
   height: 100%;
   scrollbar-width: none; /* For Firefox */
@@ -97,7 +97,6 @@
 }
 .send-message-form {
   grid-area: f;
-  
   width: 100%;
 }
 .send-message-form input {
@@ -105,13 +104,17 @@
   width: -webkit-fill-available;
   height: -webkit-fill-available;
   font-size: 15px;
+  box-shadow: 0px 1px 8px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  margin-left: 1%;
+  
   /* border-top: 1px solid #69ffb4;
   border-bottom: none;
    */
 }
 
 .new-room-form {
-  background: var(--main-color);
+  background: linear-gradient(to right, white ,var(--main-color) 80%);
   color: var(--main-text-color);
   height: 100%;
 }

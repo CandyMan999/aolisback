@@ -1,7 +1,8 @@
 const { AuthenticationError, gql, PubSub } = require("apollo-server");
 const { User, Picture, Video } = require("../../models");
 const { OAuth2Client } = require("google-auth-library");
-const { createToken, sendPushNotification } = require("../../utils/middleware");
+const { createToken } = require("../../utils/middleware");
+const { publishCreateVideo } = require("../subscription/subscription");
 const moment = require("moment");
 
 require("dotenv").config();
@@ -56,7 +57,7 @@ module.exports = {
     const video = await Video.create({
       url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
       publicId: "GoneChatting",
-      sender: "648ba740bbb5cf00146ab4eb",
+      sender: "64a455bd78f7452d62d4f7f9",
       receiver: user._id,
     });
 
@@ -196,7 +197,7 @@ module.exports = {
     const video = await Video.create({
       url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
       publicId: "GoneChatting",
-      sender: "648ba740bbb5cf00146ab4eb",
+      sender: "64a455bd78f7452d62d4f7f9",
       receiver: user._id,
     });
 

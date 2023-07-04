@@ -133,7 +133,6 @@ const ChatBox = () => {
         variables
       );
 
-      // setRoomId(createRoom._id);
       await dispatch({ type: "CHANGE_ROOM", payload: createRoom._id });
       setLoading(false);
     } catch (err) {

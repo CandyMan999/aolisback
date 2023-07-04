@@ -6,7 +6,7 @@ const { findCoords } = require("./randomCoords");
 
 require("dotenv").config();
 
-const TOTAL_USERS = 10000;
+const TOTAL_USERS = 500;
 
 const seedUsers = async () => {
   try {
@@ -18,9 +18,9 @@ const seedUsers = async () => {
       .then(() => console.log("DB connected"))
       .catch((err) => console.log(err));
 
-    // const USERS = await User.find();
+    const USERS = await User.find();
 
-    // if (USERS.length) await User.collection.drop();
+    if (USERS.length) await User.collection.drop();
 
     const handleIsLoggedIn = () => {
       return Math.random() < 0.5;
@@ -92,6 +92,11 @@ const seedUsers = async () => {
       return ageRange;
     };
 
+    const handleUsername = () => {
+      let name = faker.internet.userName();
+      return (name = `${name.slice(0, 5)}Dummy`);
+    };
+
     for (let i = 0; i < TOTAL_USERS; i++) {
       const randomCoords = await handleCoordinates();
 
@@ -99,11 +104,12 @@ const seedUsers = async () => {
       const { data } = await axios.get("https://randomuser.me/api/");
 
       const newUser = await User.create({
-        username: faker.internet.userName(),
+        username: handleUsername(),
         isLoggedIn: handleIsLoggedIn(),
         email: faker.internet.email(),
+        seeder: true,
         password: "Katie1221",
-        intro: faker.person.bio(),
+        intro: `${faker.person.bio()}, I am dummy data and will not be here for long. I am Just here for the Beta launch to show how the application works.`,
         age: handleAge(),
         sex: getRandomGender(data.results[0].gender),
         kids: handleKids(),

@@ -7,6 +7,7 @@ module.exports = gql`
     googleId: String
     username: String!
     isLoggedIn: Boolean
+    seeder: Boolean
     email: String
     pictures: [Picture]
     comments: [Comment]
