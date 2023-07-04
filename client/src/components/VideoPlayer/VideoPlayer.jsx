@@ -74,7 +74,7 @@ const VideoPlayer = ({
       controls={controls}
       style={{
         borderRadius: borderRadius ? borderRadius : undefined,
-        maxWidth: mobile && !isFullScreen && !isAndroid ? 300 : undefined,
+        maxWidth: mobile && (!isFullScreen || isAndroid) ? 300 : undefined,
       }} // Add border radius
       {...props}
     />
