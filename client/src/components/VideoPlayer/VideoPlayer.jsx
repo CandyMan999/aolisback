@@ -64,7 +64,7 @@ const VideoPlayer = ({
     }
   };
 
-  return isChromeMobile || isAndroid ? (
+  return isChromeMobile ? (
     <video
       key={publicId}
       ref={videoRef}
@@ -74,7 +74,7 @@ const VideoPlayer = ({
       controls={controls}
       style={{
         borderRadius: borderRadius ? borderRadius : undefined,
-        maxWidth: mobile && !isFullScreen ? 300 : undefined,
+        maxWidth: mobile ? 300 : undefined,
       }} // Add border radius
       {...props}
     />
@@ -89,7 +89,7 @@ const VideoPlayer = ({
       playsInline={!fullScreen ? "webkit-playsinline" : undefined}
       style={{
         borderRadius: borderRadius ? borderRadius : undefined,
-        maxWidth: mobile ? 300 : undefined,
+        maxWidth: mobile && !isFullScreen ? 300 : undefined,
       }} // Add border radius
       {...props}
     />
