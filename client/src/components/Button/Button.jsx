@@ -22,11 +22,12 @@ const StyledButton = styled.button(
     size,
     fontSize,
     coolStyle,
+    padding,
   }) => ({
     border: "none",
     borderRadius: "4px",
     fontSize: fontSize ? fontSize : "14px",
-    padding: size === "small" ? "4px" : "8px",
+    padding: padding ? padding : size === "small" ? "4px" : "8px",
     margin: "8px 16px",
     width: width || "86px",
     cursor: disabled ? "not-allowed" : "pointer",

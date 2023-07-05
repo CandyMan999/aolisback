@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import OutsideClickHandler from "react-outside-click-handler";
+
 import { withStyles } from "@material-ui/core/styles";
 
 import { Box, Icon, ICON_SIZES, Loading, BackDrop } from "..";
