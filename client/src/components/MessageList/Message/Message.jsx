@@ -17,8 +17,6 @@ const Message = ({
   publicId,
 }) => {
   const handleSpeech = async (text, voiceType) => {
-    console.log("firing");
-
     try {
       let voices = await window.speechSynthesis.getVoices();
 
@@ -31,14 +29,20 @@ const Message = ({
         voice = voices[1];
       }
 
-      const msg = new SpeechSynthesisUtterance();
-      msg.text = text;
-      msg.voice = voice;
-      msg.lang = "en-US";
-      msg.default = true;
-      msg.localService = true;
+      const synth = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.voice = voice;
 
-      await window.speechSynthesis.speak(msg);
+      synth.speak(utterance);
+
+      // const msg = new SpeechSynthesisUtterance();
+      // msg.text = text;
+      // msg.voice = voice;
+      // msg.lang = "en-US";
+      // msg.default = true;
+      // msg.localService = true;
+
+      // await window.speechSynthesis.speak(msg);
     } catch (err) {
       console.log("error talking:  ", err);
     }

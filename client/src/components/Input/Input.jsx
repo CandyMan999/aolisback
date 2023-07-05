@@ -119,6 +119,7 @@ const errorStyles = css({
   fontSize: "11px",
   margin: 0,
   position: "absolute",
+
   top: "36px",
 });
 
