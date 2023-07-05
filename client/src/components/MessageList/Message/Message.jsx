@@ -18,22 +18,23 @@ const Message = ({
 }) => {
   const handleSpeech = async (text, voiceType) => {
     try {
-      let voices = await window.speechSynthesis.getVoices();
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+      // let voices = await window.speechSynthesis.getVoices();
 
-      voices = await voices.filter((v) => v.lang === "en-US");
-      let voice;
+      // voices = await voices.filter((v) => v.lang === "en-US");
+      // let voice;
 
-      if (voiceType === "male") {
-        voice = voices[0];
-      } else {
-        voice = voices[1];
-      }
+      // if (voiceType === "male") {
+      //   voice = voices[0];
+      // } else {
+      //   voice = voices[1];
+      // }
 
-      const synth = window.speechSynthesis;
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.voice = voice;
+      // const synth = window.speechSynthesis;
+      // const utterance = new SpeechSynthesisUtterance(text);
+      // utterance.voice = voice;
 
-      synth.speak(utterance);
+      // synth.speak(utterance);
 
       // const msg = new SpeechSynthesisUtterance();
       // msg.text = text;
