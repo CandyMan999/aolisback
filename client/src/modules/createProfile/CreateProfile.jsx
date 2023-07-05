@@ -82,10 +82,9 @@ const CreateProfile = ({ client, dispatch, state, currentUser }) => {
     const err = {};
     if (!values.age.length) err.age = "Required";
     if (values.age) {
-      if (!(Number(values.age) > 0.5)) err.age = "Age Must be a Number";
-      if (Number(values.age) < 18) err.age = "You must be older than 18!";
-      if (Number(values.age) > 80)
-        err.age = "We don't like people older than 80!";
+      if (!(Number(values.age) > 0.5)) err.age = "Must be a Number";
+      if (Number(values.age) < 18) err.age = "Must be 18 or older!";
+      if (Number(values.age) > 80) err.age = "Must be 80 or less!";
     }
     if (!values.intro.length) {
       err.intro = "Tell us about You!";

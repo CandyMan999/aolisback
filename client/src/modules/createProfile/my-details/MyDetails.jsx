@@ -75,12 +75,12 @@ const MyDetails = ({
                   />
                   <Box
                     display="flex"
-                    width={"100%"}
+                    // width={"100%"}
                     justifyContent="space-around"
                     marginY={15}
                   >
                     <Input
-                      marginRight={mobile ? 100 : ""}
+                      marginRight={mobile ? 50 : ""}
                       name="age"
                       type="input"
                       placeholder="age"

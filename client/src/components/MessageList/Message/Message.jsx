@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import { Box, Text, FONT_SIZES, Picture, Button } from "../../../components";
 import { COLORS } from "../../../constants";
 import { formatDistanceToNow } from "date-fns";
-import Speech from "react-speech";
 
 const Message = ({
   username,
@@ -14,36 +13,10 @@ const Message = ({
   authorId,
   picture,
   createdAt,
-  publicId,
 }) => {
   const handleSpeech = async (text, voiceType) => {
     try {
       window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-      // let voices = await window.speechSynthesis.getVoices();
-
-      // voices = await voices.filter((v) => v.lang === "en-US");
-      // let voice;
-
-      // if (voiceType === "male") {
-      //   voice = voices[0];
-      // } else {
-      //   voice = voices[1];
-      // }
-
-      // const synth = window.speechSynthesis;
-      // const utterance = new SpeechSynthesisUtterance(text);
-      // utterance.voice = voice;
-
-      // synth.speak(utterance);
-
-      // const msg = new SpeechSynthesisUtterance();
-      // msg.text = text;
-      // msg.voice = voice;
-      // msg.lang = "en-US";
-      // msg.default = true;
-      // msg.localService = true;
-
-      // await window.speechSynthesis.speak(msg);
     } catch (err) {
       console.log("error talking:  ", err);
     }
@@ -77,9 +50,6 @@ const Message = ({
                 fontSize={FONT_SIZES.SMALL}
                 marginY={"auto"}
               >
-                {/* <span onClick={() => handleSpeech(text, "male")}>
-                  <Speech />
-                </span> */}
                 <Button
                   style={{
                     border: `solid 1px ${COLORS.white}`,
@@ -173,10 +143,8 @@ const Message = ({
             <Box
               flexWrap="wrap"
               height={"fit-content"}
-              // textAlign={"center"}
               className="others-message-text"
               marginLeft={50}
-              // justifyContent="flex-end"
             >
               <Text
                 paddingLeft={2}
