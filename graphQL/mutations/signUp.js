@@ -38,7 +38,7 @@ module.exports = {
       const video = await Video.create({
         url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
         publicId: "GoneChatting",
-        sender: "64a455bd78f7452d62d4f7f9",
+        sender: "64a5e79edee5a900144d96bf",
         receiver: receiver._id,
       });
 
