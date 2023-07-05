@@ -21,20 +21,24 @@ const Message = ({
 
     try {
       let voices = await window.speechSynthesis.getVoices();
+
+      voices = await voices.filter((v) => v.lang === "en-US");
       let voice;
 
       if (voiceType === "male") {
-        // Find the American male voice
-        voice = voices.find((v) => v.name === "Google US English male");
+        voice = voices[0];
       } else {
-        // Find the English American female voice
-        voice = voices.find((v) => v.name === "Google UK English Female");
+        voice = voices[1];
       }
 
       const msg = new SpeechSynthesisUtterance();
       msg.text = text;
       msg.voice = voice;
-      window.speechSynthesis.speak(msg);
+      msg.lang = "en-US";
+      msg.default = true;
+      msg.localService = true;
+
+      await window.speechSynthesis.speak(msg);
     } catch (err) {
       console.log("error talking:  ", err);
     }
@@ -57,40 +61,42 @@ const Message = ({
             marginRight={2}
           >
             <Box
-              flexWrap="initial"
+              flexWrap="wrap"
               height={"fit-content"}
               marginRight={50}
               className="message-text"
             >
-              <Button
-                style={{
-                  border: `solid 1px ${COLORS.white}`,
-                  borderRadius: 6,
-                  width: 12,
-                  height: 22,
-                  padding: 6,
-                  margin: 0,
-                  backgroundColor: COLORS.lightGrey,
-                }}
-                onClick={() => handleSpeech(text, "male")}
-              />
-
               <Text
                 paddingLeft={2}
                 paddingRight={2}
-                margin={"auto"}
                 fontSize={FONT_SIZES.SMALL}
+                marginY={"auto"}
               >
                 {/* <span onClick={() => handleSpeech(text, "male")}>
                   <Speech />
                 </span> */}
-
+                <Button
+                  style={{
+                    border: `solid 1px ${COLORS.white}`,
+                    borderRadius: 6,
+                    width: 12,
+                    height: 22,
+                    padding: 6,
+                    margin: 0,
+                    marginRight: 4,
+                    backgroundColor: COLORS.lightGrey,
+                  }}
+                  onClick={() => handleSpeech(text, "male")}
+                />
                 {text}
-
                 <Text
-                  style={{ display: "flex", justifyContent: "flex-end" }}
                   fontSize={FONT_SIZES.X_SMALL}
                   color={COLORS.darkGrey}
+                  style={{
+                    width: "100%",
+                    justifyContent: "flex-start",
+                    display: "flex",
+                  }}
                 >
                   {formatDistanceToNow(Number(createdAt))} ago
                 </Text>
@@ -165,40 +171,41 @@ const Message = ({
               // textAlign={"center"}
               className="others-message-text"
               marginLeft={50}
-              style={{ flexDirection: "row-reverse" }}
+              // justifyContent="flex-end"
             >
-              <Box width={"100%"} height={"100%"}>
+              <Text
+                paddingLeft={2}
+                paddingRight={2}
+                fontSize={FONT_SIZES.SMALL}
+                marginY="auto"
+              >
                 <Button
                   style={{
                     border: `solid 1px ${COLORS.white}`,
                     borderRadius: 6,
-                    width: 12,
+                    width: 14,
                     height: 22,
                     padding: 6,
                     margin: 0,
+                    marginRight: 4,
                     backgroundColor: COLORS.main,
                   }}
                   onClick={() => handleSpeech(text, "female")}
                 />
-                <Text
-                  paddingLeft={2}
-                  paddingRight={2}
-                  margin={"auto"}
-                  fontSize={FONT_SIZES.SMALL}
-                >
-                  {/* <span onClick={() => handleSpeech(text, "female")}>
-                  <Speech />
-                </span> */}
 
-                  {text}
-                </Text>
-              </Box>
+                {text}
+              </Text>
 
               <Text
                 paddingLeft={4}
                 fontSize={FONT_SIZES.X_SMALL}
                 color={COLORS.darkGrey}
                 marginRight={2}
+                style={{
+                  width: "100%",
+                  justifyContent: "flex-end",
+                  display: "flex",
+                }}
               >
                 {formatDistanceToNow(Number(createdAt))} ago
               </Text>
