@@ -5,6 +5,7 @@ module.exports = gql`
     _id: ID!
     name: String
     googleId: String
+    appleId: string
     username: String!
     isLoggedIn: Boolean
     seeder: Boolean
@@ -156,6 +157,12 @@ module.exports = gql`
     logout(username: String!): User
     googleLogin(idToken: String!): GoogleAuth
     googleAppLogin(googleId: String!): GoogleAuth
+    appleSignup(
+      email: String
+      name: String
+      appleId: String!
+      username: String!
+    ): Auth
     googleAppSignup(
       email: String!
       name: String!

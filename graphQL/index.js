@@ -41,6 +41,7 @@ const {
   googleAppLoginResolver,
   googleAppSignupResolver,
   getExpoTokenResolver,
+  appleSignupResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -86,6 +87,7 @@ const resolvers = {
     googleAppLogin: googleAppLoginResolver,
     googleAppSignup: googleAppSignupResolver,
     getExpoToken: getExpoTokenResolver,
+    appleSignup: appleSignupResolver,
   },
 };
 

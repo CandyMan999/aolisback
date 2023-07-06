@@ -6,7 +6,7 @@ const {
   googleAppLoginResolver,
   googleAppSignupResolver,
 } = require("./google");
-const { signupResolver } = require("./signUp");
+const { signupResolver, appleSignupResolver } = require("./signUp");
 const { loginResolver } = require("./login");
 const { createCommentResolver } = require("./comment");
 const { createProfileResolver } = require("./createProfile");
@@ -18,7 +18,7 @@ const { deletePhotoResolver } = require("./deletePhoto");
 const { videoChatRequestResolver } = require("./videoChatRequest");
 const { updateVideoChatRequestResolver } = require("./updateVideoChatRequest");
 const { blockResolver, unBlockResolver } = require("./block");
-const { flagVideoResolver } = require("./flagVideo");
+const { flagVideoResolver } = require("./flagvideo");
 const { deleteVideoResolver } = require("./deleteVideo");
 const { lookingForResolver } = require("./lookingFor");
 const { viewVideoResolver } = require("./videoView");
@@ -49,4 +49,5 @@ module.exports = {
   googleAppLoginResolver,
   googleAppSignupResolver,
   getExpoTokenResolver,
+  appleSignupResolver,
 };
