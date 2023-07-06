@@ -24,10 +24,6 @@ const startServer = async () => {
     typeDefs,
     resolvers,
     introspection: true,
-    // cors: {
-    //   origin: ["https://www.gonechatting.com", "http://localhost:3000"], // Replace with your client's origin
-    //   credentials: true,
-    // },
     playground: true,
     context: async ({ req, connection }) => {
       if (connection) {
