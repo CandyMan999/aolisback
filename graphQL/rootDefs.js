@@ -5,7 +5,7 @@ module.exports = gql`
     _id: ID!
     name: String
     googleId: String
-    appleId: string
+    appleId: String
     username: String!
     isLoggedIn: Boolean
     seeder: Boolean
