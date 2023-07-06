@@ -157,6 +157,7 @@ module.exports = gql`
     logout(username: String!): User
     googleLogin(idToken: String!): GoogleAuth
     googleAppLogin(googleId: String!): GoogleAuth
+    appleLogin(appleId: String!): Auth
     appleSignup(
       email: String
       name: String

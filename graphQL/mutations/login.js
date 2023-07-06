@@ -35,4 +35,28 @@ module.exports = {
       throw new AuthenticationError(err.message);
     }
   },
+  appleLoginResolver: async (root, args, ctx) => {
+    const { appleId } = args;
+    try {
+      const user = await User.findOneAndUpdate(
+        { appleId },
+        {
+          isLoggedIn: true,
+
+          roomInfo: { subscribedAt: moment() },
+        },
+        { new: true }
+      )
+        .populate("pictures")
+        .populate("comments");
+
+      const token = await createToken(user._id);
+
+      return !!user
+        ? { user, token }
+        : new AuthenticationError("Apple User Dosen't Exist");
+    } catch (err) {
+      throw new AuthenticationError("Apple User Dosen't Exist");
+    }
+  },
 };
