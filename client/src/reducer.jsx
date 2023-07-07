@@ -89,6 +89,11 @@ export default function reducer(state, { type, payload }) {
         ...state,
         roomId: payload,
       };
+    case "SHOW_TERMS":
+      return {
+        ...state,
+        showTerms: payload,
+      };
     case "VIEW_LOCATION":
       return {
         ...state,

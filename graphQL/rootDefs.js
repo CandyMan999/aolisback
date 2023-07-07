@@ -30,6 +30,7 @@ module.exports = gql`
     chatRequest: ChatRequest
     lookingFor: LookingFor
     expoToken: String
+    terms: Boolean
   }
 
   type Video {
@@ -225,6 +226,7 @@ module.exports = gql`
     viewVideo(_id: ID!, viewed: Boolean!): Video
     getExpoToken(token: String!, userId: ID!): User
     deleteAccount: Account
+    termsAgreement(accept: Boolean!): User
   }
 
   type Subscription {

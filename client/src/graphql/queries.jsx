@@ -129,6 +129,7 @@ export const FETCH_ME = gql`
     fetchMe(token: $token) {
       _id
       name
+      terms
       isLoggedIn
       username
       lookingFor {

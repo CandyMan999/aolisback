@@ -3,7 +3,7 @@ import { Box, Icon, ICON_SIZES } from "../../components";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
 
-const CreateRoom = ({ currentUserID, createRoom, dispatch }) => {
+const CreateRoom = ({ currentUserID, createRoom, dispatch, currentUser }) => {
   const [roomName, setRoomName] = useState("");
   const [touched, setTouched] = useState(false);
 
@@ -27,6 +27,14 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch }) => {
       dispatch({ type: "TOGGLE_SIGNUP", payload: true });
     } else {
       setTouched(!touched);
+    }
+  };
+
+  const handleTermsAgreement = () => {
+    if (currentUser.username && !currentUser.terms) {
+      dispatch({ type: "SHOW_TERMS", payload: true });
+    } else {
+      setTouched(false);
     }
   };
 
@@ -66,7 +74,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch }) => {
       >
         <Box display="flex" width="100%" justifyContent="center">
           <Icon
-            onClick={() => setTouched(false)}
+            onClick={handleTermsAgreement}
             name="pencil"
             size={ICON_SIZES.X_LARGE}
             color={COLORS.white}

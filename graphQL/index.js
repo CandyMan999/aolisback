@@ -44,6 +44,7 @@ const {
   appleSignupResolver,
   appleLoginResolver,
   deleteAccountResolver,
+  termsAgreementResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -92,6 +93,7 @@ const resolvers = {
     appleSignup: appleSignupResolver,
     appleLogin: appleLoginResolver,
     deleteAccount: deleteAccountResolver,
+    termsAgreement: termsAgreementResolver,
   },
 };
 

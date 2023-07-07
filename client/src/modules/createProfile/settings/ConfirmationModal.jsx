@@ -15,7 +15,7 @@ const ConfirmationModal = ({ state, client, dispatch, onClose }) => {
         DELETE_ACCOUNT_MUTATION,
         {}
       );
-      console.log("deleted: ", deleteAccount);
+
       if (deleteAccount) {
         setLoading(false);
         setSuccess(deleteAccount);

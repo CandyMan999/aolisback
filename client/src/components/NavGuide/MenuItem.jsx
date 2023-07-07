@@ -102,7 +102,7 @@ export const MenuItem = ({
       handleLogout();
       clearToken();
       dispatch({ type: "CHANGE_ROOM", payload: null });
-      dispatch({ type: "LOGIN_USER", payload: false });
+      dispatch({ type: "UPDATE_USER", payload: {} });
       toggle();
     }
   };

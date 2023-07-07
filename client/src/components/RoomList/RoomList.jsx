@@ -28,8 +28,14 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
     }
   };
 
+  const handleTermsAgreement = () => {
+    if (currentUser.username && !currentUser.terms) {
+      dispatch({ type: "SHOW_TERMS", payload: true });
+    }
+  };
+
   return (
-    <div className="rooms-list" onClick={() => handleIsLoggedIn()}>
+    <div className="rooms-list" onClick={() => handleTermsAgreement()}>
       <Box display="flex" column width="100%" alignItems="center">
         {(roomId || mobile) && (
           <Box

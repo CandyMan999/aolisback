@@ -4,6 +4,7 @@ const Context = createContext({
   currentUser: {
     username: null,
   },
+  showTerms: false,
   profile: {},
   roomId: null,
   rooms: ["Main"],

@@ -4,6 +4,7 @@ export const GOOGLE_SIGNUP_MUTATION = gql`
   mutation ($username: String!, $idToken: String!) {
     googleSignup(username: $username, idToken: $idToken) {
       token
+      terms
       user {
         _id
         name
@@ -37,6 +38,7 @@ export const GOOGLE_LOGIN_MUTATION = gql`
   mutation ($idToken: String!) {
     googleLogin(idToken: $idToken) {
       token
+      terms
       user {
         _id
         name
@@ -70,6 +72,7 @@ export const SIGNUP_MUTATION = gql`
   mutation ($username: String!, $email: String!, $password: String!) {
     signup(username: $username, email: $email, password: $password) {
       token
+      terms
       user {
         _id
         username
@@ -88,6 +91,7 @@ export const LOGIN_MUTATION = gql`
         name
         isLoggedIn
         username
+        terms
         pictures {
           _id
           url
@@ -224,6 +228,7 @@ export const CREATE_PROFILE_MUTATION = gql`
       singleTime
       drink
       smoke
+      terms
       marijuana
       drugs
       kids
@@ -550,6 +555,26 @@ export const DELETE_ACCOUNT_MUTATION = gql`
   mutation {
     deleteAccount {
       status
+    }
+  }
+`;
+
+export const ACCEPT_TERMS_MUTATION = gql`
+  mutation ($accept: Boolean!) {
+    termsAgreement(accept: $accept) {
+      _id
+      name
+      isLoggedIn
+      username
+      terms
+      pictures {
+        _id
+        url
+        publicId
+      }
+      location {
+        coordinates
+      }
     }
   }
 `;

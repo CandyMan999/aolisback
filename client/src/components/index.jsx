@@ -41,3 +41,4 @@ export { default as ProfileProgressSummary } from "./ProfileProgressSummary";
 export { default as ProgressBar } from "./ProgressBar";
 export { default as Banner } from "./Banner";
 export { default as JoinARoom } from "./JoinRoom";
+export { default as TermsAgreement } from "./TermsAgreement";

@@ -1,4 +1,4 @@
-import React, { Component, useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Subscription } from "react-apollo";
 import {
   Wrapper,
@@ -6,7 +6,7 @@ import {
   MessageList,
   CreateRoom,
   SendMessage,
-  Box,
+  TermsAgreement,
 } from "../../components";
 
 import {
@@ -20,7 +20,6 @@ import {
   FIND_USER_QUERY,
 } from "../../graphql/queries";
 import {
-  CREATE_VIDEO_SUBSCRIPTION,
   ROOM_CREATED_OR_UPDATED_SUBSCRIPTION,
   CREATE_COMMENT_SUBSCRIPTION,
 } from "../../graphql/subscriptions";
@@ -34,12 +33,18 @@ const ChatBox = () => {
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const [messages, setMessages] = useState([]);
-  const [rooms, setRooms] = useState([]);
 
+  const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
   const mobile = useMediaQuery("(max-width: 650px)");
   const roomMobile = useMediaQuery("(max-width: 950px)");
   const { currentUser } = state;
+
+  useEffect(() => {
+    if (!!currentUser && currentUser.username && !currentUser.terms) {
+      dispatch({ type: "SHOW_TERMS", payload: true });
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     getRooms();
@@ -54,7 +59,6 @@ const ChatBox = () => {
       getComments();
     }
     if (!currentUser) {
-      // setRoomId("");
       dispatch({ type: "CHANGE_ROOM", payload: null });
     }
   }, [state.roomId, currentUser]);
@@ -102,7 +106,6 @@ const ChatBox = () => {
         variables
       );
       if (!!changeRoom) {
-        // setRoomId(changeRoom._id);
         await dispatch({ type: "CHANGE_ROOM", payload: changeRoom._id });
       }
       setLoading(false);
@@ -155,6 +158,10 @@ const ChatBox = () => {
     }
   };
 
+  const handleCloseTerms = () => {
+    dispatch({ type: "SHOW_TERMS", payload: false });
+  };
+
   return (
     <Wrapper style={{ width: "100vw" }}>
       <RoomList
@@ -178,6 +185,7 @@ const ChatBox = () => {
         createRoom={createRoom}
         currentUserID={!!currentUser && currentUser._id}
         dispatch={dispatch}
+        currentUser={currentUser}
       />
 
       <SendMessage
@@ -204,8 +212,14 @@ const ChatBox = () => {
           setMessages([...messages, createComment]);
         }}
       />
-
-      {/* <Profile client={client} userClicked={state.profile} mobile={mobile} /> */}
+      {state.showTerms && (
+        <TermsAgreement
+          state={state}
+          client={client}
+          dispatch={dispatch}
+          onClose={handleCloseTerms}
+        />
+      )}
     </Wrapper>
   );
 };
