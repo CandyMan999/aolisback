@@ -23,6 +23,7 @@ const { deleteVideoResolver } = require("./deleteVideo");
 const { lookingForResolver } = require("./lookingFor");
 const { viewVideoResolver } = require("./videoView");
 const { getExpoTokenResolver } = require("./pushNotifications");
+const { deleteAccountResolver } = require("./deleteAccount");
 
 module.exports = {
   createRoomResolver,
@@ -51,4 +52,5 @@ module.exports = {
   getExpoTokenResolver,
   appleSignupResolver,
   appleLoginResolver,
+  deleteAccountResolver,
 };

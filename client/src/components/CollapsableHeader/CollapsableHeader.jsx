@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Box, Text, Icon } from "..";
+import { Box, Text, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
 
 const CollapsableHeader = ({
@@ -42,6 +42,15 @@ const CollapsableHeader = ({
           >
             {title}
           </Text>
+          {title === "Settings" && (
+            <Box paddingX={8} center>
+              <Icon
+                name="settings"
+                color={COLORS.grey}
+                size={ICON_SIZES.XX_LARGE}
+              />
+            </Box>
+          )}
           {!!total &&
             !!total &&
             ((completed || 0) < total ? (

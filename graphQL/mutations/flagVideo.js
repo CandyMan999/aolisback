@@ -1,5 +1,5 @@
 const { AuthenticationError, PubSub } = require("apollo-server");
-const { User, Video } = require("../../models");
+const { Video } = require("../../models");
 
 const { publishCreateVideo } = require("../subscription/subscription");
 

@@ -545,3 +545,11 @@ export const LOOKING_FOR_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_ACCOUNT_MUTATION = gql`
+  mutation {
+    deleteAccount {
+      status
+    }
+  }
+`;

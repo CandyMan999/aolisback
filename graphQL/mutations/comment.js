@@ -64,7 +64,7 @@ module.exports = {
         const findAIComments = async () => {
           let comments = [];
           await mainRoom[0].comments.forEach((comment) => {
-            if (comment.author.username === "J_Money$") {
+            if (comment.author.username === "AI_Ho$t") {
               comments.push(comment.text);
             }
           });
@@ -128,10 +128,7 @@ module.exports = {
           stop: [" Human:", " AI:"],
         });
 
-        let newResponse = responseAI.data.choices[0].text.slice(
-          4,
-          responseAI.data.choices[0].text.length
-        );
+        let newResponse = responseAI.data.choices[0].text;
 
         const commentAI = await new Comment({
           text: newResponse,

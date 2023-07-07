@@ -56,7 +56,7 @@ module.exports = {
 
     const video = await Video.create({
       url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
-      publicId: "GoneChatting",
+      publicId: "wy3ybqezw97wiqtst5nm",
       sender: "64a5ed088d53300014ccf08a",
       receiver: user._id,
     });
@@ -196,7 +196,7 @@ module.exports = {
 
     const video = await Video.create({
       url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
-      publicId: "GoneChatting",
+      publicId: "wy3ybqezw97wiqtst5nm",
       sender: "64a5ed088d53300014ccf08a",
       receiver: user._id,
     });

@@ -130,6 +130,10 @@ module.exports = gql`
     token: String!
   }
 
+  type Account {
+    status: Boolean!
+  }
+
   type Query {
     me: User
     fetchMe(token: String!): User
@@ -220,6 +224,7 @@ module.exports = gql`
     deleteVideo(_id: ID!): [Video]
     viewVideo(_id: ID!, viewed: Boolean!): Video
     getExpoToken(token: String!, userId: ID!): User
+    deleteAccount: Account
   }
 
   type Subscription {

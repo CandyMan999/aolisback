@@ -43,6 +43,7 @@ const {
   getExpoTokenResolver,
   appleSignupResolver,
   appleLoginResolver,
+  deleteAccountResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -90,6 +91,7 @@ const resolvers = {
     getExpoToken: getExpoTokenResolver,
     appleSignup: appleSignupResolver,
     appleLogin: appleLoginResolver,
+    deleteAccount: deleteAccountResolver,
   },
 };
 

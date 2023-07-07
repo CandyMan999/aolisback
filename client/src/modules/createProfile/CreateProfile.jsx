@@ -11,8 +11,6 @@ import {
   FONT_SIZES,
 } from "../../components";
 
-import { COLORS } from "../../constants";
-
 import { CREATE_PROFILE_MUTATION } from "../../graphql/mutations";
 
 import { SingleTime } from "./single-time";
@@ -20,6 +18,7 @@ import { GetLocation } from "./get-location";
 import { MyPhotos } from "./my-photos";
 import { MyDetails } from "./my-details";
 import { LookingFor } from "./looking-for";
+import { Settings } from "./settings";
 
 const CreateProfile = ({ client, dispatch, state, currentUser }) => {
   const [authError, setAuthError] = useState("");
@@ -237,6 +236,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser }) => {
                   total={totalCounts.lookingFor}
                   mobile={mobile}
                 />
+                <Settings state={state} client={client} dispatch={dispatch} />
               </Box>
             );
           }}
