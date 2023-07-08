@@ -4,10 +4,10 @@ export const GOOGLE_SIGNUP_MUTATION = gql`
   mutation ($username: String!, $idToken: String!) {
     googleSignup(username: $username, idToken: $idToken) {
       token
-      terms
       user {
         _id
         name
+        terms
         isLoggedIn
         username
         pictures {
@@ -38,10 +38,11 @@ export const GOOGLE_LOGIN_MUTATION = gql`
   mutation ($idToken: String!) {
     googleLogin(idToken: $idToken) {
       token
-      terms
+
       user {
         _id
         name
+        terms
         isLoggedIn
         username
         pictures {
@@ -72,11 +73,11 @@ export const SIGNUP_MUTATION = gql`
   mutation ($username: String!, $email: String!, $password: String!) {
     signup(username: $username, email: $email, password: $password) {
       token
-      terms
       user {
         _id
         username
         email
+        terms
       }
     }
   }
@@ -86,10 +87,11 @@ export const LOGIN_MUTATION = gql`
   mutation ($username: String!, $password: String!) {
     login(username: $username, password: $password) {
       token
-      terms
+
       user {
         _id
         name
+        terms
         isLoggedIn
         username
         terms
@@ -131,7 +133,6 @@ export const CREATE_ROOM_MUTATION = gql`
     createRoom(name: $name, _id: $_id) {
       _id
       name
-
       users {
         _id
         username
@@ -145,7 +146,6 @@ export const CHANGE_ROOM_MUTATION = gql`
     changeRoom(roomId: $roomId, userId: $userId) {
       _id
       name
-
       users {
         _id
         username
@@ -252,6 +252,7 @@ export const ADD_PHOTO_MUTATION = gql`
     addPhoto(_id: $_id, url: $url, publicId: $publicId) {
       _id
       username
+      terms
       pictures {
         _id
         url
@@ -318,6 +319,7 @@ export const DELETE_PHOTO_MUTATION = gql`
     deletePhoto(userId: $userId, photoId: $photoId) {
       _id
       username
+      terms
       pictures {
         _id
         url

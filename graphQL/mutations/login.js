@@ -20,6 +20,12 @@ module.exports = {
       if (!user) {
         return new AuthenticationError("Username Doesn't Exsist");
       }
+      if (user.appleId) {
+        throw new AuthenticationError("Sign in with Apple for this account");
+      }
+      if (user.googleId) {
+        throw new AuthenticationError("Sign in with Google for this account");
+      }
 
       if (user) {
         const match = await bcrypt.compare(password, user.password);

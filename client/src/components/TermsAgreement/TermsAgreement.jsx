@@ -376,8 +376,8 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             </li>
             <li>
               <Text>
-                use your real name and real age in creating your Bumble account
-                and on your profile; and
+                use your real name and real age in creating your GoneChatting
+                account and a username for your alias on your profile you; and
               </Text>
             </li>
             <li>

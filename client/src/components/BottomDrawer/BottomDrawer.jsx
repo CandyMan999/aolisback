@@ -148,7 +148,7 @@ const BottomDrawer = ({
         height: !isOpen ? 0 : "30vh",
         background: !isOpen ? "rgba(0,0,0,0.0)" : "rgba(0,0,0,0.3)",
       }}
-      transition={{ ease: "linear", duration: 0.7 }}
+      transition={{ ease: "linear", duration: 0.2 }}
       style={drawerStyle(isOpen)}
     >
       <Box column width="100%" alignItems="center" paddingBottom={2}>
