@@ -10,8 +10,9 @@ const NavArrow = ({ onClick, direction }) => (
     hoverBackground={COLORS.vividBlue}
   >
     <Icon
+      padding={0}
       name={`${direction}Arrow`}
-      size={ICON_SIZES.X_LARGE}
+      size={ICON_SIZES.XX_LARGE}
       color={COLORS.darkestGrey}
     />
   </Box>
