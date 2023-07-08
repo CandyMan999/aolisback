@@ -86,6 +86,7 @@ export const LOGIN_MUTATION = gql`
   mutation ($username: String!, $password: String!) {
     login(username: $username, password: $password) {
       token
+      terms
       user {
         _id
         name
@@ -130,6 +131,7 @@ export const CREATE_ROOM_MUTATION = gql`
     createRoom(name: $name, _id: $_id) {
       _id
       name
+      terms
       users {
         _id
         username
@@ -143,6 +145,7 @@ export const CHANGE_ROOM_MUTATION = gql`
     changeRoom(roomId: $roomId, userId: $userId) {
       _id
       name
+      terms
       users {
         _id
         username
