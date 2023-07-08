@@ -567,9 +567,17 @@ export const ACCEPT_TERMS_MUTATION = gql`
     termsAgreement(accept: $accept) {
       _id
       name
+      terms
       isLoggedIn
       username
-      terms
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
       pictures {
         _id
         url
@@ -578,6 +586,108 @@ export const ACCEPT_TERMS_MUTATION = gql`
       location {
         coordinates
       }
+      sentVideos {
+        _id
+        url
+        publicId
+        createdAt
+        sender {
+          username
+          _id
+          pictures {
+            _id
+            url
+            publicId
+          }
+        }
+        receiver {
+          _id
+          username
+          pictures {
+            _id
+            url
+            publicId
+          }
+        }
+      }
+      receivedVideos {
+        _id
+        url
+        publicId
+        createdAt
+        flagged
+        viewed
+        sender {
+          username
+          _id
+          isLoggedIn
+          pictures {
+            _id
+            url
+            publicId
+          }
+          blockedUsers {
+            _id
+          }
+          intro
+          sex
+          location {
+            coordinates
+          }
+          age
+          occupation
+          lookingFor {
+            ageRange {
+              lowEnd
+              highEnd
+            }
+            sex
+            kids
+          }
+          singleTime
+          drink
+          smoke
+          marijuana
+          drugs
+          kids
+        }
+        receiver {
+          _id
+          username
+          intro
+          sex
+          age
+          occupation
+          singleTime
+          drink
+          smoke
+          marijuana
+          drugs
+          kids
+          location {
+            coordinates
+          }
+          pictures {
+            _id
+            url
+            publicId
+          }
+        }
+      }
+      blockedUsers {
+        _id
+      }
+      email
+      intro
+      sex
+      age
+      occupation
+      singleTime
+      drink
+      smoke
+      marijuana
+      drugs
+      kids
     }
   }
 `;
