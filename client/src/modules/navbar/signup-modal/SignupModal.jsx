@@ -52,7 +52,7 @@ const SignupModal = ({ onClose }) => {
         setSpinner(true);
 
         const variables = {
-          username: username.replace(/ /g, ""),
+          username: username.trim(),
           email,
           password,
         };

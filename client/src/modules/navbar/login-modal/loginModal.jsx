@@ -47,8 +47,8 @@ const LoginModal = ({ onClose }) => {
   const handleSubmit = async ({ password, username }) => {
     try {
       const variables = {
-        username,
-        password,
+        username: username.trim(),
+        password: password.trim(),
       };
       setSpinner(true);
       const {
