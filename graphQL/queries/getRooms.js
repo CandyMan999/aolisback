@@ -14,7 +14,10 @@ module.exports = {
               user.roomInfo.subscribedAt
             ).isBefore(moment().subtract(30, "minutes"));
             if (isProbablyOffline) {
-              await Room.updateMany({ $pull: { users: user._id } });
+              await Room.updateMany(
+                { $pull: { users: user._id } },
+                { new: true }
+              );
               await User.updateOne(
                 { _id: user._id },
                 { $set: { comments: [], isLoggedIn: false } }

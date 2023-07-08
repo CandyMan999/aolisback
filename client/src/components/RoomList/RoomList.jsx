@@ -18,16 +18,6 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
   const { state, dispatch } = useContext(Context);
   const mobile = useMediaQuery("(max-width: 950px)");
 
-  const handleIsLoggedIn = async () => {
-    try {
-      if (currentUser && !currentUser.username) {
-        dispatch({ type: "TOGGLE_SIGNUP", payload: true });
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const handleTermsAgreement = () => {
     if (currentUser.username && !currentUser.terms) {
       dispatch({ type: "SHOW_TERMS", payload: true });

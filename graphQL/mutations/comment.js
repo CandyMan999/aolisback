@@ -20,7 +20,9 @@ module.exports = {
         { _id: roomId },
         { $push: { comments: comment } },
         { new: true }
-      );
+      )
+        .populate("users")
+        .populate("comments");
 
       const author = await User.findByIdAndUpdate(
         { _id: userId },

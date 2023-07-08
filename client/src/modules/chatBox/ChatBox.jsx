@@ -66,7 +66,7 @@ const ChatBox = () => {
   const getRooms = async () => {
     try {
       const { getRooms } = await client.request(GET_ROOMS_QUERY, {});
-
+      console.log("rooms: ", getRooms);
       setRooms([...getRooms]);
     } catch (err) {
       console.error(err.message);
