@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+
 import {
   Box,
   Text,
@@ -69,7 +70,6 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                 borderTop={active && `solid 2px ${COLORS.vividBlue}`}
                 borderBottom={active && `solid 2px ${COLORS.vividBlue}`}
                 key={room._id}
-                borderRadius={"50%"}
                 display="flex"
                 color={active ? COLORS.black : COLORS.grey}
                 style={{
@@ -78,6 +78,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                   boxShadow: active
                     ? `3px 3px 8px 2px white`
                     : `3px 3px 8px 2px rgba(0, 0, 0, 0.3)`,
+                  borderRadius: 10,
                 }}
                 justifyContent="center"
                 isDisabled={loading}
@@ -99,7 +100,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                 ) : (
                   <Text
                     color={active ? COLORS.vividBlue : COLORS.lightGrey}
-                    textShadow={active && `-3px 1px 2px ${COLORS.main}`}
+                    textShadow={active && `-2px 1px 2px ${COLORS.main}`}
                     className="userNumber"
                     fontSize={mobile ? undefined : FONT_SIZES.X_LARGE}
                     width={"100%"}
@@ -113,6 +114,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                   position="absolute"
                   top={-11}
                   right={-7}
+                  style={{ transition: "background-color 0.4s" }}
                   border={`solid 1px ${COLORS.white}`}
                   backgroundColor={active ? COLORS.vividBlue : COLORS.lightGrey}
                   borderRadius={"50%"}

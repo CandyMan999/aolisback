@@ -96,7 +96,7 @@ const Message = ({
                 cursor: "pointer",
                 translateX: -20,
               }}
-              whileTap={{ scale: 0.9 }}
+              whileTap={{ scale: 0.7 }}
               onClick={() => usernameClick(authorId)}
             >
               <Picture

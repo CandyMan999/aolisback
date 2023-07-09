@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import { motion } from "framer-motion";
 import { NavLink, withRouter, useLocation } from "react-router-dom";
 import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 import { getToken, setToken } from "../../utils/helpers";
@@ -80,16 +81,19 @@ const Navbar = ({ props }) => {
           onClose={() => dispatch({ type: "TOGGLE_LOGIN", payload: false })}
         />
       )}
-      <Box
-        flexWrap="wrap"
-        column
-        display="flex"
-        marginTop={props.mobile ? 25 : 38}
-        zIndex={
-          location.pathname === "/location" || location.pathname === "/message"
-            ? 2
-            : undefined
-        }
+
+      <motion.div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          marginTop: props.mobile ? 25 : 38,
+          zIndex:
+            location.pathname === "/location" ||
+            location.pathname === "/message"
+              ? 2
+              : undefined,
+        }}
+        whileTap={{ scale: 0.7 }}
       >
         <NavLink style={{ textDecoration: "none" }} to="/">
           <img
@@ -99,7 +103,7 @@ const Navbar = ({ props }) => {
             alt="Gone-Chatting-Logo"
           />
         </NavLink>
-      </Box>
+      </motion.div>
 
       {currentUser && currentUser.username && (
         <Box

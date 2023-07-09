@@ -242,7 +242,12 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
                 left={-10}
                 zIndex={900}
               >
-                <Button coolStyle width={"100%"} onClick={handleMapMove}>
+                <Button
+                  coolStyle
+                  width={"100%"}
+                  style={{ minHeight: 60 }}
+                  onClick={handleMapMove}
+                >
                   {mapLoading ? <Loading bar /> : <Text bold>UPDATE MAP</Text>}
                 </Button>
               </Box>
