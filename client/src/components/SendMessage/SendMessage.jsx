@@ -74,6 +74,9 @@ class SendMessageForm extends Component {
               paddingRight={2}
               paddingBottom={4}
               paddingLeft={4}
+              style={{
+                transition: "background-color 0.4s", // Add the transition property
+              }}
               onClick={this.handleSubmit}
             >
               <Icon

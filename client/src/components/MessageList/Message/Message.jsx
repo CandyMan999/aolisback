@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { motion } from "framer-motion";
 import { Box, Text, FONT_SIZES, Picture, Button } from "../../../components";
 import { COLORS } from "../../../constants";
 import { formatDistanceToNow } from "date-fns";
@@ -77,15 +78,25 @@ const Message = ({
                 </Text>
               </Text>
             </Box>
-
-            <Box
-              width={45}
-              position={"absolute"}
-              flexWrap="wrap"
-              height={35}
-              paddingX={1}
-              textAlign={"center"}
-              justifyContent={"center"}
+            <motion.div
+              style={{
+                width: 45,
+                position: "absolute",
+                display: "flex",
+                flexWrap: "wrap",
+                height: 35,
+                paddingLeft: 1,
+                paddingRight: 1,
+                textAlign: "center",
+                justifyContent: "center",
+              }}
+              whileHover={{
+                scale: 1.9,
+                zIndex: 2000,
+                cursor: "pointer",
+                translateX: -20,
+              }}
+              whileTap={{ scale: 0.9 }}
               onClick={() => usernameClick(authorId)}
             >
               <Picture
@@ -103,7 +114,7 @@ const Message = ({
               >
                 {username}
               </Text>
-            </Box>
+            </motion.div>
           </Box>
         ) : (
           <Box
@@ -117,12 +128,24 @@ const Message = ({
             marginRight={2}
             marginLeft={3}
           >
-            <Box
-              position={"absolute"}
-              width={45}
-              flexWrap="wrap"
-              textAlign={"center"}
-              justifyContent={"center"}
+            <motion.div
+              style={{
+                width: 45,
+                position: "absolute",
+                display: "flex",
+                flexWrap: "wrap",
+                height: 35,
+
+                textAlign: "center",
+                justifyContent: "center",
+              }}
+              whileHover={{
+                scale: 1.9,
+                zIndex: 2000,
+                cursor: "pointer",
+                translateX: 20,
+              }}
+              whileTap={{ scale: 0.7 }}
               onClick={() => usernameClick(authorId)}
             >
               <Picture
@@ -138,7 +161,7 @@ const Message = ({
               >
                 {username}
               </Text>
-            </Box>
+            </motion.div>
 
             <Box
               flexWrap="wrap"

@@ -69,7 +69,11 @@ class MessageList extends Component {
     return (
       <div
         className="message-list"
-        style={{ overflowY: "scroll", overflowX: "hidden" }}
+        style={{
+          overflowY: "scroll",
+
+          overscrollBehaviorX: "none",
+        }}
       >
         {this.props.loading ? (
           <Loading ring size={"150px"} />

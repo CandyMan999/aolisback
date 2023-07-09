@@ -87,7 +87,6 @@
 
 .message-list {
   grid-area: m;
-
   scrollbar-width: none; /* For Firefox */
   -ms-overflow-style: none;
 }

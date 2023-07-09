@@ -33,6 +33,8 @@ const StyledButton = styled.button(
     cursor: disabled ? "not-allowed" : "pointer",
     color: !minimal ? COLORS.white : undefined,
     boxShadow: coolStyle ? `2px 2px 4px 2px rgba(0, 0, 0, 0.3)` : undefined,
+    transition: "color 0.4s, background-color 0.4s",
+
     backgroundColor: color
       ? color
       : minimal

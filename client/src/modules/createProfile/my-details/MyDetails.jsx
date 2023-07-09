@@ -75,7 +75,7 @@ const MyDetails = ({
                   />
                   <Box
                     display="flex"
-                    // width={"100%"}
+                    width={"100%"}
                     justifyContent="space-around"
                     marginY={15}
                   >
