@@ -130,10 +130,7 @@ module.exports = {
           stop: [" Human:", " AI:"],
         });
 
-        let newResponse = responseAI.data.choices[0].text.slice(
-          4,
-          responseAI.data.choices[0].text.length - 1
-        );
+        let newResponse = responseAI.data.choices[0].text.split("AI: ")[1];
 
         const commentAI = await new Comment({
           text: newResponse,
