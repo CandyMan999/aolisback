@@ -71,8 +71,6 @@ class MessageList extends Component {
         className="message-list"
         style={{
           overflowY: "scroll",
-
-          overscrollBehaviorX: "none",
         }}
       >
         {this.props.loading ? (
