@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { Box, Button } from "../..";
 import { COLORS } from "../../../constants";
@@ -15,6 +16,7 @@ const Slide = ({
   id,
   url,
   width,
+  clickDirection,
   onDelete,
   withDelete,
   publicId,
@@ -46,23 +48,35 @@ const Slide = ({
   return (
     <Box noFlex>
       {!!publicId ? (
-        <CloudinaryContext cloudName="localmassagepros">
-          <Image
-            style={{
-              borderRadius: 10,
-            }}
-            loading="lazy"
-            publicId={publicId}
-            id="slide-photo"
-          >
-            <Transformation
-              height={mobile ? "390" : "390"}
-              width={mobile ? "auto" : "auto"}
-              crop={mobile ? "scale" : "fill"}
-              gravity="center"
-            />
-          </Image>
-        </CloudinaryContext>
+        <AnimatePresence>
+          <CloudinaryContext cloudName="localmassagepros">
+            <motion.div
+              key={publicId}
+              initial={{
+                x: clickDirection === "left" ? -300 : 300,
+                opacity: 0,
+              }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: clickDirection === "left" ? 300 : -300, opacity: 0 }}
+            >
+              <Image
+                style={{
+                  borderRadius: 10,
+                }}
+                loading="lazy"
+                publicId={publicId}
+                id="slide-photo"
+              >
+                <Transformation
+                  height={mobile ? "390" : "390"}
+                  width={mobile ? "auto" : "auto"}
+                  crop={mobile ? "scale" : "fill"}
+                  gravity="center"
+                />
+              </Image>
+            </motion.div>
+          </CloudinaryContext>
+        </AnimatePresence>
       ) : (
         <Box
           style={{

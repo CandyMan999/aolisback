@@ -9,6 +9,7 @@ import NavArrow from "./NavArrow";
 const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [pictures, setPictures] = useState([]);
+  const [clickDirection, setClickDirection] = useState("right");
   useEffect(() => {
     if (!!images) {
       setPictures([...images]);
@@ -22,8 +23,15 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
     setCurrentIdx(newIdx >= 0 ? newIdx % pictures.length : pictures.length - 1);
   };
 
-  const nextSlide = () => changeSlide(1);
-  const prevSlide = () => changeSlide(-1);
+  const nextSlide = () => {
+    setClickDirection("right");
+    changeSlide(1);
+  };
+
+  const prevSlide = () => {
+    setClickDirection("left");
+    changeSlide(-1);
+  };
 
   const handleDeletePhoto = (id) => {
     if (currentIdx === pictures.length - 1) {
@@ -40,7 +48,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
       background={COLORS.white}
       style={{ overflow: "hidden" }}
     >
-      {pictures.length > 0 && (
+      {pictures.length > 1 && (
         <Box
           position="absolute"
           left={2}
@@ -53,13 +61,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
         </Box>
       )}
 
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        // paddingTop={border}
-        // paddingBottom={border}
-      >
+      <Box display="flex" alignItems="center" justifyContent="center">
         <Box justifyContent="center">
           {pictures.length && currentPhoto ? (
             <Slide
@@ -70,6 +72,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
               height={height}
               width={width}
               withDelete={withDelete}
+              clickDirection={clickDirection}
               countStr={`${currentIdx + 1} of ${pictures.length}`}
             />
           ) : (
@@ -91,7 +94,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
         </Box>
       </Box>
 
-      {pictures.length > 0 && (
+      {pictures.length > 1 && (
         <Box
           position="absolute"
           column
@@ -103,14 +106,6 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
           <NavArrow direction="right" onClick={nextSlide} />
         </Box>
       )}
-
-      {/* <Box
-        position="absolute"
-        background="black"
-        bottom={0}
-        width={"100%"}
-        height={border}
-      /> */}
     </Box>
   );
 };

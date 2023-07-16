@@ -27,7 +27,7 @@ export { default as CollapsableHeader } from "./CollapsableHeader";
 export { default as ProfileProgress } from "./ProfileProgress";
 export { default as VideoUploader } from "./VideoUploader";
 export { default as FloatingHeart } from "./FloatingHeart";
-export { default as Slider } from "./Slider";
+
 export { default as OnlineDot } from "./OnlineDot";
 export { default as FlipCard } from "./FlipCard";
 export { default as VideoPlayer } from "./VideoPlayer";
@@ -42,3 +42,4 @@ export { default as ProgressBar } from "./ProgressBar";
 export { default as Banner } from "./Banner";
 export { default as JoinARoom } from "./JoinRoom";
 export { default as TermsAgreement } from "./TermsAgreement";
+export { default as Slideshow } from "./Slider";
