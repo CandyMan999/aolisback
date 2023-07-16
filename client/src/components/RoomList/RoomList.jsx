@@ -71,6 +71,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                 borderBottom={active && `solid 2px ${COLORS.vividBlue}`}
                 key={room._id}
                 display="flex"
+                dontScale={true}
                 color={active ? COLORS.black : COLORS.grey}
                 style={{
                   position: "relative",

@@ -1,17 +1,19 @@
 import React from "react";
 import styled from "@emotion/styled";
-
+import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
 
 const Button = (props) => (
   <StyledButton
+    whileTap={{ scale: 0.7 }}
+    whileHover={{ scale: props.dontScale ? 1 : 1.1 }}
     {...props}
     type={props.type || "submit"}
     onClick={props.disabled ? undefined : props.onClick}
   />
 );
 
-const StyledButton = styled.button(
+const StyledButton = styled(motion.button)(
   ({
     active,
     disabled,
