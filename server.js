@@ -1,5 +1,6 @@
 const { ApolloServer } = require("apollo-server");
 const { typeDefs, resolvers } = require("./graphQL");
+const { cronJob } = require("./utils/cronJob");
 
 const { findOrCreateUser } = require("./controllers/userController");
 
@@ -66,4 +67,6 @@ const startServer = async () => {
   });
 };
 
-startServer();
+startServer().then(() => {
+  cronJob();
+});

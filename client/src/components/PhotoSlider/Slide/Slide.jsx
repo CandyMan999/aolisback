@@ -57,7 +57,10 @@ const Slide = ({
                 opacity: 0,
               }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: clickDirection === "left" ? 300 : -300, opacity: 0 }}
+              exit={{
+                x: clickDirection === "left" ? 300 : -300,
+                opacity: 0,
+              }}
             >
               <Image
                 style={{
