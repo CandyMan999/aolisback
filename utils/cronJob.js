@@ -9,7 +9,7 @@ require("dotenv").config();
 const cronJob = async () => {
   try {
     cron.schedule(
-      "'0 */12 * * *'",
+      "* */12 * * *'",
       async () => {
         const users = await User.find({
           $or: [
