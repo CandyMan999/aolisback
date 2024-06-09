@@ -91,6 +91,8 @@ module.exports = {
           stop: [" Human:", " AI:"],
         });
 
+        console.log("responseAI: ", responseAI);
+
         const commentAI = await new Comment({
           text: responseAI.data.choices[0].text,
         }).save();
@@ -102,7 +104,7 @@ module.exports = {
         );
 
         const authorAI = await User.findByIdAndUpdate(
-          { _id: "64a5ed088d53300014ccf08a" },
+          { _id: "6665fae55486fb4b62990898" },
           { $push: { comments: commentAI } },
           { new: true }
         ).populate("pictures");

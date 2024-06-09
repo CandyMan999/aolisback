@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import Message from "./Message";
 import { Loading, Box, JoinARoom } from "../../components";
 import ReactDOM from "react-dom";
-import goneChattingSVG from "../../pictures/goneChatting.svg";
+// import goneChattingSVG from "../../pictures/goneChatting.svg";
 import MainLogo from "../../pictures/MainLogo.png";
 
 class MessageList extends Component {

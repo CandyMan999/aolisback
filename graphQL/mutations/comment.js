@@ -78,6 +78,8 @@ module.exports = {
 
         const AIcomments = await findAIComments();
 
+        console.log("comment is firing");
+
         const createPrompt = async () => {
           try {
             const humanLastThree = await humanComments.slice(-4); // Get the last three human comments
@@ -119,8 +121,10 @@ module.exports = {
 
         const prompt = await createPrompt();
 
-        const responseAI = await openai.createCompletion({
-          model: "text-davinci-003",
+        console.log("what is my prompt: ", prompt);
+        //seems I need to pay
+        const responseAI = await openai.completions.create({
+          model: "gpt-3.5-turbo-instruct",
           prompt,
           temperature: 0,
           max_tokens: 3000,
@@ -129,7 +133,7 @@ module.exports = {
           presence_penalty: 0.9,
           stop: [" Human:", " AI:"],
         });
-
+        console.log("RESPONSEAI: ", responseAI);
         let newResponse = responseAI.data.choices[0].text.split("AI: ")[1];
 
         const commentAI = await new Comment({
@@ -143,7 +147,7 @@ module.exports = {
         );
 
         const authorAI = await User.findByIdAndUpdate(
-          { _id: "64a5ed088d53300014ccf08a" },
+          { _id: "6665fae55486fb4b62990898" },
           { $push: { comments: commentAI } },
           { new: true }
         ).populate("pictures");
