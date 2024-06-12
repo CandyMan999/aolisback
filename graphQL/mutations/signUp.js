@@ -77,7 +77,6 @@ module.exports = {
   },
   appleSignupResolver: async (root, args, ctx) => {
     try {
-      console.log("args apple: ", args);
       const { email, name, appleId, username } = args;
 
       const checkIfUserExists = async (email, username, appleId) => {

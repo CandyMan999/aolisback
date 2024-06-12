@@ -1,14 +1,13 @@
 const { AuthenticationError } = require("apollo-server");
 const { User, Room, Comment } = require("../../models");
-const { Configuration, OpenAIApi } = require("openai");
+const { OpenAI } = require("openai");
 const { publishCreateComment } = require("../subscription/subscription");
 require("dotenv").config();
 
-const configuration = new Configuration({
+const openai = new OpenAI({
+  organization: process.env.ORG,
   apiKey: process.env.OPEN_AI_KEY,
 });
-
-const openai = new OpenAIApi(configuration);
 
 module.exports = {
   createCommentResolver: async (root, args, ctx) => {
@@ -78,8 +77,6 @@ module.exports = {
 
         const AIcomments = await findAIComments();
 
-        console.log("comment is firing");
-
         const createPrompt = async () => {
           try {
             const humanLastThree = await humanComments.slice(-4); // Get the last three human comments
@@ -121,11 +118,14 @@ module.exports = {
 
         const prompt = await createPrompt();
 
-        console.log("what is my prompt: ", prompt);
-        //seems I need to pay
-        const responseAI = await openai.completions.create({
-          model: "gpt-3.5-turbo-instruct",
-          prompt,
+        const responseAI = await openai.chat.completions.create({
+          model: "gpt-3.5-turbo", // Correct model name for the OpenAI AP
+          messages: [
+            {
+              role: "system",
+              content: prompt,
+            },
+          ],
           temperature: 0,
           max_tokens: 3000,
           top_p: 1,
@@ -133,8 +133,8 @@ module.exports = {
           presence_penalty: 0.9,
           stop: [" Human:", " AI:"],
         });
-        console.log("RESPONSEAI: ", responseAI);
-        let newResponse = responseAI.data.choices[0].text.split("AI: ")[1];
+
+        let newResponse = responseAI.choices[0].message.content;
 
         const commentAI = await new Comment({
           text: newResponse,

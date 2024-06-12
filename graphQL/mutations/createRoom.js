@@ -1,6 +1,6 @@
 const { AuthenticationError } = require("apollo-server");
 const { User, Room, Comment } = require("../../models");
-const { Configuration, OpenAIApi } = require("openai");
+const { OpenAI } = require("openai");
 const {
   publishCreateComment,
   publishRoomCreatedOrUpdated,
@@ -8,11 +8,10 @@ const {
 require("dotenv").config();
 const moment = require("moment");
 
-const configuration = new Configuration({
+const openai = new OpenAI({
+  organization: process.env.ORG,
   apiKey: process.env.OPEN_AI_KEY,
 });
-
-const openai = new OpenAIApi(configuration);
 
 module.exports = {
   createRoomResolver: async (root, args, ctx) => {
@@ -80,19 +79,19 @@ module.exports = {
       if (currentRoom.name !== "Main" && !currentRoom.comments.length) {
         const prompt = `Human: Let's pretend this is a chat application with the topic of ${currentRoom.name}, introduce yourself as artificial intelligence to me, my name is "${user.username}", then let me know that they I can chat with you while I wait for other users to join the room I just created.`;
 
-        const responseAI = await openai.createCompletion({
-          model: "text-davinci-003",
-          prompt,
-          temperature: 0.9,
+        const responseAI = await openai.chat.completions.create({
+          model: "gpt-3.5-turbo", // Correct model name for the OpenAI AP
+          messages: [{ role: "system", content: prompt }],
+          temperature: 0,
           max_tokens: 3000,
           top_p: 1,
-          frequency_penalty: 0,
-          presence_penalty: 0.8,
+          frequency_penalty: 0.3,
+          presence_penalty: 0.9,
           stop: [" Human:", " AI:"],
         });
 
         const commentAI = await new Comment({
-          text: responseAI.data.choices[0].text,
+          text: responseAI.choices[0].message.content,
         }).save();
 
         const roomAI = await Room.findByIdAndUpdate(

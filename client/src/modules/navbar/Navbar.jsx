@@ -125,7 +125,7 @@ const Navbar = ({ props }) => {
             Welcome, {currentUser.username}
           </Text>
 
-          {!!profilePic && profilePic.url && (
+          {!!profilePic && profilePic.publicId && (
             <Picture
               profilePic={profilePic}
               name={currentUser.username}

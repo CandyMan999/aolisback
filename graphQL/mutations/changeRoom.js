@@ -1,6 +1,6 @@
 const { AuthenticationError, gql, PubSub } = require("apollo-server");
 const { User, Room, Comment } = require("../../models");
-const { Configuration, OpenAIApi } = require("openai");
+const { OpenAI } = require("openai");
 const {
   publishCreateComment,
   publishRoomCreatedOrUpdated,
@@ -8,11 +8,10 @@ const {
 require("dotenv").config();
 const moment = require("moment");
 
-const configuration = new Configuration({
+const openai = new OpenAI({
+  organization: process.env.ORG,
   apiKey: process.env.OPEN_AI_KEY,
 });
-
-const openai = new OpenAIApi(configuration);
 
 module.exports = {
   changeRoomResolver: async (root, args, ctx) => {
@@ -79,50 +78,51 @@ module.exports = {
 
       if (currentRoom.name === "Main" && !currentRoom.comments.length) {
         const prompt = `Human: Let's pretend this is a new chat app about dating where you can create profiles, video chat, share location, and create chatrooms of particular interest; please welcome me to "GoneChatting" and tell the slogan, "slogan: where you will never catch a catfish".  and give me a short description of the app. Give me a random quote about love ask me a random personal question about literally anything.`;
+        try {
+          const responseAI = await openai.chat.completions.create({
+            model: "gpt-3.5-turbo", // Correct model name for the OpenAI AP
+            messages: [{ role: "system", content: prompt }],
+            temperature: 0,
+            max_tokens: 3000,
+            top_p: 1,
+            frequency_penalty: 0.3,
+            presence_penalty: 0.9,
+            stop: [" Human:", " AI:"],
+          });
 
-        const responseAI = await openai.createCompletion({
-          model: "text-davinci-003",
-          prompt,
-          temperature: 0.9,
-          max_tokens: 250,
-          top_p: 1,
-          frequency_penalty: 0,
-          presence_penalty: 0.6,
-          stop: [" Human:", " AI:"],
-        });
+          const commentAI = await new Comment({
+            text: responseAI.choices[0].message.content,
+          }).save();
 
-        console.log("responseAI: ", responseAI);
+          const roomAI = await Room.findByIdAndUpdate(
+            { _id: roomId },
+            { $push: { comments: commentAI } },
+            { new: true }
+          );
 
-        const commentAI = await new Comment({
-          text: responseAI.data.choices[0].text,
-        }).save();
+          const authorAI = await User.findByIdAndUpdate(
+            { _id: "6665fae55486fb4b62990898" },
+            { $push: { comments: commentAI } },
+            { new: true }
+          ).populate("pictures");
 
-        const roomAI = await Room.findByIdAndUpdate(
-          { _id: roomId },
-          { $push: { comments: commentAI } },
-          { new: true }
-        );
+          const newCommentAI = await Comment.findByIdAndUpdate(
+            {
+              _id: commentAI._id,
+            },
+            { author: authorAI, room: roomAI },
+            { new: true }
+          )
+            .populate({
+              path: "author",
+              populate: [{ path: "pictures", model: "Picture" }],
+            })
+            .populate("room");
 
-        const authorAI = await User.findByIdAndUpdate(
-          { _id: "6665fae55486fb4b62990898" },
-          { $push: { comments: commentAI } },
-          { new: true }
-        ).populate("pictures");
-
-        const newCommentAI = await Comment.findByIdAndUpdate(
-          {
-            _id: commentAI._id,
-          },
-          { author: authorAI, room: roomAI },
-          { new: true }
-        )
-          .populate({
-            path: "author",
-            populate: [{ path: "pictures", model: "Picture" }],
-          })
-          .populate("room");
-
-        publishCreateComment(newCommentAI);
+          publishCreateComment(newCommentAI);
+        } catch (err) {
+          console.log("error making AI response: ", err);
+        }
       }
 
       const getAllRooms = await Room.find({}).populate("users");
