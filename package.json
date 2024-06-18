@@ -5,6 +5,7 @@
   "author": "John Lewis",
   "license": "MIT",
   "scripts": {
+    "start": "node server.js", 
     "start:client": "cd client && yarn start",
     "dev:server": "NODE_ENV=development nodemon --exec babel-node server.js",
     "dev": "concurrently \"yarn start:client\" \"yarn dev:server\" ",
