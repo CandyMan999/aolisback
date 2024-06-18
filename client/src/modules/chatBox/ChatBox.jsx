@@ -207,7 +207,7 @@ const ChatBox = () => {
         subscription={CREATE_COMMENT_SUBSCRIPTION}
         onSubscriptionData={({ subscriptionData }) => {
           const { createComment } = subscriptionData.data;
-
+          console.log("comment subscription firing: ", createComment);
           setMessages([...messages, createComment]);
         }}
       />

@@ -22,7 +22,7 @@ import { VIDEO_CHAT_REQUEST } from "./graphql/subscriptions";
 
 export const WS_URL =
   process.env.NODE_ENV === "production"
-    ? `wss://aol-is-back.herokuapp.com/graphql`
+    ? `wss://aolisback.herokuapp.com/graphql`
     : `ws://localhost:4000/graphql`;
 
 const wsLink = new WebSocketLink({
