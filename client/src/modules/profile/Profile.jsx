@@ -75,6 +75,10 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     }
   };
 
+  const callOnFaceTime = (contact) => {
+    const facetimeUrl = `facetime://${contact}`;
+    window.location.href = facetimeUrl;
+  };
   const handleUserBlocked = () => {
     try {
       setUserBlocked(false);
