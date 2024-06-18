@@ -67,7 +67,6 @@ const startServer = async () => {
   });
 };
 
-startServer();
-// .then(() => {
-//   cronJob();
-// });
+startServer().then(() => {
+  cronJob();
+});
