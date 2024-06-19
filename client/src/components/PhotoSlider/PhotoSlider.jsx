@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-
-import { Box, Icon, ICON_SIZES } from "..";
+import { Box, Icon, ICON_SIZES, Loading } from ".."; // Import Spinner component
 import { COLORS } from "../../constants";
 import Slide from "./Slide";
 import NavArrow from "./NavArrow";
@@ -10,9 +9,27 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [pictures, setPictures] = useState([]);
   const [clickDirection, setClickDirection] = useState("right");
+  const [loading, setLoading] = useState(true); // New loading state
+
   useEffect(() => {
-    if (!!images) {
-      setPictures([...images]);
+    if (images && images.length > 0) {
+      const loadImages = async () => {
+        const promises = images.map((image) => {
+          return new Promise((resolve) => {
+            const img = new Image();
+            img.src = image.url;
+            img.onload = resolve;
+          });
+        });
+
+        await Promise.all(promises);
+        setPictures([...images]);
+        setLoading(false);
+      };
+
+      loadImages();
+    } else {
+      setLoading(false);
     }
   }, [images]);
 
@@ -48,63 +65,76 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
       background={COLORS.white}
       style={{ overflow: "hidden" }}
     >
-      {pictures.length > 1 && (
-        <Box
-          position="absolute"
-          left={2}
-          column
-          justifyContent="center"
-          height={height + 10}
-          zIndex={10}
-        >
-          <NavArrow direction="left" onClick={prevSlide} />
-        </Box>
-      )}
-
-      <Box display="flex" alignItems="center" justifyContent="center">
-        <Box justifyContent="center">
-          {pictures.length && currentPhoto ? (
-            <Slide
-              id={currentPhoto._id}
-              publicId={currentPhoto.publicId ? currentPhoto.publicId : null}
-              onDelete={handleDeletePhoto}
-              url={currentPhoto.url}
-              height={height}
-              width={width}
-              withDelete={withDelete}
-              clickDirection={clickDirection}
-              countStr={`${currentIdx + 1} of ${pictures.length}`}
-            />
-          ) : (
-            <Box column height={height} width={width} justifyContent="center">
-              <Box justifyContent="center">
-                {!!isUser ? null : (
-                  <Icon
-                    name="user"
-                    size={ICON_SIZES.XXX_LARGE}
-                    color={COLORS.darkestGrey}
-                  />
-                )}
-              </Box>
-              <Box justifyContent="center">
-                <h2>No Photos</h2>
-              </Box>
+      {loading ? ( // Show loader while loading
+        <Loading color={COLORS.vividBlue} />
+      ) : (
+        <>
+          {pictures.length > 1 && (
+            <Box
+              position="absolute"
+              left={2}
+              column
+              justifyContent="center"
+              height={height + 10}
+              zIndex={10}
+            >
+              <NavArrow direction="left" onClick={prevSlide} />
             </Box>
           )}
-        </Box>
-      </Box>
 
-      {pictures.length > 1 && (
-        <Box
-          position="absolute"
-          column
-          justifyContent="center"
-          right={2}
-          height={height + 10}
-          zIndex={10}
-        >
-          <NavArrow direction="right" onClick={nextSlide} />
-        </Box>
+          <Box display="flex" alignItems="center" justifyContent="center">
+            <Box justifyContent="center">
+              {pictures.length && currentPhoto ? (
+                <Slide
+                  id={currentPhoto._id}
+                  publicId={
+                    currentPhoto.publicId ? currentPhoto.publicId : null
+                  }
+                  onDelete={handleDeletePhoto}
+                  url={currentPhoto.url}
+                  height={height}
+                  width={width}
+                  withDelete={withDelete}
+                  clickDirection={clickDirection}
+                  countStr={`${currentIdx + 1} of ${pictures.length}`}
+                />
+              ) : (
+                <Box
+                  column
+                  height={height}
+                  width={width}
+                  justifyContent="center"
+                >
+                  <Box justifyContent="center">
+                    {!!isUser ? null : (
+                      <Icon
+                        name="user"
+                        size={ICON_SIZES.XXX_LARGE}
+                        color={COLORS.darkestGrey}
+                      />
+                    )}
+                  </Box>
+                  <Box justifyContent="center">
+                    <h2>No Photos</h2>
+                  </Box>
+                </Box>
+              )}
+            </Box>
+          </Box>
+
+          {pictures.length > 1 && (
+            <Box
+              position="absolute"
+              column
+              justifyContent="center"
+              right={2}
+              height={height + 10}
+              zIndex={10}
+            >
+              <NavArrow direction="right" onClick={nextSlide} />
+            </Box>
+          )}
+        </>
       )}
     </Box>
   );
