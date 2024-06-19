@@ -24,6 +24,7 @@ const StyledP = styled("p")(
     position,
     bottom,
     backgroundColor,
+    noWrap,
   }) => ({
     fontSize: fontSizes[fontSize],
     color,
@@ -40,6 +41,7 @@ const StyledP = styled("p")(
     position,
     bottom,
     backgroundColor,
+    whiteSpace: noWrap ? "nowrap" : undefined,
   })
 );
 
@@ -57,6 +59,7 @@ const StyledSpan = styled("span")(
     marginX,
     marginY,
     lineHeight,
+    noWrap,
   }) => ({
     fontSize: fontSizes[fontSize],
     color,
@@ -67,6 +70,7 @@ const StyledSpan = styled("span")(
     marginRight: marginRight ? marginRight : marginX ? marginX : margin,
     marginTop: marginTop ? marginTop : marginY ? marginY : margin,
     lineHeight,
+    whiteSpace: noWrap ? "nowrap" : undefined,
   })
 );
 

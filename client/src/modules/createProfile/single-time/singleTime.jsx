@@ -61,6 +61,7 @@ const SingleTime = ({
       <Box column width={"100%"} marginY={15} alignItems="center">
         {profile.singleTime && (
           <Text
+            noWrap
             fontSize={FONT_SIZES.X_LARGE}
             color={COLORS.main}
             marginTop={0}

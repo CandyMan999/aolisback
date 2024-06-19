@@ -221,7 +221,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                   color={COLORS.red}
                   size={ICON_SIZES.XX_LARGE}
                 />
-                <Text marginBottom={0} bold>
+                <Text marginBottom={0} bold noWrap>
                   Single Since:
                 </Text>
               </Box>
