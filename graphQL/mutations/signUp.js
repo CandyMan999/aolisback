@@ -27,7 +27,7 @@ module.exports = {
         return;
       }
 
-      const receiver = await new User({
+      const user = await new User({
         username,
         password,
         email,
@@ -35,42 +35,42 @@ module.exports = {
         roomInfo: { subscribedAt: moment() },
       }).save();
 
-      const video = await Video.create({
-        url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
-        publicId: "wy3ybqezw97wiqtst5nm",
-        sender: "64a5ed088d53300014ccf08a",
-        receiver: receiver._id,
-      });
+      // const video = await Video.create({
+      //   url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
+      //   publicId: "wy3ybqezw97wiqtst5nm",
+      //   sender: "64a5ed088d53300014ccf08a",
+      //   receiver: receiver._id,
+      // });
 
-      const user = await User.findByIdAndUpdate(
-        { _id: receiver._id },
-        { $push: { receivedVideos: video } },
-        { new: true }
-      ).populate("receivedVideos");
+      // const user = await User.findByIdAndUpdate(
+      //   { _id: receiver._id },
+      //   { $push: { receivedVideos: video } },
+      //   { new: true }
+      // ).populate("receivedVideos");
 
-      const newVideo = await Video.findOne({ _id: video._id }).populate([
-        {
-          path: "sender",
-          model: "User",
-          populate: {
-            path: "pictures",
-            model: "Picture",
-          },
-        },
-        {
-          path: "receiver",
-          model: "User",
-          populate: {
-            path: "pictures",
-            model: "Picture",
-          },
-        },
-      ]);
+      // const newVideo = await Video.findOne({ _id: video._id }).populate([
+      //   {
+      //     path: "sender",
+      //     model: "User",
+      //     populate: {
+      //       path: "pictures",
+      //       model: "Picture",
+      //     },
+      //   },
+      //   {
+      //     path: "receiver",
+      //     model: "User",
+      //     populate: {
+      //       path: "pictures",
+      //       model: "Picture",
+      //     },
+      //   },
+      // ]);
 
-      publishCreateVideo(newVideo);
+      // publishCreateVideo(newVideo);
 
       const token = await createToken(user._id);
-      return { user: user, token };
+      return { user, token };
     } catch (err) {
       throw new AuthenticationError(err);
     }
@@ -103,7 +103,7 @@ module.exports = {
         return;
       }
 
-      const receiver = await new User({
+      const user = await new User({
         username,
         name,
         email,
@@ -112,42 +112,42 @@ module.exports = {
         roomInfo: { subscribedAt: moment() },
       }).save();
 
-      const video = await Video.create({
-        url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
-        publicId: "wy3ybqezw97wiqtst5nm",
-        sender: "64a5ed088d53300014ccf08a",
-        receiver: receiver._id,
-      });
+      // const video = await Video.create({
+      //   url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
+      //   publicId: "wy3ybqezw97wiqtst5nm",
+      //   sender: "64a5ed088d53300014ccf08a",
+      //   receiver: receiver._id,
+      // });
 
-      const user = await User.findByIdAndUpdate(
-        { _id: receiver._id },
-        { $push: { receivedVideos: video } },
-        { new: true }
-      ).populate("receivedVideos");
+      // const user = await User.findByIdAndUpdate(
+      //   { _id: receiver._id },
+      //   { $push: { receivedVideos: video } },
+      //   { new: true }
+      // ).populate("receivedVideos");
 
-      const newVideo = await Video.findOne({ _id: video._id }).populate([
-        {
-          path: "sender",
-          model: "User",
-          populate: {
-            path: "pictures",
-            model: "Picture",
-          },
-        },
-        {
-          path: "receiver",
-          model: "User",
-          populate: {
-            path: "pictures",
-            model: "Picture",
-          },
-        },
-      ]);
+      // const newVideo = await Video.findOne({ _id: video._id }).populate([
+      //   {
+      //     path: "sender",
+      //     model: "User",
+      //     populate: {
+      //       path: "pictures",
+      //       model: "Picture",
+      //     },
+      //   },
+      //   {
+      //     path: "receiver",
+      //     model: "User",
+      //     populate: {
+      //       path: "pictures",
+      //       model: "Picture",
+      //     },
+      //   },
+      // ]);
 
-      publishCreateVideo(newVideo);
+      // publishCreateVideo(newVideo);
 
       const token = await createToken(user._id);
-      return { user: user, token };
+      return { user, token };
     } catch (err) {
       throw new AuthenticationError(err);
     }

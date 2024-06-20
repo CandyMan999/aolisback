@@ -3,7 +3,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { Box, Button } from "../..";
+import { Box, Button, Loading } from "../..";
 import { COLORS } from "../../../constants";
 
 import { DELETE_PHOTO_MUTATION } from "../../../graphql/mutations";

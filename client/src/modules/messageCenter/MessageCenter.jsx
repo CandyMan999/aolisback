@@ -43,6 +43,8 @@ const MessageCenter = () => {
       await handleDeleteVideos(fetchMe._id);
       await setReceivedVideos(fetchMe.receivedVideos);
 
+      console.log("fetch me inside messag center: ", fetchMe);
+
       await dispatch({ type: "LOGIN_USER", payload: fetchMe });
       setLoading(false);
     } catch (err) {
@@ -82,7 +84,7 @@ const MessageCenter = () => {
       const groups = {};
 
       for (const video of videos) {
-        const senderUsername = video.sender.username;
+        const senderUsername = video && video.sender && video.sender.username;
 
         if (groups[senderUsername]) {
           groups[senderUsername].push(video);
