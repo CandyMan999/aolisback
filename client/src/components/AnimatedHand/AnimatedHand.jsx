@@ -22,7 +22,7 @@ const AnimatedHand = ({ isPointingDown }) => {
     >
       <Icon
         style={{ bottom: 0 }}
-        name={isPointingDown ? "handPointDown" : "handpointRight"}
+        name={isPointingDown ? "handPointDown" : "handPointUp"}
         size={ICON_SIZES.XXX_LARGE}
         color={isPointingDown ? COLORS.white : COLORS.vividBlue}
       />

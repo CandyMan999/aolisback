@@ -27,21 +27,21 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
 
   return (
     <div className="rooms-list" onClick={() => handleTermsAgreement()}>
-      <Box display="flex" column width="100%" alignItems="center">
-        {(roomId || mobile) && (
+      <Box display="flex" row width="100%" alignItems="center">
+        {/* {(roomId || mobile) && (
           <Box
             width={"100%"}
             justifyContent="space-around"
             display="flex"
             alignItems="center"
+            position="fixed"
           >
             <Text
               bold
               margin={0}
               fontSize={mobile ? FONT_SIZES.LARGE : FONT_SIZES.XXX_LARGE}
               style={{
-                textShadow:
-                  "-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white",
+                textShadow: `-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white`,
               }}
             >
               Rooms
@@ -49,11 +49,11 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
             <Icon
               style={{ margin: 0 }}
               size={mobile ? ICON_SIZES.XX_LARGE : ICON_SIZES.XXX_LARGE}
-              color={COLORS.white}
+              color={COLORS.deepPurple}
               name="chat"
             />
           </Box>
-        )}
+        )} */}
         {!roomId && !mobile && (
           <Box alignItems="center">
             <JoinARoom isPointingDown={true} />
@@ -72,12 +72,13 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                 key={room._id}
                 display="flex"
                 dontScale={true}
-                color={active ? COLORS.black : COLORS.grey}
+                color={active ? COLORS.deepPurple : COLORS.lightPurple}
                 style={{
+                  border: `solid 1px ${COLORS.pink}`,
                   position: "relative",
                   overflowWrap: "break-word",
                   boxShadow: active
-                    ? `3px 3px 8px 2px white`
+                    ? `3px 3px 8px 2px ${COLORS.pink}`
                     : `3px 3px 8px 2px rgba(0, 0, 0, 0.3)`,
                   borderRadius: 10,
                 }}
@@ -100,8 +101,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                   </Box>
                 ) : (
                   <Text
-                    color={active ? COLORS.vividBlue : COLORS.lightGrey}
-                    textShadow={active && `-2px 1px 2px ${COLORS.main}`}
+                    color={active ? COLORS.white : COLORS.darkGrey}
                     className="userNumber"
                     fontSize={mobile ? undefined : FONT_SIZES.X_LARGE}
                     width={"100%"}
@@ -116,8 +116,10 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                   top={-11}
                   right={-7}
                   style={{ transition: "background-color 0.4s" }}
-                  border={`solid 1px ${COLORS.white}`}
-                  backgroundColor={active ? COLORS.vividBlue : COLORS.lightGrey}
+                  border={`solid 1px ${active ? COLORS.pink : COLORS.darkGrey}`}
+                  backgroundColor={
+                    active ? COLORS.lightPurple : COLORS.lightGrey
+                  }
                   borderRadius={"50%"}
                   minWidth={20}
                   minHeight={20}
@@ -127,7 +129,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                 >
                   <Text
                     margin={0}
-                    color={active ? COLORS.black : COLORS.grey}
+                    color={active ? COLORS.white : COLORS.darkGrey}
                     className="userNumber"
                     fontSize={mobile ? FONT_SIZES.SMALL : FONT_SIZES.X_LARGE}
                     width={"100%"}

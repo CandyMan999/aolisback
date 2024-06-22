@@ -59,7 +59,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, currentUser }) => {
     >
       <Box
         onClick={handleIsLoggedIn}
-        border={`solid 1px ${COLORS.white}`}
+        border={`solid 1px ${COLORS.pink}`}
         boxShadow={`1px 1px 1px 2px rgba(0, 0, 0, 0.2)`}
         style={{
           position: "absolute",
@@ -77,7 +77,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, currentUser }) => {
             onClick={handleTermsAgreement}
             name="pencil"
             size={ICON_SIZES.X_LARGE}
-            color={COLORS.white}
+            color={COLORS.pink}
           />
         </Box>
       </Box>
@@ -99,7 +99,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, currentUser }) => {
                 top={-12}
                 left={-12}
                 backgroundColor={COLORS.black}
-                border={`solid 1px ${COLORS.white}`}
+                border={`solid 1px ${COLORS.pink}`}
                 boxShadow={`1px 1px 1px 2px rgba(0, 0, 0, 0.2)`}
                 borderRadius={"50%"}
                 padding={3}
@@ -133,7 +133,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, currentUser }) => {
                     onClick={handleSubmit}
                     name="send"
                     size={ICON_SIZES.X_LARGE}
-                    color={COLORS.vividBlue}
+                    color={COLORS.pink}
                   />
                 </Box>
               )}

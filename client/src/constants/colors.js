@@ -33,4 +33,7 @@ export const COLORS = {
   pink: "#FF69B4",
   magenta: "#e90076",
   main: "#5ea3d0",
+  lightPurple: "#D8BFD8",
+  deepPurple: "#8A2BE2",
+  brown: "#7B3F00",
 };

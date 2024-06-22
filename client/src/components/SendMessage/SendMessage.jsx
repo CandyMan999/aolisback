@@ -40,12 +40,18 @@ class SendMessageForm extends Component {
         onClick={() => this.handleIsLoggedIn()}
         style={{ paddingBottom: "1%" }}
       >
-        <Box position="relative" width={"100%"} height={"100%"}>
+        <Box
+          position="relative"
+          width={"90%"}
+          height={"100%"}
+          display="flex"
+          alignItems="center"
+        >
           <Box
+            flex={1}
             style={{
-              gridArea: "f",
-              width: "-webkit-fill-available",
-              height: "-webkit-fill-available",
+              display: "flex",
+              alignItems: "center",
               borderRadius: "20px",
               marginLeft: "1%",
               boxShadow: `0px 1px 8px 4px ${
@@ -56,7 +62,14 @@ class SendMessageForm extends Component {
             <input
               disabled={this.props.disabled}
               onChange={this.handleChange}
-              style={{ border: "none" }}
+              style={{
+                border: "none",
+                flex: 1,
+                height: "100%",
+                padding: "10px",
+                borderRadius: "20px",
+                outline: "none",
+              }}
               value={this.state.message}
               placeholder="Type your message and hit ENTER"
               type="text"
@@ -67,21 +80,23 @@ class SendMessageForm extends Component {
             <Box
               position="absolute"
               right={5}
-              top={"10%"}
-              backgroundColor={this.state.message ? COLORS.green : undefined}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              padding="0 10px"
+              backgroundColor={
+                this.state.message ? COLORS.lightPurple : undefined
+              }
               borderRadius={10}
-              paddingTop={2}
-              paddingRight={2}
-              paddingBottom={4}
-              paddingLeft={4}
               style={{
-                transition: "background-color 0.4s", // Add the transition property
+                transition: "background-color 0.4s",
+                cursor: "pointer",
               }}
               onClick={this.handleSubmit}
             >
               <Icon
                 name="send"
-                color={this.state.message ? COLORS.white : undefined}
+                color={this.state.message ? COLORS.pink : undefined}
               />
             </Box>
           )}

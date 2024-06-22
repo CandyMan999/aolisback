@@ -35,6 +35,8 @@ const SingleTime = ({
         singleTime: profile.singleTime,
       };
 
+      console.log("variables: ", variables);
+
       const { createProfile } = await client.request(
         CREATE_PROFILE_MUTATION,
         variables

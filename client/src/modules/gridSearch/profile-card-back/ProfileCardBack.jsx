@@ -96,7 +96,7 @@ const ProfileCardBack = ({
         boxShadow: `0px 0px 5px 1px ${COLORS.lightGrey}`,
         border:
           activeID === user._id
-            ? `3px solid ${COLORS.yellow}`
+            ? `3px solid ${COLORS.pink}`
             : `1px solid ${COLORS.grey}`,
       }}
       onClick={() => onClick(user._id)}

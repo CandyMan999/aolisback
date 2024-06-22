@@ -84,7 +84,7 @@ const MessageCenter = () => {
       const groups = {};
 
       for (const video of videos) {
-        const senderUsername = video && video.sender && video.sender.username;
+        const senderUsername = video.sender.username;
 
         if (groups[senderUsername]) {
           groups[senderUsername].push(video);

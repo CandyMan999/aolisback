@@ -32,14 +32,17 @@
 .wrapper {
   grid-area: c;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 60px;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 60px;
   grid-template-areas:
-    "m m m m m r r"
-    "m m m m m r r"
-    "m m m m m r r"
-    "m m m m m r r"
-    "m m m m m r r"
+    "r r r r r r r"
+    "m m m m m m m"
+    "m m m m m m m"
+    "m m m m m m m"
+    "m m m m m m m"
+    "m m m m m m m"
+    "m m m m m m m"
+    "m m m m m m m"
     "f f f f f n n";
 }
 
@@ -52,7 +55,8 @@
   grid-area: r;
   box-sizing: border-box;
   padding: 10px;
-  background: linear-gradient(to right, white ,var(--main-color) 80%);
+  
+  /* background: linear-gradient(to right, white ,var(--main-color) 80%); */
   overflow: scroll;
   height: 100%;
   scrollbar-width: none; /* For Firefox */
@@ -110,13 +114,15 @@
 .send-message-form input:focus {
   outline: none; /* Remove the default focus outline */
   border: none; /* Remove the border */
+
   /* Additional styling if desired */
 }
 
 .new-room-form {
-  background: linear-gradient(to right, white ,var(--main-color) 80%);
+  /* background: linear-gradient(to right, white ,var(--main-color) 80%); */
   color: var(--main-text-color);
   height: 100%;
+
 }
 
 .new-room-form form {
