@@ -35,6 +35,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
+  phoneNumber: {
+    type: String,
+    unique: true,
+  },
   isLoggedIn: {
     type: Boolean,
     default: false,

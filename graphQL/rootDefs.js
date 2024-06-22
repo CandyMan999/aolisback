@@ -31,6 +31,7 @@ module.exports = gql`
     lookingFor: LookingFor
     expoToken: String
     terms: Boolean
+    phoneNumber: String
   }
 
   type Video {
@@ -227,6 +228,7 @@ module.exports = gql`
     getExpoToken(token: String!, userId: ID!): User
     deleteAccount: Account
     termsAgreement(accept: Boolean!): User
+    addPhone(_id: ID!, phoneNumber: String!): User
   }
 
   type Subscription {
