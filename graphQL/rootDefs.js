@@ -32,6 +32,7 @@ module.exports = gql`
     expoToken: String
     terms: Boolean
     phoneNumber: String
+    isBanned: Boolean
   }
 
   type Video {
