@@ -7,7 +7,7 @@ module.exports = {
     try {
       // Check if the phone number is already in use
       const existingUser = await User.findOne({ phoneNumber });
-      if (existingUser._id !== _id) {
+      if (existingUser && existingUser._id !== _id) {
         throw new UserInputError("This phone number is already in use.");
       }
 
