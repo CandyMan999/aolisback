@@ -44,7 +44,7 @@ const RoomList = ({
         height: "100%",
       }}
       animate={{
-        width: showRoomList ? "100vW" : "50%",
+        width: showRoomList ? "100vW" : "25%",
         zIndex: showRoomList && roomId ? 5000 : undefined,
         postion: showRoomList ? "fixed" : undefined,
       }}
