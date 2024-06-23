@@ -24,13 +24,11 @@ const RoomList = ({
 }) => {
   const { state, dispatch } = useContext(Context);
   const mobile = useMediaQuery("(max-width: 950px)");
-  const [touched, setTouched] = useState(false);
 
   const handleTermsAgreement = () => {
     if (currentUser.username && !currentUser.terms) {
       dispatch({ type: "SHOW_TERMS", payload: true });
     }
-    // setTouched(!touched);
   };
 
   return (
@@ -38,13 +36,21 @@ const RoomList = ({
       onClick={() => handleTermsAgreement()}
       style={{
         marginRight: 15,
-
         flexDirection: "column",
         alignItems: "center",
         height: "100%",
+        overflowY: "scroll",
+        scrollbarWidth: "none", // For Firefox
+        msOverflowStyle: "none",
       }}
+      css={`
+        &::-webkit-scrollbar {
+          width: 0;
+          height: 0;
+        }
+      `}
       animate={{
-        width: showRoomList ? "100vW" : "25%",
+        width: showRoomList ? "100vW" : "50%",
         zIndex: showRoomList && roomId ? 5000 : undefined,
         postion: showRoomList ? "fixed" : undefined,
       }}
