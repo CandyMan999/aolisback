@@ -43,8 +43,6 @@ const MessageCenter = () => {
       await handleDeleteVideos(fetchMe._id);
       await setReceivedVideos(fetchMe.receivedVideos);
 
-      console.log("fetch me inside messag center: ", fetchMe);
-
       await dispatch({ type: "LOGIN_USER", payload: fetchMe });
       setLoading(false);
     } catch (err) {

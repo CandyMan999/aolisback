@@ -14,7 +14,9 @@ module.exports = {
       // Check if the user is banned
       const userCheck = await User.findById(_id);
       if (userCheck.isBanned) {
-        throw new AuthenticationError("This user is banned.");
+        throw new AuthenticationError(
+          `${userCheck.username}, has been banned for being a creepy fuck!`
+        );
       }
 
       const user = await User.findByIdAndUpdate(

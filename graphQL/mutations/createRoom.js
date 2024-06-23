@@ -122,7 +122,7 @@ module.exports = {
         publishCreateComment(newCommentAI);
       }
 
-      const getAllRooms = await Room.find().populate("users");
+      const getAllRooms = await Room.find({}).populate("users");
 
       publishRoomCreatedOrUpdated(getAllRooms);
       return currentRoom;

@@ -106,6 +106,9 @@ const ChatBox = () => {
       );
       if (!!changeRoom) {
         await dispatch({ type: "CHANGE_ROOM", payload: changeRoom._id });
+        setTimeout(() => {
+          dispatch({ type: "CREATE_ROOM", payload: false });
+        }, 1000);
       }
       setLoading(false);
     } catch (err) {
@@ -163,21 +166,17 @@ const ChatBox = () => {
 
   return (
     <Wrapper style={{ width: "100vw" }}>
-      <RoomList
-        roomId={state.roomId}
-        subscribeToRoom={subscribeToRoom}
-        rooms={rooms}
-        currentUser={currentUser}
-        loading={loading}
-        mobile={mobile}
-      />
       <MessageList
         usernameClick={usernameClick}
         roomId={state.roomId}
         messages={messages}
-        currentUser={!!currentUser && currentUser._id}
+        currentUserID={!!currentUser && currentUser._id}
         loading={loading}
         mobile={roomMobile}
+        rooms={rooms}
+        subscribeToRoom={subscribeToRoom}
+        currentUser={currentUser}
+        showRoomList={state.showRoomList}
       />
 
       <CreateRoom
@@ -185,6 +184,7 @@ const ChatBox = () => {
         currentUserID={!!currentUser && currentUser._id}
         dispatch={dispatch}
         currentUser={currentUser}
+        state={state}
       />
 
       <SendMessage
@@ -192,6 +192,7 @@ const ChatBox = () => {
         sendMessage={sendMessage}
         dispatch={dispatch}
         currentUserID={!!currentUser && currentUser._id}
+        showRoomList={state.showRoomList}
       />
 
       <Subscription
@@ -207,7 +208,7 @@ const ChatBox = () => {
         subscription={CREATE_COMMENT_SUBSCRIPTION}
         onSubscriptionData={({ subscriptionData }) => {
           const { createComment } = subscriptionData.data;
-          console.log("comment subscription firing: ", createComment);
+
           setMessages([...messages, createComment]);
         }}
       />

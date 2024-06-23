@@ -103,6 +103,11 @@ export default function reducer(state, { type, payload }) {
           lng: payload.lng,
         },
       };
+    case "CREATE_ROOM":
+      return {
+        ...state,
+        showRoomList: payload,
+      };
 
     default:
       return state;

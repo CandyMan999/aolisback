@@ -2,10 +2,19 @@ import React, { useState } from "react";
 import { Box, Icon, ICON_SIZES } from "../../components";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-const CreateRoom = ({ currentUserID, createRoom, dispatch, currentUser }) => {
+const CreateRoom = ({
+  currentUserID,
+  createRoom,
+  dispatch,
+  currentUser,
+  state,
+}) => {
   const [roomName, setRoomName] = useState("");
   const [touched, setTouched] = useState(false);
+  const mobile = useMediaQuery("(max-width: 950px)");
+  const { showRoomList, roomId } = state;
 
   const handleChange = (e) => {
     setRoomName(e.target.value);
@@ -19,24 +28,34 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, currentUser }) => {
     };
     createRoom(variables);
     setRoomName("");
-    setTouched(false);
+    // setTouched(false);
+    dispatch({ type: "CREATE_ROOM", payload: false });
   };
 
   const handleIsLoggedIn = () => {
     if (!currentUserID) {
       dispatch({ type: "TOGGLE_SIGNUP", payload: true });
     } else {
-      setTouched(!touched);
+      // dispatch({ type: "CREATE_ROOM", payload: !showRoomList });
     }
   };
 
-  const handleTermsAgreement = () => {
-    if (currentUser.username && !currentUser.terms) {
-      dispatch({ type: "SHOW_TERMS", payload: true });
-    } else {
-      setTouched(false);
-    }
+  const handleCreateRoom = () => {
+    dispatch({ type: "CREATE_ROOM", payload: true });
   };
+
+  const handleClose = () => {
+    dispatch({ type: "CREATE_ROOM", payload: false });
+  };
+
+  // const handleTermsAgreement = () => {
+  //   if (currentUser.username && !currentUser.terms) {
+  //     dispatch({ type: "SHOW_TERMS", payload: true });
+  //   } else {
+  //     setTouched(false);
+  //     dispatch({ type: "CREATE_ROOM", payload: true });
+  //   }
+  // };
 
   const inputContainerVariants = {
     hidden: {
@@ -52,38 +71,41 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, currentUser }) => {
 
   return (
     <motion.div
-      onClick={!touched ? handleIsLoggedIn : undefined}
+      onClick={handleIsLoggedIn}
       className="new-room-form"
-      animate={{ width: touched ? "50vW" : "100%" }}
+      style={{ backgroundColor: "white" }}
+      animate={{
+        width: showRoomList ? "100vW" : "100%",
+        zIndex: showRoomList ? 5000 : undefined,
+      }}
       transition={{ ease: "linear", duration: 0.5 }}
     >
       <Box
-        onClick={handleIsLoggedIn}
         border={`solid 1px ${COLORS.pink}`}
         boxShadow={`1px 1px 1px 2px rgba(0, 0, 0, 0.2)`}
         style={{
           position: "absolute",
-          bottom: "20px",
-          right: "20px",
+          bottom: "10px",
+          right: "10px",
           borderRadius: "50%",
           backgroundColor: COLORS.black,
-          height: "55px",
-          width: "55px",
-          display: touched ? "none" : undefined,
+          height: "50px",
+          width: "50px",
+          display: showRoomList ? "none" : undefined,
         }}
       >
         <Box display="flex" width="100%" justifyContent="center">
           <Icon
-            onClick={handleTermsAgreement}
-            name="pencil"
-            size={ICON_SIZES.X_LARGE}
+            onClick={handleCreateRoom}
+            name={roomId ? "chat" : "plus"}
+            size={roomId ? ICON_SIZES.XXX_LARGE : ICON_SIZES.LARGE}
             color={COLORS.pink}
           />
         </Box>
       </Box>
       <motion.div
         initial="hidden"
-        animate={touched ? "visible" : "none"}
+        animate={showRoomList ? "visible" : "none"}
         variants={inputContainerVariants}
         style={{
           position: "absolute",
@@ -91,9 +113,14 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, currentUser }) => {
           right: "5%",
         }}
       >
-        {touched && (
+        {showRoomList && (
           <form onSubmit={handleSubmit}>
-            <Box position="absolute" bottom={-20} width="100%">
+            <Box
+              position="absolute"
+              bottom={-20}
+              right={0}
+              width={mobile ? "90vW" : "50%"}
+            >
               <Box
                 position="absolute"
                 top={-12}
@@ -105,7 +132,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, currentUser }) => {
                 padding={3}
               >
                 <Icon
-                  onClick={handleIsLoggedIn}
+                  onClick={handleClose}
                   name="close"
                   size={ICON_SIZES.MEDIUM}
                   color={COLORS.white}

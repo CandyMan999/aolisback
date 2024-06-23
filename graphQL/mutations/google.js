@@ -130,6 +130,12 @@ module.exports = {
         .populate("pictures")
         .populate("comments");
 
+      if (user.isBanned) {
+        throw new AuthenticationError(
+          `${user.username}, has been banned for being a creepy fuck!`
+        );
+      }
+
       const token = await createToken(user._id);
 
       return !!user
@@ -153,6 +159,12 @@ module.exports = {
       )
         .populate("pictures")
         .populate("comments");
+
+      if (user.isBanned) {
+        throw new AuthenticationError(
+          `${user.username}, has been banned for being a creepy fuck!`
+        );
+      }
 
       const token = await createToken(user._id);
 
@@ -194,39 +206,39 @@ module.exports = {
 
     const newPhoto = await Picture.create({ url: picture, user: user._id });
 
-    const video = await Video.create({
-      url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
-      publicId: "wy3ybqezw97wiqtst5nm",
-      sender: "64a5ed088d53300014ccf08a",
-      receiver: user._id,
-    });
+    // const video = await Video.create({
+    //   url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
+    //   publicId: "wy3ybqezw97wiqtst5nm",
+    //   sender: "64a5ed088d53300014ccf08a",
+    //   receiver: user._id,
+    // });
 
-    await User.findByIdAndUpdate(
-      { _id: user._id },
-      { $push: { receivedVideos: video } },
-      { new: true }
-    ).populate("receivedVideos");
+    // await User.findByIdAndUpdate(
+    //   { _id: user._id },
+    //   { $push: { receivedVideos: video } },
+    //   { new: true }
+    // ).populate("receivedVideos");
 
-    const newVideo = await Video.findOne({ _id: video._id }).populate([
-      {
-        path: "sender",
-        model: "User",
-        populate: {
-          path: "pictures",
-          model: "Picture",
-        },
-      },
-      {
-        path: "receiver",
-        model: "User",
-        populate: {
-          path: "pictures",
-          model: "Picture",
-        },
-      },
-    ]);
+    // const newVideo = await Video.findOne({ _id: video._id }).populate([
+    //   {
+    //     path: "sender",
+    //     model: "User",
+    //     populate: {
+    //       path: "pictures",
+    //       model: "Picture",
+    //     },
+    //   },
+    //   {
+    //     path: "receiver",
+    //     model: "User",
+    //     populate: {
+    //       path: "pictures",
+    //       model: "Picture",
+    //     },
+    //   },
+    // ]);
 
-    publishCreateVideo(newVideo);
+    // publishCreateVideo(newVideo);
 
     const currentUser = await User.findByIdAndUpdate(
       {

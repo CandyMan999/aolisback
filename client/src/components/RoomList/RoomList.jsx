@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-
+import React, { useContext, useState } from "react";
 import {
   Box,
   Text,
@@ -11,30 +10,58 @@ import {
   JoinARoom,
 } from "../../components";
 import { COLORS } from "../../constants";
+import { motion } from "framer-motion";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-
 import Context from "../../context";
 
-const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
+const RoomList = ({
+  rooms,
+  roomId,
+  currentUser,
+  subscribeToRoom,
+  loading,
+  showRoomList,
+}) => {
   const { state, dispatch } = useContext(Context);
   const mobile = useMediaQuery("(max-width: 950px)");
+  const [touched, setTouched] = useState(false);
 
   const handleTermsAgreement = () => {
     if (currentUser.username && !currentUser.terms) {
       dispatch({ type: "SHOW_TERMS", payload: true });
     }
+    // setTouched(!touched);
   };
 
   return (
-    <div className="rooms-list" onClick={() => handleTermsAgreement()}>
-      <Box display="flex" row width="100%" alignItems="center">
-        {/* {(roomId || mobile) && (
+    <motion.div
+      onClick={() => handleTermsAgreement()}
+      style={{
+        marginRight: 15,
+
+        flexDirection: "column",
+        alignItems: "center",
+        height: "100%",
+      }}
+      animate={{
+        width: showRoomList ? "100vW" : "50%",
+        zIndex: showRoomList && roomId ? 5000 : undefined,
+        postion: showRoomList ? "fixed" : undefined,
+      }}
+      transition={{ ease: "linear", duration: 0.5 }}
+    >
+      <Box
+        display="flex"
+        column
+        // width={showRoomList ? "100vW" : "100%"}
+        alignItems="center"
+      >
+        {(roomId || mobile) && !showRoomList && (
           <Box
             width={"100%"}
             justifyContent="space-around"
             display="flex"
             alignItems="center"
-            position="fixed"
           >
             <Text
               bold
@@ -49,16 +76,17 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
             <Icon
               style={{ margin: 0 }}
               size={mobile ? ICON_SIZES.XX_LARGE : ICON_SIZES.XXX_LARGE}
-              color={COLORS.deepPurple}
+              color={COLORS.pink}
               name="chat"
             />
           </Box>
-        )} */}
-        {!roomId && !mobile && (
-          <Box alignItems="center">
-            <JoinARoom isPointingDown={true} />
-          </Box>
         )}
+        {(!roomId && !mobile) ||
+          (showRoomList && (
+            <Box alignItems="center">
+              <JoinARoom isPointingDown={true} />
+            </Box>
+          ))}
 
         {rooms &&
           rooms.map((room) => {
@@ -85,7 +113,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
                 justifyContent="center"
                 isDisabled={loading}
                 height={80}
-                width={"100%"}
+                width={"90%"}
                 onClick={
                   !loading
                     ? () =>
@@ -142,7 +170,7 @@ const RoomList = ({ rooms, roomId, currentUser, subscribeToRoom, loading }) => {
             );
           })}
       </Box>
-    </div>
+    </motion.div>
   );
 };
 

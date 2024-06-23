@@ -20,6 +20,11 @@ module.exports = {
       if (!user) {
         return new AuthenticationError("Username Doesn't Exsist");
       }
+      if (user.isBanned) {
+        throw new AuthenticationError(
+          `${user.username}, has been banned for being a creepy fuck!`
+        );
+      }
       if (user.appleId) {
         throw new AuthenticationError("Sign in with Apple for this account");
       }
@@ -55,6 +60,12 @@ module.exports = {
       )
         .populate("pictures")
         .populate("comments");
+
+      if (user.isBanned) {
+        throw new AuthenticationError(
+          `${user.username}, has been banned for being a creepy fuck!`
+        );
+      }
 
       const token = await createToken(user._id);
 

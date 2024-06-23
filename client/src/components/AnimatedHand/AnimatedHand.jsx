@@ -11,6 +11,7 @@ const AnimatedHand = ({ isPointingDown }) => {
         rotate: [0, 0, 720, 720, 0],
         zIndex: [0, 0, 2000, 2000, 0],
       }}
+      style={{ zIndex: 6000 }}
       transition={{
         duration: 1,
 
@@ -22,9 +23,9 @@ const AnimatedHand = ({ isPointingDown }) => {
     >
       <Icon
         style={{ bottom: 0 }}
-        name={isPointingDown ? "handPointDown" : "handPointUp"}
+        name={isPointingDown ? "handPointDown" : "handpointRight"}
         size={ICON_SIZES.XXX_LARGE}
-        color={isPointingDown ? COLORS.white : COLORS.vividBlue}
+        color={COLORS.vividBlue}
       />
     </motion.div>
   );

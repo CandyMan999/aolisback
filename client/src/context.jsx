@@ -12,6 +12,7 @@ const Context = createContext({
   showLogin: false,
   showSignup: false,
   showVideo: false,
+  showRoomList: false,
   showChatRequest: false,
   userChannel: null,
   userLocation: {
