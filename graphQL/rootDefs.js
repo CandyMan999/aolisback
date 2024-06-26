@@ -33,6 +33,7 @@ module.exports = gql`
     terms: Boolean
     phoneNumber: String
     isBanned: Boolean
+    profileComplete: Boolean
   }
 
   type Video {

@@ -116,7 +116,11 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
   ) : (
     <Box height={"calc(100vH - 60px)"} width="100%" maxHeight={1066}>
       <Box
-        style={{ margin: "20px", textAlign: "center" }}
+        style={{
+          margin: "20px",
+          textAlign: "center",
+          borderColor: `solid 1px ${COLORS.pink}`,
+        }}
         width="100%"
         height={"60vH"}
         justifyContent="space-around"

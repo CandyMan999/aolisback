@@ -163,6 +163,10 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "ChatRequest",
   },
+  profileComplete: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 UserSchema.index({ location: "2dsphere" }); // Create the geospatial index on the 'location' field

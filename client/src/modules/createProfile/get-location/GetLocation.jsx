@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   CollapsableHeader,
   Box,
@@ -11,7 +11,6 @@ import {
 } from "../../../components";
 import { COLORS } from "../../../constants";
 import { useLocation } from "react-router-dom";
-
 import { UPDATE_LOCATION_MUTATION } from "../../../graphql/mutations";
 
 const GetLocation = ({
@@ -29,7 +28,7 @@ const GetLocation = ({
   const [locationSuccess, setLocationSuccess] = useState(false);
 
   useEffect(() => {
-    if (userCoords.lat) {
+    if (userCoords.lat !== null && userCoords.lng !== null) {
       handleGetLocation();
       dispatch({
         type: "VIEW_LOCATION",
@@ -40,21 +39,31 @@ const GetLocation = ({
         },
       });
     }
-  }, [userCoords.lat]);
+  }, [userCoords, dispatch, currentUser._id]);
 
   useEffect(() => {
     if (currentUser.username) {
       setLocationSuccess(!noLocation(currentUser.location.coordinates));
     }
-  }, [currentUser.username]);
+  }, [currentUser.location.coordinates, currentUser.username]);
 
-  const handleGetLocation = async () => {
+  const handleGetLocation = useCallback(async () => {
     try {
       setSpinner(true);
       setSubmitted(false);
+
+      let latitude =
+        userCoords.lat !== null ? userCoords.lat : currentUser.location.lat;
+      let longitude =
+        userCoords.lng !== null ? userCoords.lng : currentUser.location.lng;
+
+      const offset = 0.02;
+      latitude += (Math.random() * 2 - 1) * offset;
+      longitude += (Math.random() * 2 - 1) * offset;
+
       const variables = {
-        latitude: userCoords.lat ? userCoords.lat : currentUser.location.lat,
-        longitude: userCoords.lng ? userCoords.lng : currentUser.location.lng,
+        latitude,
+        longitude,
         _id: currentUser._id,
       };
 
@@ -69,31 +78,25 @@ const GetLocation = ({
           payload: updateLocation.coordinates,
         });
 
-        setSpinner(false);
-
         setLocationSuccess(true);
-      }
-      if (!updateLocation) {
+      } else {
         setLocationSuccess(false);
-        setSpinner(false);
       }
+      setSpinner(false);
     } catch (err) {
       setSpinner(false);
       console.log(err);
     }
-  };
+  }, [userCoords, currentUser._id, client, dispatch]);
 
-  const noLocation = (array) => {
-    if (
+  const noLocation = useCallback((array) => {
+    return (
       Array.isArray(array) &&
       array.length === 2 &&
       array[0] === 0 &&
       array[1] === 0
-    ) {
-      return true;
-    }
-    return false;
-  };
+    );
+  }, []);
 
   const handleLocation = () => {
     try {
@@ -113,7 +116,6 @@ const GetLocation = ({
   return (
     <CollapsableHeader
       title={"Get Location"}
-      // onClose={submitted}
       total={total}
       completed={completed}
     >

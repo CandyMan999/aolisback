@@ -71,7 +71,7 @@ module.exports = {
       if (authCode && Number(authCode) === Number(TWO_FACTOR[_id])) {
         user = await User.findByIdAndUpdate(
           { _id },
-          { phoneNumber },
+          { phoneNumber, profileComplete: true },
           { new: true }
         ).populate("pictures");
       }
