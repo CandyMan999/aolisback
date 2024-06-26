@@ -274,12 +274,8 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             paddingRight="5%"
           >
             <Box>
+              <Icon name="job" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
               <Text bold>Occupation: </Text>
-              <Icon
-                name="job"
-                color={COLORS.black}
-                size={ICON_SIZES.XX_LARGE}
-              />
             </Box>
 
             {occupation && <Text>{occupation}</Text>}
@@ -297,12 +293,12 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             paddingRight="5%"
           >
             <Box>
-              <Text bold>Drink: </Text>
               <Icon
                 name="beer"
-                color={COLORS.black}
+                color={COLORS.pink}
                 size={ICON_SIZES.XX_LARGE}
               />
+              <Text bold>Drink: </Text>
             </Box>
 
             {drink && <Text>{drink}</Text>}
@@ -320,12 +316,12 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             paddingRight="5%"
           >
             <Box>
-              <Text bold>Smoke: </Text>
               <Icon
                 name="smoke"
-                color={COLORS.textRed}
+                color={COLORS.pink}
                 size={ICON_SIZES.XX_LARGE}
               />
+              <Text bold>Smoke: </Text>
             </Box>
 
             {smoke && <Text>{smoke}</Text>}
@@ -343,12 +339,8 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             paddingRight="5%"
           >
             <Box>
-              <Text bold>Marijuana: </Text>
-              <Icon
-                name="weed"
-                color={COLORS.green}
-                size={ICON_SIZES.X_LARGE}
-              />
+              <Icon name="weed" color={COLORS.pink} size={ICON_SIZES.X_LARGE} />
+              <Text bold>Marijuana Tolerance: </Text>
             </Box>
 
             {marijuana && <Text>{marijuana}</Text>}
@@ -366,12 +358,12 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             paddingRight="5%"
           >
             <Box>
-              <Text bold>Drugs: </Text>
               <Icon
                 name="drugs"
-                color={COLORS.green}
+                color={COLORS.pink}
                 size={ICON_SIZES.XX_LARGE}
               />
+              <Text bold>Drug Use: </Text>
             </Box>
 
             {drugs && <Text>{drugs}</Text>}
@@ -392,12 +384,8 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             paddingRight="5%"
           >
             <Box>
+              <Icon name="kid" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
               <Text bold>Kids: </Text>
-              <Icon
-                name="kid"
-                color={COLORS.black}
-                size={ICON_SIZES.XX_LARGE}
-              />
             </Box>
 
             {kids && <Text>{kids}</Text>}
@@ -416,12 +404,12 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               paddingRight="5%"
             >
               <Box>
-                <Text bold>Looking For: </Text>
                 <Icon
                   name="curious"
-                  color={COLORS.black}
+                  color={COLORS.pink}
                   size={ICON_SIZES.XX_LARGE}
                 />
+                <Text bold>Looking For: </Text>
               </Box>
 
               <Text>
@@ -438,7 +426,11 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
           <Box justifyContent="center" width={"100%"} minHeight={60}>
             <Button
-              style={{ margin: 0 }}
+              style={{
+                margin: 0,
+                border: `solid 2px ${COLORS.pink}`,
+                borderRadius: 20,
+              }}
               onClick={
                 userBlocked
                   ? handleUnBlock
@@ -457,7 +449,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               color={
                 (imBlocked && !userBlocked) || state.showChatRequest || itsMe
                   ? COLORS.lightGrey
-                  : COLORS.red
+                  : COLORS.deepPurple
               }
               width="100%"
             >
@@ -478,9 +470,14 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               )}
             </Button>
             <Button
-              style={{ margin: 0 }}
+              style={{
+                margin: 0,
+                border: `solid 2px ${COLORS.pink}`,
+                borderRadius: 20,
+              }}
               disabled={location && noLocation(location.coordinates)}
               onClick={() => handleLocation(_id, location)}
+              coolStyle
               color={
                 location && noLocation(location.coordinates)
                   ? COLORS.lightGrey

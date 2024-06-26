@@ -241,11 +241,17 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
                 bottom={0}
                 left={-10}
                 zIndex={900}
+                style={{ color: COLORS.deepPurple }}
               >
                 <Button
                   coolStyle
                   width={"100%"}
-                  style={{ minHeight: 60 }}
+                  style={{
+                    minHeight: 60,
+                    borderRadius: 20,
+                    backgroundColor: COLORS.deepPurple,
+                    border: `solid 1px ${COLORS.pink}`,
+                  }}
                   onClick={handleMapMove}
                 >
                   {mapLoading ? <Loading bar /> : <Text bold>UPDATE MAP</Text>}
@@ -274,8 +280,8 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
                     size={ICON_SIZES.X_LARGE}
                     color={
                       state.currentUser._id === user._id
-                        ? COLORS.vividBlue
-                        : COLORS.red
+                        ? COLORS.pink
+                        : COLORS.deepPurple
                     }
                   />
                 </Marker>

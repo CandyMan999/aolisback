@@ -27,15 +27,14 @@ module.exports = {
       // Check if the phone number is already in use
       const existingUser = await User.findOne({ phoneNumber });
       if (existingUser && existingUser._id !== _id) {
-        throw new UserInputError("This phone number is already in use.");
-      }
-
-      // Check if the user is banned
-      const userCheck = await User.findById(_id);
-      if (userCheck.isBanned) {
-        throw new AuthenticationError(
-          `${userCheck.username}, has been banned for being a creepy Fuck!`
-        );
+        //check if associated phone number is banned
+        if (existingUser.isBanned) {
+          throw new AuthenticationError(
+            "A user accosiated with the number has been BANNED!"
+          );
+        }
+        // check if phone number is in use
+        throw new AuthenticationError("This phone number is already in use.");
       }
 
       // Generate a new auth code if not provided

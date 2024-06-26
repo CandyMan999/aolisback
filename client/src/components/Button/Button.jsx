@@ -34,7 +34,9 @@ const StyledButton = styled(motion.button)(
     width: width || "86px",
     cursor: disabled ? "not-allowed" : "pointer",
     color: !minimal ? COLORS.white : undefined,
-    boxShadow: coolStyle ? `2px 2px 4px 2px rgba(0, 0, 0, 0.3)` : undefined,
+    boxShadow: coolStyle
+      ? `2px 2px 4px 2px ${COLORS.pink}`
+      : `2px 2px 4px 2px ${COLORS.vividBlue}`,
     transition: "color 0.4s, background-color 0.4s",
 
     backgroundColor: color
