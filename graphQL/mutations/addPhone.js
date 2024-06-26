@@ -50,7 +50,7 @@ module.exports = {
             to: phoneNumber,
           });
 
-          console.log("success: ", message);
+          console.log("verification code: ", twoFactor);
         } catch (err) {
           console.log("err sending text: ", err);
         }
