@@ -11,6 +11,7 @@ module.exports = {
         status,
         sender: senderID,
         receiver: receiverID,
+        connection: "OfferSent",
       });
 
       const sender = await User.findByIdAndUpdate(

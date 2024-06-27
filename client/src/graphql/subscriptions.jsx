@@ -96,6 +96,7 @@ export const VIDEO_CHAT_REQUEST = gql`
       _id
       createdAt
       status
+      connection
       receiver {
         _id
         username
@@ -105,27 +106,6 @@ export const VIDEO_CHAT_REQUEST = gql`
         _id
         username
         phoneNumber
-        sex
-        age
-        blockedUsers {
-          _id
-        }
-        pictures {
-          url
-          publicId
-          _id
-        }
-        singleTime
-        kids
-        intro
-        occupation
-        drink
-        smoke
-        marijuana
-        drugs
-        location {
-          coordinates
-        }
       }
     }
   }

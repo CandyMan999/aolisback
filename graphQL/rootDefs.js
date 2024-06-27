@@ -119,7 +119,7 @@ module.exports = gql`
     status: Status
     sender: User
     receiver: User
-    connetion: Connection
+    connection: Connection
   }
 
   enum Status {
