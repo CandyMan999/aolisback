@@ -106,6 +106,11 @@ export const VIDEO_CHAT_REQUEST = gql`
         _id
         username
         phoneNumber
+        pictures {
+          _id
+          url
+          publicId
+        }
       }
     }
   }

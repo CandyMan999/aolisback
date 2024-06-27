@@ -364,6 +364,11 @@ export const VIDEO_CHAT_REQUEST = gql`
         _id
         phoneNumber
         username
+        pictures {
+          _id
+          url
+          publicId
+        }
       }
       receiver {
         _id
@@ -389,6 +394,11 @@ export const UPDATE_VIDEO_CHAT_REQUEST = gql`
         _id
         phoneNumber
         username
+        pictures {
+          _id
+          url
+          publicId
+        }
       }
       receiver {
         _id

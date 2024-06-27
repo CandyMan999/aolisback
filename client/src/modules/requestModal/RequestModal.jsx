@@ -42,7 +42,7 @@ const RequestModal = ({
     if (currentUser._id !== sender._id && status === "Pending") {
       playSound();
     }
-    handleUpdateAppUsername(receiver.username, receiver.phoneNumber, faceTime);
+    // handleUpdateAppUsername(receiver.username, receiver.phoneNumber, faceTime);
   }, [status]);
 
   const playSound = () => {
@@ -69,11 +69,11 @@ const RequestModal = ({
       case "Accept":
         toggleChatRequest();
         dispatch({ type: "JOIN_CHANNEL", payload: receiver.username });
-        history.push(
-          `/video?username=${receiver.username}&phone=${
-            receiver.phoneNumber
-          }&device=${faceTime ? "iOS" : "Android"}`
-        );
+        // history.push(
+        //   `/video?username=${receiver.username}&phone=${
+        //     receiver.phoneNumber
+        //   }&device=${faceTime ? "iOS" : "Android"}`
+        // );
         break;
       case "Decline":
         setTimeout(() => {
