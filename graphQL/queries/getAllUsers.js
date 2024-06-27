@@ -24,6 +24,7 @@ module.exports = {
           $lte: ageRange.highEnd,
         },
         kids: kids === "" ? { $exists: true } : kids,
+        isBanned: false,
         $or: [
           { sex: sex },
           { sex: !sex || sex === "Gender_Diverse" ? { $exists: true } : null },

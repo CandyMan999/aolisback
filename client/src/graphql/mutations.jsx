@@ -361,9 +361,11 @@ export const VIDEO_CHAT_REQUEST = gql`
       createdAt
       sender {
         _id
+        phoneNumber
       }
       receiver {
         _id
+        phoneNumber
       }
     }
   }
@@ -381,9 +383,11 @@ export const UPDATE_VIDEO_CHAT_REQUEST = gql`
       createdAt
       sender {
         _id
+        phoneNumber
       }
       receiver {
         _id
+        phoneNumber
       }
     }
   }

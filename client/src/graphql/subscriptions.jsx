@@ -99,10 +99,12 @@ export const VIDEO_CHAT_REQUEST = gql`
       receiver {
         _id
         username
+        phoneNumber
       }
       sender {
         _id
         username
+        phoneNumber
         sex
         age
         blockedUsers {

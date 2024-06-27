@@ -16,6 +16,7 @@ module.exports = {
             $maxDistance: 12500 * 1609.34, // Convert miles to meters (1 mile = 1609.34 meters), we will use half of the distance of the largest possible circumfrence of the earth 12500 to return all users until we need a smaller API call
           },
         },
+        isBanned: false,
       })
         .limit(200)
         .populate([

@@ -52,6 +52,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     _id,
     isLoggedIn,
     lookingFor,
+    phoneNumber,
   } = user;
 
   useEffect(() => {
@@ -110,6 +111,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
         VIDEO_CHAT_REQUEST,
         variables
       );
+
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
       dispatch({ type: "TOGGLE_CHAT", payload: true });
       setLoading(false);
@@ -429,7 +431,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               style={{
                 margin: 0,
                 border: `solid 2px ${COLORS.pink}`,
-                borderRadius: 20,
+                borderRadius: 10,
               }}
               onClick={
                 userBlocked
@@ -473,7 +475,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               style={{
                 margin: 0,
                 border: `solid 2px ${COLORS.pink}`,
-                borderRadius: 20,
+                borderRadius: 10,
               }}
               disabled={location && noLocation(location.coordinates)}
               onClick={() => handleLocation(_id, location)}

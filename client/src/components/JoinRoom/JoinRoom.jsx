@@ -61,7 +61,6 @@ const JoinARoom = ({ isPointingDown }) => {
         style={{
           display: "inline-block",
           marginRight: index === 3 || index === 4 ? "10px" : undefined,
-          zIndex: isPointingDown ? -1 : 200,
         }}
         initial={{ opacity: 0, y: 20 }}
         animate={{

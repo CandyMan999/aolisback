@@ -1,12 +1,20 @@
 const mongoose = require("mongoose");
-const { User, Picture } = require("../models");
+const { User, Picture, Comment, Video } = require("../models");
 const { faker } = require("@faker-js/faker");
 const axios = require("axios");
 const { findCoords } = require("./randomCoords");
+const cloudinary = require("cloudinary").v2;
 
 require("dotenv").config();
 
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+
 const TOTAL_USERS = 500;
+const EXCLUDED_USER_ID = "6665fae55486fb4b62990898"; // The user ID to exclude
 
 const seedUsers = async () => {
   try {
@@ -18,89 +26,115 @@ const seedUsers = async () => {
       .then(() => console.log("DB connected"))
       .catch((err) => console.log(err));
 
-    const USERS = await User.find();
+    const USERS = await User.find({ seeder: true });
 
-    if (USERS.length) await User.collection.drop();
+    const deleteUserAndAssociatedData = async (user) => {
+      if (user._id.toString() !== EXCLUDED_USER_ID) {
+        // Delete all pictures
+        for (const pic of user.pictures) {
+          data = await Picture.findById(pic._id);
+          if (data && data.publicId) {
+            await cloudinary.uploader.destroy(data.publicId);
+          }
+          await Picture.deleteOne({ _id: pic._id });
+        }
 
-    const handleIsLoggedIn = () => {
-      return Math.random() < 0.5;
+        // Delete all comments
+        for (const comment of user.comments) {
+          await Comment.deleteOne({ _id: comment._id });
+        }
+
+        // Delete all videos
+        const publicIDs = [];
+        for (const video of user.sentVideos) {
+          publicIDs.push(video.publicId);
+          if (video && video.receiver && video.reciever._is) {
+            await User.findByIdAndUpdate(
+              { _id: video.receiver._id },
+              { $pull: { receivedVideos: video._id } }
+            );
+          }
+
+          await Video.deleteOne({ _id: video._id });
+        }
+        for (const video of user.receivedVideos) {
+          publicIDs.push(video.publicId);
+          await Video.deleteOne({ _id: video._id });
+        }
+        if (publicIDs.length) {
+          await cloudinary.api.delete_resources(publicIDs, {
+            resource_type: "video",
+          });
+        }
+
+        // Delete user
+        await User.deleteOne({ _id: user._id });
+      }
     };
 
-    const handleAge = () => {
-      var min = 18;
-      var max = 80;
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    };
+    // Deleting all users except the excluded user
+    await Promise.all(USERS.map((user) => deleteUserAndAssociatedData(user)));
+
+    const handleIsBanned = () => Math.random() < 0.5;
+    const handleIsLoggedIn = () => Math.random() < 0.5;
+    const handleAge = () => Math.floor(Math.random() * (80 - 18 + 1)) + 18;
     const getRandomGender = (gender) => {
-      var genders = ["Female", "Male", "Gender_Diverse"];
+      const genders = ["Female", "Male", "Gender_Diverse"];
       const getGender = gender === "female" ? "Female" : "Male";
       return Math.random() < 0.5 ? getGender : "Gender_Diverse";
     };
     const getRandomSex = () => {
-      var genders = ["Female", "Male", "Gender_Diverse"];
-      var randomIndex = Math.floor(Math.random() * genders.length);
-      return genders[randomIndex];
+      const genders = ["Female", "Male", "Gender_Diverse"];
+      return genders[Math.floor(Math.random() * genders.length)];
     };
-
-    const handleKids = () => {
-      return Math.random() < 0.5 ? "Yes" : "No";
-    };
-
-    const handleDrink = () => {
-      var drink = ["Yes", "Socially", "Never"];
-      var randomIndex = Math.floor(Math.random() * drink.length);
-      return drink[randomIndex];
-    };
-    const handleSmoke = () => {
-      var smoke = ["Yes", "Socially", "Never"];
-      var randomIndex = Math.floor(Math.random() * smoke.length);
-      return smoke[randomIndex];
-    };
-
-    const handle420 = () => {
-      var smoke = ["Friendly", "Unfriendly"];
-      var randomIndex = Math.floor(Math.random() * smoke.length);
-      return smoke[randomIndex];
-    };
-    const handleDrugs = () => {
-      var drugs = ["Recreational", "Yes", "No"];
-      var randomIndex = Math.floor(Math.random() * drugs.length);
-      return drugs[randomIndex];
-    };
+    const handleKids = () => (Math.random() < 0.5 ? "Yes" : "No");
+    const handleDrink = () =>
+      ["Yes", "Socially", "Never"][Math.floor(Math.random() * 3)];
+    const handleSmoke = () =>
+      ["Yes", "Socially", "Never"][Math.floor(Math.random() * 3)];
+    const handle420 = () =>
+      ["Friendly", "Unfriendly"][Math.floor(Math.random() * 2)];
+    const handleDrugs = () =>
+      ["Recreational", "Yes", "No"][Math.floor(Math.random() * 3)];
 
     const handleCoordinates = async () => {
       const coords = await findCoords();
-
       const randomCoords = await faker.location.nearbyGPSCoordinate({
         origin: coords,
         radius: 50,
       });
-
       return Math.random() < 0.1 ? [0, 0] : [randomCoords[1], randomCoords[0]];
     };
 
     const getRandomAgeRange = () => {
-      var lowEnd = Math.floor(Math.random() * (80 - 18 + 1)) + 18;
-
-      var highEnd = Math.floor(Math.random() * (80 - lowEnd + 1)) + lowEnd;
-
-      var ageRange = {
-        lowEnd: lowEnd,
-        highEnd: highEnd,
-      };
-
-      return ageRange;
+      const lowEnd = Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+      const highEnd = Math.floor(Math.random() * (80 - lowEnd + 1)) + lowEnd;
+      return { lowEnd, highEnd };
     };
 
     const handleUsername = () => {
       let name = faker.internet.userName();
-      return (name = `${name.slice(0, 5)}Dummy`);
+      const randomNumber = Math.floor(Math.random() * 90) + 10; // Random 2-digit number
+      const emojis = [
+        "😀",
+        "😃",
+        "😄",
+        "😁",
+        "😆",
+        "😅",
+        "😂",
+        "🤣",
+        "😊",
+        "😇",
+      ];
+      const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+      const randomSuffix = `${randomNumber}${randomEmoji}`;
+      return `${name.slice(0, 5)}Dummy${randomSuffix}`;
     };
 
     for (let i = 0; i < TOTAL_USERS; i++) {
       const randomCoords = await handleCoordinates();
-
-      const ageRange = await getRandomAgeRange();
+      const ageRange = getRandomAgeRange();
       const { data } = await axios.get("https://randomuser.me/api/");
 
       const newUser = await User.create({
@@ -119,6 +153,9 @@ const seedUsers = async () => {
         smoke: handleSmoke(),
         marijuana: handle420(),
         drugs: handleDrugs(),
+        profileComplete: true,
+        phoneNumber: "+14698152066",
+        isBanned: handleIsBanned(),
         location: {
           coordinates: randomCoords,
         },
@@ -150,4 +187,5 @@ const seedUsers = async () => {
     console.log(err.stack);
   }
 };
+
 seedUsers();

@@ -46,6 +46,7 @@ export const FIND_USER_QUERY = gql`
       _id
       username
       email
+      phoneNumber
       lookingFor {
         ageRange {
           lowEnd
@@ -87,6 +88,8 @@ export const GET_USERS_MAP_QUERY = gql`
       username
       isLoggedIn
       email
+      phoneNumber
+      isBanned
       lookingFor {
         ageRange {
           lowEnd
@@ -259,6 +262,8 @@ export const GET_ALL_USERS = gql`
     getAllUsers(latitude: $latitude, longitude: $longitude) {
       _id
       name
+      isBanned
+      phoneNumber
       username
       lookingFor {
         ageRange {

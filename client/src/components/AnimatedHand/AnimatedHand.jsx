@@ -6,12 +6,12 @@ import { COLORS } from "../../constants";
 const AnimatedHand = ({ isPointingDown }) => {
   return (
     <motion.div
+      style={{ position: "relative", zIndex: 2 }}
       animate={{
         scale: [1, 2, 2, 1, 1],
         rotate: [0, 0, 720, 720, 0],
-        zIndex: [0, 0, 2000, 2000, 0],
+        zIndex: [0, 20000, 20000, 20000, 0],
       }}
-      style={{ zIndex: 6000 }}
       transition={{
         duration: 1,
 

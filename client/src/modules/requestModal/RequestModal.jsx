@@ -15,6 +15,13 @@ import {
 import { useClient } from "../../client";
 import { useHistory } from "react-router-dom";
 import notification from "../../sounds/notification.mp3";
+import {
+  isDesktop,
+  isMacOs,
+  isIOS,
+  isAndroid,
+  isWindows,
+} from "react-device-detect";
 
 const RequestModal = ({
   dispatch,
@@ -27,6 +34,8 @@ const RequestModal = ({
 }) => {
   const client = useClient();
   let history = useHistory();
+
+  const faceTime = isMacOs || isIOS;
 
   useEffect(() => {
     handleStatus(status);
@@ -58,7 +67,11 @@ const RequestModal = ({
       case "Accept":
         toggleChatRequest();
         dispatch({ type: "JOIN_CHANNEL", payload: receiver.username });
-        history.push(`/video?username=${receiver.username}`);
+        history.push(
+          `/video?username=${receiver.username}&phone=${
+            receiver.phoneNumber
+          }&device=${faceTime ? "iOS" : "Android"}`
+        );
         break;
       case "Decline":
         setTimeout(() => {
