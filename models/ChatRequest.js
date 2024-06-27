@@ -6,10 +6,13 @@ const ChatRequestSchema = new mongoose.Schema({
     default: Date.now,
     expires: 3700,
   },
-
   status: {
     type: String,
     enum: ["Pending", "Accept", "Decline", "Block", "Cancel"],
+  },
+  connection: {
+    type: String,
+    enum: ["OfferSent", "AnswerSent", "CandidateSent"],
   },
   sender: { type: mongoose.Schema.ObjectId, ref: "User" },
   receiver: { type: mongoose.Schema.ObjectId, ref: "User" },

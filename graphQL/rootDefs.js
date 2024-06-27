@@ -119,6 +119,7 @@ module.exports = gql`
     status: Status
     sender: User
     receiver: User
+    connetion: Connection
   }
 
   enum Status {
@@ -127,6 +128,11 @@ module.exports = gql`
     Decline
     Block
     Cancel
+  }
+  enum Connection {
+    OfferSent
+    AnswerSent
+    CandidateSent
   }
 
   type AuthSignup {

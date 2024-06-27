@@ -46,6 +46,8 @@ module.exports = {
         { new: true }
       ).populate("chatRequest");
 
+      // Emit signaling messages based on the status
+
       publishVideoChatRequest(chatRequest);
 
       return chatRequest;
