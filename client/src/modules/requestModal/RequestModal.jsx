@@ -42,7 +42,7 @@ const RequestModal = ({
     if (currentUser._id !== sender._id && status === "Pending") {
       playSound();
     }
-    handleUpdateAppUsername(receiver.username);
+    handleUpdateAppUsername(receiver.username, receiver.phoneNumber, faceTime);
   }, [status]);
 
   const playSound = () => {
@@ -55,10 +55,12 @@ const RequestModal = ({
     }
   };
 
-  const handleUpdateAppUsername = (username) => {
+  const handleUpdateAppUsername = (username, phone, device) => {
     history.push({
       pathname: history.location.pathname,
-      search: `?username=${username}`,
+      search: `?username=${username}&phone=${phone}&device=${
+        device ? "iOS" : "Android"
+      }`,
     });
   };
 
