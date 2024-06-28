@@ -10,12 +10,12 @@ const ChatRequestSchema = new mongoose.Schema({
     type: String,
     enum: ["Pending", "Accept", "Decline", "Block", "Cancel"],
   },
-  connection: {
-    type: String,
-    enum: ["OfferSent", "AnswerSent", "CandidateSent"],
-  },
+
   sender: { type: mongoose.Schema.ObjectId, ref: "User" },
   receiver: { type: mongoose.Schema.ObjectId, ref: "User" },
+  offer: { type: String }, // SDP offer string
+  answer: { type: String }, // SDP answer string
+  candidates: [{ type: String }], // ICE candidate strings
 });
 
 module.exports = mongoose.model("ChatRequest", ChatRequestSchema);

@@ -2,8 +2,6 @@ const { ApolloServer } = require("apollo-server");
 const { typeDefs, resolvers } = require("./graphQL");
 const { cronJob } = require("./utils/cronJob");
 
-const { findOrCreateUser } = require("./controllers/userController");
-
 const mongoose = require("mongoose");
 const { verifyToken } = require("./utils/middleware");
 const { fetchMeResolver } = require("./graphQL/queries");

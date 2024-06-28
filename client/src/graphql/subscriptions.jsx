@@ -96,7 +96,6 @@ export const VIDEO_CHAT_REQUEST = gql`
       _id
       createdAt
       status
-      connection
       receiver {
         _id
         username

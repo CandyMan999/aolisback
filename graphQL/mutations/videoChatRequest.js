@@ -4,15 +4,19 @@ const { publishVideoChatRequest } = require("../subscription/subscription");
 
 module.exports = {
   videoChatRequestResolver: async (root, args, ctx) => {
-    const { senderID, receiverID, status } = args;
+    const { senderID, receiverID, status, offer, answer, candidate } = args;
 
+    const updateData = {
+      status,
+      sender: senderID,
+      receiver: receiverID,
+    };
+
+    // Add offer, answer, and candidate to updateData if they are present
+    if (offer) updateData.offer = offer;
+    if (answer) updateData.answer = answer;
     try {
-      const chatRequest = await ChatRequest.create({
-        status,
-        sender: senderID,
-        receiver: receiverID,
-        connection: "OfferSent",
-      });
+      const chatRequest = await ChatRequest.create(updateData);
 
       const sender = await User.findByIdAndUpdate(
         { _id: senderID },

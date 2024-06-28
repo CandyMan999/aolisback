@@ -15,6 +15,7 @@
     "@apollo/react-hooks": "^4.0.0",
     "@faker-js/faker": "^8.0.2",
     "apollo-server": "^2.21.0",
+    "apollo-server-express": "^3.13.0",
     "axios": "^1.4.0",
     "bcrypt": "^5.0.1",
     "caniuse-lite": "^1.0.30001359",
@@ -22,10 +23,12 @@
     "concurrently": "^6.0.0",
     "dotenv": "^8.2.0",
     "expo-server-sdk": "^3.7.0",
+    "express": "^4.19.2",
     "faker": "^6.6.6",
     "global": "^4.4.0",
     "google-auth-library": "^7.0.2",
     "graphql": "^15.5.0",
+    "graphql-subscriptions": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mongoose": "^5.11.18",
@@ -33,7 +36,10 @@
     "openai": "^4.0.0",
     "react-jitsi": "^1.0.4",
     "slick-carousel": "^1.8.1",
-    "twilio": "^5.2.0"
+    "socket.io": "^4.7.5",
+    "subscriptions-transport-ws": "^0.11.0",
+    "twilio": "^5.2.0",
+    "ws": "^8.17.1"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"

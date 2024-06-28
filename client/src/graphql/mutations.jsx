@@ -359,7 +359,7 @@ export const VIDEO_CHAT_REQUEST = gql`
     ) {
       status
       createdAt
-      connection
+
       sender {
         _id
         phoneNumber
@@ -389,7 +389,7 @@ export const UPDATE_VIDEO_CHAT_REQUEST = gql`
     ) {
       status
       createdAt
-      connection
+
       sender {
         _id
         phoneNumber

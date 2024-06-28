@@ -64,10 +64,15 @@ const RequestModal = ({
     });
   };
 
+  const startWebRTC = () => {
+    console.log("STARTING VIDEO CHAT....");
+  };
+
   const handleStatus = (action) => {
     switch (action) {
       case "Accept":
         toggleChatRequest();
+        startWebRTC();
         dispatch({ type: "JOIN_CHANNEL", payload: receiver.username });
         // history.push(
         //   `/video?username=${receiver.username}&phone=${

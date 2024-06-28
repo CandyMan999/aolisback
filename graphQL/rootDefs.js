@@ -119,7 +119,10 @@ module.exports = gql`
     status: Status
     sender: User
     receiver: User
-    connection: Connection
+
+    offer: String
+    answer: String
+    candidates: [String]
   }
 
   enum Status {
@@ -128,11 +131,6 @@ module.exports = gql`
     Decline
     Block
     Cancel
-  }
-  enum Connection {
-    OfferSent
-    AnswerSent
-    CandidateSent
   }
 
   type AuthSignup {
@@ -214,12 +212,18 @@ module.exports = gql`
       senderID: ID!
       receiverID: ID!
       status: Status!
+      offer: String
+      answer: String
     ): ChatRequest
     updateVideoChatRequest(
       _id: ID!
       senderID: ID!
       receiverID: ID!
       status: Status!
+
+      offer: String
+      answer: String
+      candidate: String
     ): ChatRequest
     lookingFor(
       _id: ID!

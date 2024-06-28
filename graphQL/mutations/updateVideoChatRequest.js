@@ -4,16 +4,36 @@ const { publishVideoChatRequest } = require("../subscription/subscription");
 
 module.exports = {
   updateVideoChatRequestResolver: async (root, args, ctx) => {
-    const { senderID, receiverID, status, _id } = args;
+    const {
+      senderID,
+      receiverID,
+      status,
+      _id,
+
+      offer,
+      answer,
+      candidate,
+    } = args;
 
     try {
+      const updateData = {
+        status,
+        sender: senderID,
+        receiver: receiverID,
+      };
+
+      // Add offer, answer, and candidate to updateData if they are present
+      if (offer) updateData.offer = offer;
+      if (answer) updateData.answer = answer;
+      if (candidate) {
+        const chatRequest = await ChatRequest.findById(_id);
+        chatRequest.candidates.push(candidate);
+        updateData.candidates = chatRequest.candidates;
+      }
+
       const chatRequest = await ChatRequest.findByIdAndUpdate(
         { _id },
-        {
-          status,
-          sender: senderID,
-          receiver: receiverID,
-        },
+        updateData,
         { new: true }
       ).populate([
         {
@@ -45,8 +65,6 @@ module.exports = {
         { chatRequest },
         { new: true }
       ).populate("chatRequest");
-
-      // Emit signaling messages based on the status
 
       publishVideoChatRequest(chatRequest);
 
