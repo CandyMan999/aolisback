@@ -31,7 +31,7 @@ const Drawer = ({ isOpen, onClose, children }) => {
           <Icon
             clickable
             name="back"
-            color={COLORS.black}
+            color={COLORS.pink}
             size={ICON_SIZES.XX_LARGE}
             onClick={onClose}
           />

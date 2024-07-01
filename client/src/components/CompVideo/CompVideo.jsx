@@ -132,18 +132,20 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
                     width={"100%"}
                     onClick={startRecording}
                     disabled={submitting || recording}
+                    color={COLORS.white}
                     style={{
-                      borderBottom: `solid 2px ${COLORS.grey}`,
-                      boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+                      borderBottom: `solid 2px ${COLORS.pink}`,
+                      boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+                      borderRadius: 25,
                     }}
                   >
                     <Box justifyContent="center">
                       <Icon
                         name="record"
                         size={ICON_SIZES.X_LARGE}
-                        color={COLORS.white}
+                        color={COLORS.pink}
                       />
-                      <Text bold center>
+                      <Text bold center color={COLORS.pink}>
                         Record Video
                       </Text>
                     </Box>
@@ -157,6 +159,7 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
                     style={{
                       borderBottom: `solid 2px ${COLORS.grey}`,
                       boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+                      borderRadius: 25,
                     }}
                   >
                     <Text bold center>

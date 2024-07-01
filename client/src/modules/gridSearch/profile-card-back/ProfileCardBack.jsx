@@ -110,7 +110,7 @@ const ProfileCardBack = ({
         <Icon
           name="back"
           size={ICON_SIZES.XX_LARGE}
-          color={video ? COLORS.white : COLORS.vividBlue}
+          color={video ? COLORS.pink : COLORS.vividBlue}
         />
       </Box>
 
@@ -124,7 +124,7 @@ const ProfileCardBack = ({
         <Icon
           name="user"
           size={ICON_SIZES.X_LARGE}
-          color={video ? COLORS.white : COLORS.main}
+          color={video ? COLORS.pink : COLORS.main}
         />
       </Box>
       {!video && !loading && (

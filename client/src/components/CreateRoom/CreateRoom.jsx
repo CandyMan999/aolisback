@@ -112,11 +112,17 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
         >
           {showRoomList && (
             <form onSubmit={handleSubmit}>
-              <Box
-                position="absolute"
-                bottom={-20}
-                right={0}
-                width={mobile ? "90vw" : "50%"}
+              <motion.div
+                style={{
+                  position: "absolute",
+                  bottom: -20,
+                  right: 0,
+                  width: "0%",
+                }}
+                animate={{
+                  width: showRoomList ? "90vw" : "100%",
+                }}
+                transition={{ ease: "linear", duration: 1.0 }}
               >
                 <Box
                   position="absolute"
@@ -135,7 +141,6 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
                     color={COLORS.white}
                   />
                 </Box>
-
                 {error && (
                   <Box
                     position="absolute"
@@ -149,7 +154,6 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
                     <Text>{error}</Text>
                   </Box>
                 )}
-
                 <input
                   style={{
                     width: "100%",
@@ -175,7 +179,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
                     />
                   </Box>
                 )}
-              </Box>
+              </motion.div>
             </form>
           )}
         </motion.div>
