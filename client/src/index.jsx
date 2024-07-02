@@ -52,13 +52,13 @@ const Root = () => {
 
   useEffect(() => {
     if (state.videoChatRequest && state.videoChatRequest.status === "Accept") {
-      console.log("firing");
       setShowScreen(true);
     }
-    console.log("video chat request: ", state.videoChatRequest);
   }, [state]);
 
-  console.log("show modal: ", showScreen);
+  const handleShutScreen = () => {
+    setShowScreen(false);
+  };
 
   return (
     <Router>
@@ -77,7 +77,10 @@ const Root = () => {
                 chatID={videoChat._id}
               />
             )}
-            <VideoChatScreen showScreen={showScreen} />
+            <VideoChatScreen
+              showScreen={showScreen}
+              handleShutScreen={handleShutScreen}
+            />
             <Profile
               userClicked={state.profile}
               mobile={mobile}
