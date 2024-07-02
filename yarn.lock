@@ -254,6 +254,11 @@
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.2.0.tgz#5f3d96ec6b2354ad6d8a28bf216a1d97b5426861"
   integrity sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==
 
+"@jitsi/react-sdk@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@jitsi/react-sdk/-/react-sdk-1.4.0.tgz#4c300bf3d97632d7421eee71e2d335600878b5e7"
+  integrity sha512-1dn3WIZNyRuESh5qvBR52PQz/avM0Wl575WtuW2sRaNemx38+I1eHJvA58SNhC3zas1PkxBfjeBqmTUHeJlaCw==
+
 "@josephg/resolvable@^1.0.0":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@josephg/resolvable/-/resolvable-1.0.1.tgz#69bc4db754d79e1a2f17a650d3466e038d94a5eb"

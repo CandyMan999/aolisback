@@ -5,6 +5,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import RequestModal from "./modules/requestModal";
+import { VideoChatScreen } from "./components";
 import Profile from "./modules/profile";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -40,6 +41,7 @@ const Root = () => {
   const initialState = useContext(Context);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [videoChat, setVideoChat] = useState(null);
+  const [showScreen, setShowScreen] = useState(false);
 
   const mobile = useMediaQuery("(max-width: 650px)");
   const navLogo = useMediaQuery("(max-width: 950px)");
@@ -47,6 +49,16 @@ const Root = () => {
   const toggleChatRequest = (payload) => {
     dispatch({ type: "TOGGLE_CHAT", payload });
   };
+
+  useEffect(() => {
+    if (state.videoChatRequest && state.videoChatRequest.status === "Accept") {
+      console.log("firing");
+      setShowScreen(true);
+    }
+    console.log("video chat request: ", state.videoChatRequest);
+  }, [state]);
+
+  console.log("show modal: ", showScreen);
 
   return (
     <Router>
@@ -65,6 +77,7 @@ const Root = () => {
                 chatID={videoChat._id}
               />
             )}
+            <VideoChatScreen showScreen={showScreen} />
             <Profile
               userClicked={state.profile}
               mobile={mobile}
@@ -83,6 +96,10 @@ const Root = () => {
                     "video chat subscription request: ",
                     videoChatRequest
                   );
+                  dispatch({
+                    type: "UPDATE_VIDEO_CHAT_REQUEST",
+                    payload: videoChatRequest,
+                  });
                   setVideoChat(videoChatRequest);
 
                   toggleChatRequest(true);
@@ -95,9 +112,7 @@ const Root = () => {
     </Router>
   );
 };
+
 ReactDOM.render(<Root />, document.getElementById("root"));
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

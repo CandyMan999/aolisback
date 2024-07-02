@@ -13,15 +13,8 @@ import {
   BLOCK_USER_MUTATION,
 } from "../../graphql/mutations";
 import { useClient } from "../../client";
-import { useHistory } from "react-router-dom";
+
 import notification from "../../sounds/notification.mp3";
-import {
-  isDesktop,
-  isMacOs,
-  isIOS,
-  isAndroid,
-  isWindows,
-} from "react-device-detect";
 
 const RequestModal = ({
   dispatch,
@@ -33,16 +26,12 @@ const RequestModal = ({
   status,
 }) => {
   const client = useClient();
-  let history = useHistory();
-
-  const faceTime = isMacOs || isIOS;
 
   useEffect(() => {
     handleStatus(status);
     if (currentUser._id !== sender._id && status === "Pending") {
       playSound();
     }
-    // handleUpdateAppUsername(receiver.username, receiver.phoneNumber, faceTime);
   }, [status]);
 
   const playSound = () => {
@@ -55,30 +44,11 @@ const RequestModal = ({
     }
   };
 
-  const handleUpdateAppUsername = (username, phone, device) => {
-    history.push({
-      pathname: history.location.pathname,
-      search: `?username=${username}&phone=${phone}&device=${
-        device ? "iOS" : "Android"
-      }`,
-    });
-  };
-
-  const startWebRTC = () => {
-    console.log("STARTING VIDEO CHAT....");
-  };
-
   const handleStatus = (action) => {
     switch (action) {
       case "Accept":
         toggleChatRequest();
-        startWebRTC();
-        dispatch({ type: "JOIN_CHANNEL", payload: receiver.username });
-        // history.push(
-        //   `/video?username=${receiver.username}&phone=${
-        //     receiver.phoneNumber
-        //   }&device=${faceTime ? "iOS" : "Android"}`
-        // );
+
         break;
       case "Decline":
         setTimeout(() => {

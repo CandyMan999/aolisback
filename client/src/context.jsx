@@ -15,6 +15,7 @@ const Context = createContext({
   showRoomList: false,
   showChatRequest: false,
   userChannel: null,
+  videoChatRequest: {},
   userLocation: {
     _id: null,
     lat: null,

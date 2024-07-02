@@ -9,7 +9,7 @@ import CreateProfile from "./modules/createProfile";
 import GridSearch from "./modules/gridSearch";
 import MessageCenter from "./modules/messageCenter";
 import Message from "./modules/Message";
-import { Video, Map } from "./components";
+import { Map } from "./components";
 
 import "./App.css";
 
@@ -21,7 +21,7 @@ class App extends React.PureComponent {
         <Switch>
           <Route exact path="/" component={HomeContainer} />
           <ProtectedRoute exact path="/profile" component={CreateProfile} />
-          <ProtectedRoute path="/video" component={Video} />
+
           <ProtectedRoute props={this.props} path="/location" component={Map} />
           <Route path="/message-center" component={MessageCenter} />
           <ProtectedRoute path="/message" component={Message} />

@@ -109,6 +109,12 @@ export default function reducer(state, { type, payload }) {
         showRoomList: payload,
       };
 
+    case "UPDATE_VIDEO_CHAT_REQUEST":
+      return {
+        ...state,
+        videoChatRequest: payload,
+      };
+
     default:
       return state;
   }
