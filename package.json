@@ -14,7 +14,7 @@
   "dependencies": {
     "@apollo/react-hooks": "^4.0.0",
     "@faker-js/faker": "^8.0.2",
-    "@jitsi/react-sdk": "^1.4.0",
+  
     "apollo-server": "^2.21.0",
     "apollo-server-express": "^3.13.0",
     "axios": "^1.4.0",
