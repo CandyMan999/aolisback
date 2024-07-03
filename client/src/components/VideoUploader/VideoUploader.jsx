@@ -104,16 +104,13 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
 
       // Adjust parameters for better quality based on actual resolution
       formData.append("quality", "auto:best");
-      formData.append("format", "mp4");
-      formData.append(
-        "transformation",
-        JSON.stringify({
-          width, // Use actual video width
-          height, // Use actual video height
-          crop: "limit",
-          video_codec: "auto",
-        })
-      );
+      formData.append("max_duration", 60);
+      formData.append("quality", "auto:best");
+
+      formData.append("width", width);
+      formData.append("height", height);
+      formData.append("crop", "limit");
+      formData.append("video_codec", "auto");
 
       const res = await axios.post(
         `https://api.cloudinary.com/v1_1/localmassagepros/video/upload`,

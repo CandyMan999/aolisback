@@ -67,6 +67,23 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             support.
           </Text>
           <Text bold center fontSize={FONT_SIZES.X_LARGE}>
+            Privacy and Data Protection
+          </Text>
+          <Text>
+            We take your privacy very seriously and are committed to protecting
+            your personal information. In compliance with our agreements with
+            third-party service providers such as Twilio, we ensure that your
+            phone number and other personal information are not shared with
+            third parties. Your phone number will be used solely for
+            verification purposes and will not be disclosed, sold, or rented to
+            any third party for any reason. For more details, please refer to
+            our{" "}
+            <a href="https://candyman999.github.io/goneChattingSupport/">
+              Privacy Policy
+            </a>
+            .
+          </Text>
+          <Text bold center fontSize={FONT_SIZES.X_LARGE}>
             1. GoneChatting RULES
           </Text>
           <Text>
