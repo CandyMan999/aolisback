@@ -4,7 +4,7 @@ import { COLORS } from "../../constants";
 import iOSLogo from "../../pictures/iOSLogo.png";
 import Context from "../../context";
 import { UPDATE_VIDEO_CHAT_REQUEST } from "../../graphql/mutations";
-import { Loading, Button, Text, Box } from "../../components";
+import { Loading, Button, Text, Box, FONT_SIZES } from "../../components";
 import { JitsiMeeting } from "@jitsi/react-sdk";
 
 import { useClient } from "../../client";
@@ -17,12 +17,11 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [isApiReady, setIsApiReady] = useState(false);
   const [roomName, setRoomName] = useState("");
 
-  const [showButton, setShowButton] = useState(null);
-
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
       const roomName = `${videoChatRequest.sender.username}-${videoChatRequest.receiver.username}`;
       setRoomName(roomName);
+
       setIsMeetingStarted(true);
     }
   }, [videoChatRequest]);
@@ -36,7 +35,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   }, [roomName, isMeetingStarted]);
 
   const handleHangup = async () => {
-    console.log("Call has ended");
     try {
       handleShutScreen();
 
@@ -80,33 +78,32 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           src={iOSLogo}
           alt="Watermark-logo"
         />
-        <Box
-          style={{
-            alignContent: "center",
-            justifyContent: "center",
-            width: "100vW",
-            position: "absolute",
-            top: "5%",
-          }}
-        >
-          {isApiReady && isMeetingStarted && (
-            <Button
-              width={"30%"}
-              color={COLORS.white}
-              style={{
-                borderBottom: `solid 2px ${COLORS.pink}`,
-                boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
-                borderRadius: 25,
-                opacity: 0.6,
-                padding: 0,
-              }}
+
+        {isApiReady && isMeetingStarted && (
+          <Button
+            width={"30%"}
+            color={COLORS.white}
+            style={{
+              position: "absolute",
+              borderBottom: `solid 2px ${COLORS.pink}`,
+              boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+              borderRadius: 25,
+              opacity: 0.6,
+              padding: 0,
+              top: 10,
+              right: 0,
+            }}
+          >
+            <Text
+              center
+              color={COLORS.pink}
+              style={{ padding: 0 }}
+              fontSize={FONT_SIZES.SMALL}
             >
-              <Text center color={COLORS.pink}>
-                Send Phone #
-              </Text>
-            </Button>
-          )}
-        </Box>
+              Send Phone #
+            </Text>
+          </Button>
+        )}
 
         {!isApiReady ? (
           <Loading ring color={COLORS.pink} size={250} />
@@ -123,22 +120,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 startScreenSharing: false,
                 enableEmailInStats: false,
                 disableDeepLinking: true,
-                p2p: {
-                  enabled: true,
-                  stunServers: [
-                    { urls: "stun:167.172.254.201:3478" },
-                    {
-                      urls: "turn:167.172.254.201:3478?transport=udp",
-                      credential: "testpassword",
-                      username: "testuser",
-                    },
-                    {
-                      urls: "turn:167.172.254.201:3478?transport=tcp",
-                      credential: "testpassword",
-                      username: "testuser",
-                    },
-                  ],
-                },
+                disableEndConference: true,
               }}
               interfaceConfigOverwrite={{
                 TOOLBAR_BUTTONS: [
@@ -147,43 +129,14 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                   "desktop",
                   "hangup",
                   "tileview",
+                  "videocam",
                 ],
-                DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
-                DEFAULT_REMOTE_DISPLAY_NAME: "Participant",
-                MOBILE_APP_PROMO: false, // Disable mobile app promo
-                filmStripOnly: true, // Show only the filmstrip
-
-                SHOW_JITSI_WATERMARK: false,
-                SHOW_BRAND_WATERMARK: false,
-                SHOW_POWERED_BY: false,
-                SHOW_WATERMARK_FOR_GUESTS: false,
-                DEFAULT_LOGO_URL: "",
-                JITSI_WATERMARK_LINK: "",
               }}
               userInfo={{
                 displayName: state.currentUser.username,
               }}
               onApiReady={(externalApi) => {
                 externalApi.addListener("videoConferenceLeft", handleHangup);
-                // Add custom button to the toolbar
-                externalApi.executeCommand("overwriteConfig", {
-                  config: {
-                    customToolbarButtons: [
-                      {
-                        icon: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", // Path to your custom icon
-                        id: "custom-toolbar-button",
-                        text: "Custom Toolbar Button",
-                      },
-                    ],
-                  },
-                });
-
-                externalApi.addListener("toolbarButtonClicked", ({ key }) => {
-                  if (key === "custom-toolbar-button") {
-                    alert("Custom Toolbar Button Clicked");
-                    // Your custom action here
-                  }
-                });
 
                 externalApi.executeCommand(
                   "pinParticipant",
@@ -195,10 +148,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
               }}
               getIFrameRef={(iframeRef) => {
                 iframeRef.style.height = "100%";
-                // iframeRef.contentWindow.addEventListener("click", (event) => {
-                //   console.log("Clicked inside Jitsi iframe");
-                //   // Handle click event within the iframe context if necessary
-                // });
               }}
             />
           )

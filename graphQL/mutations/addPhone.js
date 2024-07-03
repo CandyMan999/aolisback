@@ -53,6 +53,7 @@ module.exports = {
           console.log("verification code: ", twoFactor);
         } catch (err) {
           console.log("err sending text: ", err);
+          throw new AuthenticationError(err);
         }
 
         // Set a timeout to delete the auth code after 60 seconds
