@@ -68,16 +68,69 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
     }
   };
 
+  // const handleUpload = async () => {
+  //   try {
+  //     setSubmitting(true);
+  //     handleSending(true);
+
+  //     const formData = new FormData();
+  //     formData.append("file", file, "recorded-video.webm");
+  //     formData.append("upload_preset", "dlxzn2uj");
+  //     formData.append("resource_type", "video");
+  //     formData.append("max_duration", 60);
+
+  //     const res = await axios.post(
+  //       `https://api.cloudinary.com/v1_1/localmassagepros/video/upload`,
+  //       formData
+  //     );
+
+  //     setSubmitting(false);
+  //     handleSending(false);
+  //     return { url: res.data.url, publicId: res.data.public_id };
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  const getVideoResolution = (file) => {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement("video");
+      video.preload = "metadata";
+
+      video.onloadedmetadata = () => {
+        resolve({ width: video.videoWidth, height: video.videoHeight });
+      };
+
+      video.onerror = () => {
+        reject(new Error("Failed to load video metadata"));
+      };
+
+      video.src = URL.createObjectURL(file);
+    });
+  };
+
   const handleUpload = async () => {
     try {
       setSubmitting(true);
       handleSending(true);
+
+      const { width, height } = await getVideoResolution(file);
+
+      console.log("file dimensions: ", width, height);
 
       const formData = new FormData();
       formData.append("file", file, "recorded-video.webm");
       formData.append("upload_preset", "dlxzn2uj");
       formData.append("resource_type", "video");
       formData.append("max_duration", 60);
+      formData.append("quality", "auto:best");
+      // formData.append("format", "mp4");
+      formData.append("width", width);
+      formData.append("height", height);
+      formData.append("crop", "limit");
+      formData.append("video_codec", "auto");
+
+      console.log("form data: ", formData);
 
       const res = await axios.post(
         `https://api.cloudinary.com/v1_1/localmassagepros/video/upload`,
@@ -89,6 +142,7 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
       return { url: res.data.url, publicId: res.data.public_id };
     } catch (err) {
       console.log(err);
+      setError(err.message);
     }
   };
 
