@@ -14,9 +14,56 @@ module.exports = {
         { username },
         { isLoggedIn: true, roomInfo: { subscribedAt: moment() } },
         { new: true }
-      )
-        .populate("pictures")
-        .populate("comments");
+      ).populate([
+        "pictures",
+        "comments",
+        "sentVideos",
+        "blockedUsers",
+        "receivedVideos",
+        {
+          path: "sentVideos",
+          populate: [
+            {
+              path: "sender",
+              model: "User",
+              populate: {
+                path: "pictures",
+                model: "Picture",
+              },
+            },
+            {
+              path: "receiver",
+              model: "User",
+              populate: {
+                path: "pictures",
+                model: "Picture",
+              },
+            },
+          ],
+        },
+        {
+          path: "receivedVideos",
+          populate: [
+            "blockedUsers",
+            {
+              path: "sender",
+              model: "User",
+              populate: {
+                path: "pictures",
+                model: "Picture",
+              },
+            },
+            {
+              path: "receiver",
+              model: "User",
+              populate: {
+                path: "pictures",
+                model: "Picture",
+              },
+            },
+          ],
+        },
+      ]);
       if (!user) {
         return new AuthenticationError("Username Doesn't Exsist");
       }
@@ -57,9 +104,56 @@ module.exports = {
           roomInfo: { subscribedAt: moment() },
         },
         { new: true }
-      )
-        .populate("pictures")
-        .populate("comments");
+      ).populate([
+        "pictures",
+        "comments",
+        "sentVideos",
+        "blockedUsers",
+        "receivedVideos",
+        {
+          path: "sentVideos",
+          populate: [
+            {
+              path: "sender",
+              model: "User",
+              populate: {
+                path: "pictures",
+                model: "Picture",
+              },
+            },
+            {
+              path: "receiver",
+              model: "User",
+              populate: {
+                path: "pictures",
+                model: "Picture",
+              },
+            },
+          ],
+        },
+        {
+          path: "receivedVideos",
+          populate: [
+            "blockedUsers",
+            {
+              path: "sender",
+              model: "User",
+              populate: {
+                path: "pictures",
+                model: "Picture",
+              },
+            },
+            {
+              path: "receiver",
+              model: "User",
+              populate: {
+                path: "pictures",
+                model: "Picture",
+              },
+            },
+          ],
+        },
+      ]);
 
       if (user.isBanned) {
         throw new AuthenticationError(
