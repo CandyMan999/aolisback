@@ -3,7 +3,10 @@ import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
 import iOSLogo from "../../pictures/iOSLogo.png";
 import Context from "../../context";
-import { UPDATE_VIDEO_CHAT_REQUEST } from "../../graphql/mutations";
+import {
+  UPDATE_VIDEO_CHAT_REQUEST,
+  SEND_PHONE_NUMBER,
+} from "../../graphql/mutations";
 import { Loading, Button, Text, Box, FONT_SIZES } from "../../components";
 import { JitsiMeeting } from "@jitsi/react-sdk";
 
@@ -12,11 +15,13 @@ import { useClient } from "../../client";
 const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const { state } = useContext(Context);
   const client = useClient();
-  const { videoChatRequest } = state;
+  const { videoChatRequest, currentUser } = state;
   const [isMeetingStarted, setIsMeetingStarted] = useState(false);
   const [isApiReady, setIsApiReady] = useState(false);
   const [roomName, setRoomName] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  console.log("current user and chat Request: ", currentUser, videoChatRequest);
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
       const roomName = `${videoChatRequest.sender.username}-${videoChatRequest.receiver.username}`;
@@ -54,6 +59,35 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
     }
   };
 
+  const handleFigureWhosExpoToken = () => {
+    const user =
+      videoChatRequest.receiver.username === state.currentUser.username
+        ? videoChatRequest.sender
+        : videoChatRequest.receiver;
+
+    return user.expoToken;
+  };
+
+  const handleSendPhoneNumber = async () => {
+    try {
+      setLoading(true);
+      const variables = {
+        username: currentUser.username,
+        phoneNumber: currentUser.phoneNumber,
+        expoToken: handleFigureWhosExpoToken(),
+      };
+
+      const { sendPhoneNumber } = await client.request(
+        SEND_PHONE_NUMBER,
+        variables
+      );
+
+      setLoading(false);
+    } catch (err) {
+      console.log("err: ", err);
+    }
+  };
+
   return (
     videoChatRequest &&
     videoChatRequest.status === "Accept" && (
@@ -79,31 +113,39 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           alt="Watermark-logo"
         />
 
-        {isApiReady && isMeetingStarted && (
-          <Button
-            width={"30%"}
-            color={COLORS.white}
-            style={{
-              position: "absolute",
-              borderBottom: `solid 2px ${COLORS.pink}`,
-              boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
-              borderRadius: 25,
-              opacity: 0.6,
-              padding: 0,
-              top: 10,
-              right: 0,
-            }}
-          >
-            <Text
-              center
-              color={COLORS.pink}
-              style={{ padding: 0 }}
-              fontSize={FONT_SIZES.SMALL}
+        {isApiReady &&
+          isMeetingStarted &&
+          currentUser.expoToken &&
+          videoChatRequest.receiver.expoToken && (
+            <Button
+              onClick={handleSendPhoneNumber}
+              width={"30%"}
+              color={COLORS.white}
+              style={{
+                position: "absolute",
+                borderBottom: `solid 2px ${COLORS.pink}`,
+                boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+                borderRadius: 25,
+                opacity: 0.6,
+                padding: 0,
+                top: 10,
+                right: 0,
+              }}
             >
-              Send Phone #
-            </Text>
-          </Button>
-        )}
+              {loading ? (
+                <Loading pulse color={COLORS.vividBlue} />
+              ) : (
+                <Text
+                  center
+                  color={COLORS.pink}
+                  style={{ padding: 0 }}
+                  fontSize={FONT_SIZES.SMALL}
+                >
+                  Send Phone #
+                </Text>
+              )}
+            </Button>
+          )}
 
         {!isApiReady ? (
           <Loading ring color={COLORS.pink} size={250} />

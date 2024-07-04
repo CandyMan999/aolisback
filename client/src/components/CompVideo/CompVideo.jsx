@@ -33,10 +33,14 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
   const startRecording = async () => {
     try {
       setRecording(true);
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
+      const constraints = {
+        video: {
+          width: { ideal: 4096 },
+          height: { ideal: 2160 },
+        },
         audio: true,
-      });
+      };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       mediaStreamRef.current = stream;
       const videoElement = videoRef.current;
       videoElement.srcObject = stream;
@@ -53,44 +57,22 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
   const stopRecording = () => {
     const mediaRecorder = mediaRecorderRef.current;
     if (mediaRecorder && mediaStreamRef.current) {
-      mediaRecorder.stop();
       const chunks = [];
 
       mediaRecorder.ondataavailable = (e) => {
         chunks.push(e.data);
+      };
 
-        recordedBlobRef.current = new Blob(chunks, { type: e.data.type });
+      mediaRecorder.onstop = () => {
+        recordedBlobRef.current = new Blob(chunks, { type: "video/webm" });
         setFile(recordedBlobRef.current);
       };
-      setRecording(false);
 
+      mediaRecorder.stop();
       mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+      setRecording(false);
     }
   };
-
-  // const handleUpload = async () => {
-  //   try {
-  //     setSubmitting(true);
-  //     handleSending(true);
-
-  //     const formData = new FormData();
-  //     formData.append("file", file, "recorded-video.webm");
-  //     formData.append("upload_preset", "dlxzn2uj");
-  //     formData.append("resource_type", "video");
-  //     formData.append("max_duration", 60);
-
-  //     const res = await axios.post(
-  //       `https://api.cloudinary.com/v1_1/localmassagepros/video/upload`,
-  //       formData
-  //     );
-
-  //     setSubmitting(false);
-  //     handleSending(false);
-  //     return { url: res.data.url, publicId: res.data.public_id };
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   const getVideoResolution = (file) => {
     return new Promise((resolve, reject) => {
@@ -124,7 +106,6 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
       formData.append("resource_type", "video");
       formData.append("max_duration", 60);
       formData.append("quality", "auto:best");
-      // formData.append("format", "mp4");
       formData.append("width", width);
       formData.append("height", height);
       formData.append("crop", "limit");
@@ -167,7 +148,7 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
       dispatch({ type: "TOGGLE_VIDEO", payload: false });
     } catch (err) {
       console.log(err);
-      setError(err);
+      setError(err.message);
     }
   };
 

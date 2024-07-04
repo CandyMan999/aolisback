@@ -26,6 +26,7 @@ const { getExpoTokenResolver } = require("./pushNotifications");
 const { deleteAccountResolver } = require("./deleteAccount");
 const { termsAgreementResolver } = require("./termsAgreement");
 const { addPhoneResolver } = require("./addPhone");
+const { sendPhoneNumberResolver } = require("./sendPhoneNumber");
 
 module.exports = {
   createRoomResolver,
@@ -57,4 +58,5 @@ module.exports = {
   deleteAccountResolver,
   termsAgreementResolver,
   addPhoneResolver,
+  sendPhoneNumberResolver,
 };

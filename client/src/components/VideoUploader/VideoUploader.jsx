@@ -49,30 +49,6 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
     }
   };
 
-  // const handleUpload = async () => {
-  //   try {
-  //     setSubmitting(true);
-  //     handleSending(true);
-
-  //     const formData = new FormData();
-  //     formData.append("file", file);
-  //     formData.append("upload_preset", "dlxzn2uj");
-  //     formData.append("resource_type", "video");
-  //     formData.append("max_duration", 60);
-
-  //     const res = await axios.post(
-  //       `https://api.cloudinary.com/v1_1/localmassagepros/video/upload`,
-  //       formData
-  //     );
-
-  //     setSubmitting(false);
-  //     handleSending(false);
-  //     return { url: res.data.url, publicId: res.data.public_id };
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   const getVideoResolution = (file) => {
     return new Promise((resolve, reject) => {
       const video = document.createElement("video");

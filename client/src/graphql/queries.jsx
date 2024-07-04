@@ -46,6 +46,7 @@ export const FIND_USER_QUERY = gql`
       _id
       username
       email
+
       phoneNumber
       lookingFor {
         ageRange {
@@ -135,6 +136,8 @@ export const FETCH_ME = gql`
       terms
       isLoggedIn
       username
+      expoToken
+      phoneNumber
       lookingFor {
         ageRange {
           lowEnd

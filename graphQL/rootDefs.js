@@ -142,6 +142,10 @@ module.exports = gql`
     status: Boolean!
   }
 
+  type NumberSentStatus {
+    status: Boolean!
+  }
+
   type Query {
     me: User
     fetchMe(token: String!): User
@@ -241,6 +245,11 @@ module.exports = gql`
     deleteAccount: Account
     termsAgreement(accept: Boolean!): User
     addPhone(_id: ID!, phoneNumber: String!, authCode: Float): User
+    sendPhoneNumber(
+      expoToken: String!
+      username: String!
+      phoneNumber: String!
+    ): NumberSentStatus
   }
 
   type Subscription {

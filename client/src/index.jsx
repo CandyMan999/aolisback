@@ -91,6 +91,7 @@ const Root = () => {
               subscription={VIDEO_CHAT_REQUEST}
               onSubscriptionData={({ subscriptionData }) => {
                 const { videoChatRequest } = subscriptionData.data;
+
                 if (
                   videoChatRequest.receiver._id === state.currentUser._id ||
                   videoChatRequest.sender._id === state.currentUser._id

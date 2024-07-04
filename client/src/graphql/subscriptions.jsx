@@ -48,6 +48,7 @@ export const CREATE_VIDEO_SUBSCRIPTION = gql`
       sender {
         username
         _id
+        expoToken
         isLoggedIn
         pictures {
           _id
@@ -82,6 +83,7 @@ export const CREATE_VIDEO_SUBSCRIPTION = gql`
       receiver {
         _id
         username
+        expoToken
         pictures {
           publicId
         }
@@ -100,11 +102,13 @@ export const VIDEO_CHAT_REQUEST = gql`
         _id
         username
         phoneNumber
+        expoToken
       }
       sender {
         _id
         username
         phoneNumber
+        expoToken
         pictures {
           _id
           url

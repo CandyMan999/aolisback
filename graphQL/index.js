@@ -46,6 +46,7 @@ const {
   deleteAccountResolver,
   termsAgreementResolver,
   addPhoneResolver,
+  sendPhoneNumberResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -96,6 +97,7 @@ const resolvers = {
     deleteAccount: deleteAccountResolver,
     termsAgreement: termsAgreementResolver,
     addPhone: addPhoneResolver,
+    sendPhoneNumber: sendPhoneNumberResolver,
   },
 };
 

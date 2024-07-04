@@ -359,11 +359,11 @@ export const VIDEO_CHAT_REQUEST = gql`
     ) {
       status
       createdAt
-
       sender {
         _id
         phoneNumber
         username
+        expoToken
         pictures {
           _id
           url
@@ -374,6 +374,7 @@ export const VIDEO_CHAT_REQUEST = gql`
         _id
         phoneNumber
         username
+        expoToken
       }
     }
   }
@@ -389,11 +390,12 @@ export const UPDATE_VIDEO_CHAT_REQUEST = gql`
     ) {
       status
       createdAt
-
       sender {
         _id
         phoneNumber
         username
+        expoToken
+        sex
         pictures {
           _id
           url
@@ -404,7 +406,20 @@ export const UPDATE_VIDEO_CHAT_REQUEST = gql`
         _id
         phoneNumber
         username
+        expoToken
       }
+    }
+  }
+`;
+
+export const SEND_PHONE_NUMBER = gql`
+  mutation ($phoneNumber: String!, $username: String!, $expoToken: String!) {
+    sendPhoneNumber(
+      phoneNumber: $phoneNumber
+      username: $username
+      expoToken: $expoToken
+    ) {
+      status
     }
   }
 `;
