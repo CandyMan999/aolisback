@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
 import iOSLogo from "../../pictures/iOSLogo.png";
@@ -20,13 +20,12 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [isApiReady, setIsApiReady] = useState(false);
   const [roomName, setRoomName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showThumbsUp, setShowThumbsUp] = useState(false);
 
-  console.log("current user and chat Request: ", currentUser, videoChatRequest);
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
       const roomName = `${videoChatRequest.sender.username}-${videoChatRequest.receiver.username}`;
       setRoomName(roomName);
-
       setIsMeetingStarted(true);
     }
   }, [videoChatRequest]);
@@ -50,9 +49,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
         status: "Cancel",
       };
 
-      console.log("variables: ", variables);
       const data = await client.request(UPDATE_VIDEO_CHAT_REQUEST, variables);
-
       console.log("success end room: ", data);
     } catch (err) {
       console.log("error ending video call: ", err);
@@ -64,7 +61,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
       videoChatRequest.receiver.username === state.currentUser.username
         ? videoChatRequest.sender
         : videoChatRequest.receiver;
-
     return user.expoToken;
   };
 
@@ -77,10 +73,15 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
         expoToken: handleFigureWhosExpoToken(),
       };
 
-      const { sendPhoneNumber } = await client.request(
+      const { sendPhoneNumber: status } = await client.request(
         SEND_PHONE_NUMBER,
         variables
       );
+
+      if (!!status) {
+        setShowThumbsUp(true);
+        setTimeout(() => setShowThumbsUp(false), 2000); // Show thumbs up for 2 seconds
+      }
 
       setLoading(false);
     } catch (err) {
@@ -120,6 +121,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
             <Button
               onClick={handleSendPhoneNumber}
               width={"30%"}
+              disabled={showThumbsUp || loading}
               color={COLORS.white}
               style={{
                 position: "absolute",
@@ -130,10 +132,11 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 padding: 0,
                 top: 10,
                 right: 0,
+                minHeight: 40,
               }}
             >
               {loading ? (
-                <Loading bar color={COLORS.vividBlue} size={15} />
+                <Loading bar color={COLORS.pink} size={20} />
               ) : (
                 <Text
                   center
@@ -141,7 +144,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                   style={{ padding: 0 }}
                   fontSize={FONT_SIZES.SMALL}
                 >
-                  Send Phone #
+                  {showThumbsUp ? "👍" : "Send Phone #"}
                 </Text>
               )}
             </Button>
@@ -163,6 +166,9 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 enableEmailInStats: false,
                 disableDeepLinking: true,
                 disableEndConference: true,
+                enableFeaturesBasedOnToken: false,
+
+                disableThirdPartyRequests: true,
               }}
               interfaceConfigOverwrite={{
                 TOOLBAR_BUTTONS: [
@@ -171,7 +177,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                   "desktop",
                   "hangup",
                   "tileview",
-                  "videocam",
+                  "toggle-camera",
                 ],
               }}
               userInfo={{
