@@ -20,7 +20,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [isApiReady, setIsApiReady] = useState(false);
   const [roomName, setRoomName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   console.log("current user and chat Request: ", currentUser, videoChatRequest);
   useEffect(() => {
@@ -86,8 +85,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      setError(err);
-      console.log("err: ", err);
     }
   };
 
@@ -136,7 +133,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
               }}
             >
               {loading ? (
-                <Loading pulse color={COLORS.vividBlue} />
+                <Loading bar color={COLORS.vividBlue} size={15} />
               ) : (
                 <Text
                   center
@@ -144,7 +141,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                   style={{ padding: 0 }}
                   fontSize={FONT_SIZES.SMALL}
                 >
-                  {error ? error : `Send Phone #`}
+                  Send Phone #
                 </Text>
               )}
             </Button>
