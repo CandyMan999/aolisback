@@ -119,6 +119,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           currentUser.expoToken &&
           videoChatRequest.receiver.expoToken && (
             <Button
+              id="send-phone"
               onClick={handleSendPhoneNumber}
               width={"30%"}
               disabled={showThumbsUp || loading}
@@ -128,7 +129,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 borderBottom: `solid 2px ${COLORS.pink}`,
                 boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
                 borderRadius: 25,
-                opacity: 0.6,
+                // opacity: 0.6,
                 padding: 0,
                 top: 10,
                 right: 0,
@@ -178,6 +179,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                   "hangup",
                   "tileview",
                   "toggle-camera",
+                  "settings",
                 ],
               }}
               userInfo={{
