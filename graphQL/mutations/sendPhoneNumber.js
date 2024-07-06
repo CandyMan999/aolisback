@@ -5,6 +5,9 @@ const { pushNotificationPhoneNumber } = require("../../utils/middleware");
 module.exports = {
   sendPhoneNumberResolver: async (root, args, ctx) => {
     const { expoToken, username, phoneNumber, imageUrl } = args;
+
+    console.log("backend: ", imageUrl);
+
     try {
       pushNotificationPhoneNumber(expoToken, username, phoneNumber, imageUrl);
 

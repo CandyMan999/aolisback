@@ -195,7 +195,8 @@ const pushNotificationProfile = async (expoToken) => {
 const pushNotificationPhoneNumber = async (
   expoToken,
   username,
-  phoneNumber
+  phoneNumber,
+  imageUrl
 ) => {
   try {
     let expo = new Expo();
@@ -213,7 +214,7 @@ const pushNotificationPhoneNumber = async (
       title: "Gone Chatting",
       subtitle: "Never Catch a Catfish 🎣",
       body: `📞 ${username} wants you to have their number ${phoneNumber}`,
-      data: { expoToken, username, phoneNumber },
+      data: { expoToken, username, phoneNumber, imageUrl },
     });
 
     let chunks = expo.chunkPushNotifications(messages);

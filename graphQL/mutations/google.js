@@ -203,7 +203,7 @@ module.exports = {
           roomInfo: { subscribedAt: moment() },
         },
         { new: true }
-      ).x--;
+      );
 
       if (user.isBanned) {
         throw new AuthenticationError(
