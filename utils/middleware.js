@@ -203,6 +203,8 @@ const pushNotificationPhoneNumber = async (
 
     let messages = [];
 
+    console.log("backend: ", expoToken, username, phoneNumber, imageUrl);
+
     if (!Expo.isExpoPushToken(expoToken)) {
       console.error(`Push token ${expoToken} is not a valid Expo push token`);
       return;
