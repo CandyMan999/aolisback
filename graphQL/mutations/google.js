@@ -203,56 +203,7 @@ module.exports = {
           roomInfo: { subscribedAt: moment() },
         },
         { new: true }
-      ).populate([
-        "pictures",
-        "comments",
-        "sentVideos",
-        "blockedUsers",
-        "receivedVideos",
-        {
-          path: "sentVideos",
-          populate: [
-            {
-              path: "sender",
-              model: "User",
-              populate: {
-                path: "pictures",
-                model: "Picture",
-              },
-            },
-            {
-              path: "receiver",
-              model: "User",
-              populate: {
-                path: "pictures",
-                model: "Picture",
-              },
-            },
-          ],
-        },
-        {
-          path: "receivedVideos",
-          populate: [
-            "blockedUsers",
-            {
-              path: "sender",
-              model: "User",
-              populate: {
-                path: "pictures",
-                model: "Picture",
-              },
-            },
-            {
-              path: "receiver",
-              model: "User",
-              populate: {
-                path: "pictures",
-                model: "Picture",
-              },
-            },
-          ],
-        },
-      ]);
+      ).x--;
 
       if (user.isBanned) {
         throw new AuthenticationError(

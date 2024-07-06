@@ -71,6 +71,9 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
         username: currentUser.username,
         phoneNumber: currentUser.phoneNumber,
         expoToken: handleFigureWhosExpoToken(),
+        imageUrl: currentUser.pictures.length
+          ? currentUser.pictures[0].url
+          : "",
       };
 
       const { sendPhoneNumber: status } = await client.request(

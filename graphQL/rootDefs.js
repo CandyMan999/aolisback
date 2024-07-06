@@ -249,6 +249,7 @@ module.exports = gql`
       expoToken: String!
       username: String!
       phoneNumber: String!
+      imageUrl: String
     ): NumberSentStatus
   }
 
