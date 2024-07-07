@@ -1,21 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Subscription } from "react-apollo";
+import React, { useState, useEffect } from "react";
+
 import { Loading, Text, Button, Box, Icon, ICON_SIZES } from "..";
-import Context from "../../context";
+
 import { COLORS } from "../../constants";
-import { getToken } from "../../utils/helpers";
-import { FETCH_ME } from "../../graphql/queries";
-import { useClient } from "../../client";
-import { CREATE_VIDEO_SUBSCRIPTION } from "../../graphql/subscriptions";
+
 import { useHistory, useLocation } from "react-router-dom";
 
 function VideoUploader({ senderID, receiverID, handleSending }) {
-  const { dispatch, state } = useContext(Context);
-  const client = useClient();
-  const [grabMe, setGrabMe] = useState(false);
-  const token = getToken();
-
-  const currentUser = state;
   const [file, setFile] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -30,37 +21,13 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
     }
   }, [location.search]);
 
-  useEffect(() => {
-    if (grabMe) {
-      handleFetchMe();
-    }
-  }, [grabMe]);
-
-  const handleFetchMe = async () => {
-    try {
-      setSubmitting(true);
-      const variables = {
-        token,
-      };
-
-      const { fetchMe } = await client.request(FETCH_ME, variables);
-
-      await dispatch({ type: "LOGIN_USER", payload: fetchMe });
-      setSubmitting(false);
-      dispatch({ type: "TOGGLE_VIDEO", payload: false });
-    } catch (err) {
-      setSubmitting(false);
-      dispatch({ type: "TOGGLE_VIDEO", payload: false });
-      console.log(err);
-    }
-  };
-
   const handleRecordButtonClick = () => {
     // Construct the new URL with updated query parameters
     const params = new URLSearchParams(location.search);
     params.set("senderID", senderID);
     params.set("receiverID", receiverID);
     params.set("videoMessage", true);
+    setSubmitting(true);
 
     // Navigate to the constructed URL
     history.replace({
@@ -99,19 +66,6 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
           </Button>
         </Box>
       )}
-
-      <Subscription
-        subscription={CREATE_VIDEO_SUBSCRIPTION}
-        onSubscriptionData={({ subscriptionData }) => {
-          const { createVideo } = subscriptionData.data;
-
-          if (createVideo.sender._id === currentUser._id) {
-            dispatch({ type: "UPDATE_USER_VIDEO", payload: createVideo });
-
-            setGrabMe(true);
-          }
-        }}
-      />
     </div>
   );
 }

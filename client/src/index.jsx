@@ -11,14 +11,18 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import Context from "./context";
 import reducer from "./reducer";
-
+import { getToken } from "./utils/helpers";
+import { FETCH_ME } from "./graphql/queries";
 import { ApolloProvider, Subscription } from "react-apollo";
 import { ApolloClient } from "apollo-client";
 import { WebSocketLink } from "apollo-link-ws";
 
 import { InMemoryCache } from "apollo-cache-inmemory";
 
-import { VIDEO_CHAT_REQUEST } from "./graphql/subscriptions";
+import {
+  VIDEO_CHAT_REQUEST,
+  CREATE_VIDEO_SUBSCRIPTION,
+} from "./graphql/subscriptions";
 
 export const WS_URL =
   process.env.NODE_ENV === "production"
@@ -42,12 +46,38 @@ const Root = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [videoChat, setVideoChat] = useState(null);
   const [showScreen, setShowScreen] = useState(false);
+  const [grabMe, setGrabMe] = useState(false);
+  const token = getToken();
+  const currentUser = state;
 
   const mobile = useMediaQuery("(max-width: 650px)");
   const navLogo = useMediaQuery("(max-width: 950px)");
 
   const toggleChatRequest = (payload) => {
     dispatch({ type: "TOGGLE_CHAT", payload });
+  };
+
+  useEffect(() => {
+    if (grabMe) {
+      handleFetchMe();
+    }
+  }, [grabMe]);
+
+  const handleFetchMe = async () => {
+    try {
+      const variables = {
+        token,
+      };
+
+      const { fetchMe } = await client.request(FETCH_ME, variables);
+
+      await dispatch({ type: "LOGIN_USER", payload: fetchMe });
+
+      dispatch({ type: "TOGGLE_VIDEO", payload: false });
+    } catch (err) {
+      dispatch({ type: "TOGGLE_VIDEO", payload: false });
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -86,6 +116,19 @@ const Root = () => {
               mobile={mobile}
               state={state}
               currentUser={state.currentUser}
+            />
+
+            <Subscription
+              subscription={CREATE_VIDEO_SUBSCRIPTION}
+              onSubscriptionData={({ subscriptionData }) => {
+                const { createVideo } = subscriptionData.data;
+
+                if (createVideo.sender._id === currentUser._id) {
+                  dispatch({ type: "UPDATE_USER_VIDEO", payload: createVideo });
+
+                  setGrabMe(true);
+                }
+              }}
             />
             <Subscription
               subscription={VIDEO_CHAT_REQUEST}
