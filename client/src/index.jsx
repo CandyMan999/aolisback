@@ -117,9 +117,10 @@ const Root = () => {
                 const { createVideo } = subscriptionData.data;
 
                 if (createVideo.sender._id === state.currentUser._id) {
-                  dispatch({ type: "UPDATE_USER_VIDEO", payload: createVideo });
                   dispatch({ type: "TOGGLE_VIDEO", payload: false });
-                  handleFetchMe();
+                  dispatch({ type: "UPDATE_USER_VIDEO", payload: createVideo });
+
+                  // handleFetchMe();
                 }
               }}
             />
