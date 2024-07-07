@@ -46,9 +46,8 @@ const Root = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [videoChat, setVideoChat] = useState(null);
   const [showScreen, setShowScreen] = useState(false);
-  const [grabMe, setGrabMe] = useState(false);
+
   const token = getToken();
-  const currentUser = state;
 
   const mobile = useMediaQuery("(max-width: 650px)");
   const navLogo = useMediaQuery("(max-width: 950px)");
@@ -56,12 +55,6 @@ const Root = () => {
   const toggleChatRequest = (payload) => {
     dispatch({ type: "TOGGLE_CHAT", payload });
   };
-
-  useEffect(() => {
-    if (grabMe) {
-      handleFetchMe();
-    }
-  }, [grabMe]);
 
   const handleFetchMe = async () => {
     try {
@@ -123,10 +116,10 @@ const Root = () => {
               onSubscriptionData={({ subscriptionData }) => {
                 const { createVideo } = subscriptionData.data;
 
-                if (createVideo.sender._id === currentUser._id) {
+                if (createVideo.sender._id === state.currentUser._id) {
                   dispatch({ type: "UPDATE_USER_VIDEO", payload: createVideo });
-
-                  setGrabMe(true);
+                  dispatch({ type: "TOGGLE_VIDEO", payload: false });
+                  handleFetchMe();
                 }
               }}
             />
