@@ -1,107 +1,27 @@
-import React, { useState, useContext, useEffect } from "react";
-import axios from "axios";
-import { Loading, Text, Button, Box, Icon, ICON_SIZES } from "..";
+import React, { useState, useContext } from "react";
+import { Button, Box, Icon, ICON_SIZES, Loading, Text } from "..";
 import Context from "../../context";
 import { COLORS } from "../../constants";
-import { useClient } from "../../client";
-import { SEND_VIDEO_MUTATION } from "../../graphql/mutations";
+import { useHistory, useLocation } from "react-router-dom";
 
-function VideoUploader({ senderID, receiverID, handleSending }) {
+function VideoUploader({ senderID, receiverID }) {
   const { dispatch } = useContext(Context);
-  const client = useClient();
-  const [file, setFile] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState(false);
+  const history = useHistory();
+  const location = useLocation();
 
-  useEffect(() => {
-    if (file) {
-      imageUploader();
-    }
-  }, [file]);
+  const handleRecordButtonClick = () => {
+    // Construct the new URL with updated query parameters
+    const params = new URLSearchParams(location.search);
+    params.set("senderID", senderID);
+    params.set("receiverID", receiverID);
+    params.set("videoMessage", true);
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    setFile(selectedFile);
-  };
-
-  const imageUploader = async () => {
-    try {
-      const { url, publicId } = await handleUpload();
-
-      const variables = {
-        url,
-        publicId,
-        senderID,
-        receiverID,
-      };
-
-      const { sendVideo } = await client.request(
-        SEND_VIDEO_MUTATION,
-        variables
-      );
-
-      dispatch({ type: "UPDATE_USER_VIDEO", payload: sendVideo });
-
-      dispatch({ type: "TOGGLE_VIDEO", payload: false });
-    } catch (err) {
-      console.log(err);
-      setError(err);
-    }
-  };
-
-  const getVideoResolution = (file) => {
-    return new Promise((resolve, reject) => {
-      const video = document.createElement("video");
-      video.preload = "metadata";
-
-      video.onloadedmetadata = () => {
-        resolve({ width: video.videoWidth, height: video.videoHeight });
-      };
-
-      video.onerror = () => {
-        reject(new Error("Failed to load video metadata"));
-      };
-
-      video.src = URL.createObjectURL(file);
+    // Navigate to the constructed URL
+    history.replace({
+      pathname: location.pathname,
+      search: params.toString(),
     });
-  };
-
-  const handleUpload = async () => {
-    try {
-      setSubmitting(true);
-      handleSending(true);
-
-      const { width, height } = await getVideoResolution(file);
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "dlxzn2uj");
-      formData.append("resource_type", "video");
-
-      // Adjust parameters for better quality based on actual resolution
-      formData.append("quality", "auto:best");
-      formData.append("max_duration", 60);
-      formData.append("quality", "auto:best");
-
-      formData.append("width", width);
-      formData.append("height", height);
-      formData.append("crop", "limit");
-      formData.append("video_codec", "auto");
-
-      const res = await axios.post(
-        `https://api.cloudinary.com/v1_1/localmassagepros/video/upload`,
-        formData
-      );
-
-      setSubmitting(false);
-      handleSending(false);
-      return { url: res.data.url, publicId: res.data.public_id };
-    } catch (err) {
-      console.log(err);
-      setSubmitting(false);
-      handleSending(false);
-      setError("Cannot upload video");
-    }
   };
 
   return (
@@ -111,6 +31,7 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
       ) : (
         <Box width="100%" column>
           <Button
+            onClick={handleRecordButtonClick}
             width={"200px"}
             disabled={submitting}
             color={COLORS.white}
@@ -121,19 +42,19 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
             }}
           >
             <Box justifyContent="center">
-              <input
-                type="file"
-                accept="video/*"
-                capture="user"
-                placeholder="Take Video"
-                onChange={handleFileChange}
-                style={{
-                  position: "absolute",
-                  opacity: 0,
-                  top: 15,
-                  left: 50,
-                }}
-              />
+              {/* <input
+                  type="file"
+                  accept="video/*"
+                  capture="user"
+                  placeholder="Take Video"
+                  onChange={handleFileChange}
+                  style={{
+                    position: "absolute",
+                    opacity: 0,
+                    top: 15,
+                    left: 50,
+                  }}
+                /> */}
 
               <Icon
                 name="record"
@@ -145,16 +66,16 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
               </Text>
             </Box>
           </Button>
-          {file && (
-            <Box display="flex" justifyContent="center">
-              <Text
-                center
-                color={!error ? COLORS.facebookBlue : COLORS.textRed}
-              >
-                {!error ? "Success add another!" : error}
-              </Text>
-            </Box>
-          )}
+          {/* {file && (
+              <Box display="flex" justifyContent="center">
+                <Text
+                  center
+                  color={!error ? COLORS.facebookBlue : COLORS.textRed}
+                >
+                  {!error ? "Success add another!" : error}
+                </Text>
+              </Box>
+            )} */}
         </Box>
       )}
     </div>
