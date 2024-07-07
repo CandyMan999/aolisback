@@ -1,10 +1,15 @@
-const { User } = require("../models");
+const { User, Video } = require("../models");
 const cron = require("node-cron");
 const { pushNotificationProfile } = require("../utils/middleware");
+const cloudinary = require("cloudinary").v2;
 
-const { Expo } = require("expo-server-sdk");
-let expo = new Expo();
 require("dotenv").config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 const cronJob = async () => {
   try {
@@ -33,8 +38,54 @@ const cronJob = async () => {
       },
       { scheduled: true, timezone: "America/Denver" }
     );
+
+    cron.schedule(
+      "0 0 */10 * *", // Every 10 days at midnight
+      async () => {
+        const allUsers = await User.find();
+
+        for (const user of allUsers) {
+          await deleteAllVideos(user);
+        }
+      },
+      { scheduled: true, timezone: "America/Denver" }
+    );
+
+    const deleteAllVideos = async (currentUser) => {
+      try {
+        const publicIDs = [];
+        for (const video of currentUser.sentVideos) {
+          publicIDs.push(video.publicId);
+          await User.findByIdAndUpdate(
+            { _id: video.receiver._id },
+            { $pull: { receivedVideos: video._id } }
+          );
+          await Video.deleteOne({ _id: video._id });
+        }
+        for (const video of currentUser.receivedVideos) {
+          publicIDs.push(video.publicId);
+          await Video.deleteOne({ _id: video._id });
+        }
+
+        if (publicIDs.length) {
+          await cloudinary.api.delete_resources(publicIDs, {
+            resource_type: "video",
+          });
+        }
+
+        // Clear references in the user object
+        await User.findByIdAndUpdate(currentUser._id, {
+          $set: {
+            sentVideos: [],
+            receivedVideos: [],
+          },
+        });
+      } catch (err) {
+        console.log("Error deleting videos:", err);
+      }
+    };
   } catch (err) {
-    console.log("error running cron: ", err);
+    console.log("Error running cron:", err);
   }
 };
 
