@@ -2,7 +2,7 @@ const { User, Video } = require("../models");
 const cron = require("node-cron");
 const { pushNotificationProfile } = require("../utils/middleware");
 const cloudinary = require("cloudinary").v2;
-
+const moment = require("moment"); // Ensure you have moment.js installed
 require("dotenv").config();
 
 cloudinary.config({
@@ -13,6 +13,7 @@ cloudinary.config({
 
 const cronJob = async () => {
   try {
+    // Notification cron job
     cron.schedule(
       "0 0 */2 * * *",
       async () => {
@@ -35,55 +36,48 @@ const cronJob = async () => {
             pushNotificationProfile(pushToken);
           }
         }
-      },
-      { scheduled: true, timezone: "America/Denver" }
-    );
 
-    cron.schedule(
-      "0 0 */10 * *", // Every 10 days at midnight
-      async () => {
-        const allUsers = await User.find();
-
-        for (const user of allUsers) {
-          await deleteAllVideos(user);
-        }
-      },
-      { scheduled: true, timezone: "America/Denver" }
-    );
-
-    const deleteAllVideos = async (currentUser) => {
-      try {
+        // Video deletion job
+        const videos = await Video.find();
         const publicIDs = [];
-        for (const video of currentUser.sentVideos) {
-          publicIDs.push(video.publicId);
-          await User.findByIdAndUpdate(
-            { _id: video.receiver._id },
-            { $pull: { receivedVideos: video._id } }
-          );
-          await Video.deleteOne({ _id: video._id });
-        }
-        for (const video of currentUser.receivedVideos) {
-          publicIDs.push(video.publicId);
-          await Video.deleteOne({ _id: video._id });
-        }
 
-        if (publicIDs.length) {
-          await cloudinary.api.delete_resources(publicIDs, {
-            resource_type: "video",
-          });
-        }
+        await Promise.all(
+          videos.map(async (video) => {
+            const pastDue = moment(video.createdAt).isBefore(
+              moment().subtract(7, "days")
+            );
 
-        // Clear references in the user object
-        await User.findByIdAndUpdate(currentUser._id, {
-          $set: {
-            sentVideos: [],
-            receivedVideos: [],
-          },
-        });
-      } catch (err) {
-        console.log("Error deleting videos:", err);
-      }
-    };
+            if (pastDue) {
+              publicIDs.push(video.publicId);
+              const receiver = video.receiver._id;
+              const sender = video.sender._id;
+
+              await Video.deleteOne({ _id: video._id });
+
+              await User.findByIdAndUpdate(
+                receiver,
+                { $pull: { receivedVideos: video._id } },
+                { new: true }
+              );
+
+              await User.findByIdAndUpdate(
+                sender,
+                { $pull: { sentVideos: video._id } },
+                { new: true }
+              );
+            }
+          })
+        );
+
+        await cloudinary.api.delete_resources(
+          publicIDs,
+
+          { resource_type: "video" }
+        );
+      },
+
+      { scheduled: true, timezone: "America/Denver" }
+    );
   } catch (err) {
     console.log("Error running cron:", err);
   }
