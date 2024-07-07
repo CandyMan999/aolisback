@@ -12,7 +12,7 @@ import { useHistory, useLocation } from "react-router-dom";
 function VideoUploader({ senderID, receiverID, handleSending }) {
   const { dispatch, state } = useContext(Context);
   const client = useClient();
-  const [grabMe, setGrabMe] = useState(true);
+  const [grabMe, setGrabMe] = useState(false);
   const token = getToken();
 
   const currentUser = state;
@@ -61,7 +61,6 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
     params.set("senderID", senderID);
     params.set("receiverID", receiverID);
     params.set("videoMessage", true);
-    setSubmitting(true);
 
     // Navigate to the constructed URL
     history.replace({
