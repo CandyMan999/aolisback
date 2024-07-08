@@ -218,7 +218,7 @@ const Message = () => {
                         <Icon
                           style={{ zIndex: 1000 }}
                           name="threeDot"
-                          size={ICON_SIZES.LARGE}
+                          size={ICON_SIZES.X_LARGE}
                           color={COLORS.vividBlue}
                           onClick={() => handleToggleBottomDrawer(video)}
                         />
@@ -228,7 +228,7 @@ const Message = () => {
                     <VideoPlayer
                       publicId={video.publicId}
                       controls={true}
-                      height={100}
+                      height={250}
                       width={"auto"}
                       borderRadius={"10px"}
                       fullScreen={true}
@@ -261,20 +261,42 @@ const Message = () => {
             disabled={isBlocked}
             width="70%"
             onClick={toggleModal}
+            color={isBlocked ? COLORS.lightGrey : COLORS.white}
             style={{
-              borderBottom: `solid 2px ${COLORS.grey}`,
-              boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+              borderBottom: `solid 2px ${COLORS.pink}`,
+              boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+              borderRadius: 25,
+              marginBottom: "5%",
             }}
           >
             {isBlocked ? (
-              <Box justifyContent={"center"} width={"90%"}>
-                <Icon name="block" size={ICON_SIZES.LARGE} />{" "}
-                <Text fontSize={FONT_SIZES.LARGE} bold margin={2}>
+              <Box
+                justifyContent={"center"}
+                width={"90%"}
+                style={{ alignItems: "center" }}
+              >
+                <Icon
+                  name="block"
+                  size={ICON_SIZES.LARGE}
+                  color={COLORS.textRed}
+                />{" "}
+                <Text
+                  fontSize={FONT_SIZES.LARGE}
+                  bold
+                  margin={2}
+                  color={COLORS.black}
+                  center
+                >
                   Blocked
                 </Text>
               </Box>
             ) : (
-              <Text fontSize={FONT_SIZES.LARGE} bold margin={2}>
+              <Text
+                fontSize={FONT_SIZES.LARGE}
+                bold
+                margin={2}
+                color={COLORS.black}
+              >
                 Reply
               </Text>
             )}

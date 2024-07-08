@@ -119,8 +119,10 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
         style={{
           margin: "20px",
           textAlign: "center",
-          borderColor: `solid 1px ${COLORS.pink}`,
+          borderColor: COLORS.pink,
+          opacity: 0.8,
         }}
+        background={COLORS.lightPurple}
         width="100%"
         height={"60vH"}
         justifyContent="space-around"
@@ -129,7 +131,7 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
       >
         <Box display={"flex"} column justifyContent="space-around">
           <Box centerText>
-            <Text fontSize={FONT_SIZES.X_LARGE} bold>
+            <Text fontSize={FONT_SIZES.X_LARGE} bold color={COLORS.deepPurple}>
               No Video Messages At This Time!
             </Text>
           </Box>

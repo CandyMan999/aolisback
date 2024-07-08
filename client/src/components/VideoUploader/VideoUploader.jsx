@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import iOSLogo from "../../pictures/iOSLogo.png";
 import { Loading, Text, Button, Box, Icon, ICON_SIZES } from "..";
 
 import { COLORS } from "../../constants";
@@ -41,7 +41,14 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
       {submitting ? (
         <Loading ring size={150} />
       ) : (
-        <Box width="100%" column>
+        <Box width="100%" column alignItems="center">
+          <img
+            height={100}
+            width={100}
+            src={iOSLogo}
+            alt="Watermark-logo"
+            style={{ paddingBottom: "10%" }}
+          />
           <Button
             onClick={handleRecordButtonClick}
             width={"200px"}
@@ -59,7 +66,7 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
                 size={ICON_SIZES.X_LARGE}
                 color={COLORS.pink}
               />
-              <Text bold center color={COLORS.pink}>
+              <Text bold center color={COLORS.black}>
                 Record Video
               </Text>
             </Box>

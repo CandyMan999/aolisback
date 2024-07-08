@@ -178,7 +178,7 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
                       <Icon
                         name="record"
                         size={ICON_SIZES.X_LARGE}
-                        color={COLORS.pink}
+                        color={COLORS.black}
                       />
                       <Text bold center color={COLORS.pink}>
                         Record Video

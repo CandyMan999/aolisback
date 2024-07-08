@@ -8,14 +8,13 @@ const JoinARoom = ({ isPointingDown }) => {
     let style = {};
     if (!isPointingDown) {
       style = {
-        // textShadow:
-        //   "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
+        textShadow:
+          "-0.5px -0.5px 0 black, 1px -0.5px 0 black, -0.5px 0.5px 0 black, 0.5px 0.5px 0 black",
         color: COLORS.vividBlue,
       };
     } else {
       style = {
-        textShadow:
-          "-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white",
+        textShadow: `-0.5px -0.5px 0 ${COLORS.pink}, 0.5px -0.5px 0 ${COLORS.pink}, -0.5px 0.5px 0 ${COLORS.pink}, 0.5px 0.5px 0 ${COLORS.pink}`,
         color: "black",
       };
     }

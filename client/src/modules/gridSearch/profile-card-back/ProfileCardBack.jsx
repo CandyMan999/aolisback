@@ -165,8 +165,9 @@ const ProfileCardBack = ({
             width={150}
             height={280}
             controls={true}
+            fullScreen={false}
             mobile={mobile}
-            borderRadius="10px 10px 0px 0px"
+            borderRadius="8px 8px 0px 0px"
           />
         </Box>
       ) : undefined}

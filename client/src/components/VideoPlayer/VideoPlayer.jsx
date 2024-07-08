@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { VIEWED_VIDEO_MUTATION } from "../../graphql/mutations";
 import { useLocation } from "react-router-dom";
 import { Cloudinary } from "@cloudinary/url-gen";
-import { AdvancedVideo } from "@cloudinary/react";
+import { Box, Loading, Text } from "../../components";
+import { COLORS } from "../../constants";
+import { AdvancedVideo, AdvancedImage } from "@cloudinary/react";
 
 const VideoPlayer = ({
   publicId,
@@ -46,16 +48,14 @@ const VideoPlayer = ({
 
   const handlePlay = (event) => {
     const videoPlayer = event.currentTarget;
-    // if (fullScreen && !isFullScreen) {
     videoPlayer.requestFullscreen();
     setIsFullScreen(true);
-    // }
     if (receiverWatching) {
       handleViewVideo();
     }
   };
 
-  const handleFullsScreen = (event) => {
+  const handleFullScreen = (event) => {
     const videoPlayer = event.currentTarget;
     if (fullScreen && !isFullScreen) {
       videoPlayer.requestFullscreen();
@@ -80,19 +80,50 @@ const VideoPlayer = ({
   }, []);
 
   if (isLoading || !cloudinaryRef.current) {
-    return null; // Show loading or null while initializing
+    return (
+      <Box
+        width={150}
+        height={height ? height : 250}
+        background={COLORS.lightGrey}
+        borderRadius={8}
+        flex
+        column
+      >
+        <Loading ring size={35} color={COLORS.pink} />
+        <Text center padding={0} bold color={COLORS.white}>
+          Processing HD...
+        </Text>
+      </Box>
+    ); // Show loading or null while initializing
+  }
+
+  if (location.pathname === "/message-center") {
+    const video = cloudinaryRef.current.video(publicId);
+
+    return (
+      <AdvancedVideo
+        cldVid={video}
+        controls={controls}
+        onClick={handleFullScreen}
+        width={width}
+        height={height ? height : 250}
+        style={{
+          borderRadius: borderRadius ? borderRadius : undefined,
+          maxWidth: isFullScreen ? undefined : 300,
+        }}
+        {...props}
+      />
+    );
   }
 
   const video = cloudinaryRef.current.video(publicId);
-
   return (
     <AdvancedVideo
       cldVid={video}
       controls={controls}
-      // onPlay={handlePlay}
-      onClick={handleFullsScreen}
+      onClick={handleFullScreen}
       width={width}
-      height={location.pathname === "/message-center" ? height : 250}
+      height={height ? height : 250}
       style={{
         borderRadius: borderRadius ? borderRadius : undefined,
         maxWidth: isFullScreen ? undefined : 300,
