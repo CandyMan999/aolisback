@@ -322,6 +322,8 @@ const Message = () => {
               }
 
               setGroupReceived([...groupedReceived, createVideo]);
+              setLoading(false);
+              dispatch({ type: "TOGGLE_VIDEO", payload: false });
             }
           }}
         />

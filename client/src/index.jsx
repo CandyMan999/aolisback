@@ -1,5 +1,9 @@
 import React, { useContext, useReducer, useState, useEffect } from "react";
-import { BrowserRouter, BrowserRouter as Router } from "react-router-dom";
+import {
+  BrowserRouter,
+  BrowserRouter as Router,
+  useLocation,
+} from "react-router-dom";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
@@ -11,8 +15,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import Context from "./context";
 import reducer from "./reducer";
-import { getToken } from "./utils/helpers";
-import { FETCH_ME } from "./graphql/queries";
+
 import { ApolloProvider, Subscription } from "react-apollo";
 import { ApolloClient } from "apollo-client";
 import { WebSocketLink } from "apollo-link-ws";
@@ -47,30 +50,11 @@ const Root = () => {
   const [videoChat, setVideoChat] = useState(null);
   const [showScreen, setShowScreen] = useState(false);
 
-  const token = getToken();
-
   const mobile = useMediaQuery("(max-width: 650px)");
   const navLogo = useMediaQuery("(max-width: 950px)");
 
   const toggleChatRequest = (payload) => {
     dispatch({ type: "TOGGLE_CHAT", payload });
-  };
-
-  const handleFetchMe = async () => {
-    try {
-      const variables = {
-        token,
-      };
-
-      const { fetchMe } = await client.request(FETCH_ME, variables);
-
-      await dispatch({ type: "LOGIN_USER", payload: fetchMe });
-
-      dispatch({ type: "TOGGLE_VIDEO", payload: false });
-    } catch (err) {
-      dispatch({ type: "TOGGLE_VIDEO", payload: false });
-      console.log(err);
-    }
   };
 
   useEffect(() => {
@@ -81,6 +65,27 @@ const Root = () => {
 
   const handleShutScreen = () => {
     setShowScreen(false);
+  };
+
+  const SubscriptionWrapper = ({ dispatch, currentUser }) => {
+    const location = useLocation();
+
+    return (
+      <Subscription
+        subscription={CREATE_VIDEO_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { createVideo } = subscriptionData.data;
+
+          if (
+            createVideo.sender._id === currentUser._id &&
+            location.pathname !== "/message"
+          ) {
+            dispatch({ type: "TOGGLE_VIDEO", payload: false });
+            dispatch({ type: "UPDATE_USER_VIDEO", payload: createVideo });
+          }
+        }}
+      />
+    );
   };
 
   return (
@@ -111,18 +116,9 @@ const Root = () => {
               currentUser={state.currentUser}
             />
 
-            <Subscription
-              subscription={CREATE_VIDEO_SUBSCRIPTION}
-              onSubscriptionData={({ subscriptionData }) => {
-                const { createVideo } = subscriptionData.data;
-
-                if (createVideo.sender._id === state.currentUser._id) {
-                  dispatch({ type: "TOGGLE_VIDEO", payload: false });
-                  dispatch({ type: "UPDATE_USER_VIDEO", payload: createVideo });
-
-                  // handleFetchMe();
-                }
-              }}
+            <SubscriptionWrapper
+              dispatch={dispatch}
+              currentUser={state.currentUser}
             />
             <Subscription
               subscription={VIDEO_CHAT_REQUEST}

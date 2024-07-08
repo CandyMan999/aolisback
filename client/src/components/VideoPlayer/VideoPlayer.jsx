@@ -1,52 +1,35 @@
 import { useEffect, useRef, useState } from "react";
-import { browserName, isIOS, isAndroid } from "react-device-detect";
 import { VIEWED_VIDEO_MUTATION } from "../../graphql/mutations";
 import { useLocation } from "react-router-dom";
+import { Cloudinary } from "@cloudinary/url-gen";
+import { AdvancedVideo } from "@cloudinary/react";
 
 const VideoPlayer = ({
   publicId,
   width,
   height,
-  props,
   controls,
-  mobile,
   borderRadius,
   fullScreen,
   receiverWatching,
   _id,
   client,
+  ...props
 }) => {
-  const cloudinaryRef = useRef();
-  const videoRef = useRef();
   const location = useLocation();
   const [isFullScreen, setIsFullScreen] = useState(false);
-
-  const isChromeMobile = isIOS && browserName === "Chrome" && mobile;
+  const [isLoading, setIsLoading] = useState(true);
+  const cloudinaryRef = useRef();
 
   useEffect(() => {
-    if (cloudinaryRef.current) return;
-    cloudinaryRef.current = window.cloudinary;
-    const videoPlayer = cloudinaryRef.current.videoPlayer(videoRef.current, {
-      cloud_name: "localmassagepros",
-    });
-
-    videoPlayer.on("play", () => {
-      if ((fullScreen && !isChromeMobile) || isAndroid) {
-        videoPlayer.maximize();
-        setIsFullScreen(true);
-      }
-      if (receiverWatching) {
-        handleViewVideo();
-      }
-    });
-
-    videoPlayer.on("fullscreenchange", () => {
-      const maxView = videoPlayer.isMaximized();
-      if (!maxView) {
-        videoPlayer.exitMaximize();
-        setIsFullScreen(false);
-      }
-    });
+    if (!cloudinaryRef.current) {
+      cloudinaryRef.current = new Cloudinary({
+        cloud: {
+          cloudName: "localmassagepros",
+        },
+      });
+      setIsLoading(false); // Set loading to false once Cloudinary instance is ready
+    }
   }, []);
 
   const handleViewVideo = async () => {
@@ -55,42 +38,65 @@ const VideoPlayer = ({
         _id,
         viewed: true,
       };
-      const { viewVideo } = await client.request(
-        VIEWED_VIDEO_MUTATION,
-        variables
-      );
+      await client.request(VIEWED_VIDEO_MUTATION, variables);
     } catch (err) {
       console.log("err setting video watched: ", err);
     }
   };
 
-  return isChromeMobile || isAndroid ? (
-    <video
-      key={publicId}
-      ref={videoRef}
-      data-cld-public-id={publicId}
+  const handlePlay = (event) => {
+    const videoPlayer = event.currentTarget;
+    // if (fullScreen && !isFullScreen) {
+    videoPlayer.requestFullscreen();
+    setIsFullScreen(true);
+    // }
+    if (receiverWatching) {
+      handleViewVideo();
+    }
+  };
+
+  const handleFullsScreen = (event) => {
+    const videoPlayer = event.currentTarget;
+    if (fullScreen && !isFullScreen) {
+      videoPlayer.requestFullscreen();
+      setIsFullScreen(true);
+    }
+    if (receiverWatching) {
+      handleViewVideo();
+    }
+  };
+
+  const handleFullscreenChange = () => {
+    if (!document.fullscreenElement) {
+      setIsFullScreen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
+  if (isLoading || !cloudinaryRef.current) {
+    return null; // Show loading or null while initializing
+  }
+
+  const video = cloudinaryRef.current.video(publicId);
+
+  return (
+    <AdvancedVideo
+      cldVid={video}
+      controls={controls}
+      // onPlay={handlePlay}
+      onClick={handleFullsScreen}
       width={width}
       height={location.pathname === "/message-center" ? height : 250}
-      controls={controls}
       style={{
         borderRadius: borderRadius ? borderRadius : undefined,
-        maxWidth: !isFullScreen || !isAndroid ? 300 : undefined,
-      }} // Add border radius
-      {...props}
-    />
-  ) : (
-    <video
-      key={publicId}
-      ref={videoRef}
-      data-cld-public-id={publicId}
-      width={width}
-      height={height}
-      controls={controls}
-      playsInline={!fullScreen ? "webkit-playsinline" : undefined}
-      style={{
-        borderRadius: borderRadius ? borderRadius : undefined,
-        maxWidth: mobile && !isFullScreen ? 300 : undefined,
-      }} // Add border radius
+        maxWidth: isFullScreen ? undefined : 300,
+      }}
       {...props}
     />
   );
