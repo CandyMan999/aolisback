@@ -29,7 +29,7 @@ const VideoPlayer = ({
   const handleViewVideo = async () => {
     try {
       const variables = { _id, viewed: true };
-      await client.request(VIEWED_VIDEO_MUTATION, variables);
+      const data = await client.request(VIEWED_VIDEO_MUTATION, variables);
     } catch (err) {
       console.log("Error setting video watched: ", err);
     }
@@ -68,12 +68,13 @@ const VideoPlayer = ({
 
   return (
     <Fragment>
-      {isLoading && (
+      {/* {isLoading &&  (
         <Box
           width={width}
           height={height || 250}
           background={COLORS.lightGrey}
           borderRadius={8}
+          paddingX={5}
           flex
           column
           alignItems="center"
@@ -84,42 +85,40 @@ const VideoPlayer = ({
             Processing HD...
           </Text>
         </Box>
-      )}
-      {location.pathname !== "/message-center" && (
-        <Box style={{ display: isLoading ? "none" : "block" }}>
-          <AdvancedVideo
-            cldVid={video}
-            ref={videoRef}
-            onCanPlay={handleSetLoading}
-            controls={controls}
-            onClick={handleFullScreen}
-            width={width}
-            height={height || 250}
-            style={{
-              borderRadius: borderRadius || undefined,
-              maxWidth: isFullScreen ? undefined : 300,
-            }}
-            {...props}
-          />
-        </Box>
+      )} */}
+      {location.pathname !== "/message-center" && !!cloudinaryRef.current && (
+        <AdvancedVideo
+          cldVid={video}
+          ref={videoRef}
+          onCanPlay={handleSetLoading}
+          controls={controls}
+          onPlay={handleViewVideo}
+          onClick={handleFullScreen}
+          width={width}
+          height={height || 250}
+          style={{
+            borderRadius: borderRadius || undefined,
+            maxWidth: isFullScreen ? undefined : 300,
+          }}
+          {...props}
+        />
       )}
 
-      {location.pathname === "/message-center" && (
-        <Box style={{ display: isLoading ? "none" : "block" }}>
-          <AdvancedVideo
-            cldVid={video}
-            controls={controls}
-            onCanPlay={handleSetLoading}
-            onClick={handleFullScreen}
-            width={width}
-            height={height || 250}
-            style={{
-              borderRadius: borderRadius || undefined,
-              maxWidth: isFullScreen ? undefined : 300,
-            }}
-            {...props}
-          />
-        </Box>
+      {location.pathname === "/message-center" && !!cloudinaryRef.current && (
+        <AdvancedVideo
+          cldVid={video}
+          controls={controls}
+          onPlay={handleViewVideo}
+          onCanPlay={handleSetLoading}
+          onClick={handleFullScreen}
+          width={width}
+          height={height || 250}
+          style={{
+            borderRadius: borderRadius || undefined,
+            maxWidth: isFullScreen ? undefined : 300,
+          }}
+          {...props}
+        />
       )}
     </Fragment>
   );
