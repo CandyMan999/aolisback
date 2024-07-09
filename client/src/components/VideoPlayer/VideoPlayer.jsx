@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { VIEWED_VIDEO_MUTATION } from "../../graphql/mutations";
 import { useLocation } from "react-router-dom";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { Box, Loading, Text } from "../../components";
 import { COLORS } from "../../constants";
-import { AdvancedVideo, AdvancedImage } from "@cloudinary/react";
+import { AdvancedVideo } from "@cloudinary/react";
 
 const VideoPlayer = ({
   publicId,
@@ -21,37 +21,17 @@ const VideoPlayer = ({
   const location = useLocation();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const cloudinaryRef = useRef();
-
-  useEffect(() => {
-    if (!cloudinaryRef.current) {
-      cloudinaryRef.current = new Cloudinary({
-        cloud: {
-          cloudName: "localmassagepros",
-        },
-      });
-      setIsLoading(false); // Set loading to false once Cloudinary instance is ready
-    }
-  }, []);
+  const cloudinaryRef = useRef(
+    new Cloudinary({ cloud: { cloudName: "localmassagepros" } })
+  );
+  const videoRef = useRef();
 
   const handleViewVideo = async () => {
     try {
-      const variables = {
-        _id,
-        viewed: true,
-      };
+      const variables = { _id, viewed: true };
       await client.request(VIEWED_VIDEO_MUTATION, variables);
     } catch (err) {
-      console.log("err setting video watched: ", err);
-    }
-  };
-
-  const handlePlay = (event) => {
-    const videoPlayer = event.currentTarget;
-    videoPlayer.requestFullscreen();
-    setIsFullScreen(true);
-    if (receiverWatching) {
-      handleViewVideo();
+      console.log("Error setting video watched: ", err);
     }
   };
 
@@ -72,43 +52,48 @@ const VideoPlayer = ({
     }
   };
 
+  const handleSetLoading = () => {
+    console.log("CAN PLAY!!!!!!");
+    setIsLoading(false);
+  };
+
   useEffect(() => {
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     return () => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
   }, []);
-
-  if (isLoading || !cloudinaryRef.current) {
-    return (
-      <Box
-        width={150}
-        height={height ? height : 250}
-        background={COLORS.lightGrey}
-        borderRadius={8}
-        flex
-        column
-      >
-        <Loading ring size={35} color={COLORS.pink} />
-        <Text center padding={0} bold color={COLORS.white}>
-          Processing HD...
-        </Text>
-      </Box>
-    ); // Show loading or null while initializing
-  }
-
-  if (location.pathname === "/message-center") {
+  if (!isLoading && cloudinaryRef.current) {
     const video = cloudinaryRef.current.video(publicId);
 
+    return (
+      <AdvancedVideo
+        cldVid={video}
+        ref={videoRef}
+        onCanPlay={handleSetLoading}
+        controls={controls}
+        onClick={handleFullScreen}
+        width={width}
+        height={height || 250}
+        style={{
+          borderRadius: borderRadius || undefined,
+          maxWidth: isFullScreen ? undefined : 300,
+        }}
+        {...props}
+      />
+    );
+  }
+  if (location.pathname === "/message-center" && cloudinaryRef.current) {
+    const video = cloudinaryRef.current.video(publicId);
     return (
       <AdvancedVideo
         cldVid={video}
         controls={controls}
         onClick={handleFullScreen}
         width={width}
-        height={height ? height : 250}
+        height={height || 250}
         style={{
-          borderRadius: borderRadius ? borderRadius : undefined,
+          borderRadius: borderRadius || undefined,
           maxWidth: isFullScreen ? undefined : 300,
         }}
         {...props}
@@ -116,21 +101,44 @@ const VideoPlayer = ({
     );
   }
 
-  const video = cloudinaryRef.current.video(publicId);
-  return (
-    <AdvancedVideo
-      cldVid={video}
-      controls={controls}
-      onClick={handleFullScreen}
-      width={width}
-      height={height ? height : 250}
-      style={{
-        borderRadius: borderRadius ? borderRadius : undefined,
-        maxWidth: isFullScreen ? undefined : 300,
-      }}
-      {...props}
-    />
-  );
+  if (isLoading && cloudinaryRef.current) {
+    const video = cloudinaryRef.current.video(publicId);
+    return (
+      <Fragment>
+        <Box style={{ display: "none" }}>
+          <AdvancedVideo
+            cldVid={video}
+            controls={controls}
+            onCanPlay={handleSetLoading}
+            onClick={handleFullScreen}
+            width={width}
+            height={height || 250}
+            style={{
+              borderRadius: borderRadius || undefined,
+              maxWidth: isFullScreen ? undefined : 300,
+            }}
+            {...props}
+          />
+        </Box>
+
+        <Box
+          width={150}
+          height={height || 250}
+          background={COLORS.lightGrey}
+          borderRadius={8}
+          flex
+          column
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Loading ring size={35} color={COLORS.pink} />
+          <Text center padding={0} bold color={COLORS.white}>
+            Processing HD...
+          </Text>
+        </Box>
+      </Fragment>
+    );
+  }
 };
 
 export default VideoPlayer;

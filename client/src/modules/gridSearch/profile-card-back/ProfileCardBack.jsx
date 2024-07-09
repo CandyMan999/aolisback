@@ -13,6 +13,8 @@ import { COLORS } from "../../../constants";
 import { GET_VIDEOS_QUERY } from "../../../graphql/queries";
 
 import { motion } from "framer-motion";
+import zIndex from "@material-ui/core/styles/zIndex";
+import { Background } from "@cloudinary/url-gen/qualifiers";
 
 const ProfileCardBack = ({
   online,
@@ -94,6 +96,7 @@ const ProfileCardBack = ({
         borderRadius: "10px",
         justifyContent: "space-between",
         boxShadow: `0px 0px 5px 1px ${COLORS.lightGrey}`,
+        background: video ? COLORS.black : undefined,
         border:
           activeID === user._id
             ? `3px solid ${COLORS.pink}`
@@ -159,7 +162,13 @@ const ProfileCardBack = ({
       {loading ? (
         <Loading ring />
       ) : video ? (
-        <Box style={{ display: "contents" }} key={video.publicId}>
+        <Box
+          style={{
+            display: "contents",
+            overflow: "hidden",
+          }}
+          key={video.publicId}
+        >
           <VideoPlayer
             publicId={video.publicId}
             width={150}
@@ -167,7 +176,7 @@ const ProfileCardBack = ({
             controls={true}
             fullScreen={false}
             mobile={mobile}
-            borderRadius="8px 8px 0px 0px"
+            borderRadius="8px 8px 8px 8px"
           />
         </Box>
       ) : undefined}
@@ -178,6 +187,7 @@ const ProfileCardBack = ({
         bottom={0}
         justifyContent="center"
         height={40}
+        style={{ display: video ? "none" : undefined }}
         alignItems="center"
         borederRadius="0px 0px 10px 10px"
         onClick={isBlocked ? undefined : handleMessage}
