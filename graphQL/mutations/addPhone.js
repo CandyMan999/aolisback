@@ -6,18 +6,7 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
 const client = require("twilio")(accountSid, authToken);
-
-let TWO_FACTOR = {};
-
-const generateAuthCode = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-};
-
-const setAuthCodeTimeout = (_id) => {
-  setTimeout(() => {
-    delete TWO_FACTOR[_id];
-  }, 60000); // 60 seconds
-};
+const serviceSid = process.env.TWILIO_VERIFY_SID;
 
 module.exports = {
   addPhoneResolver: async (root, args, ctx) => {
@@ -26,59 +15,52 @@ module.exports = {
     try {
       // Check if the phone number is already in use
       const existingUser = await User.findOne({ phoneNumber });
-      if (existingUser && existingUser._id !== _id) {
-        //check if associated phone number is banned
+      if (existingUser && existingUser._id.toString() !== _id) {
+        // Check if associated phone number is banned
         if (existingUser.isBanned) {
           throw new AuthenticationError(
-            "A user accosiated with the number has been BANNED!"
+            "A user associated with the number has been BANNED!"
           );
         }
-        // check if phone number is in use
+        // Check if phone number is in use
         throw new AuthenticationError("This phone number is already in use.");
       }
 
-      // Generate a new auth code if not provided
       if (!authCode) {
-        const twoFactor = generateAuthCode();
-        TWO_FACTOR[_id] = twoFactor;
-
         try {
-          const message = await client.messages.create({
-            body: `GoneChatting's: authorization code ${twoFactor}`,
-            messagingServiceSid,
-            from: "+16508709194",
+          await client.verify.v2.services(serviceSid).verifications.create({
+            channel: "sms",
             to: phoneNumber,
           });
 
-          console.log("verification code: ", twoFactor);
+          return { message: "Verification code sent." };
         } catch (err) {
-          console.log("err sending text: ", err);
+          console.error("Error sending text: ", err);
           throw new AuthenticationError(err);
         }
+      } else {
+        try {
+          const verificationCheck = await client.verify.v2
+            .services(serviceSid)
+            .verificationChecks.create({ to: phoneNumber, code: authCode });
 
-        // Set a timeout to delete the auth code after 60 seconds
-        setAuthCodeTimeout(_id);
-
-        return { message: "Verification code sent." };
+          if (verificationCheck.status === "approved") {
+            const user = await User.findByIdAndUpdate(
+              { _id },
+              { phoneNumber, profileComplete: true },
+              { new: true }
+            ).populate("pictures");
+            return user;
+          } else {
+            throw new AuthenticationError("Invalid verification code.");
+          }
+        } catch (err) {
+          console.error("Error verifying code: ", err);
+          throw new AuthenticationError(err);
+        }
       }
-
-      // Verify the auth code
-      if (authCode && Number(authCode) !== Number(TWO_FACTOR[_id])) {
-        throw new AuthenticationError("Invalid Verification Code");
-      }
-      // Update the phone number after verification
-
-      let user;
-      if (authCode && Number(authCode) === Number(TWO_FACTOR[_id])) {
-        user = await User.findByIdAndUpdate(
-          { _id },
-          { phoneNumber, profileComplete: true },
-          { new: true }
-        ).populate("pictures");
-      }
-
-      return user;
     } catch (err) {
+      console.error("General error: ", err);
       throw new AuthenticationError(err.message);
     }
   },
