@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, Fragment } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  Fragment,
+  useMemo,
+} from "react";
 import { Subscription } from "react-apollo";
 import { formatDistanceToNow } from "date-fns";
 import { CREATE_VIDEO_SUBSCRIPTION } from "../../graphql/subscriptions";
@@ -18,7 +24,6 @@ import {
 import VideoModal from "../../modules/gridSearch/video-modal";
 import { COLORS } from "../../constants";
 import { useHistory, useLocation } from "react-router-dom";
-
 import { useClient } from "../../client";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -33,7 +38,10 @@ const Message = () => {
   const { sentVideos, receivedVideos } = currentUser;
   const [loading, setLoading] = useState(false);
   const mobile = useMediaQuery("(max-width: 650px)");
-  const senderID = new URLSearchParams(location.search).get("sender");
+  const senderID = useMemo(
+    () => new URLSearchParams(location.search).get("sender"),
+    [location.search]
+  );
 
   const [groupedReceived, setGroupReceived] = useState(null);
   const [openReport, setOpenReport] = useState(false);
@@ -41,75 +49,59 @@ const Message = () => {
   const [video, setVideo] = useState(null);
 
   useEffect(() => {
-    if (receivedVideos && !!receivedVideos.length && !!senderID) {
+    if (receivedVideos?.length && senderID) {
       groupVideosBySender(receivedVideos, sentVideos);
     }
-  }, [senderID, currentUser]);
+  }, [senderID, receivedVideos, sentVideos]);
 
   const setBlocked = async (data) => {
     setIsBlocked(false);
 
-    const user = await data.filter((video) => video.sender._id === senderID);
+    const user = data.find((video) => video.sender._id === senderID);
 
-    user[0].sender.blockedUsers.find((user) => {
-      if (user._id === currentUser._id) {
-        setIsBlocked(true);
-      }
-    });
+    if (
+      user?.sender.blockedUsers.some((user) => user._id === currentUser._id)
+    ) {
+      setIsBlocked(true);
+    }
   };
 
   const groupVideosBySender = async (receivedVids, sentVids) => {
     try {
       setLoading(true);
-      const array = [];
+      const array = [
+        ...receivedVids.filter((video) => video.sender._id === senderID),
+        ...sentVids.filter((video) => video.receiver._id === senderID),
+      ];
 
-      for (const video of receivedVids) {
-        const senderId = video.sender._id;
-
-        if (senderId === senderID) {
-          array.push(video);
-        }
-      }
-
-      for (const video of sentVids) {
-        const senderId = video.receiver._id;
-
-        if (senderId === senderID) {
-          array.push(video);
-        }
-      }
-      const data = await orderByCreatedAt(array);
+      const data = orderByCreatedAt(array);
 
       setGroupReceived(data);
       setBlocked(data);
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      console.log(err);
+      console.error(err);
     }
   };
 
   const orderByCreatedAt = (array) => {
-    return array.sort((a, b) => {
-      const dateA = new Date(parseInt(a.createdAt));
-      const dateB = new Date(parseInt(b.createdAt));
-      return dateA - dateB;
-    });
+    return array.sort(
+      (a, b) =>
+        new Date(parseInt(a.createdAt)) - new Date(parseInt(b.createdAt))
+    );
   };
 
   const handleOnClick = () => {
-    history.push({
-      pathname: "/message-center",
-    });
+    history.push({ pathname: "/message-center" });
   };
 
   const handleProfileClick = async () => {
-    const user = await groupedReceived.filter(
-      (video) => video.sender._id === senderID
-    );
-
-    await dispatch({ type: "UPDATE_PROFILE", payload: user[0].sender });
-    await dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
+    const user = groupedReceived.find((video) => video.sender._id === senderID);
+    if (user) {
+      await dispatch({ type: "UPDATE_PROFILE", payload: user.sender });
+      await dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
+    }
   };
 
   const toggleModal = () => {
@@ -188,73 +180,66 @@ const Message = () => {
           margin={20}
           justifyContent="space-around"
           height={"auto"}
-          // minHeight={"60vH"}
           width="auto"
           column
         >
-          {groupedReceived &&
-            !!groupedReceived.length &&
-            groupedReceived.map((video, i) => {
-              return (
-                <Box
-                  key={`${video.publicId}-${i}`}
-                  width="100%"
-                  display="flex"
-                  justifyContent={
-                    video.sender._id === currentUser._id
-                      ? "flex-end"
-                      : undefined
-                  }
-                >
-                  <Box
-                    column
-                    maxWidth={300}
-                    alignItems="center"
-                    display="flex"
-                    marginTop={20}
-                  >
-                    {video.sender._id !== currentUser._id && (
-                      <Box position={"absolute"} top={-20} right={0}>
-                        <Icon
-                          style={{ zIndex: 1000 }}
-                          name="threeDot"
-                          size={ICON_SIZES.X_LARGE}
-                          color={COLORS.vividBlue}
-                          onClick={() => handleToggleBottomDrawer(video)}
-                        />
-                      </Box>
-                    )}
-
-                    <VideoPlayer
-                      publicId={video.publicId}
-                      controls={true}
-                      height={250}
-                      width={"auto"}
-                      borderRadius={"10px"}
-                      fullScreen={true}
-                      mobile={mobile}
-                      receiverWatching={video.receiver._id === currentUser._id}
-                      _id={video._id}
-                      client={client}
+          {groupedReceived.map((video, i) => (
+            <Box
+              key={`${video.publicId}-${i}`}
+              width="100%"
+              display="flex"
+              justifyContent={
+                video.sender._id === currentUser._id ? "flex-end" : undefined
+              }
+            >
+              <Box
+                column
+                maxWidth={300}
+                alignItems="center"
+                display="flex"
+                marginTop={20}
+              >
+                {video.sender._id !== currentUser._id && (
+                  <Box position={"absolute"} top={-20} right={0}>
+                    <Icon
+                      style={{ zIndex: 1000 }}
+                      name="threeDot"
+                      size={ICON_SIZES.X_LARGE}
+                      color={COLORS.vividBlue}
+                      onClick={() => handleToggleBottomDrawer(video)}
                     />
-
-                    <Text center bold margin={0}>
-                      {video.sender._id === currentUser._id
-                        ? "Sent Video "
-                        : "Received Video "}
-                    </Text>
-                    <Text
-                      color={COLORS.facebookBlue}
-                      margin={0}
-                      center
-                      fontSize={FONT_SIZES.SMALL}
-                    >
-                      {formatDistanceToNow(Number(video.createdAt))} ago
-                    </Text>
                   </Box>
-                </Box>
-              );
-            })}
+                )}
+
+                <VideoPlayer
+                  publicId={video.publicId}
+                  controls={true}
+                  height={250}
+                  width={"auto"}
+                  borderRadius={"10px"}
+                  fullScreen={true}
+                  mobile={mobile}
+                  receiverWatching={video.receiver._id === currentUser._id}
+                  _id={video._id}
+                  client={client}
+                />
+
+                <Text center bold margin={0}>
+                  {video.sender._id === currentUser._id
+                    ? "Sent Video "
+                    : "Received Video "}
+                </Text>
+                <Text
+                  color={COLORS.facebookBlue}
+                  margin={0}
+                  center
+                  fontSize={FONT_SIZES.SMALL}
+                >
+                  {formatDistanceToNow(Number(video.createdAt))} ago
+                </Text>
+              </Box>
+            </Box>
+          ))}
         </Box>
         <Box width="100%" justifyContent="center">
           <Button

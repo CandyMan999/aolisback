@@ -1,4 +1,11 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import React, {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  memo,
+  useMemo,
+} from "react";
 import { VIEWED_VIDEO_MUTATION } from "../../graphql/mutations";
 import { useLocation } from "react-router-dom";
 import { Cloudinary } from "@cloudinary/url-gen";
@@ -41,9 +48,6 @@ const VideoPlayer = ({
       videoPlayer.requestFullscreen();
       setIsFullScreen(true);
     }
-    if (receiverWatching) {
-      handleViewVideo();
-    }
   };
 
   const handleFullscreenChange = () => {
@@ -53,7 +57,6 @@ const VideoPlayer = ({
   };
 
   const handleSetLoading = () => {
-    console.log("CAN PLAY!!!!!!");
     setIsLoading(false);
   };
 
@@ -64,34 +67,39 @@ const VideoPlayer = ({
     };
   }, []);
 
-  const video = cloudinaryRef.current.video(publicId);
+  const video = useMemo(() => {
+    return cloudinaryRef.current.video(publicId);
+  }, [publicId]);
 
   const mountVideo = !isLoading && cloudinaryRef.current;
+
   return (
     <Fragment>
-      {(isLoading || !cloudinaryRef.current) && (
-        <Box
-          width={150}
-          height={height || 250}
-          background={COLORS.lightGrey}
-          borderRadius={8}
-          flex
-          column
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Loading ring size={35} color={COLORS.pink} />
-          <Text center padding={0} bold color={COLORS.white}>
-            Processing HD...
-          </Text>
-        </Box>
-      )}
+      {(isLoading || !cloudinaryRef.current) &&
+        location.pathname !== "/message-center" && (
+          <Box
+            width={150}
+            height={height || 250}
+            background={COLORS.lightGrey}
+            borderRadius={8}
+            flex
+            column
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Loading ring size={35} color={COLORS.pink} />
+            <Text center padding={0} bold color={COLORS.white}>
+              Processing HD...
+            </Text>
+          </Box>
+        )}
       {location.pathname !== "/message-center" && !!cloudinaryRef.current && (
         <Box style={{ display: mountVideo ? "block" : "none" }}>
           <AdvancedVideo
             cldVid={video}
             ref={videoRef}
             onCanPlay={handleSetLoading}
+            onPlay={receiverWatching ? handleViewVideo : undefined}
             controls={controls}
             onClick={handleFullScreen}
             width={width}
@@ -104,13 +112,15 @@ const VideoPlayer = ({
           />
         </Box>
       )}
-
       {location.pathname === "/message-center" && !!cloudinaryRef.current && (
         <Box style={{ display: mountVideo ? "block" : "none" }}>
           <AdvancedVideo
             cldVid={video}
-            controls={controls}
+            ref={videoRef}
             onCanPlay={handleSetLoading}
+            onPlay={receiverWatching ? handleViewVideo : undefined}
+            controls={controls}
+            onClick={handleFullScreen}
             width={width}
             height={height || 250}
             style={{
@@ -125,4 +135,4 @@ const VideoPlayer = ({
   );
 };
 
-export default VideoPlayer;
+export default memo(VideoPlayer);

@@ -280,8 +280,8 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
                     size={ICON_SIZES.X_LARGE}
                     color={
                       state.currentUser._id === user._id
-                        ? COLORS.pink
-                        : COLORS.deepPurple
+                        ? COLORS.deepPurple
+                        : COLORS.pink
                     }
                   />
                 </Marker>

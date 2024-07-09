@@ -154,7 +154,6 @@ const seedUsers = async () => {
         marijuana: handle420(),
         drugs: handleDrugs(),
         profileComplete: true,
-        phoneNumber: "+14698152066",
         isBanned: handleIsBanned(),
         location: {
           coordinates: randomCoords,
