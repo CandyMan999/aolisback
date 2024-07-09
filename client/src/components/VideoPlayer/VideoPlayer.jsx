@@ -85,7 +85,7 @@ const VideoPlayer = ({
           </Text>
         </Box>
       )}
-      {location.pathname === "/message" && (
+      {location.pathname !== "/message-center" && (
         <Box style={{ display: isLoading ? "none" : "block" }}>
           <AdvancedVideo
             cldVid={video}
