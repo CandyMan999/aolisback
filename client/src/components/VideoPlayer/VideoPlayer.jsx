@@ -63,49 +63,49 @@ const VideoPlayer = ({
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
   }, []);
-  if (!isLoading && cloudinaryRef.current) {
-    const video = cloudinaryRef.current.video(publicId);
 
-    return (
-      <AdvancedVideo
-        cldVid={video}
-        ref={videoRef}
-        onCanPlay={handleSetLoading}
-        controls={controls}
-        onClick={handleFullScreen}
-        width={width}
-        height={height || 250}
-        style={{
-          borderRadius: borderRadius || undefined,
-          maxWidth: isFullScreen ? undefined : 300,
-        }}
-        {...props}
-      />
-    );
-  }
-  if (location.pathname === "/message-center" && cloudinaryRef.current) {
-    const video = cloudinaryRef.current.video(publicId);
-    return (
-      <AdvancedVideo
-        cldVid={video}
-        controls={controls}
-        onClick={handleFullScreen}
-        width={width}
-        height={height || 250}
-        style={{
-          borderRadius: borderRadius || undefined,
-          maxWidth: isFullScreen ? undefined : 300,
-        }}
-        {...props}
-      />
-    );
-  }
+  const video = cloudinaryRef.current.video(publicId);
 
-  if (isLoading && cloudinaryRef.current) {
-    const video = cloudinaryRef.current.video(publicId);
-    return (
-      <Fragment>
-        <Box style={{ display: "none" }}>
+  return (
+    <Fragment>
+      {isLoading && (
+        <Box
+          width={width}
+          height={height || 250}
+          background={COLORS.lightGrey}
+          borderRadius={8}
+          flex
+          column
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Loading ring size={35} color={COLORS.pink} />
+          <Text center padding={0} bold color={COLORS.white}>
+            Processing HD...
+          </Text>
+        </Box>
+      )}
+      {location.pathname === "/message" && (
+        <Box style={{ display: isLoading ? "none" : "block" }}>
+          <AdvancedVideo
+            cldVid={video}
+            ref={videoRef}
+            onCanPlay={handleSetLoading}
+            controls={controls}
+            onClick={handleFullScreen}
+            width={width}
+            height={height || 250}
+            style={{
+              borderRadius: borderRadius || undefined,
+              maxWidth: isFullScreen ? undefined : 300,
+            }}
+            {...props}
+          />
+        </Box>
+      )}
+
+      {location.pathname === "/message-center" && (
+        <Box style={{ display: isLoading ? "none" : "block" }}>
           <AdvancedVideo
             cldVid={video}
             controls={controls}
@@ -120,25 +120,9 @@ const VideoPlayer = ({
             {...props}
           />
         </Box>
-
-        <Box
-          width={150}
-          height={height || 250}
-          background={COLORS.lightGrey}
-          borderRadius={8}
-          flex
-          column
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Loading ring size={35} color={COLORS.pink} />
-          <Text center padding={0} bold color={COLORS.white}>
-            Processing HD...
-          </Text>
-        </Box>
-      </Fragment>
-    );
-  }
+      )}
+    </Fragment>
+  );
 };
 
 export default VideoPlayer;
