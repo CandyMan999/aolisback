@@ -190,12 +190,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             <OnlineDot inCall={inCall} />
           </Box>
         )}
-        <Box
-          width={"100%"}
-          style={{
-            borderBottom: "solid 1px black",
-          }}
-        >
+        <Box width={"100%"}>
           <PhotoSlider
             withDelete={_id && _id === state.currentUser._id ? true : false}
             images={pictures}
@@ -438,7 +433,11 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             <Button
               style={{
                 margin: 0,
-                border: `solid 2px ${COLORS.pink}`,
+                border: `solid 2px ${
+                  itsMe || userBlocked || imBlocked || loading
+                    ? COLORS.grey
+                    : COLORS.pink
+                }`,
                 borderRadius: 10,
               }}
               onClick={
@@ -465,7 +464,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                   margin={0}
                   bold
                   color={
-                    location && noLocation(location.coordinates)
+                    itsMe || userBlocked || imBlocked
                       ? COLORS.white
                       : COLORS.deepPurple
                   }
@@ -485,7 +484,11 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             <Button
               style={{
                 margin: 0,
-                border: `solid 2px ${COLORS.pink}`,
+                border: `solid 2px ${
+                  location && noLocation(location.coordinates)
+                    ? COLORS.grey
+                    : COLORS.pink
+                }`,
                 borderRadius: 10,
               }}
               disabled={location && noLocation(location.coordinates)}

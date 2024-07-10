@@ -1,6 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
+import { AdvancedImage } from "@cloudinary/react";
+import { Cloudinary } from "@cloudinary/url-gen";
+import { scale } from "@cloudinary/url-gen/actions/resize";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { Box, Button, Loading } from "../..";
@@ -25,7 +27,20 @@ const Slide = ({
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const [loading, setLoading] = useState(false);
+  const [photoLoaded, setPhotoLoaded] = useState(false);
+  const [myImage, setMyImage] = useState(null);
   const { currentUser } = state;
+
+  // Create a Cloudinary instance and set your cloud name.
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName: "localmassagepros",
+    },
+  });
+
+  useEffect(() => {
+    handleImage();
+  }, [publicId]);
 
   const handleDeletePhoto = async (id) => {
     const variables = { photoId: id, userId: currentUser._id };
@@ -45,50 +60,71 @@ const Slide = ({
     }
   };
 
+  const handleLoad = () => {
+    console.log("Image loaded");
+    setPhotoLoaded(true);
+  };
+
+  const handleError = () => {
+    console.log("Image load error");
+    setPhotoLoaded(true);
+  };
+
+  const handleImage = () => {
+    const data = cld.image(publicId);
+    setMyImage(data);
+  };
+
   return (
     <Box noFlex>
       {!!publicId ? (
         <AnimatePresence>
-          <CloudinaryContext cloudName="localmassagepros">
-            <motion.div
-              key={publicId}
-              initial={{
-                x: clickDirection === "left" ? -300 : 300,
-                opacity: 0,
+          {!photoLoaded && (
+            <Box height={250} width={"100%"}>
+              <Loading logo />
+            </Box>
+          )}
+          <motion.div
+            key={publicId}
+            initial={{
+              x: clickDirection === "left" ? -300 : 300,
+              opacity: 0,
+            }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{
+              x: clickDirection === "left" ? 300 : -300,
+              opacity: 0,
+              position: "absolute",
+            }}
+          >
+            <AdvancedImage
+              cldImg={myImage}
+              style={{
+                width: "100%",
+                height: "auto",
+                borderBottom: `solid 2px ${COLORS.vividBlue}`,
+                display: photoLoaded ? "block" : "none",
               }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: clickDirection === "left" ? 300 : -300, opacity: 0 }}
-            >
-              <Image
-                style={{
-                  borderRadius: 10,
-                  width: "100%",
-                  height: "auto",
-                }}
-                loading="lazy"
-                publicId={publicId}
-                id="slide-photo"
-              >
-                <Transformation crop="scale" />
-              </Image>
-            </motion.div>
-          </CloudinaryContext>
+              onLoad={handleLoad}
+              onError={handleError}
+            />
+          </motion.div>
         </AnimatePresence>
       ) : (
         <Box
           style={{
             backgroundImage: `url(${url})`,
-            maxWidth: mobile ? "100%" : width,
+            maxWidth: mobile ? 240 : 270,
             borderRadius: 10,
-            maxHeight: height,
-            height: "auto",
-            width: "100%",
+            maxHeight: mobile ? 259 : 290,
+            height: mobile ? 259 : 290,
+            width: mobile ? 240 : 290,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
         />
       )}
-      {countStr && (
+      {countStr && withDelete && (
         <Box
           width="100%"
           position="absolute"

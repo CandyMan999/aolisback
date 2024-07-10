@@ -27,12 +27,12 @@ const Drawer = ({ isOpen, onClose, children }) => {
           overflow: "scroll",
         }}
       >
-        <Box position="absolute" top={25} left={10} zIndex={20000}>
+        <Box position="absolute" top={15} right={10} zIndex={20000}>
           <Icon
             clickable
             name="back"
             color={COLORS.pink}
-            size={ICON_SIZES.XX_LARGE}
+            size={ICON_SIZES.XXX_LARGE}
             onClick={onClose}
           />
         </Box>

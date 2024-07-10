@@ -62,6 +62,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
       justifyContent="center"
       height={"fit-content"}
       width={"100%"}
+      position={"relative"}
       background={COLORS.white}
       style={{ overflow: "hidden" }}
     >
@@ -75,7 +76,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
               left={2}
               column
               justifyContent="center"
-              height={height + 10}
+              height={"100%"}
               zIndex={10}
             >
               <NavArrow direction="left" onClick={prevSlide} />
@@ -83,7 +84,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
           )}
 
           <Box display="flex" alignItems="center" justifyContent="center">
-            <Box justifyContent="center">
+            <Box justifyContent="center" position="relative">
               {pictures.length && currentPhoto ? (
                 <Slide
                   id={currentPhoto._id}
@@ -128,7 +129,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
               column
               justifyContent="center"
               right={2}
-              height={height + 10}
+              height={"100%"}
               zIndex={10}
             >
               <NavArrow direction="right" onClick={nextSlide} />
