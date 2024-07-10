@@ -207,14 +207,20 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           justifyContent="space-between"
         >
           <Box display="flex" width="100%" justifyContent="space-between">
-            <Box paddingLeft={"5%"} display="flex" column paddingTop={8}>
-              <Text
-                margin={2}
-                bold
-                fontSize={mobile ? FONT_SIZES.X_LARGE : FONT_SIZES.XX_LARGE}
+            <Box paddingLeft={"5%"} display="flex" paddingTop={8} column>
+              <Box
+                display="flex"
+                style={{ flexWrap: "nowrap", width: "max-content" }}
               >
-                {username}
-              </Text>
+                <Text
+                  margin={2}
+                  bold
+                  fontSize={mobile ? FONT_SIZES.X_LARGE : FONT_SIZES.XX_LARGE}
+                >
+                  {username}
+                </Text>
+              </Box>
+
               <Text margin={2}>
                 {sex === "Gender_Diverse" ? "Gender Diverse" : sex} {age}
               </Text>

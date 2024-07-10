@@ -77,7 +77,7 @@ module.exports = {
       );
 
       if (currentRoom.name !== "Main" && !currentRoom.comments.length) {
-        const prompt = `Human: Let's pretend this is a chat application with the topic of ${currentRoom.name}, introduce yourself as artificial intelligence to me, my name is "${user.username}", then let me know that they I can chat with you while I wait for other users to join the room I just created.`;
+        const prompt = `Human: Let's pretend this is a chat application with the topic of ${currentRoom.name}, introduce yourself to me as CandyMan, an artificial intelligence, my name is "${user.username}", then let me know that they I can chat with you while I wait for other users to join the room I just created.`;
 
         const responseAI = await openai.chat.completions.create({
           model: "gpt-3.5-turbo", // Correct model name for the OpenAI AP

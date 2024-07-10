@@ -77,7 +77,7 @@ module.exports = {
       );
 
       if (currentRoom.name === "Main" && !currentRoom.comments.length) {
-        const prompt = `Human: Let's pretend this is a new chat app about dating where you can create profiles, video chat, share location, and create chatrooms of particular interest; please welcome me to "GoneChatting" and tell the slogan, "slogan: where you will never catch a catfish".  and give me a short description of the app. Give me a random quote about love ask me a random personal question about literally anything.`;
+        const prompt = `Human: Let's pretend this is a new chat app about dating where you can create profiles, video chat, share location, and create chatrooms of particular interest; please welcome me to "GoneChatting" and tell the slogan, "slogan: where you will never catch a catfish".  let them know this is the hottest new app on the block and to tell their momma and their freinds! Then ask them a random personal question.`;
         try {
           const responseAI = await openai.chat.completions.create({
             model: "gpt-3.5-turbo", // Correct model name for the OpenAI AP
