@@ -46,7 +46,7 @@ export const FIND_USER_QUERY = gql`
       _id
       username
       email
-
+      inCall
       phoneNumber
       lookingFor {
         ageRange {
@@ -89,6 +89,7 @@ export const GET_USERS_MAP_QUERY = gql`
       username
       isLoggedIn
       email
+      inCall
       phoneNumber
       isBanned
       lookingFor {
@@ -137,6 +138,7 @@ export const FETCH_ME = gql`
       isLoggedIn
       username
       expoToken
+      inCall
       phoneNumber
       lookingFor {
         ageRange {
@@ -268,6 +270,7 @@ export const GET_ALL_USERS = gql`
       isBanned
       phoneNumber
       username
+      inCall
       lookingFor {
         ageRange {
           lowEnd

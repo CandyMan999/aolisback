@@ -1,23 +1,22 @@
 import React from "react";
 import { motion } from "framer-motion";
-
 import { COLORS } from "../../constants";
 
-const OnlineDot = ({ online }) => {
+const OnlineDot = ({ online, inCall }) => {
   const outerDotVariants = {
     start: {
       scale: 1,
       opacity: 1,
-      boxShadow: `0px 0px 0px 0px ${COLORS.green}`,
+      boxShadow: `0px 0px 0px 0px ${inCall ? COLORS.vividBlue : COLORS.green}`,
       transition: {
         duration: 1.5,
         loop: Infinity,
       },
     },
     end: {
-      scale: 1.5,
+      scale: inCall ? 2 : 1.5,
       opacity: 0,
-      boxShadow: `0px 0px 20px 8px ${COLORS.green}`,
+      boxShadow: `0px 0px 20px 8px ${inCall ? COLORS.vividBlue : COLORS.green}`,
       transition: {
         duration: 2.5,
         loop: Infinity,
@@ -35,7 +34,7 @@ const OnlineDot = ({ online }) => {
       },
     },
     end: {
-      scale: 3,
+      scale: inCall ? 4 : 3,
       opacity: 0,
       transition: {
         duration: 2.5,
@@ -51,7 +50,7 @@ const OnlineDot = ({ online }) => {
           width: "10px",
           height: "10px",
           borderRadius: "50%",
-          backgroundColor: COLORS.green,
+          backgroundColor: inCall ? COLORS.vividBlue : COLORS.green,
           margin: "4px",
         }}
       >
@@ -64,20 +63,24 @@ const OnlineDot = ({ online }) => {
             width: "10px",
             height: "10px",
             borderRadius: "50%",
-            backgroundColor: online ? COLORS.green : COLORS.red,
+            backgroundColor: inCall
+              ? COLORS.vividBlue
+              : online
+              ? COLORS.green
+              : COLORS.red,
             marginRight: "5px",
           }}
-          variants={online ? outerDotVariants : {}}
+          variants={online || inCall ? outerDotVariants : {}}
           initial="start"
-          animate={online ? "end" : {}}
+          animate={online || inCall ? "end" : {}}
         >
-          {online && (
+          {(online || inCall) && (
             <motion.div
               style={{
                 width: "7px",
                 height: "6px",
                 borderRadius: "50%",
-                border: `2px solid ${COLORS.green}`,
+                border: `2px solid ${inCall ? COLORS.vividBlue : COLORS.green}`,
               }}
               variants={online ? ringOverlayVariants : {}}
               initial="start"
@@ -91,13 +94,17 @@ const OnlineDot = ({ online }) => {
         style={{
           fontSize: "14px",
           fontWeight: "bold",
-          color: online ? COLORS.green : COLORS.black,
+          color: inCall
+            ? COLORS.vividBlue
+            : online
+            ? COLORS.green
+            : COLORS.black,
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
       >
-        {online ? "Online" : "Offline"}
+        {inCall ? "In Call" : online ? "Online" : "Offline"}
       </motion.p>
     </div>
   );

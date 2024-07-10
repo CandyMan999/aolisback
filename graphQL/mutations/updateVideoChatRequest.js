@@ -23,8 +23,7 @@ module.exports = {
       };
 
       // Add offer, answer, and candidate to updateData if they are present
-      if (offer) updateData.offer = offer;
-      if (answer) updateData.answer = answer;
+      const inCall = status === "Accept" || status === "Pending" ? true : false;
       if (candidate) {
         const chatRequest = await ChatRequest.findById(_id);
         chatRequest.candidates.push(candidate);
@@ -56,13 +55,13 @@ module.exports = {
 
       const sender = await User.findByIdAndUpdate(
         { _id: senderID },
-        { chatRequest },
+        { chatRequest, inCall },
         { new: true }
       ).populate("chatRequest");
 
       const receiver = await User.findByIdAndUpdate(
         { _id: receiverID },
-        { chatRequest },
+        { chatRequest, inCall },
         { new: true }
       ).populate("chatRequest");
       console.log("video chat request: ", chatRequest);

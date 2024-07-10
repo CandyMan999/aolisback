@@ -60,7 +60,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
   return (
     <Box
       justifyContent="center"
-      height={height + 30}
+      height={"fit-content"}
       width={"100%"}
       background={COLORS.white}
       style={{ overflow: "hidden" }}

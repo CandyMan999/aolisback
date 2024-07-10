@@ -20,13 +20,13 @@ module.exports = {
 
       const sender = await User.findByIdAndUpdate(
         { _id: senderID },
-        { chatRequest },
+        { chatRequest, inCall: true },
         { new: true }
       ).populate("chatRequest");
 
       const receiver = await User.findByIdAndUpdate(
         { _id: receiverID },
-        { chatRequest },
+        { chatRequest, inCall: true },
         { new: true }
       ).populate("chatRequest");
 

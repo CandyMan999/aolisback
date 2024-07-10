@@ -21,7 +21,7 @@ const Slide = ({
   withDelete,
   publicId,
 }) => {
-  const mobile = useMediaQuery("(max-width: 650px)");
+  const mobile = useMediaQuery("(max-width: 1300px)");
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const [loading, setLoading] = useState(false);
@@ -62,17 +62,14 @@ const Slide = ({
               <Image
                 style={{
                   borderRadius: 10,
+                  width: "100%",
+                  height: "auto",
                 }}
                 loading="lazy"
                 publicId={publicId}
                 id="slide-photo"
               >
-                <Transformation
-                  height={mobile ? "390" : "390"}
-                  width={mobile ? "auto" : "auto"}
-                  crop={mobile ? "scale" : "fill"}
-                  gravity="center"
-                />
+                <Transformation crop="scale" />
               </Image>
             </motion.div>
           </CloudinaryContext>
@@ -81,11 +78,11 @@ const Slide = ({
         <Box
           style={{
             backgroundImage: `url(${url})`,
-            maxWidth: mobile ? 240 : 270,
+            maxWidth: mobile ? "100%" : width,
             borderRadius: 10,
-            maxHeight: mobile ? 259 : 290,
-            height: mobile ? 259 : 290,
-            width: mobile ? 240 : 290,
+            maxHeight: height,
+            height: "auto",
+            width: "100%",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

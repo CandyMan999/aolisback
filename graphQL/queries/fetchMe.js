@@ -15,7 +15,11 @@ module.exports = {
 
       const user = await User.findOneAndUpdate(
         { _id: id },
-        { isLoggedIn: true, roomInfo: { subscribedAt: moment() } },
+        {
+          isLoggedIn: true,
+          inCall: false,
+          roomInfo: { subscribedAt: moment() },
+        },
         { new: true }
       ).populate([
         "pictures",

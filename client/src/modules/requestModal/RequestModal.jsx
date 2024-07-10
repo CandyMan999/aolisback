@@ -6,6 +6,7 @@ import {
   Button,
   Box,
   Picture,
+  Loading,
 } from "../../components";
 import { COLORS } from "../../constants";
 import {
@@ -112,7 +113,12 @@ const RequestModal = ({
   return (
     <Modal onClose={() => {}} state={state}>
       {currentUser._id === sender._id ? (
-        <Box display="flex" column center>
+        <Box
+          display="flex"
+          column
+          center
+          style={{ justifyContent: "space-between", height: "100%" }}
+        >
           {status === "Decline" || status === "Block" ? (
             <Text fontSize={FONT_SIZES.LARGE} width={"100%"} center bold>
               {receiver.username} has Declined your request
@@ -120,9 +126,9 @@ const RequestModal = ({
           ) : (
             <Fragment>
               <Text fontSize={FONT_SIZES.LARGE} width={"100%"} center bold>
-                Please Wait while user decides...
+                Please Wait while {receiver.username} decides...
               </Text>
-
+              <Loading logo />
               <Button
                 coolStyle
                 width={"100%"}
@@ -138,7 +144,7 @@ const RequestModal = ({
         <Box display="flex" column center width="100%" height="90%">
           <Box
             width="110%"
-            background={COLORS.lightGrey}
+            background={COLORS.lightPurple}
             style={{ alignItems: "center" }}
             height={110}
             marginBottom={50}
@@ -171,11 +177,14 @@ const RequestModal = ({
 
           <Button
             width={"100%"}
-            color={COLORS.grey}
-            style={{ boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)` }}
+            color={COLORS.white}
+            style={{
+              boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+              borderRadius: 10,
+            }}
             onClick={() => handleViewProfile(sender)}
           >
-            <Text color={COLORS.white} margin={0} bold>
+            <Text color={COLORS.black} margin={0} bold>
               View Profile
             </Text>
           </Button>
@@ -188,6 +197,7 @@ const RequestModal = ({
                 marginRight: 5,
                 borderBottom: `solid 2px ${COLORS.grey}`,
                 boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+                borderRadius: 20,
               }}
               onClick={() => handleUpdate("Accept")}
             >
@@ -202,6 +212,7 @@ const RequestModal = ({
                 margin: 0,
                 borderBottom: `solid 2px ${COLORS.grey}`,
                 boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+                borderRadius: 20,
               }}
               onClick={() => handleUpdate("Decline")}
             >
@@ -217,6 +228,7 @@ const RequestModal = ({
               position: "absolute",
               bottom: 0,
               boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+              borderRadius: 10,
             }}
             width={"100%"}
             onClick={() => handleUpdate("Block")}

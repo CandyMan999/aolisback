@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  inCall: {
+    type: Boolean,
+    default: false,
+  },
   password: {
     type: String,
   },

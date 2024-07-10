@@ -413,7 +413,12 @@ export const UPDATE_VIDEO_CHAT_REQUEST = gql`
 `;
 
 export const SEND_PHONE_NUMBER = gql`
-  mutation ($phoneNumber: String!, $username: String!, $expoToken: String!, $imageUrl: String) {
+  mutation (
+    $phoneNumber: String!
+    $username: String!
+    $expoToken: String!
+    $imageUrl: String
+  ) {
     sendPhoneNumber(
       phoneNumber: $phoneNumber
       username: $username
@@ -608,6 +613,7 @@ export const ACCEPT_TERMS_MUTATION = gql`
       terms
       isLoggedIn
       username
+      inCall
       lookingFor {
         ageRange {
           lowEnd

@@ -9,6 +9,7 @@ import {
   PhotoSlider,
   FONT_SIZES,
   Loading,
+  OnlineDot,
 } from "../../components";
 
 import { COLORS } from "../../constants";
@@ -53,7 +54,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     _id,
     isLoggedIn,
     lookingFor,
-    phoneNumber,
+    inCall,
   } = user;
 
   useEffect(() => {
@@ -182,9 +183,19 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   };
 
   return (
-    <Fragment>
+    <Fragment style={{ justifyContent: "space-between", height: "100%" }}>
       <Drawer onClose={toggleDrawer} isOpen={state.isProfile}>
-        <Box width={"100%"} style={{ borderBottom: "solid 1px black" }}>
+        {inCall && (
+          <Box width={"100%"} justifyContent="center" background={COLORS.black}>
+            <OnlineDot inCall={inCall} />
+          </Box>
+        )}
+        <Box
+          width={"100%"}
+          style={{
+            borderBottom: "solid 1px black",
+          }}
+        >
           <PhotoSlider
             withDelete={_id && _id === state.currentUser._id ? true : false}
             images={pictures}
@@ -435,34 +446,37 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                   ? handleUnBlock
                   : imBlocked
                   ? undefined
-                  : !isLoggedIn
+                  : !isLoggedIn || inCall
                   ? handleSendVideoMessage
                   : handleVideoChatRequest
               }
-              disabled={
-                (imBlocked && !userBlocked) ||
-                loading ||
-                state.showChatRequest ||
-                itsMe
-              }
+              disabled={(imBlocked && !userBlocked) || loading || itsMe}
               color={
-                (imBlocked && !userBlocked) || state.showChatRequest || itsMe
+                (imBlocked && !userBlocked) || itsMe
                   ? COLORS.lightGrey
-                  : COLORS.deepPurple
+                  : COLORS.lightPurple
               }
               width="100%"
             >
               {loading ? (
                 <Loading bar />
               ) : (
-                <Text margin={0} bold>
+                <Text
+                  margin={0}
+                  bold
+                  color={
+                    location && noLocation(location.coordinates)
+                      ? COLORS.white
+                      : COLORS.deepPurple
+                  }
+                >
                   {itsMe
                     ? `Send Video Message`
                     : userBlocked
                     ? `UnBlock  ${username}`
                     : imBlocked
                     ? `You're Blocked`
-                    : !isLoggedIn
+                    : !isLoggedIn || inCall
                     ? `Send Video Message`
                     : `Video Chat with ${username}`}
                 </Text>
@@ -480,11 +494,19 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               color={
                 location && noLocation(location.coordinates)
                   ? COLORS.lightGrey
-                  : COLORS.vividBlue
+                  : COLORS.lightPurple
               }
               width="100%"
             >
-              <Text margin={0} bold>
+              <Text
+                margin={0}
+                bold
+                color={
+                  location && noLocation(location.coordinates)
+                    ? COLORS.white
+                    : COLORS.deepPurple
+                }
+              >
                 View Location
               </Text>
             </Button>

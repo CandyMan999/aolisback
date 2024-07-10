@@ -98,8 +98,6 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
 
       const { width, height } = await getVideoResolution(file);
 
-      console.log("file dimensions: ", width, height);
-
       const formData = new FormData();
       formData.append("file", file, "recorded-video.webm");
       formData.append("upload_preset", "dlxzn2uj");
@@ -110,8 +108,6 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
       formData.append("height", height);
       formData.append("crop", "limit");
       formData.append("video_codec", "auto");
-
-      console.log("form data: ", formData);
 
       const res = await axios.post(
         `https://api.cloudinary.com/v1_1/localmassagepros/video/upload`,

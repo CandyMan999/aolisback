@@ -34,6 +34,7 @@ module.exports = gql`
     phoneNumber: String
     isBanned: Boolean
     profileComplete: Boolean
+    inCall: Boolean
   }
 
   type Video {
