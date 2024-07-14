@@ -50,13 +50,9 @@ module.exports = {
         const filterIDs = publicIDs.filter(
           (id) => id !== "wy3ybqezw97wiqtst5nm"
         );
-        await cloudinary.api.delete_resources(
-          filterIDs,
-          function (result) {
-            console.log(result);
-          },
-          { resource_type: "video" }
-        );
+        await cloudinary.api.delete_resources(filterIDs, {
+          resource_type: "video",
+        });
       }
 
       const updatedVideos = await Video.find().populate([

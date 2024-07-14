@@ -69,11 +69,13 @@ const cronJob = async () => {
           })
         );
 
-        await cloudinary.api.delete_resources(
-          publicIDs,
+        if (publicIDs.length) {
+          await cloudinary.api.delete_resources(
+            publicIDs,
 
-          { resource_type: "video" }
-        );
+            { resource_type: "video" }
+          );
+        }
       },
 
       { scheduled: true, timezone: "America/Denver" }

@@ -57,13 +57,9 @@ module.exports = {
             (id) => id !== "wy3ybqezw97wiqtst5nm"
           );
           if (!!filterIDs.length) {
-            await cloudinary.api.delete_resources(
-              filterIDs,
-              function (result) {
-                console.log(result);
-              },
-              { resource_type: "video" }
-            );
+            await cloudinary.api.delete_resources(filterIDs, {
+              resource_type: "video",
+            });
           }
         } catch (err) {
           throw new AuthenticationError(err);
