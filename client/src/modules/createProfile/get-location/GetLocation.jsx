@@ -27,25 +27,26 @@ const GetLocation = ({
   const location = useLocation();
   const [locationSuccess, setLocationSuccess] = useState(false);
 
+  const noLocation = useCallback((array) => {
+    return (
+      Array.isArray(array) &&
+      array.length === 2 &&
+      array[0] === 0 &&
+      array[1] === 0
+    );
+  }, []);
+
   useEffect(() => {
     if (userCoords.lat !== null && userCoords.lng !== null) {
       handleGetLocation();
-      dispatch({
-        type: "VIEW_LOCATION",
-        payload: {
-          _id: currentUser._id,
-          lat: userCoords.lat,
-          lng: userCoords.lng,
-        },
-      });
     }
-  }, [userCoords, dispatch, currentUser._id]);
+  }, [userCoords.lat, userCoords.lng]);
 
   useEffect(() => {
     if (currentUser.username) {
       setLocationSuccess(!noLocation(currentUser.location.coordinates));
     }
-  }, [currentUser.location.coordinates, currentUser.username]);
+  }, [currentUser.location.coordinates, currentUser.username, noLocation]);
 
   const handleGetLocation = useCallback(async () => {
     try {
@@ -88,15 +89,6 @@ const GetLocation = ({
       console.log(err);
     }
   }, [userCoords, currentUser._id, client, dispatch]);
-
-  const noLocation = useCallback((array) => {
-    return (
-      Array.isArray(array) &&
-      array.length === 2 &&
-      array[0] === 0 &&
-      array[1] === 0
-    );
-  }, []);
 
   const handleLocation = () => {
     try {

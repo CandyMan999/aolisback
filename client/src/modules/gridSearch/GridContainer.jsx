@@ -30,8 +30,6 @@ const GridContainer = () => {
       };
       const { getAllUsers } = await client.request(GET_ALL_USERS, variables);
 
-      console.log("users: ", getAllUsers);
-
       const filteredUsers = await getAllUsers.filter(
         (user) => user.username !== state.currentUser.username
       );

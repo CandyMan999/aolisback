@@ -9,7 +9,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     if (!state.currentUser) {
       dispatch({ type: "TOGGLE_LOGIN", payload: true });
     }
-  }, [state.currentUser]);
+  }, [state.currentUser, dispatch]);
 
   return (
     <Route

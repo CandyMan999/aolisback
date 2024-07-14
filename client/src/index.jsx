@@ -129,10 +129,6 @@ const Root = () => {
                   videoChatRequest.receiver._id === state.currentUser._id ||
                   videoChatRequest.sender._id === state.currentUser._id
                 ) {
-                  console.log(
-                    "video chat subscription request: ",
-                    videoChatRequest
-                  );
                   dispatch({
                     type: "UPDATE_VIDEO_CHAT_REQUEST",
                     payload: videoChatRequest,

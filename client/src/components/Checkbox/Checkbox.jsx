@@ -11,8 +11,6 @@ class Checkbox extends React.PureComponent {
       value,
       onChange,
       withoutFormik,
-      margin,
-      padding,
     } = this.props;
 
     if (!!onChange && withoutFormik) {

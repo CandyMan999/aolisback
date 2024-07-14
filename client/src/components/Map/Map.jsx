@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, Fragment } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  Fragment,
+  useMemo,
+} from "react";
 import "./map.css";
 import ReactMapGL, {
   NavigationControl,
@@ -56,11 +62,18 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
     if (!state.userLocation._id) {
       handleGetUsers();
     }
-  }, []);
+  }, [state.userLocation._id]);
+
+  const memoizedCoordinates = useMemo(
+    () => currentUser.location.coordinates,
+    [currentUser.location.coordinates[0], currentUser.location.coordinates[1]]
+  );
 
   useEffect(() => {
-    mapLoad();
-  }, [state.userLocation._id, currentUser.location.coordinates]);
+    if (memoizedCoordinates !== state.userLocation.coordinates) {
+      mapLoad();
+    }
+  }, [state.userLocation._id, memoizedCoordinates]);
 
   const mapLoad = async () => {
     const { _id, lat, lng } = state.userLocation;

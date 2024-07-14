@@ -49,8 +49,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
         status: "Cancel",
       };
 
-      const data = await client.request(UPDATE_VIDEO_CHAT_REQUEST, variables);
-      console.log("success end room: ", data);
+      await client.request(UPDATE_VIDEO_CHAT_REQUEST, variables);
     } catch (err) {
       console.log("error ending video call: ", err);
     }
@@ -96,7 +95,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
     videoChatRequest &&
     videoChatRequest.status === "Accept" && (
       <motion.div
-        onClick={() => console.log("screen clicked")}
         initial={{ height: "0vh" }}
         animate={{ height: showScreen ? "100vh" : "0vh" }}
         transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
@@ -134,8 +132,8 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 borderRadius: 25,
                 // opacity: 0.6,
                 padding: 0,
-                top: 10,
-                right: 0,
+                bottom: 60,
+                right: 10,
                 minHeight: 40,
               }}
             >

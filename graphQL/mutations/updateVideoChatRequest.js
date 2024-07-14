@@ -64,7 +64,7 @@ module.exports = {
         { chatRequest, inCall },
         { new: true }
       ).populate("chatRequest");
-      console.log("video chat request: ", chatRequest);
+
       publishVideoChatRequest(chatRequest);
 
       return chatRequest;

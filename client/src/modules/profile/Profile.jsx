@@ -183,7 +183,8 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   };
 
   return (
-    <Fragment style={{ justifyContent: "space-between", height: "100%" }}>
+    // style={{ justifyContent: "space-between", height: "100%" }}
+    <Fragment>
       <Drawer onClose={toggleDrawer} isOpen={state.isProfile}>
         {inCall && (
           <Box width={"100%"} justifyContent="center" background={COLORS.black}>
@@ -528,7 +529,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           receiverID={_id}
           senderID={currentUser._id}
           state={state}
-          mobile={mobile}
         />
       )}
     </Fragment>

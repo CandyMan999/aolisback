@@ -13,8 +13,6 @@ import { COLORS } from "../../../constants";
 import { GET_VIDEOS_QUERY } from "../../../graphql/queries";
 
 import { motion } from "framer-motion";
-import zIndex from "@material-ui/core/styles/zIndex";
-import { Background } from "@cloudinary/url-gen/qualifiers";
 
 const ProfileCardBack = ({
   online,
@@ -175,7 +173,6 @@ const ProfileCardBack = ({
             height={280}
             controls={true}
             fullScreen={false}
-            mobile={mobile}
             borderRadius="8px 8px 8px 8px"
           />
         </Box>

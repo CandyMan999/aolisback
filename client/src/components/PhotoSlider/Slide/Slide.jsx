@@ -61,18 +61,20 @@ const Slide = ({
   };
 
   const handleLoad = () => {
-    console.log("Image loaded");
     setPhotoLoaded(true);
   };
 
   const handleError = () => {
-    console.log("Image load error");
     setPhotoLoaded(true);
   };
 
   const handleImage = () => {
-    const data = cld.image(publicId);
-    setMyImage(data);
+    if (publicId) {
+      const data = cld.image(publicId);
+      if (data) {
+        setMyImage(data);
+      }
+    }
   };
 
   return (
@@ -97,17 +99,19 @@ const Slide = ({
               position: "absolute",
             }}
           >
-            <AdvancedImage
-              cldImg={myImage}
-              style={{
-                width: "100%",
-                height: "auto",
-                borderBottom: `solid 2px ${COLORS.vividBlue}`,
-                display: photoLoaded ? "block" : "none",
-              }}
-              onLoad={handleLoad}
-              onError={handleError}
-            />
+            {myImage && (
+              <AdvancedImage
+                cldImg={myImage}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  borderBottom: `solid 2px ${COLORS.vividBlue}`,
+                  display: photoLoaded ? "block" : "none",
+                }}
+                onLoad={handleLoad}
+                onError={handleError}
+              />
+            )}
           </motion.div>
         </AnimatePresence>
       ) : (

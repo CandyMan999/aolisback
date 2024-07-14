@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import {
   CollapsableHeader,
   Text,
@@ -16,7 +16,7 @@ import { CREATE_PROFILE_MUTATION } from "../../../graphql/mutations";
 const SingleTime = ({
   client,
   dispatch,
-  mobile,
+
   profile,
   handleChange,
   currentUser,
