@@ -47,7 +47,9 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
             width={100}
             src={iOSLogo}
             alt="Watermark-logo"
-            style={{ paddingBottom: "10%" }}
+            style={{
+              paddingBottom: "10%",
+            }}
           />
           <Button
             onClick={handleRecordButtonClick}

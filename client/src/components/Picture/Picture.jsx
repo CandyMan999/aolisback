@@ -12,6 +12,7 @@ const Picture = ({
   marginBottom,
   border,
   marginLeft,
+  withShadow,
 }) => {
   return !!profilePic ? (
     !!profilePic.publicId ? (
@@ -26,6 +27,9 @@ const Picture = ({
               marginBottom: marginBottom ? marginBottom : undefined,
               border: `solid 1px ${COLORS.vividBlue}`,
               objectFit: "scale-down",
+              boxShadow: withShadow
+                ? `2px 2px 4px 2px ${COLORS.darkGrey}`
+                : null,
             }}
             quality={100}
             publicId={profilePic.publicId}

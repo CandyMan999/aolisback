@@ -20,10 +20,10 @@ module.exports = {
           },
         },
         age: {
-          $gte: ageRange.lowEnd,
-          $lte: ageRange.highEnd,
+          $gte: ageRange ? ageRange.lowEnd : 18,
+          $lte: ageRange ? ageRange.highEnd : 80,
         },
-        kids: kids === "" ? { $exists: true } : kids,
+        kids: kids === "Yes" ? { $exists: true } : kids,
         isBanned: false,
         $or: [
           { sex: sex },

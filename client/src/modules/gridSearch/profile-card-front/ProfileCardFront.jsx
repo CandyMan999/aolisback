@@ -90,7 +90,13 @@ const ProfileCardFront = ({
       onClick={() => onClick(user._id)}
     >
       <OnlineDot online={online} />
-      <Picture profilePic={profilePic} name={name} height={120} width={120} />
+      <Picture
+        profilePic={profilePic}
+        name={name}
+        height={120}
+        width={120}
+        withShadow={true}
+      />
       <Text bold margin={0}>
         {name}
       </Text>

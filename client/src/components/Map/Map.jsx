@@ -330,13 +330,13 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
                         <Box
                           justifyContent="center"
                           style={{
-                            backgroundColor: "black",
                             borderRadius: "5px",
                             width: "fit-content",
                             padding: 10,
                           }}
                         >
                           <Picture
+                            withShadow={true}
                             profilePic={user.pictures[0]}
                             name={user.username}
                             height={"120px"}

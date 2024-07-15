@@ -70,6 +70,7 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
                   <Picture
                     height={84}
                     width={84}
+                    withShadow={true}
                     profilePic={group[0].sender.pictures[0]}
                     name={group[0].sender.username}
                   />

@@ -12,6 +12,8 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import { Box, Loading, Text } from "../../components";
 import { COLORS } from "../../constants";
 import { AdvancedVideo } from "@cloudinary/react";
+import { thumbnail } from "@cloudinary/url-gen/actions/resize";
+import { quality, format } from "@cloudinary/url-gen/actions/delivery";
 
 const VideoPlayer = ({
   publicId,
@@ -68,32 +70,43 @@ const VideoPlayer = ({
   }, []);
 
   const video = useMemo(() => {
-    return cloudinaryRef.current.video(publicId);
+    return cloudinaryRef.current
+      .video(publicId)
+      .delivery(format("auto"))
+      .delivery(quality("auto"));
   }, [publicId]);
 
-  const mountVideo = !isLoading && cloudinaryRef.current;
+  const thumbnailUrl = useMemo(() => {
+    return cloudinaryRef.current
+      .video(publicId)
+      .resize(thumbnail().height(90)) // Adjust to desired width and height
+      .delivery(format("jpg"))
+      .delivery(quality("auto"))
+      .toURL();
+  }, [publicId]);
+
+  const mountVideo = !isLoading && !!cloudinaryRef.current;
 
   return (
     <Fragment>
-      {(isLoading || !cloudinaryRef.current) &&
-        location.pathname !== "/message-center" && (
-          <Box
-            width={150}
-            height={height || 250}
-            background={COLORS.lightGrey}
-            borderRadius={8}
-            flex
-            column
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Loading ring size={35} color={COLORS.pink} />
-            <Text center padding={0} bold color={COLORS.white}>
-              Processing HD...
-            </Text>
-          </Box>
-        )}
-      {location.pathname !== "/message-center" && !!cloudinaryRef.current && (
+      {location.pathname === "/message" && !!cloudinaryRef.current && (
+        <Box style={{ display: mountVideo ? "block" : "none" }}>
+          <AdvancedVideo
+            cldVid={video}
+            ref={videoRef}
+            onCanPlay={handleSetLoading}
+            onPlay={receiverWatching ? handleViewVideo : undefined}
+            controls={controls}
+            onClick={handleFullScreen}
+            style={{
+              borderRadius: borderRadius || undefined,
+              maxWidth: isFullScreen ? undefined : 300,
+            }}
+            {...props}
+          />
+        </Box>
+      )}
+      {location.pathname === "/grid-search" && !!cloudinaryRef.current && (
         <Box style={{ display: mountVideo ? "block" : "none" }}>
           <AdvancedVideo
             cldVid={video}
@@ -113,24 +126,39 @@ const VideoPlayer = ({
         </Box>
       )}
       {location.pathname === "/message-center" && !!cloudinaryRef.current && (
-        <Box style={{ display: mountVideo ? "block" : "none" }}>
-          <AdvancedVideo
-            cldVid={video}
-            ref={videoRef}
-            onCanPlay={handleSetLoading}
-            onPlay={receiverWatching ? handleViewVideo : undefined}
-            controls={controls}
-            onClick={handleFullScreen}
-            width={width}
-            height={height || 250}
+        <Box>
+          <img
+            src={thumbnailUrl}
+            alt="Video Thumbnail"
             style={{
               borderRadius: borderRadius || undefined,
-              maxWidth: isFullScreen ? undefined : 300,
+              maxWidth: "100%",
+              height: "auto",
+              objectFit: "cover",
+              boxShadow: `2px 2px 4px 2px ${COLORS.darkGrey}`,
             }}
             {...props}
           />
         </Box>
       )}
+      {(isLoading || !cloudinaryRef.current) &&
+        location.pathname !== "/message-center" && (
+          <Box
+            width={150}
+            height={height || 250}
+            background={COLORS.lightGrey}
+            borderRadius={8}
+            flex
+            column
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Loading ring size={35} color={COLORS.pink} />
+            <Text center padding={0} bold color={COLORS.white}>
+              Processing HD...
+            </Text>
+          </Box>
+        )}
     </Fragment>
   );
 };

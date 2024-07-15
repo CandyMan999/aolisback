@@ -7,7 +7,7 @@ import {
   UPDATE_VIDEO_CHAT_REQUEST,
   SEND_PHONE_NUMBER,
 } from "../../graphql/mutations";
-import { Loading, Button, Text, Box, FONT_SIZES } from "../../components";
+import { Loading, Button, Text, FONT_SIZES } from "../../components";
 import { JitsiMeeting } from "@jitsi/react-sdk";
 
 import { useClient } from "../../client";
@@ -130,7 +130,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 borderBottom: `solid 2px ${COLORS.pink}`,
                 boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
                 borderRadius: 25,
-                // opacity: 0.6,
                 padding: 0,
                 bottom: 60,
                 right: 10,
@@ -169,7 +168,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 disableDeepLinking: true,
                 disableEndConference: true,
                 enableFeaturesBasedOnToken: false,
-
                 disableThirdPartyRequests: true,
               }}
               interfaceConfigOverwrite={{
@@ -181,6 +179,16 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                   "tileview",
                   "toggle-camera",
                   "settings",
+                ],
+                buttonsWithNotifyClick: [
+                  "microphone",
+                  "camera",
+                  "desktop",
+                  "hangup",
+                  "tileview",
+                  "toggle-camera",
+                  "settings",
+                  "filmstrip",
                 ],
               }}
               userInfo={{
