@@ -25,7 +25,6 @@ const VideoPlayer = ({
   receiverWatching,
   _id,
   client,
-  ...props
 }) => {
   const location = useLocation();
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -72,8 +71,8 @@ const VideoPlayer = ({
   const video = useMemo(() => {
     return cloudinaryRef.current
       .video(publicId)
-      .delivery(format("mp4"))
-      .delivery(quality("70"));
+      .delivery(format("auto"))
+      .delivery(quality("auto"));
   }, [publicId]);
 
   const thumbnailUrl = useMemo(() => {
@@ -102,7 +101,6 @@ const VideoPlayer = ({
               borderRadius: borderRadius || undefined,
               maxWidth: isFullScreen ? undefined : 300,
             }}
-            {...props}
           />
         </Box>
       )}
@@ -121,7 +119,6 @@ const VideoPlayer = ({
               borderRadius: borderRadius || undefined,
               maxWidth: isFullScreen ? undefined : 300,
             }}
-            {...props}
           />
         </Box>
       )}
@@ -137,7 +134,6 @@ const VideoPlayer = ({
               objectFit: "cover",
               boxShadow: `2px 2px 4px 2px ${COLORS.darkGrey}`,
             }}
-            {...props}
           />
         </Box>
       )}
