@@ -70,10 +70,7 @@ const VideoPlayer = ({
   }, []);
 
   const video = useMemo(() => {
-    return cloudinaryRef.current
-      .video(publicId)
-      .delivery(format("auto"))
-      .delivery(quality("auto"));
+    return cloudinaryRef.current.video(publicId);
   }, [publicId]);
 
   const thumbnailUrl = useMemo(() => {
@@ -92,7 +89,7 @@ const VideoPlayer = ({
       {location.pathname === "/message" && !!cloudinaryRef.current && (
         <Box style={{ display: mountVideo ? "block" : "none" }}>
           <AdvancedVideo
-            cldVid={video}
+            cldVid={video.delivery(format("auto")).delivery(quality("auto"))}
             ref={videoRef}
             onCanPlay={handleSetLoading}
             onPlay={receiverWatching ? handleViewVideo : undefined}
@@ -109,7 +106,7 @@ const VideoPlayer = ({
       {location.pathname === "/grid-search" && !!cloudinaryRef.current && (
         <Box style={{ display: mountVideo ? "block" : "none" }}>
           <AdvancedVideo
-            cldVid={video}
+            cldVid={video.delivery(format("auto")).delivery(quality("auto"))}
             ref={videoRef}
             onCanPlay={handleSetLoading}
             onPlay={receiverWatching ? handleViewVideo : undefined}

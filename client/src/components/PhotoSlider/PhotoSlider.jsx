@@ -67,7 +67,9 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
       style={{ overflow: "hidden" }}
     >
       {loading ? ( // Show loader while loading
-        <Loading color={COLORS.vividBlue} />
+        <Box height={250} width={"100%"}>
+          <Loading logo />
+        </Box>
       ) : (
         <>
           {pictures.length > 1 && (
