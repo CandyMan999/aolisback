@@ -69,10 +69,7 @@ const VideoPlayer = ({
   }, []);
 
   const video = useMemo(() => {
-    return cloudinaryRef.current
-      .video(publicId)
-      .delivery(format("auto"))
-      .delivery(quality("auto"));
+    return cloudinaryRef.current.video(publicId).delivery(quality("auto"));
   }, [publicId]);
 
   const thumbnailUrl = useMemo(() => {
