@@ -14,7 +14,7 @@ const VideoUploader = ({ senderID, receiverID, handleSending }) => {
 
   const handleRecordButtonClick = () => {
     // Construct the new URL with updated query parameters
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams();
     params.set("senderID", senderID);
     params.set("receiverID", receiverID);
     params.set("videoMessage", true);
