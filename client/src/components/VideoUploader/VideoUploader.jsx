@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import iOSLogo from "../../pictures/iOSLogo.png";
 import { Loading, Text, Button, Box, Icon, ICON_SIZES } from "..";
-
 import { COLORS } from "../../constants";
-
 import { useHistory, useLocation } from "react-router-dom";
 
 function VideoUploader({ senderID, receiverID, handleSending }) {
@@ -22,8 +20,8 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
   }, [location.search]);
 
   const handleRecordButtonClick = () => {
-    // Construct the new URL with updated query parameters
-    const params = new URLSearchParams(location.search);
+    // Clear existing query parameters and set new ones
+    const params = new URLSearchParams();
     params.set("senderID", senderID);
     params.set("receiverID", receiverID);
     params.set("videoMessage", true);
