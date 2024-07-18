@@ -39,11 +39,11 @@ const AvatarContainer = styled.div`
 `;
 
 const Username = styled(Text)`
-  font-size: 20px;
+  font-size: 15px;
   color: ${COLORS.vividBlue};
   margin-bottom: 2px;
   font-weight: bold;
-  margin-top: 2px;
+  margin-top: 15px;
   display: flex;
   flex-direction: row;
 `;
