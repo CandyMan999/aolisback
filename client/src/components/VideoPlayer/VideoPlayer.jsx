@@ -43,30 +43,30 @@ const VideoPlayer = ({
     }
   };
 
-  const handleFullScreen = (event) => {
-    const videoPlayer = event.currentTarget;
-    if (fullScreen && !isFullScreen) {
-      videoPlayer.requestFullscreen();
-      setIsFullScreen(true);
-    }
-  };
+  // const handleFullScreen = (event) => {
+  //   const videoPlayer = event.currentTarget;
+  //   if (fullScreen && !isFullScreen) {
+  //     videoPlayer.requestFullscreen();
+  //     setIsFullScreen(true);
+  //   }
+  // };
 
-  const handleFullscreenChange = () => {
-    if (!document.fullscreenElement) {
-      setIsFullScreen(false);
-    }
-  };
+  // const handleFullscreenChange = () => {
+  //   if (!document.fullscreenElement) {
+  //     setIsFullScreen(false);
+  //   }
+  // };
 
   const handleSetLoading = () => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => {
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-    };
-  }, []);
+  // useEffect(() => {
+  //   document.addEventListener("fullscreenchange", handleFullscreenChange);
+  //   return () => {
+  //     document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  //   };
+  // }, []);
 
   const video = useMemo(() => {
     return cloudinaryRef.current.video(publicId).delivery(quality("auto"));
@@ -93,7 +93,7 @@ const VideoPlayer = ({
             onCanPlay={handleSetLoading}
             onPlay={receiverWatching ? handleViewVideo : undefined}
             controls={controls}
-            onClick={handleFullScreen}
+            // onClick={handleFullScreen}
             style={{
               borderRadius: borderRadius || undefined,
               maxWidth: isFullScreen ? undefined : 300,
@@ -109,7 +109,7 @@ const VideoPlayer = ({
             onCanPlay={handleSetLoading}
             onPlay={receiverWatching ? handleViewVideo : undefined}
             controls={controls}
-            onClick={handleFullScreen}
+            // onClick={handleFullScreen}
             width={width}
             height={height || 250}
             style={{
