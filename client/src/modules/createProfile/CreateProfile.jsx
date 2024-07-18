@@ -84,6 +84,8 @@ const CreateProfile = ({ client, dispatch, state, currentUser }) => {
       if (!(Number(values.age) > 0.5)) err.age = "Must be a Number";
       if (Number(values.age) < 18) err.age = "Must be 18 or older!";
       if (Number(values.age) > 80) err.age = "Must be 80 or less!";
+      if (!Number.isInteger(Number(values.age)))
+        err.age = "Age cannot have decimals!";
     }
     if (!values.intro.length) {
       err.intro = "Tell us about You!";

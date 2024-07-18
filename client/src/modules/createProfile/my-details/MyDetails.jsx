@@ -67,7 +67,7 @@ const MyDetails = ({
                 <Box column width="75%" justifyContent="space-between" center>
                   <Textarea
                     width={"90%"}
-                    maxLength={400}
+                    maxLength={500}
                     name="intro"
                     placeholder="intro"
                     type="input"

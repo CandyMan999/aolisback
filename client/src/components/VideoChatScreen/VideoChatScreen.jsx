@@ -129,9 +129,9 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
               style={{
                 position: "absolute",
                 top: 20,
-                right: 20,
+                right: "10%",
                 zIndex: 30001,
-                width: "200px", // fixed width
+                width: "30%", // fixed width
               }}
             >
               <Button
@@ -146,6 +146,8 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                   borderRadius: 25,
                   padding: 0,
                   minHeight: 40,
+                  // width: "30%",
+                  opacity: 0.8,
                 }}
               >
                 {loading ? (
