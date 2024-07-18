@@ -1,27 +1,20 @@
 import React, { useState, useEffect } from "react";
 import iOSLogo from "../../pictures/iOSLogo.png";
 import { Loading, Text, Button, Box, Icon, ICON_SIZES } from "..";
+
 import { COLORS } from "../../constants";
+
 import { useHistory, useLocation } from "react-router-dom";
 
-function VideoUploader({ senderID, receiverID, handleSending }) {
-  const [file, setFile] = useState(null);
+const VideoUploader = ({ senderID, receiverID, handleSending }) => {
   const [submitting, setSubmitting] = useState(false);
 
   const history = useHistory();
   const location = useLocation();
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const fileURI = params.get("videoURI");
-    if (fileURI) {
-      setFile(fileURI);
-    }
-  }, [location.search]);
-
   const handleRecordButtonClick = () => {
-    // Clear existing query parameters and set new ones
-    const params = new URLSearchParams();
+    // Construct the new URL with updated query parameters
+    const params = new URLSearchParams(location.search);
     params.set("senderID", senderID);
     params.set("receiverID", receiverID);
     params.set("videoMessage", true);
@@ -75,6 +68,6 @@ function VideoUploader({ senderID, receiverID, handleSending }) {
       )}
     </div>
   );
-}
+};
 
 export default VideoUploader;
