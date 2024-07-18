@@ -22,7 +22,7 @@ const VideoUploader = ({ senderID, receiverID, handleSending }) => {
 
     // Navigate to the constructed URL
     history.replace({
-      pathname: location.pathname,
+      pathname: "./message",
       search: params.toString(),
     });
   };
