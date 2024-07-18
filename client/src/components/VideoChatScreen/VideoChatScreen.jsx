@@ -21,6 +21,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [roomName, setRoomName] = useState("");
   const [loading, setLoading] = useState(false);
   const [showThumbsUp, setShowThumbsUp] = useState(false);
+  const [disableSendNumber, setDisableSendNumber] = useState(false);
 
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
@@ -119,36 +120,48 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           isMeetingStarted &&
           currentUser.expoToken &&
           videoChatRequest.receiver.expoToken && (
-            <Button
-              id="send-phone"
-              onClick={handleSendPhoneNumber}
-              width={"30%"}
-              disabled={showThumbsUp || loading}
-              color={COLORS.white}
+            <motion.div
+              drag="y"
+              dragConstraints={{ top: 0, bottom: window.innerHeight - 100 }}
+              dragElastic={0.2}
+              onDragStart={() => setDisableSendNumber(true)}
+              onDragEnd={() => setDisableSendNumber(false)}
               style={{
                 position: "absolute",
-                borderBottom: `solid 2px ${COLORS.pink}`,
-                boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
-                borderRadius: 25,
-                padding: 0,
-                bottom: 60,
-                right: 10,
-                minHeight: 40,
+                top: 20,
+                right: 20,
+                zIndex: 30001,
+                width: "200px", // fixed width
               }}
             >
-              {loading ? (
-                <Loading bar color={COLORS.pink} size={20} />
-              ) : (
-                <Text
-                  center
-                  color={COLORS.pink}
-                  style={{ padding: 0 }}
-                  fontSize={FONT_SIZES.SMALL}
-                >
-                  {showThumbsUp ? "👍" : "Send Phone #"}
-                </Text>
-              )}
-            </Button>
+              <Button
+                id="send-phone"
+                onClick={disableSendNumber ? undefined : handleSendPhoneNumber}
+                width={"100%"}
+                disabled={showThumbsUp || loading}
+                color={COLORS.white}
+                style={{
+                  borderBottom: `solid 2px ${COLORS.pink}`,
+                  boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+                  borderRadius: 25,
+                  padding: 0,
+                  minHeight: 40,
+                }}
+              >
+                {loading ? (
+                  <Loading bar color={COLORS.pink} size={20} />
+                ) : (
+                  <Text
+                    center
+                    color={COLORS.pink}
+                    style={{ padding: 0 }}
+                    fontSize={FONT_SIZES.SMALL}
+                  >
+                    {showThumbsUp ? "👍" : "Send Phone #"}
+                  </Text>
+                )}
+              </Button>
+            </motion.div>
           )}
 
         {!isApiReady ? (
@@ -179,16 +192,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                   "tileview",
                   "toggle-camera",
                   "settings",
-                ],
-                buttonsWithNotifyClick: [
-                  "microphone",
-                  "camera",
-                  "desktop",
-                  "hangup",
-                  "tileview",
-                  "toggle-camera",
-                  "settings",
-                  "filmstrip",
                 ],
               }}
               userInfo={{
