@@ -2,8 +2,8 @@ import React, {
   useContext,
   useState,
   useEffect,
-  Fragment,
   useMemo,
+  Fragment,
 } from "react";
 import { Subscription } from "react-apollo";
 import { formatDistanceToNow } from "date-fns";
@@ -30,7 +30,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Context from "../../context";
 
 const Message = () => {
-  let history = useHistory();
+  const history = useHistory();
   const location = useLocation();
   const { state, dispatch } = useContext(Context);
   const client = useClient();
@@ -43,7 +43,7 @@ const Message = () => {
     [location.search]
   );
 
-  const [groupedReceived, setGroupReceived] = useState(null);
+  const [groupedReceived, setGroupedReceived] = useState([]);
   const [openReport, setOpenReport] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [video, setVideo] = useState(null);
@@ -56,7 +56,6 @@ const Message = () => {
 
   const setBlocked = async (data) => {
     setIsBlocked(false);
-
     const user = data.find((video) => video.sender._id === senderID);
 
     if (
@@ -67,21 +66,20 @@ const Message = () => {
   };
 
   const groupVideosBySender = async (receivedVids, sentVids) => {
+    setLoading(true);
     try {
-      setLoading(true);
       const array = [
         ...receivedVids.filter((video) => video.sender._id === senderID),
         ...sentVids.filter((video) => video.receiver._id === senderID),
       ];
 
       const data = orderByCreatedAt(array);
-
-      setGroupReceived(data);
-      setBlocked(data);
-      setLoading(false);
+      setGroupedReceived(data);
+      await setBlocked(data);
     } catch (err) {
-      setLoading(false);
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -99,8 +97,8 @@ const Message = () => {
   const handleProfileClick = async () => {
     const user = groupedReceived.find((video) => video.sender._id === senderID);
     if (user) {
-      await dispatch({ type: "UPDATE_PROFILE", payload: user.sender });
-      await dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
+      dispatch({ type: "UPDATE_PROFILE", payload: user.sender });
+      dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
     }
   };
 
@@ -212,6 +210,7 @@ const Message = () => {
                 )}
 
                 <VideoPlayer
+                  videoUrl={video.url}
                   publicId={video.publicId}
                   controls={true}
                   height={250}
@@ -319,7 +318,7 @@ const Message = () => {
                   (video) => video._id === createVideo._id
                 );
                 setVideo(createVideo);
-                setGroupReceived([
+                setGroupedReceived([
                   ...updatedGroupReceived.slice(0, insertIndex),
                   createVideo,
                   ...updatedGroupReceived.slice(insertIndex),
@@ -327,7 +326,7 @@ const Message = () => {
                 return;
               }
 
-              setGroupReceived([...groupedReceived, createVideo]);
+              setGroupedReceived([...groupedReceived, createVideo]);
               setLoading(false);
               dispatch({ type: "TOGGLE_VIDEO", payload: false });
             }

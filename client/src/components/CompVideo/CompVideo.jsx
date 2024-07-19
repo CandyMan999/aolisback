@@ -114,9 +114,15 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
         formData
       );
 
+      let url = res.data.url;
+      let publicId = res.data.public_id;
+
+      // Ensure the URL uses HTTPS and has a .mov extension
+      url = url.replace(/^http:\/\//i, "https://").replace(/\.mkv$/i, ".mov");
+
       setSubmitting(false);
       handleSending(false);
-      return { url: res.data.url, publicId: res.data.public_id };
+      return { url, publicId };
     } catch (err) {
       console.log(err);
       setError(err.message);

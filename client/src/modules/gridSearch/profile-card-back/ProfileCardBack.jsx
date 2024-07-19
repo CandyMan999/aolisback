@@ -168,7 +168,8 @@ const ProfileCardBack = ({
           key={video.publicId}
         >
           <VideoPlayer
-            publicId={video.publicId}
+            // publicId={video.publicId}
+            videoUrl={video.url}
             width={150}
             height={280}
             controls={true}

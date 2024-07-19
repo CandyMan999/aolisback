@@ -11,11 +11,11 @@ import { useLocation } from "react-router-dom";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { Box, Loading, Text } from "../../components";
 import { COLORS } from "../../constants";
-import { AdvancedVideo } from "@cloudinary/react";
 import { thumbnail } from "@cloudinary/url-gen/actions/resize";
 import { quality, format } from "@cloudinary/url-gen/actions/delivery";
 
 const VideoPlayer = ({
+  videoUrl,
   publicId,
   width,
   height,
@@ -29,10 +29,10 @@ const VideoPlayer = ({
   const location = useLocation();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const videoRef = useRef();
   const cloudinaryRef = useRef(
     new Cloudinary({ cloud: { cloudName: "localmassagepros" } })
   );
-  const videoRef = useRef();
 
   const handleViewVideo = async () => {
     try {
@@ -43,34 +43,30 @@ const VideoPlayer = ({
     }
   };
 
-  // const handleFullScreen = (event) => {
-  //   const videoPlayer = event.currentTarget;
-  //   if (fullScreen && !isFullScreen) {
-  //     videoPlayer.requestFullscreen();
-  //     setIsFullScreen(true);
-  //   }
-  // };
-
-  // const handleFullscreenChange = () => {
-  //   if (!document.fullscreenElement) {
-  //     setIsFullScreen(false);
-  //   }
-  // };
-
   const handleSetLoading = () => {
     setIsLoading(false);
   };
 
-  // useEffect(() => {
-  //   document.addEventListener("fullscreenchange", handleFullscreenChange);
-  //   return () => {
-  //     document.removeEventListener("fullscreenchange", handleFullscreenChange);
-  //   };
-  // }, []);
+  const handleFullScreen = (event) => {
+    const videoPlayer = event.currentTarget;
+    if (fullScreen && !isFullScreen) {
+      videoPlayer.requestFullscreen();
+      setIsFullScreen(true);
+    }
+  };
 
-  const video = useMemo(() => {
-    return cloudinaryRef.current.video(publicId).delivery(quality("auto"));
-  }, [publicId]);
+  const handleFullscreenChange = () => {
+    if (!document.fullscreenElement) {
+      setIsFullScreen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
 
   const thumbnailUrl = useMemo(() => {
     return cloudinaryRef.current
@@ -81,45 +77,45 @@ const VideoPlayer = ({
       .toURL();
   }, [publicId]);
 
-  const mountVideo = !isLoading && !!cloudinaryRef.current;
-
   return (
     <Fragment>
-      {location.pathname === "/message" && !!cloudinaryRef.current && (
-        <Box style={{ display: mountVideo ? "block" : "none" }}>
-          <AdvancedVideo
-            cldVid={video}
+      {location.pathname === "/message" && (
+        <Box style={{ display: !isLoading ? "block" : "none" }}>
+          <video
             ref={videoRef}
+            src={videoUrl}
             onCanPlay={handleSetLoading}
             onPlay={receiverWatching ? handleViewVideo : undefined}
             controls={controls}
-            // onClick={handleFullScreen}
+            onClick={handleFullScreen}
             style={{
               borderRadius: borderRadius || undefined,
               maxWidth: isFullScreen ? undefined : 300,
+              width: "100%",
             }}
           />
         </Box>
       )}
-      {location.pathname === "/grid-search" && !!cloudinaryRef.current && (
-        <Box style={{ display: mountVideo ? "block" : "none" }}>
-          <AdvancedVideo
-            cldVid={video}
+      {location.pathname === "/grid-search" && (
+        <Box style={{ display: !isLoading ? "block" : "none" }}>
+          <video
             ref={videoRef}
+            src={videoUrl}
             onCanPlay={handleSetLoading}
             onPlay={receiverWatching ? handleViewVideo : undefined}
             controls={controls}
-            // onClick={handleFullScreen}
+            onClick={handleFullScreen}
             width={width}
             height={height || 250}
             style={{
               borderRadius: borderRadius || undefined,
               maxWidth: isFullScreen ? undefined : 300,
+              width: "100%",
             }}
           />
         </Box>
       )}
-      {location.pathname === "/message-center" && !!cloudinaryRef.current && (
+      {location.pathname === "/message-center" && (
         <Box>
           <img
             src={thumbnailUrl}
@@ -134,24 +130,23 @@ const VideoPlayer = ({
           />
         </Box>
       )}
-      {(isLoading || !cloudinaryRef.current) &&
-        location.pathname !== "/message-center" && (
-          <Box
-            width={150}
-            height={height || 250}
-            background={COLORS.lightGrey}
-            borderRadius={8}
-            flex
-            column
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Loading ring size={35} color={COLORS.pink} />
-            <Text center padding={0} bold color={COLORS.white}>
-              Processing HD...
-            </Text>
-          </Box>
-        )}
+      {(isLoading || !videoUrl) && location.pathname !== "/message-center" && (
+        <Box
+          width={150}
+          height={height || 250}
+          background={COLORS.lightGrey}
+          borderRadius={8}
+          flex
+          column
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Loading ring size={35} color={COLORS.pink} />
+          <Text center padding={0} bold color={COLORS.white}>
+            Processing HD...
+          </Text>
+        </Box>
+      )}
     </Fragment>
   );
 };

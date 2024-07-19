@@ -103,6 +103,7 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
               >
                 <VideoPlayer
                   publicId={group[group.length - 1].publicId}
+                  // videoUrl={group[group.length - 1].url}
                   height={90}
                   controls={false}
                   fullScreen={true}
