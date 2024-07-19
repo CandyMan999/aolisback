@@ -14,7 +14,7 @@ const VideoUploader = ({ senderID, receiverID, handleSending }) => {
 
   const handleRecordButtonClick = () => {
     // Construct the new URL with updated query parameters
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(location.search);
     params.set("senderID", senderID);
     params.set("receiverID", receiverID);
     params.set("videoMessage", true);
@@ -22,7 +22,7 @@ const VideoUploader = ({ senderID, receiverID, handleSending }) => {
 
     // Navigate to the constructed URL
     history.replace({
-      pathname: "./message",
+      pathname: location.pathname,
       search: params.toString(),
     });
   };
