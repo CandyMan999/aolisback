@@ -26,6 +26,7 @@ const cronJob = async () => {
             { marijuana: { $exists: false } },
             { kids: { $exists: false } },
             { drugs: { $exists: false } },
+            { pictures: { $exists: true, $size: 0 } },
           ],
         });
 
@@ -39,7 +40,39 @@ const cronJob = async () => {
 
         // Video deletion job
         const videos = await Video.find();
+        const videosNotFlagedandViewed = await Video.find({
+          viewed: true,
+          flagged: false,
+        });
         const publicIDs = [];
+
+        await Promise.all(
+          videosNotFlagedandViewed.map(async (video) => {
+            const pastDue = moment(video.createdAt).isBefore(
+              moment().subtract(1, "days")
+            );
+
+            if (pastDue) {
+              publicIDs.push(video.publicId);
+              const receiver = video.receiver._id;
+              const sender = video.sender._id;
+
+              await Video.deleteOne({ _id: video._id });
+
+              await User.findByIdAndUpdate(
+                receiver,
+                { $pull: { receivedVideos: video._id } },
+                { new: true }
+              );
+
+              await User.findByIdAndUpdate(
+                sender,
+                { $pull: { sentVideos: video._id } },
+                { new: true }
+              );
+            }
+          })
+        );
 
         await Promise.all(
           videos.map(async (video) => {
