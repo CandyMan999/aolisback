@@ -49,7 +49,7 @@ const cronJob = async () => {
         await Promise.all(
           videosNotFlagedandViewed.map(async (video) => {
             const pastDue = moment(video.createdAt).isBefore(
-              moment().subtract(1, "days")
+              moment().subtract(2, "days")
             );
 
             if (pastDue) {
