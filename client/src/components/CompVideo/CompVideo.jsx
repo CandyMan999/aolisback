@@ -57,20 +57,18 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
   const stopRecording = () => {
     const mediaRecorder = mediaRecorderRef.current;
     if (mediaRecorder && mediaStreamRef.current) {
+      mediaRecorder.stop();
       const chunks = [];
 
       mediaRecorder.ondataavailable = (e) => {
         chunks.push(e.data);
-      };
 
-      mediaRecorder.onstop = () => {
-        recordedBlobRef.current = new Blob(chunks, { type: "video/webm" });
+        recordedBlobRef.current = new Blob(chunks, { type: e.data.type });
         setFile(recordedBlobRef.current);
       };
-
-      mediaRecorder.stop();
-      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
       setRecording(false);
+
+      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
     }
   };
 
@@ -116,7 +114,6 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
 
       let url = res.data.url;
       let publicId = res.data.public_id;
-      console.log("url: ", url);
 
       // Ensure the URL uses HTTPS and has a .mov extension
       url = url.replace(/^http:\/\//i, "https://").replace(/\.mkv$/i, ".mov");
