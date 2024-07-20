@@ -80,7 +80,13 @@ const VideoPlayer = ({
   return (
     <Fragment>
       {location.pathname === "/message" && (
-        <Box style={{ display: true ? "block" : "none" }}>
+        <Box
+          style={{
+            display: true ? "block" : "none",
+            backgroundColor: COLORS.lightGrey,
+            borderRadius: borderRadius,
+          }}
+        >
           <video
             ref={videoRef}
             src={videoUrl}
@@ -97,7 +103,13 @@ const VideoPlayer = ({
         </Box>
       )}
       {location.pathname === "/grid-search" && (
-        <Box style={{ display: true ? "block" : "none" }}>
+        <Box
+          style={{
+            display: true ? "block" : "none",
+            backgroundColor: COLORS.lightGrey,
+            borderRadius: borderRadius,
+          }}
+        >
           <video
             ref={videoRef}
             src={videoUrl}
