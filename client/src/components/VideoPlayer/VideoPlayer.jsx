@@ -82,9 +82,12 @@ const VideoPlayer = ({
       {location.pathname === "/message" && (
         <Box
           style={{
-            display: true ? "block" : "none",
-            backgroundColor: COLORS.lightGrey,
+            display: "block",
+            backgroundColor: COLORS.black,
             borderRadius: borderRadius,
+            width: "100%",
+            height: "fit-content",
+            boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
           }}
         >
           <video
@@ -105,9 +108,10 @@ const VideoPlayer = ({
       {location.pathname === "/grid-search" && (
         <Box
           style={{
-            display: true ? "block" : "none",
-            backgroundColor: COLORS.lightGrey,
+            display: "block",
+            backgroundColor: COLORS.black,
             borderRadius: borderRadius,
+            height: height || 250,
           }}
         >
           <video
