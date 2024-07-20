@@ -119,44 +119,22 @@ const VideoPlayer = ({
             backgroundColor: COLORS.black,
             borderRadius: borderRadius,
             height: height || 250,
-            position: "relative",
           }}
         >
           <video
             ref={videoRef}
             src={videoUrl}
             onPlay={receiverWatching ? handleViewVideo : undefined}
+            controls={controls}
             onClick={handleFullScreen}
             width={width}
             height={height || 250}
             style={{
               borderRadius: borderRadius || undefined,
-              maxWidth: 300,
+              maxWidth: isFullScreen ? undefined : 300,
               width: "100%",
-              display: "block",
             }}
-            controls={false} // Hide default controls
           />
-          <button
-            onClick={handlePlayPause}
-            style={{
-              position: "absolute",
-              bottom: "0%",
-              left: "25%",
-              transform: "translate(-50%, -50%)",
-              background: COLORS.darkerGrey,
-              opacity: 0.8,
-              border: "none",
-              cursor: "pointer",
-              borderRadius: 7,
-            }}
-          >
-            {isPlaying ? (
-              <span style={{ fontSize: "48px", color: "white" }}>❚❚</span>
-            ) : (
-              <span style={{ fontSize: "48px", color: "white" }}>►</span>
-            )}
-          </button>
         </Box>
       )}
       {location.pathname === "/message-center" && (
