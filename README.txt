@@ -18,7 +18,17 @@ We just launched in your city! More users are joining soon. Start sending video 
 15. check that Cloudinary is not raping me in the ass anymore on price
 16. The unblock is not updating on the message- check dispatch. 
 17. prescreen for the app store review ? this is a maybe... 
+18. Biuld a plan object, free, pro, unlimited.. {plan: "Free"
+                                                messagesSent: 2,
+                                                videoChat: sconds
+                                                messagesPerPlan: x number
+                                                videoChat seconds per plan: x number,
+                                                }
+19. Clear out the messages sent every day, and seconds of video every week with cron job. - make seed users and test this with a large dataset for chunking with cron
+20.. add Holt to unbuntu server to keep track of usage.. or check if digital ocean has data.. 
 
+
+                                
 
 
 15. Launch in Austin!

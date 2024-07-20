@@ -1,5 +1,6 @@
 const { AuthenticationError, UserInputError } = require("apollo-server");
 const { User } = require("../../models");
+const { pushNotificationWelcome } = require("../../utils/middleware");
 require("dotenv").config();
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -50,6 +51,9 @@ module.exports = {
               { phoneNumber, profileComplete: true },
               { new: true }
             ).populate("pictures");
+
+            pushNotificationWelcome(user.expoToken, user.location.coordinates);
+
             return user;
           } else {
             throw new AuthenticationError("Invalid verification code.");
