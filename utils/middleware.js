@@ -3,7 +3,7 @@ const { AuthenticationError } = require("apollo-server-express");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID);
 const { Expo } = require("expo-server-sdk");
-const CITIES = require("./citiesList");
+const { CITIES } = require("./citiesList");
 
 const parseToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -204,8 +204,6 @@ const pushNotificationPhoneNumber = async (
 
     let messages = [];
 
-    console.log("backend: ", expoToken, username, phoneNumber, imageUrl);
-
     if (!Expo.isExpoPushToken(expoToken)) {
       console.error(`Push token ${expoToken} is not a valid Expo push token`);
       return;
@@ -288,22 +286,32 @@ const getDistanceFromCoords = (lat1, lng1, lat2, lng2) => {
 const deg2rad = (deg) => deg * (Math.PI / 180);
 
 const findClosestCity = async (lat, long) => {
-  let shortestDistance = null;
-  let currentDistance = null;
-  let cityName = null;
+  try {
+    let shortestDistance = null;
+    let currentDistance = null;
+    let cityName = null;
 
-  CITIES.map(async (city) => {
-    const cityLat = city.latitude;
-    const cityLng = city.longitude;
+    for (const city of CITIES) {
+      const cityLat = city.latitude;
+      const cityLng = city.longitude;
 
-    currentDistance = await getDistanceFromCoords(lat, long, cityLat, cityLng);
-    if (shortestDistance === null || currentDistance < shortestDistance) {
-      shortestDistance = currentDistance;
-      cityName = city.city;
+      currentDistance = await getDistanceFromCoords(
+        lat,
+        long,
+        cityLat,
+        cityLng
+      );
+
+      if (shortestDistance === null || currentDistance < shortestDistance) {
+        shortestDistance = currentDistance;
+        cityName = city.city;
+      }
     }
-  });
 
-  return cityName;
+    return cityName;
+  } catch (err) {
+    console.log("error finding city: ", err);
+  }
 };
 
 const pushNotificationWelcome = async (expoToken, coordinates) => {
@@ -315,9 +323,8 @@ const pushNotificationWelcome = async (expoToken, coordinates) => {
     let city = undefined;
     const long = coordinates[0];
     const lat = coordinates[1];
-    console.log("backend: ", expoToken, coordinates);
 
-    if (lat || long !== 0) {
+    if (lat || long) {
       city = await findClosestCity(lat, long);
     }
 
