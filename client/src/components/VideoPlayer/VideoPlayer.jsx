@@ -80,7 +80,7 @@ const VideoPlayer = ({
   return (
     <Fragment>
       {location.pathname === "/message" && (
-        <Box style={{ display: !isLoading ? "block" : "none" }}>
+        <Box style={{ display: true ? "block" : "none" }}>
           <video
             ref={videoRef}
             src={videoUrl}
@@ -97,7 +97,7 @@ const VideoPlayer = ({
         </Box>
       )}
       {location.pathname === "/grid-search" && (
-        <Box style={{ display: !isLoading ? "block" : "none" }}>
+        <Box style={{ display: true ? "block" : "none" }}>
           <video
             ref={videoRef}
             src={videoUrl}
@@ -130,7 +130,7 @@ const VideoPlayer = ({
           />
         </Box>
       )}
-      {(isLoading || !videoUrl) && location.pathname !== "/message-center" && (
+      {/* {(isLoading || !videoUrl) && location.pathname !== "/message-center" && (
         <Box
           width={150}
           height={height || 250}
@@ -146,7 +146,7 @@ const VideoPlayer = ({
             Processing HD...
           </Text>
         </Box>
-      )}
+      )} */}
     </Fragment>
   );
 };
