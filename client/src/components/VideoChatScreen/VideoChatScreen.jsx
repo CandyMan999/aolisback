@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
 import iOSLogo from "../../pictures/iOSLogo.png";
@@ -6,10 +6,10 @@ import Context from "../../context";
 import {
   UPDATE_VIDEO_CHAT_REQUEST,
   SEND_PHONE_NUMBER,
+  CALL_DURATION_MUTATION,
 } from "../../graphql/mutations";
 import { Loading, Button, Text, FONT_SIZES } from "../../components";
 import { JitsiMeeting } from "@jitsi/react-sdk";
-
 import { useClient } from "../../client";
 
 const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
@@ -22,6 +22,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [loading, setLoading] = useState(false);
   const [showThumbsUp, setShowThumbsUp] = useState(false);
   const [disableSendNumber, setDisableSendNumber] = useState(false);
+  const intervalIdRef = useRef(null); // Use useRef to store interval ID
 
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
@@ -39,9 +40,27 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
     }
   }, [roomName, isMeetingStarted]);
 
+  const handleParticipantLeft = async () => {
+    try {
+      handleShutScreen();
+
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
+      }
+    } catch (err) {
+      console.log("error ending video call: ", err);
+    }
+  };
+
   const handleHangup = async () => {
     try {
       handleShutScreen();
+
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
+      }
 
       const variables = {
         _id: videoChatRequest._id,
@@ -91,6 +110,39 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
       setLoading(false);
     }
   };
+
+  const handleParticipantJoined = async () => {
+    const sendApiCall = async () => {
+      try {
+        const variables = {
+          userID: currentUser._id,
+          time: 10,
+        };
+
+        const { callDuration } = await client.request(
+          CALL_DURATION_MUTATION,
+          variables
+        );
+
+        console.log("updating time: ", callDuration);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    intervalIdRef.current = setInterval(() => {
+      sendApiCall();
+    }, 10000); // 10 seconds interval
+  };
+
+  // Clear interval when component unmounts
+  useEffect(() => {
+    return () => {
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+      }
+    };
+  }, []);
 
   return (
     videoChatRequest &&
@@ -201,6 +253,14 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
               }}
               onApiReady={(externalApi) => {
                 externalApi.addListener("videoConferenceLeft", handleHangup);
+                externalApi.addListener(
+                  "participantJoined",
+                  handleParticipantJoined
+                );
+                externalApi.addListener(
+                  "participantLeft",
+                  handleParticipantLeft
+                );
 
                 externalApi.executeCommand(
                   "pinParticipant",

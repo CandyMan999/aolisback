@@ -35,6 +35,21 @@ module.exports = gql`
     isBanned: Boolean
     profileComplete: Boolean
     inCall: Boolean
+    plan: Plan
+  }
+
+  type Plan {
+    planType: PlanType
+    messages: Int
+    messagesSent: Int
+    videoMinutes: Int
+    videoMinutesUsed: Int
+  }
+
+  enum PlanType {
+    Free
+    Premium
+    Unlimited
   }
 
   type Video {
@@ -137,6 +152,11 @@ module.exports = gql`
   type AuthSignup {
     user: User
     token: String!
+  }
+
+  type CallDuration {
+    user: User
+    outOfTime: Boolean
   }
 
   type Account {
@@ -252,6 +272,7 @@ module.exports = gql`
       phoneNumber: String!
       imageUrl: String
     ): NumberSentStatus
+    callDuration(userID: ID!, time: Int!): CallDuration
   }
 
   type Subscription {

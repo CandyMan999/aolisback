@@ -28,6 +28,12 @@ module.exports = {
         { new: true }
       ).populate("receivedVideos");
 
+      // Increment the messagesSent field in the sender's plan
+      await User.updateOne(
+        { _id: senderID },
+        { $inc: { "plan.messagesSent": 1 } }
+      );
+
       const newVideo = await Video.findOne({ _id: video._id }).populate([
         {
           path: "sender",

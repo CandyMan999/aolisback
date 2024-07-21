@@ -167,9 +167,33 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "ChatRequest",
   },
+
   profileComplete: {
     type: Boolean,
     default: false,
+  },
+  plan: {
+    planType: {
+      type: String,
+      enum: ["Free", "Premium", "Unlimited"],
+      default: "Free",
+    },
+    messages: {
+      type: Number,
+      default: 3, // testing 3 per day to start
+    },
+    messagesSent: {
+      type: Number,
+      default: 0,
+    },
+    videoMinutes: {
+      type: Number,
+      default: 15 * 60, // testing 15 min to start
+    },
+    videoMinutesUsed: {
+      type: Number,
+      default: 0,
+    },
   },
 });
 

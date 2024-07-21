@@ -605,6 +605,23 @@ export const DELETE_ACCOUNT_MUTATION = gql`
   }
 `;
 
+export const CALL_DURATION_MUTATION = gql`
+  mutation ($userID: ID!, $time: Int!) {
+    callDuration(userID: $userID, time: $time) {
+      user {
+        username
+        plan {
+          messages
+          messagesSent
+          videoMinutes
+          videoMinutesUsed
+        }
+      }
+      outOfTime
+    }
+  }
+`;
+
 export const ACCEPT_TERMS_MUTATION = gql`
   mutation ($accept: Boolean!) {
     termsAgreement(accept: $accept) {

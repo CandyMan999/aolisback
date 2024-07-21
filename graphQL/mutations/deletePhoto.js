@@ -28,6 +28,15 @@ module.exports = {
       )
         .populate("pictures")
         .populate("comments");
+
+      if (!user.pictures.length) {
+        await User.findByIdAndUpdate(
+          { _id: userId },
+          { profileComplete: false },
+          { new: true }
+        );
+      }
+
       return user;
     } catch (err) {
       throw new AuthenticationError(err.message);

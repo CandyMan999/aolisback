@@ -1,5 +1,5 @@
 const { AuthenticationError, gql, PubSub } = require("apollo-server");
-const { User, Picture, Video } = require("../../models");
+const { User, Picture, Plan } = require("../../models");
 const { OAuth2Client } = require("google-auth-library");
 const { createToken } = require("../../utils/middleware");
 const { publishCreateVideo } = require("../subscription/subscription");
@@ -53,40 +53,6 @@ module.exports = {
     }).save();
 
     const newPhoto = await Picture.create({ url: picture, user: user._id });
-
-    // const video = await Video.create({
-    //   url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
-    //   publicId: "wy3ybqezw97wiqtst5nm",
-    //   sender: "64a5ed088d53300014ccf08a",
-    //   receiver: user._id,
-    // });
-
-    // await User.findByIdAndUpdate(
-    //   { _id: user._id },
-    //   { $push: { receivedVideos: video } },
-    //   { new: true }
-    // ).populate("receivedVideos");
-
-    // const newVideo = await Video.findOne({ _id: video._id }).populate([
-    //   {
-    //     path: "sender",
-    //     model: "User",
-    //     populate: {
-    //       path: "pictures",
-    //       model: "Picture",
-    //     },
-    //   },
-    //   {
-    //     path: "receiver",
-    //     model: "User",
-    //     populate: {
-    //       path: "pictures",
-    //       model: "Picture",
-    //     },
-    //   },
-    // ]);
-
-    // publishCreateVideo(newVideo);
 
     const currentUser = await User.findByIdAndUpdate(
       {
@@ -299,40 +265,6 @@ module.exports = {
     }).save();
 
     const newPhoto = await Picture.create({ url: picture, user: user._id });
-
-    // const video = await Video.create({
-    //   url: "https://res.cloudinary.com/localmassagepros/video/upload/v1686922266/GoneChatting.mp4",
-    //   publicId: "wy3ybqezw97wiqtst5nm",
-    //   sender: "64a5ed088d53300014ccf08a",
-    //   receiver: user._id,
-    // });
-
-    // await User.findByIdAndUpdate(
-    //   { _id: user._id },
-    //   { $push: { receivedVideos: video } },
-    //   { new: true }
-    // ).populate("receivedVideos");
-
-    // const newVideo = await Video.findOne({ _id: video._id }).populate([
-    //   {
-    //     path: "sender",
-    //     model: "User",
-    //     populate: {
-    //       path: "pictures",
-    //       model: "Picture",
-    //     },
-    //   },
-    //   {
-    //     path: "receiver",
-    //     model: "User",
-    //     populate: {
-    //       path: "pictures",
-    //       model: "Picture",
-    //     },
-    //   },
-    // ]);
-
-    // publishCreateVideo(newVideo);
 
     const currentUser = await User.findByIdAndUpdate(
       {

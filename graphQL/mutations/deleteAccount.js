@@ -1,6 +1,6 @@
 const { AuthenticationError } = require("apollo-server");
 const { User, Picture, Room, Comment, Video } = require("../../models");
-const cloudinary = require("cloudinary");
+const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
 
 cloudinary.config({
@@ -16,53 +16,83 @@ module.exports = {
     try {
       const deleteAllPhotos = async () => {
         try {
-          currentUser.pictures.forEach(async (pic) => {
+          const deletePhotoPromises = currentUser.pictures.map(async (pic) => {
             const { publicId } = await Picture.findById(pic._id);
             if (publicId) {
-              const deleteData = await cloudinary.uploader.destroy(publicId);
+              await cloudinary.uploader.destroy(publicId);
             }
             await Picture.deleteOne({ _id: pic._id });
           });
+          await Promise.all(deletePhotoPromises);
         } catch (err) {
-          throw new AuthenticationError(err);
+          throw new AuthenticationError(err.message);
         }
       };
 
       const deleteAllComments = async () => {
         try {
-          currentUser.comments.forEach(async (comment) => {
-            await Comment.deleteOne({ _id: comment._id });
+          const deleteCommentPromises = currentUser.comments.map(
+            async (comment) => {
+              await Comment.deleteOne({ _id: comment._id });
+            }
+          );
+          await Promise.all(deleteCommentPromises);
+
+          // Remove references to the user's comments in any associated rooms
+          const rooms = await Room.find({
+            comments: { $in: currentUser.comments },
           });
+          const updateRoomPromises = rooms.map(async (room) => {
+            await Room.updateOne(
+              { _id: room._id },
+              { $pull: { comments: { $in: currentUser.comments } } }
+            );
+          });
+          await Promise.all(updateRoomPromises);
         } catch (err) {
-          throw new AuthenticationError(err);
+          throw new AuthenticationError(err.message);
         }
       };
 
       const deleteAllVideos = async () => {
         try {
           const publicIDs = [];
-          currentUser.sentVideos.forEach(async (video) => {
-            publicIDs.push(video.publicId);
-            await User.findByIdAndUpdate(
-              { _id: video.receiver._id },
-              { $pull: { receivedVideos: video._id } }
-            );
-            const data = await Video.deleteOne({ _id: video._id });
-          });
-          currentUser.receivedVideos.forEach(async (video) => {
-            publicIDs.push(video.publicId);
-            const data = await Video.deleteOne({ _id: video._id });
-          });
-          const filterIDs = await publicIDs.filter(
-            (id) => id !== "wy3ybqezw97wiqtst5nm"
+          const deleteSentVideoPromises = currentUser.sentVideos.map(
+            async (videoId) => {
+              const video = await Video.findById(videoId);
+              if (video && video.publicId) {
+                publicIDs.push(video.publicId);
+              }
+              await User.findByIdAndUpdate(
+                { _id: video.receiver._id },
+                { $pull: { receivedVideos: video._id } }
+              );
+              await Video.deleteOne({ _id: video._id });
+            }
           );
-          if (!!filterIDs.length) {
-            await cloudinary.api.delete_resources(filterIDs, {
+
+          const deleteReceivedVideoPromises = currentUser.receivedVideos.map(
+            async (videoId) => {
+              const video = await Video.findById(videoId);
+              if (video && video.publicId) {
+                publicIDs.push(video.publicId);
+              }
+              await Video.deleteOne({ _id: video._id });
+            }
+          );
+
+          await Promise.all([
+            ...deleteSentVideoPromises,
+            ...deleteReceivedVideoPromises,
+          ]);
+
+          if (publicIDs.length) {
+            await cloudinary.api.delete_resources(publicIDs, {
               resource_type: "video",
             });
           }
         } catch (err) {
-          throw new AuthenticationError(err);
+          throw new AuthenticationError(err.message);
         }
       };
 
@@ -70,7 +100,7 @@ module.exports = {
         try {
           await User.deleteOne({ _id: currentUser._id });
         } catch (err) {
-          throw new AuthenticationError(err);
+          throw new AuthenticationError(err.message);
         }
       };
 

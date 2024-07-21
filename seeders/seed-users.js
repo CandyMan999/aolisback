@@ -14,7 +14,7 @@ cloudinary.config({
 });
 
 const TOTAL_USERS = 500;
-const EXCLUDED_USER_ID = "6665fae55486fb4b62990898"; // The user ID to exclude
+const EXCLUDED_USER_ID = "6686f5e8af94620002482764"; // The user ID to exclude
 
 const seedUsers = async () => {
   try {
@@ -26,13 +26,13 @@ const seedUsers = async () => {
       .then(() => console.log("DB connected"))
       .catch((err) => console.log(err));
 
-    const USERS = await User.find({ seeder: true });
+    const USERS = await User.find();
 
     const deleteUserAndAssociatedData = async (user) => {
       if (user._id.toString() !== EXCLUDED_USER_ID) {
         // Delete all pictures
         for (const pic of user.pictures) {
-          data = await Picture.findById(pic._id);
+          const data = await Picture.findById(pic._id);
           if (data && data.publicId) {
             await cloudinary.uploader.destroy(data.publicId);
           }
@@ -47,20 +47,26 @@ const seedUsers = async () => {
         // Delete all videos
         const publicIDs = [];
         for (const video of user.sentVideos) {
-          publicIDs.push(video.publicId);
-          if (video && video.receiver && video.reciever._is) {
-            await User.findByIdAndUpdate(
-              { _id: video.receiver._id },
-              { $pull: { receivedVideos: video._id } }
-            );
+          const videoData = await Video.findById(video);
+          if (videoData) {
+            publicIDs.push(videoData.publicId);
+            if (videoData.receiver) {
+              await User.findByIdAndUpdate(
+                { _id: videoData.receiver },
+                { $pull: { receivedVideos: videoData._id } }
+              );
+            }
+            await Video.deleteOne({ _id: videoData._id });
           }
-
-          await Video.deleteOne({ _id: video._id });
         }
         for (const video of user.receivedVideos) {
-          publicIDs.push(video.publicId);
-          await Video.deleteOne({ _id: video._id });
+          const videoData = await Video.findById(video);
+          if (videoData) {
+            publicIDs.push(videoData.publicId);
+            await Video.deleteOne({ _id: videoData._id });
+          }
         }
+
         if (publicIDs.length) {
           await cloudinary.api.delete_resources(publicIDs, {
             resource_type: "video",

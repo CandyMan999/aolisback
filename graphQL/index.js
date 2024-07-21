@@ -47,6 +47,7 @@ const {
   termsAgreementResolver,
   addPhoneResolver,
   sendPhoneNumberResolver,
+  callDurationResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -98,6 +99,7 @@ const resolvers = {
     termsAgreement: termsAgreementResolver,
     addPhone: addPhoneResolver,
     sendPhoneNumber: sendPhoneNumberResolver,
+    callDuration: callDurationResolver,
   },
 };
 
