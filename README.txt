@@ -26,7 +26,10 @@ We just launched in your city! More users are joining soon. Start sending video 
                                                 }
 19. Clear out the messages sent every day, and seconds of video every week with cron job. - make seed users and test this with a large dataset for chunking with cron
 20.. add Holt to unbuntu server to keep track of usage.. or check if digital ocean has data.. 
-21.. if photos are 0 then back to profileComplete false.
+21.. if photos are 0 then back to profileComplete false.- did that but now fix when sent back to profile. 
+22. if delete account pull from other users liked, blocked, and matched
+23. no pull down refresh on map
+24. notification, a user you like is online
 
 
                                 

@@ -87,6 +87,22 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
 
           <Box display="flex" alignItems="center" justifyContent="center">
             <Box justifyContent="center" position="relative">
+              {/* <Box
+                position="absolute"
+                row
+                zIndex={10}
+                top={2}
+                left={10}
+                marginTop={2}
+                boxShadow={`2px 2px 4px 2px ${COLORS.pink}`}
+                borderRadius={30}
+                height={60}
+                width={60}
+                alignItems="center"
+                justifyContent="center"
+              >
+                👍❤️
+              </Box> */}
               {pictures.length && currentPhoto ? (
                 <Slide
                   id={currentPhoto._id}

@@ -10,6 +10,9 @@ import {
   FONT_SIZES,
   Loading,
   OnlineDot,
+  FloatingHeart,
+  LikeButton,
+  UnlikeButton,
 } from "../../components";
 
 import { COLORS } from "../../constants";
@@ -33,6 +36,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const [imBlocked, setImBlocked] = useState(false);
   const [userBlocked, setUserBlocked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showHearts, setShowHearts] = useState(false);
 
   let user = userClicked ? userClicked : currentUser;
   const itsMe = userClicked._id === currentUser._id;
@@ -191,6 +195,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             <OnlineDot inCall={inCall} />
           </Box>
         )}
+
         <Box width={"100%"}>
           <PhotoSlider
             withDelete={_id && _id === state.currentUser._id ? true : false}
@@ -198,6 +203,13 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             height={310}
             width={200}
           />
+          {!itsMe &&
+            (!showHearts ? (
+              <UnlikeButton onClick={() => setShowHearts(true)} />
+            ) : (
+              <LikeButton onClick={() => setShowHearts(false)} />
+            ))}
+          {showHearts && <FloatingHeart activate={showHearts} />}
         </Box>
         <Box
           display="flex"

@@ -9,7 +9,7 @@ import CreateProfile from "./modules/createProfile";
 import GridSearch from "./modules/gridSearch";
 import MessageCenter from "./modules/messageCenter";
 import Message from "./modules/Message";
-import { Map } from "./components";
+import { Map, FloatingHeart } from "./components";
 
 import "./App.css";
 

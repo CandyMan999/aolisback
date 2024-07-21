@@ -27,6 +27,8 @@ module.exports = gql`
     sentVideos: [Video]
     receivedVideos: [Video]
     blockedUsers: [User]
+    likedUsers: [User]
+    matchedUsers: [User]
     chatRequest: ChatRequest
     lookingFor: LookingFor
     expoToken: String
@@ -44,6 +46,8 @@ module.exports = gql`
     messagesSent: Int
     videoMinutes: Int
     videoMinutesUsed: Int
+    withAds: Boolean
+    showWhoLikesMe: Boolean
   }
 
   enum PlanType {

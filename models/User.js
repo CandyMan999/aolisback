@@ -146,6 +146,18 @@ const UserSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  likedUsers: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
+  ],
+  matchedUsers: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
+  ],
   comments: [{ type: mongoose.Schema.ObjectId, ref: "Comment" }],
   room: {
     type: mongoose.Schema.ObjectId,
@@ -193,6 +205,14 @@ const UserSchema = new mongoose.Schema({
     videoMinutesUsed: {
       type: Number,
       default: 0,
+    },
+    withAds: {
+      type: Boolean,
+      default: true,
+    },
+    showWhoLikesMe: {
+      type: Boolean,
+      default: true,
     },
   },
 });
