@@ -10,7 +10,12 @@ const LikeButton = ({ onClick, disabled, dontScale, type }) => (
     onClick={disabled ? undefined : onClick}
     type={type || "button"}
   >
-    👍❤️
+    <span role="img" aria-label="thumbs-up">
+      👍
+    </span>
+    <span role="img" aria-label="heart">
+      ❤️
+    </span>
   </StyledButton>
 );
 
@@ -33,6 +38,11 @@ const StyledButton = styled(motion.button)`
   top: 2px;
   left: 10px;
   margin-top: 2px;
+
+  span {
+    font-size: 24px;
+    line-height: 1; /* Ensures emojis are aligned properly */
+  }
 
   &:disabled {
     cursor: not-allowed;
