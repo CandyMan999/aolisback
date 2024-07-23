@@ -51,31 +51,6 @@ const MessageCenter = () => {
     }
   };
 
-  // const handleDeleteVideos = async (_id) => {
-  //   try {
-  //     const variables = {
-  //       _id,
-  //     };
-  //     const { deleteVideo } = await client.request(
-  //       DELETE_VIDEO_MUTATION,
-  //       variables
-  //     );
-  //     const sentVideos = await deleteVideo.filter(
-  //       (video) => video.sender._id === currentUser._id
-  //     );
-  //     const receivedVideos = await deleteVideo.filter(
-  //       (video) => video.receiver._id === currentUser._id
-  //     );
-
-  //     await dispatch({
-  //       type: "UPDATE_VIDEOS",
-  //       payload: { sentVideos, receivedVideos },
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   const groupVideosBySender = (videos) => {
     try {
       setLoading(true);

@@ -12,7 +12,7 @@ import iOSLogo from "../../pictures/iOSLogo.png";
 import { Box } from "..";
 import { COLORS } from "../../constants";
 
-const Loading = ({ bar, fade, grid, ring, size, color, logo }) => {
+const Loading = ({ bar, fade, grid, ring, size, color, logo, width }) => {
   let Loader = PulseLoader;
 
   if (bar) Loader = BarLoader;
@@ -40,7 +40,12 @@ const Loading = ({ bar, fade, grid, ring, size, color, logo }) => {
     );
 
   return (
-    <Box width="100%" height="100%" justifyContent="center" alignItems="center">
+    <Box
+      width={width ? width : "100%"}
+      height="100%"
+      justifyContent="center"
+      alignItems="center"
+    >
       {logo ? (
         Loader
       ) : (

@@ -29,6 +29,7 @@ module.exports = gql`
     blockedUsers: [User]
     likedUsers: [User]
     matchedUsers: [User]
+    usersLikedMe: [User]
     chatRequest: ChatRequest
     lookingFor: LookingFor
     expoToken: String
@@ -180,6 +181,9 @@ module.exports = gql`
     getUsersMap(latitude: Float!, longitude: Float!): [User]
     getAllUsers(latitude: Float!, longitude: Float!): [User]
     getVideos(senderID: ID!, receiverID: ID!): [Video]
+    getLikedUsers(userID: ID!): [User]
+    getUsersWhoLikedMe(userID: ID!): [User]
+    getMatchedUsers(userID: ID!): [User]
   }
 
   type GoogleAuth {
@@ -277,6 +281,8 @@ module.exports = gql`
       imageUrl: String
     ): NumberSentStatus
     callDuration(userID: ID!, time: Int!): CallDuration
+    like(userID: ID!, likeID: ID!): User
+    unLike(userID: ID!, unLikeID: ID!): User
   }
 
   type Subscription {

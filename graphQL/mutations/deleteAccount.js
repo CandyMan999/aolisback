@@ -96,6 +96,26 @@ module.exports = {
         }
       };
 
+      const removeUserReferences = async () => {
+        try {
+          // Update other users' matchedUsers, likedUsers, and usersLikedMe arrays
+          await User.updateMany(
+            { matchedUsers: currentUser._id },
+            { $pull: { matchedUsers: currentUser._id } }
+          );
+          await User.updateMany(
+            { likedUsers: currentUser._id },
+            { $pull: { likedUsers: currentUser._id } }
+          );
+          await User.updateMany(
+            { usersLikedMe: currentUser._id },
+            { $pull: { usersLikedMe: currentUser._id } }
+          );
+        } catch (err) {
+          throw new AuthenticationError(err.message);
+        }
+      };
+
       const deleteUser = async () => {
         try {
           await User.deleteOne({ _id: currentUser._id });
@@ -107,6 +127,7 @@ module.exports = {
       await deleteAllPhotos();
       await deleteAllComments();
       await deleteAllVideos();
+      await removeUserReferences();
       await deleteUser();
 
       return { status: true };

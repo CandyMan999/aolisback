@@ -13,6 +13,7 @@ const SearchResults = ({
   client,
   dispatch,
   currentUser,
+  search,
 }) => {
   const [activeID, setActiveID] = useState(null);
 
@@ -25,7 +26,7 @@ const SearchResults = ({
   };
 
   const handleComponent = () => {
-    if (!users.length) {
+    if (!users.length && search === "Browse") {
       return (
         <Box
           display={"flex"}
@@ -45,51 +46,110 @@ const SearchResults = ({
         </Box>
       );
     }
+    if (!users.length && search === "Matches") {
+      return (
+        <Box
+          display={"flex"}
+          height={"50%"}
+          column
+          width="100%"
+          justifyContent="space-around"
+          alignItems="center"
+        >
+          <Box centerText padding={"5%"}>
+            <Text center fontSize={FONT_SIZES.X_LARGE} bold>
+              Sorry, you got no matches you UGLY FUCK!
+            </Text>
+          </Box>
+        </Box>
+      );
+    }
+    if (!users.length && search === "My Likes") {
+      return (
+        <Box
+          display={"flex"}
+          height={"50%"}
+          column
+          width="100%"
+          justifyContent="space-around"
+          alignItems="center"
+        >
+          <Box centerText padding={"5%"}>
+            <Text center fontSize={FONT_SIZES.X_LARGE} bold>
+              You haven't Liked anyone yet. What, you too fucking good to like
+              someone? You're probably a 7 at best.. so don't be so fucking
+              critical
+            </Text>
+          </Box>
+        </Box>
+      );
+    }
+    if (!users.length && search === "Likes Me") {
+      return (
+        <Box
+          display={"flex"}
+          height={"50%"}
+          column
+          width="100%"
+          justifyContent="space-around"
+          alignItems="center"
+        >
+          <Box centerText padding={"5%"}>
+            <Text center fontSize={FONT_SIZES.X_LARGE} bold>
+              Sorry ,No one likes you yet you LAME FUCK, how about trying to
+              upgrade you profile or actually interact with some people?!
+            </Text>
+          </Box>
+        </Box>
+      );
+    }
   };
 
   return (
-    <Box
-      className={gridStyle(mobile)}
-      style={{ display: users.length ? "grid" : "" }}
-      width="100%"
-    >
-      {!!users.length
-        ? users.map((user, i) => (
-            <FlipCard
-              key={`card${user.username}-${i}`}
-              state={state}
-              frontContent={
-                <ProfileCardFront
-                  state={state}
-                  user={user}
-                  key={`${user.username}-${i}`}
-                  name={`${user.username}`}
-                  onClick={() => onUserCardClick(user._id)}
-                  photos={user.pictures}
-                  online={user.isLoggedIn}
-                  activeID={activeID}
-                />
-              }
-              backContent={
-                <ProfileCardBack
-                  state={state}
-                  user={user}
-                  currentUser={currentUser}
-                  client={client}
-                  key={`${user.username}-${i}-back`}
-                  name={`${user.username}`}
-                  onClick={() => onUserCardClick(user._id)}
-                  photos={user.pictures}
-                  online={user.isLoggedIn}
-                  activeID={activeID}
-                  openModal={toggleModal}
-                  dispatch={dispatch}
-                  mobile={mobile}
-                />
-              }
-            />
-          ))
-        : handleComponent()}
+    <Box width="100%" height={"100%"} column>
+      <Box
+        className={gridStyle(mobile)}
+        style={{ display: users.length ? "grid" : "" }}
+        width="100%"
+      >
+        {!!users.length
+          ? users.map((user, i) => (
+              <FlipCard
+                key={`card${user.username}-${i}`}
+                state={state}
+                frontContent={
+                  <ProfileCardFront
+                    state={state}
+                    user={user}
+                    key={`${user.username}-${i}`}
+                    name={`${user.username}`}
+                    onClick={() => onUserCardClick(user._id)}
+                    photos={user.pictures}
+                    online={user.isLoggedIn}
+                    activeID={activeID}
+                  />
+                }
+                backContent={
+                  <ProfileCardBack
+                    state={state}
+                    user={user}
+                    currentUser={currentUser}
+                    client={client}
+                    key={`${user.username}-${i}-back`}
+                    name={`${user.username}`}
+                    onClick={() => onUserCardClick(user._id)}
+                    photos={user.pictures}
+                    online={user.isLoggedIn}
+                    activeID={activeID}
+                    openModal={toggleModal}
+                    dispatch={dispatch}
+                    mobile={mobile}
+                  />
+                }
+              />
+            ))
+          : handleComponent()}
+      </Box>
     </Box>
   );
 };

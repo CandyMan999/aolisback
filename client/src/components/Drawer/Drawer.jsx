@@ -24,7 +24,8 @@ const Drawer = ({ isOpen, onClose, children }) => {
           left: 0,
           borderRadius: mobile ? "" : "0px 5px 5px 0px",
           zIndex: 20000,
-          overflow: "scroll",
+          overflowY: "scroll",
+          overflowX: "hidden",
         }}
       >
         <Box position="absolute" top={15} right={10} zIndex={20000}>

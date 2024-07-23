@@ -247,6 +247,15 @@ export const FETCH_ME = gql`
       blockedUsers {
         _id
       }
+      likedUsers {
+        _id
+      }
+      matchedUsers {
+        _id
+      }
+      usersLikedMe {
+        _id
+      }
       email
       intro
       sex
@@ -324,6 +333,147 @@ export const GET_VIDEOS_QUERY = gql`
         _id
         username
       }
+    }
+  }
+`;
+
+export const GET_LIKED_USERS_QUERY = gql`
+  query ($userID: ID!) {
+    getLikedUsers(userID: $userID) {
+      _id
+      name
+      isBanned
+      phoneNumber
+      username
+      inCall
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
+      room {
+        _id
+        name
+      }
+      blockedUsers {
+        _id
+      }
+      pictures {
+        _id
+        url
+        publicId
+      }
+      isLoggedIn
+      location {
+        coordinates
+      }
+      intro
+      sex
+      age
+      occupation
+      singleTime
+      drink
+      smoke
+      marijuana
+      drugs
+      kids
+    }
+  }
+`;
+
+export const GET_USERS_WHO_LIKE_ME_QUERY = gql`
+  query ($userID: ID!) {
+    getUsersWhoLikedMe(userID: $userID) {
+      _id
+      name
+      isBanned
+      phoneNumber
+      username
+      inCall
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
+      room {
+        _id
+        name
+      }
+      blockedUsers {
+        _id
+      }
+      pictures {
+        _id
+        url
+        publicId
+      }
+      isLoggedIn
+      location {
+        coordinates
+      }
+      intro
+      sex
+      age
+      occupation
+      singleTime
+      drink
+      smoke
+      marijuana
+      drugs
+      kids
+    }
+  }
+`;
+
+export const GET_MATCHED_USERS_QUERY = gql`
+  query ($userID: ID!) {
+    getMatchedUsers(userID: $userID) {
+      _id
+      name
+      isBanned
+      phoneNumber
+      username
+      inCall
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
+      room {
+        _id
+        name
+      }
+      blockedUsers {
+        _id
+      }
+      pictures {
+        _id
+        url
+        publicId
+      }
+      isLoggedIn
+      location {
+        coordinates
+      }
+      intro
+      sex
+      age
+      occupation
+      singleTime
+      drink
+      smoke
+      marijuana
+      drugs
+      kids
     }
   }
 `;

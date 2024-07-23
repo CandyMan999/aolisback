@@ -752,3 +752,31 @@ export const ACCEPT_TERMS_MUTATION = gql`
     }
   }
 `;
+
+export const LIKE_MUTATION = gql`
+  mutation ($userID: ID!, $likeID: ID!) {
+    like(userID: $userID, likeID: $likeID) {
+      username
+      likedUsers {
+        _id
+      }
+      matchedUsers {
+        _id
+      }
+    }
+  }
+`;
+
+export const UNLIKE_MUTATION = gql`
+  mutation ($userID: ID!, $unLikeID: ID!) {
+    unLike(userID: $userID, unLikeID: $unLikeID) {
+      username
+      likedUsers {
+        _id
+      }
+      matchedUsers {
+        _id
+      }
+    }
+  }
+`;

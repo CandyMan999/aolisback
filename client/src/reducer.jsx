@@ -103,6 +103,7 @@ export default function reducer(state, { type, payload }) {
           lng: payload.lng,
         },
       };
+
     case "CREATE_ROOM":
       return {
         ...state,
@@ -113,6 +114,15 @@ export default function reducer(state, { type, payload }) {
       return {
         ...state,
         videoChatRequest: payload,
+      };
+    case "UPDATE_LIKED_USERS":
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          likedUsers: payload.likedUsers,
+          matchedUsers: payload.matchedUsers,
+        },
       };
 
     default:

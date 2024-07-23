@@ -26,6 +26,8 @@ import { useClient } from "../../client";
 import {
   VIDEO_CHAT_REQUEST,
   UNBLOCK_USER_MUTATION,
+  LIKE_MUTATION,
+  UNLIKE_MUTATION,
 } from "../../graphql/mutations";
 
 const Profile = ({ userClicked, mobile, currentUser }) => {
@@ -65,8 +67,25 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (!!state.isProfile) {
       handleImBlocked();
       handleUserBlocked();
+      handleShowHearts();
     }
   }, [state.isProfile]);
+
+  const handleShowHearts = () => {
+    try {
+      if (currentUser.likedUsers.length) {
+        const isLiked = currentUser.likedUsers.some((user) => user._id === _id);
+
+        if (isLiked) {
+          setShowHearts(true);
+        } else {
+          setShowHearts(false);
+        }
+      }
+    } catch (err) {
+      console.log("error filtering likes: ", err);
+    }
+  };
 
   const handleImBlocked = () => {
     try {
@@ -98,6 +117,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const toggleDrawer = () => {
     dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
+    if (!state.isProfile) {
+      setShowHearts(false);
+    }
   };
 
   const handleVideoChatRequest = async () => {
@@ -116,6 +138,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
       dispatch({ type: "TOGGLE_CHAT", payload: true });
+      setShowHearts(false);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -134,6 +157,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
         },
       });
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
+      setShowHearts(false);
       history.push("/location");
     } catch (err) {
       console.log(err);
@@ -168,6 +192,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const handleSendVideoMessage = () => {
     try {
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
+      setShowHearts(false);
       toggleModal();
     } catch (err) {
       console.log(err);
@@ -186,8 +211,42 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     return false;
   };
 
+  const handleLikeUser = async () => {
+    try {
+      setLoading(true);
+      const variables = {
+        userID: currentUser._id,
+        likeID: _id,
+      };
+      const { like } = await client.request(LIKE_MUTATION, variables);
+
+      dispatch({ type: "UPDATE_LIKED_USERS", payload: like });
+      setShowHearts(true);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      console.log("error liking user: ", err);
+    }
+  };
+  const handleUnLikeUser = async () => {
+    try {
+      setLoading(true);
+      const variables = {
+        userID: currentUser._id,
+        unLikeID: _id,
+      };
+      const { unLike } = await client.request(UNLIKE_MUTATION, variables);
+
+      dispatch({ type: "UPDATE_LIKED_USERS", payload: unLike });
+      setShowHearts(false);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      console.log("error liking user: ", err);
+    }
+  };
+
   return (
-    // style={{ justifyContent: "space-between", height: "100%" }}
     <Fragment>
       <Drawer onClose={toggleDrawer} isOpen={state.isProfile}>
         {inCall && (
@@ -205,11 +264,17 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           />
           {!itsMe &&
             (!showHearts ? (
-              <UnlikeButton onClick={() => setShowHearts(true)} />
+              <UnlikeButton disabled={loading} onClick={handleLikeUser} />
             ) : (
-              <LikeButton onClick={() => setShowHearts(false)} />
+              <LikeButton disabled={loading} onClick={handleUnLikeUser} />
             ))}
-          {showHearts && <FloatingHeart activate={showHearts} />}
+          {showHearts && (
+            <FloatingHeart
+              activate={showHearts}
+              currentUser={currentUser}
+              profileID={_id}
+            />
+          )}
         </Box>
         <Box
           display="flex"
@@ -313,16 +378,24 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               paddingBottom: "4px",
             }}
             paddingY={5}
-            paddingLeft="5%"
+            paddingLeft="6%"
             paddingRight="5%"
           >
-            <Box>
-              <Icon
+            <Box flex style={{ alignItems: "center" }}>
+              {/* <Icon
                 name="beer"
                 color={COLORS.pink}
                 size={ICON_SIZES.XX_LARGE}
-              />
-              <Text bold>Drink: </Text>
+              /> */}
+              <Box paddingLeft={"5%"} marginRight={13}>
+                <Text
+                  style={{ paddingRight: 2, margin: 0 }}
+                  fontSize={FONT_SIZES.X_LARGE}
+                >
+                  🥃
+                </Text>
+              </Box>
+              <Text bold> Drink: </Text>
             </Box>
 
             {drink && <Text>{drink}</Text>}
@@ -339,12 +412,23 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             paddingLeft="5%"
             paddingRight="5%"
           >
-            <Box>
+            {/* <Box>
               <Icon
                 name="smoke"
                 color={COLORS.pink}
                 size={ICON_SIZES.XX_LARGE}
-              />
+              /> */}
+            <Box flex style={{ alignItems: "center" }}>
+              {/* <Icon
+                name="beer"
+                color={COLORS.pink}
+                size={ICON_SIZES.XX_LARGE}
+              /> */}
+              <Box paddingLeft={"5%"} marginRight={13}>
+                <Text style={{ paddingRight: 0, margin: 0, fontSize: 25 }}>
+                  🚬
+                </Text>
+              </Box>
               <Text bold>Smoke: </Text>
             </Box>
 
@@ -433,6 +517,10 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                   color={COLORS.pink}
                   size={ICON_SIZES.XX_LARGE}
                 />
+                <Box position="absolute" top={0} left={37}>
+                  💍
+                </Box>
+
                 <Text bold>Looking For: </Text>
               </Box>
 

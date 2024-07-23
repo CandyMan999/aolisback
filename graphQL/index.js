@@ -15,6 +15,9 @@ const {
   getUsersMapResolver,
   getAllUsersResolver,
   getVideosResolver,
+  getLikedUsersResolver,
+  getUsersWhoLikedMeResolver,
+  getMatchedUsersResolver,
 } = require("./queries");
 const {
   createRoomResolver,
@@ -48,6 +51,8 @@ const {
   addPhoneResolver,
   sendPhoneNumberResolver,
   callDurationResolver,
+  likeResolver,
+  unLikeResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -67,6 +72,9 @@ const resolvers = {
     getUsersMap: getUsersMapResolver,
     getAllUsers: getAllUsersResolver,
     getVideos: getVideosResolver,
+    getLikedUsers: getLikedUsersResolver,
+    getUsersWhoLikedMe: getUsersWhoLikedMeResolver,
+    getMatchedUsers: getMatchedUsersResolver,
   },
   Mutation: {
     createRoom: createRoomResolver,
@@ -100,6 +108,8 @@ const resolvers = {
     addPhone: addPhoneResolver,
     sendPhoneNumber: sendPhoneNumberResolver,
     callDuration: callDurationResolver,
+    like: likeResolver,
+    unLike: unLikeResolver,
   },
 };
 

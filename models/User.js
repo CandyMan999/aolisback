@@ -152,6 +152,12 @@ const UserSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  usersLikedMe: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
+  ],
   matchedUsers: [
     {
       type: mongoose.Schema.ObjectId,

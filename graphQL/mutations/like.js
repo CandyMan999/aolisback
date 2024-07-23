@@ -1,10 +1,13 @@
 const { AuthenticationError } = require("apollo-server");
 const { User } = require("../../models");
+const { pushNotificationNewMatch } = require("../../utils/middleware");
 
 module.exports = {
   likeResolver: async (root, args, ctx) => {
     const { userID, likeID } = args;
+
     try {
+      // Find the user
       const user = await User.findById(userID).populate([
         "pictures",
         "blockedUsers",
@@ -12,73 +15,102 @@ module.exports = {
         "matchedUsers",
       ]);
 
-      const likedUser = await User.findById(likeID).populate([
-        "pictures",
-        "blockedUsers",
-        "likedUsers",
-        "matchedUsers",
-      ]);
+      // Check if the likeID is already in the user's likedUsers array
 
-      if (!user || !likedUser) {
-        throw new AuthenticationError("User not found");
+      const isAlreadyLiked = user.likedUsers.some(
+        (user) => user._id.toString() === likeID
+      );
+
+      if (isAlreadyLiked) {
+        // They already liked the user
+        return user;
       }
 
-      // Check if the likeID is in the user's likedUsers array
-      const isAlreadyLiked = user.likedUsers.includes(likeID);
+      // Check if the likedUser has already liked the current user
+      const likedUser = await User.findById(likeID);
 
-      // Add likeID to user's likedUsers array if not already liked
-      if (!isAlreadyLiked) {
+      const isMutualLike = likedUser.likedUsers.some(
+        (user) => user._id.toString() === userID
+      );
+
+      if (isMutualLike) {
+        // If mutual like, add each other to matchedUsers array
         await User.findByIdAndUpdate(
           userID,
-          { $push: { likedUsers: likeID } },
+          { $push: { likedUsers: likeID, matchedUsers: likeID } },
           { new: true }
         );
-      }
-
-      // Check if the userID is in the likedUser's likedUsers array
-      const isMatch = likedUser.likedUsers.includes(userID);
-
-      if (isMatch) {
-        // Add each other to matchedUsers array if there is a match
-        await User.findByIdAndUpdate(
-          userID,
-          { $addToSet: { matchedUsers: likeID } },
-          { new: true }
-        );
-
+        await User.findByIdAndUpdate(likeID, {
+          $push: { usersLikedMe: userID },
+        });
         await User.findByIdAndUpdate(
           likeID,
-          { $addToSet: { matchedUsers: userID } },
+          { $push: { matchedUsers: userID } },
           { new: true }
         );
+
+        pushNotificationNewMatch(user.username, likedUser.expoToken);
+      } else {
+        // Add the likeID to the user's likedUsers array
+        await User.findByIdAndUpdate(userID, {
+          $push: { likedUsers: likeID },
+        });
+        await User.findByIdAndUpdate(likeID, {
+          $push: { usersLikedMe: userID },
+        });
       }
 
-      return await User.findById(userID).populate([
+      // Return the updated user
+      const updatedUser = await User.findById(userID).populate([
         "pictures",
         "blockedUsers",
         "likedUsers",
         "matchedUsers",
       ]);
+      return updatedUser;
     } catch (err) {
       throw new AuthenticationError(err.message);
     }
   },
   unLikeResolver: async (root, args, ctx) => {
-    const { userID, likeID } = args;
+    const { userID, unLikeID } = args;
     try {
-      const user = await User.findByIdAndUpdate(
-        userID,
-        { $pull: { likedUsers: likeID, matchedUsers: likeID } },
-        { new: true }
-      ).populate(["pictures", "blockedUsers", "likedUsers", "matchedUsers"]);
+      // Remove the likeID from the user's likedUsers array
+      const user = await User.findById(userID).populate([
+        "pictures",
+        "blockedUsers",
+        "likedUsers",
+        "matchedUsers",
+      ]);
 
-      await User.findByIdAndUpdate(
-        likeID,
-        { $pull: { matchedUsers: userID } },
-        { new: true }
+      // If they were matched, remove each other from matchedUsers array
+      const isMatched = user.matchedUsers.some(
+        (user) => user._id.toString() === unLikeID
       );
 
-      return user;
+      if (isMatched) {
+        const userWithoutMatch = await User.findByIdAndUpdate(
+          userID,
+          { $pull: { matchedUsers: unLikeID, likedUsers: unLikeID } },
+          { new: true }
+        ).populate(["pictures", "blockedUsers", "likedUsers", "matchedUsers"]);
+        await User.findByIdAndUpdate(unLikeID, {
+          $pull: { matchedUsers: userID, usersLikedMe: userID },
+        });
+        return userWithoutMatch;
+      } else {
+        const newUser = await User.findByIdAndUpdate(
+          userID,
+          { $pull: { likedUsers: unLikeID } },
+          { new: true }
+        ).populate(["pictures", "blockedUsers", "likedUsers", "matchedUsers"]);
+
+        await User.findByIdAndUpdate(unLikeID, {
+          $pull: { usersLikedMe: userID },
+        });
+
+        return newUser;
+      }
     } catch (err) {
       throw new AuthenticationError(err.message);
     }

@@ -4,7 +4,14 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import SearchResults from "./search-results/SearchResults";
 
-const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
+const GridSearch = ({
+  state,
+  client,
+  dispatch,
+  currentUser,
+  users,
+  search,
+}) => {
   const mobile = useMediaQuery("(max-width: 740px)");
 
   return (
@@ -16,7 +23,7 @@ const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
       justifyContent="center"
     >
       <Box
-        style={{ display: "grid", margin: "20px" }}
+        style={{ display: "grid", margin: "20px", marginTop: 5 }}
         width="100%"
         height="fit-content"
         minHeight={"100%"}
@@ -30,6 +37,7 @@ const GridSearch = ({ state, client, dispatch, currentUser, users }) => {
           currentUser={currentUser}
           mobile={mobile}
           users={users}
+          search={search}
         />
       </Box>
     </Box>

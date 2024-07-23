@@ -28,6 +28,7 @@ const { termsAgreementResolver } = require("./termsAgreement");
 const { addPhoneResolver } = require("./addPhone");
 const { sendPhoneNumberResolver } = require("./sendPhoneNumber");
 const { callDurationResolver } = require("./callDuration");
+const { likeResolver, unLikeResolver } = require("./like");
 
 module.exports = {
   createRoomResolver,
@@ -61,4 +62,6 @@ module.exports = {
   addPhoneResolver,
   sendPhoneNumberResolver,
   callDurationResolver,
+  likeResolver,
+  unLikeResolver,
 };
