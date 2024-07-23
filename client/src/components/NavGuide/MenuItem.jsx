@@ -5,6 +5,7 @@ import { Text, Icon, ICON_SIZES } from "../../components";
 import { COLORS } from "../../constants";
 import { clearToken } from "../../utils/helpers";
 import { LOGOUT_MUTATION } from "../../graphql/mutations";
+import { useHistory, useLocation } from "react-router-dom";
 
 const variants = {
   open: {
@@ -61,6 +62,8 @@ export const MenuItem = ({
   state,
   client,
 }) => {
+  const history = useHistory();
+
   const style = {
     border: `3px solid ${teals[i === teals.length ? 0 : i]}`,
     justifyContent: "center",
@@ -114,6 +117,10 @@ export const MenuItem = ({
       };
 
       const { logout } = await client.request(LOGOUT_MUTATION, variables);
+      history.push({
+        pathname: "/",
+        search: `?logout`,
+      });
       return logout;
     } catch (err) {
       console.log(err);

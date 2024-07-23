@@ -111,6 +111,10 @@ module.exports = {
             { usersLikedMe: currentUser._id },
             { $pull: { usersLikedMe: currentUser._id } }
           );
+          await User.updateMany(
+            { blockedUsers: currentUser._id },
+            { $pull: { blockedUsers: currentUser._id } }
+          );
         } catch (err) {
           throw new AuthenticationError(err.message);
         }

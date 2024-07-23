@@ -12,7 +12,7 @@ We just launched in your city! More users are joining soon. Start sending video 
 9. Add phone number verification to website login process
 10. Shadows on boxes and picture in message center.. Check buttons everywhere
 11. Change the app intro for the main chat open AI response to something better... up the temp.. 
-12. fix fucking google login if you can
+12. fix fucking google login if you can-- have to do development build to test 
 13. add th payment options, build it all out and test
 14. Get everything working on android. 
 15. check that Cloudinary is not raping me in the ass anymore on price
@@ -25,12 +25,12 @@ We just launched in your city! More users are joining soon. Start sending video 
                                                 videoChat seconds per plan: x number,
                                                 }
 19. Clear out the messages sent every day, and seconds of video every week with cron job. - make seed users and test this with a large dataset for chunking with cron
-20.. add Holt to unbuntu server to keep track of usage.. or check if digital ocean has data.. 
-21.. if photos are 0 then back to profileComplete false.- did that but now fix when sent back to profile. 
-22. if delete account pull from other users liked, blocked, and matched
-23. no pull down refresh on map
-24. notification, a user you like is online
 
+
+
+24. notification, a user you like is online
+25. remove jitsi logs from unbuntu server to free up disc space
+26. Check twilio money before deploy
 
                                 
 
