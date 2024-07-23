@@ -119,7 +119,7 @@ export const MenuItem = ({
       const { logout } = await client.request(LOGOUT_MUTATION, variables);
       history.push({
         pathname: "/",
-        search: `?logout`,
+        search: `?logout=${true}`,
       });
       return logout;
     } catch (err) {
