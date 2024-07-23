@@ -47,6 +47,17 @@ const ButtonsWithSelection = ({
   const [selectedButton, setSelectedButton] = useState(null);
 
   useEffect(() => {
+    if (!selectedButton) {
+      try {
+        setSearch("Browse");
+        handleGetAllUsers();
+      } catch (err) {
+        console.log(
+          "error getting all browsable users inside button component: ",
+          err
+        );
+      }
+    }
     if (selectedButton === "My Likes") {
       try {
         setSearch("My Likes");
@@ -71,21 +82,7 @@ const ButtonsWithSelection = ({
         console.log("error getting liked users inside button component: ", err);
       }
     }
-  }, [currentUser]);
-
-  useEffect(() => {
-    if (!selectedButton) {
-      try {
-        setSearch("Browse");
-        handleGetAllUsers();
-      } catch (err) {
-        console.log(
-          "error getting all browsable users inside button component: ",
-          err
-        );
-      }
-    }
-  }, [selectedButton]);
+  }, [selectedButton, currentUser]);
 
   const handleClick = async (button) => {
     setSelectedButton(selectedButton === button ? null : button);

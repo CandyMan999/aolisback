@@ -1,5 +1,6 @@
 import React from "react";
 import { Box } from "../../components";
+import { COLORS } from "../../constants";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import SearchResults from "./search-results/SearchResults";
@@ -23,7 +24,12 @@ const GridSearch = ({
       justifyContent="center"
     >
       <Box
-        style={{ display: "grid", margin: "20px", marginTop: 5 }}
+        style={{
+          display: "grid",
+          margin: "20px",
+          marginTop: !users || !users.length ? 20 : 5,
+        }}
+        background={!users || !users.length ? COLORS.lightPurple : undefined}
         width="100%"
         height="fit-content"
         minHeight={"100%"}

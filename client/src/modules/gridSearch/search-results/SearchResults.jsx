@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { Box, Text, FONT_SIZES, FlipCard } from "../../../components";
+import { COLORS } from "../../../constants";
 import ProfileCardFront from "../profile-card-front";
 import ProfileCardBack from "../profile-card-back/ProfileCardBack";
 
@@ -30,17 +31,24 @@ const SearchResults = ({
       return (
         <Box
           display={"flex"}
-          height={"50%"}
+          height={"100%"}
           column
           width="100%"
           justifyContent="space-around"
           alignItems="center"
+          textAlign="center"
+          marginTop="50px"
         >
           <Box centerText padding={"5%"}>
-            <Text center fontSize={FONT_SIZES.X_LARGE} bold>
+            <Text
+              center
+              fontSize={FONT_SIZES.X_LARGE}
+              bold
+              color={COLORS.deepPurple}
+            >
               Sorry, there currently aren't any users. Try broadening what you
               are looking for in your profile. More users should be arriving
-              soon as we are in BETA.
+              soon since we JUST LAUNCHED.
             </Text>
           </Box>
         </Box>
@@ -50,15 +58,24 @@ const SearchResults = ({
       return (
         <Box
           display={"flex"}
-          height={"50%"}
+          height={"100%"}
           column
           width="100%"
           justifyContent="space-around"
           alignItems="center"
+          textAlign="center"
+          marginTop="50px"
         >
           <Box centerText padding={"5%"}>
-            <Text center fontSize={FONT_SIZES.X_LARGE} bold>
-              Sorry, you got no matches you UGLY FUCK!
+            <Text
+              center
+              fontSize={FONT_SIZES.X_LARGE}
+              bold
+              color={COLORS.deepPurple}
+            >
+              Sorry, you don't have any matches yet! Get back out there and send
+              some likes and video messages! More users should be arriving soon
+              since we JUST LAUNCHED.
             </Text>
           </Box>
         </Box>
@@ -68,17 +85,23 @@ const SearchResults = ({
       return (
         <Box
           display={"flex"}
-          height={"50%"}
+          height={"100%"}
           column
           width="100%"
           justifyContent="space-around"
           alignItems="center"
+          textAlign="center"
+          marginTop="50px"
         >
           <Box centerText padding={"5%"}>
-            <Text center fontSize={FONT_SIZES.X_LARGE} bold>
-              You haven't Liked anyone yet. What, you too fucking good to like
-              someone? You're probably a 7 at best.. so don't be so fucking
-              critical
+            <Text
+              center
+              fontSize={FONT_SIZES.X_LARGE}
+              bold
+              color={COLORS.deepPurple}
+            >
+              You haven't Liked anyone yet! Get out there and mingle. More users
+              should be arriving soon since we JUST LAUNCHED.
             </Text>
           </Box>
         </Box>
@@ -88,16 +111,19 @@ const SearchResults = ({
       return (
         <Box
           display={"flex"}
-          height={"50%"}
+          height={"100%"}
           column
           width="100%"
           justifyContent="space-around"
           alignItems="center"
+          textAlign="center"
+          marginTop="50px"
         >
           <Box centerText padding={"5%"}>
             <Text center fontSize={FONT_SIZES.X_LARGE} bold>
-              Sorry ,No one likes you yet you LAME FUCK, how about trying to
-              upgrade you profile or actually interact with some people?!
+              Sorry, No one likes you yet! Get out there and send some likes and
+              video messages! Don't be discouraged as this is a new app and more
+              users should be arriving soon!
             </Text>
           </Box>
         </Box>

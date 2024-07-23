@@ -146,7 +146,9 @@ const GridContainer = () => {
       />
 
       {loading ? (
-        <Loading fade size={200} />
+        <Box height="50%">
+          <Loading fade size={200} />
+        </Box>
       ) : (
         <GridSearch
           state={state}
