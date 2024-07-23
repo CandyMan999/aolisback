@@ -49,7 +49,7 @@ const ButtonsWithSelection = ({
   useEffect(() => {
     if (!selectedButton) {
       try {
-        setSearch("Browse");
+        // setSearch("Browse");
         handleGetAllUsers();
       } catch (err) {
         console.log(
@@ -60,7 +60,7 @@ const ButtonsWithSelection = ({
     }
     if (selectedButton === "My Likes") {
       try {
-        setSearch("My Likes");
+        // setSearch("My Likes");
         handleGetLikedUsers();
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
@@ -68,7 +68,7 @@ const ButtonsWithSelection = ({
     }
     if (selectedButton === "Likes Me") {
       try {
-        setSearch("Likes Me");
+        // setSearch("Likes Me");
         handleGetUsersWhoLikeMe();
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
@@ -76,13 +76,13 @@ const ButtonsWithSelection = ({
     }
     if (selectedButton === "Matches") {
       try {
-        setSearch("Matches");
+        // setSearch("Matches");
         handleGetMatchedUsers();
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
       }
     }
-  }, [selectedButton, currentUser]);
+  }, [selectedButton, currentUser.matchedUsers, currentUser.likedUsers]);
 
   const handleClick = async (button) => {
     setSelectedButton(selectedButton === button ? null : button);
