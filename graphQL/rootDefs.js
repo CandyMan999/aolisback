@@ -39,6 +39,7 @@ module.exports = gql`
     profileComplete: Boolean
     inCall: Boolean
     plan: Plan
+    lastMatchNotification: String
   }
 
   type Plan {

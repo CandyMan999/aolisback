@@ -69,7 +69,7 @@ const sendPushNotification = async (expoToken, username) => {
       sound: "default",
       title: "Gone Chatting",
       subtitle: "Never Catch a Catfish 🎣",
-      body: `🚨 ${username} sent you a new video message`,
+      body: `🚨 ${username} sent you a new video message. Watch it now!`,
       data: { expoToken, username },
     });
 
@@ -212,9 +212,9 @@ const pushNotificationPhoneNumber = async (
     messages.push({
       to: expoToken,
       sound: "default",
-      title: "Gone Chatting",
+      title: "📲 Gone Chatting Alert!",
       subtitle: "Never Catch a Catfish 🎣",
-      body: `📞 ${username} wants you to have their number ${phoneNumber}`,
+      body: `✨ ${username} wants to share their number with you: ${phoneNumber}. Give them a call! 📞`,
       data: { expoToken, username, phoneNumber, imageUrl },
     });
 
@@ -338,9 +338,9 @@ const pushNotificationWelcome = async (expoToken, coordinates) => {
       sound: "default",
       title: "Welcome to Gone Chatting! 🎉",
       subtitle: city
-        ? `We just launched in ${city}!`
-        : "We just launced in your city!",
-      body: `More users are joining soon. Start sending video messages or sit back and relax.`,
+        ? `We're now live in ${city}!`
+        : "We're now live in your city!",
+      body: `Connect with new users! Start sending video messages or sit back and relax as more users join.`,
       data: { expoToken, city },
     });
 
@@ -408,9 +408,79 @@ const pushNotificationNewMatch = async (username, expoToken) => {
     messages.push({
       to: expoToken,
       sound: "default",
-      title: "Gone Chatting",
+      title: "🎉 New Match on Gone Chatting!",
       subtitle: "Never Catch a Catfish 🎣",
-      body: `🥳 ${username} just matched with you, send them a video message!`,
+      body: `🥳 ${username} just matched with you! Send them a video message now!`,
+      data: { expoToken, username },
+    });
+
+    let chunks = expo.chunkPushNotifications(messages);
+    let tickets = [];
+    (async () => {
+      for (let chunk of chunks) {
+        try {
+          let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+          console.log(ticketChunk);
+          tickets.push(...ticketChunk);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    })();
+
+    let receiptIds = [];
+    for (let ticket of tickets) {
+      if (ticket.id) {
+        receiptIds.push(ticket.id);
+      }
+    }
+
+    let receiptIdChunks = expo.chunkPushNotificationReceiptIds(receiptIds);
+    (async () => {
+      for (let chunk of receiptIdChunks) {
+        try {
+          let receipts = await expo.getPushNotificationReceiptsAsync(chunk);
+
+          for (let receiptId in receipts) {
+            let { status, message, details } = receipts[receiptId];
+            if (status === "ok") {
+              continue;
+            } else if (status === "error") {
+              console.error(
+                `There was an error sending a notification: ${message}`
+              );
+              if (details && details.error) {
+                console.error(`The error code is ${details.error}`);
+              }
+            }
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    })();
+  } catch (err) {
+    console.log("err sending push");
+  }
+};
+
+const pushNotificationMatchOnline = async (username, expoToken) => {
+  try {
+    let expo = new Expo();
+
+    let messages = [];
+
+    if (!Expo.isExpoPushToken(expoToken)) {
+      console.error(`Push token ${expoToken} is not a valid Expo push token`);
+      return;
+    }
+
+    messages.push({
+      to: expoToken,
+      sound: "default",
+      title: "🔥 Gone Chatting Match Alert! 🔥",
+      subtitle: "Never Catch a Catfish 🎣",
+      body: `🎥 ${username} is online! Start a video call now and say hi!`,
       data: { expoToken, username },
     });
 
@@ -475,4 +545,5 @@ module.exports = {
   pushNotificationPhoneNumber,
   pushNotificationWelcome,
   pushNotificationNewMatch,
+  pushNotificationMatchOnline,
 };

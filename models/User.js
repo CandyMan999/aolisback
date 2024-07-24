@@ -190,6 +190,10 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  lastMatchNotification: {
+    type: Date,
+    default: null,
+  },
   plan: {
     planType: {
       type: String,
