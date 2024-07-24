@@ -113,6 +113,24 @@ const cronJob = async () => {
 
       { scheduled: true, timezone: "America/Denver" }
     );
+    cron.schedule(
+      "0 0 * * *",
+      async () => {
+        await User.updateMany({}, { "plan.messagesSent": 0 });
+        console.log("Reset messagesSent to 0 for all users.");
+      },
+      { scheduled: true, timezone: "America/Denver" }
+    );
+
+    // Reset videoMinutesUsed to 0 every 7 days
+    cron.schedule(
+      "0 0 * * 0",
+      async () => {
+        await User.updateMany({}, { "plan.videoMinutesUsed": 0 });
+        console.log("Reset videoMinutesUsed to 0 for all users.");
+      },
+      { scheduled: true, timezone: "America/Denver" }
+    );
   } catch (err) {
     console.log("Error running cron:", err);
   }
