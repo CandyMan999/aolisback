@@ -15,6 +15,8 @@ import {
 } from "../../graphql/mutations";
 import { useClient } from "../../client";
 
+import { useHistory, useLocation } from "react-router-dom";
+
 import notification from "../../sounds/notification.mp3";
 
 const RequestModal = ({
@@ -27,6 +29,8 @@ const RequestModal = ({
   status,
 }) => {
   const client = useClient();
+  const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     handleStatus(status);
@@ -49,6 +53,16 @@ const RequestModal = ({
     switch (action) {
       case "Accept":
         toggleChatRequest();
+
+        // Construct the new URL with updated query parameters
+        const params = new URLSearchParams(location.search);
+        params.set("videoChat", true);
+
+        // Navigate to the constructed URL
+        history.replace({
+          pathname: location.pathname,
+          search: params.toString(),
+        });
 
         break;
       case "Decline":

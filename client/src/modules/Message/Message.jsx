@@ -137,6 +137,7 @@ const Message = () => {
             width={"70%"}
           >
             <Picture
+              withShadow={true}
               profilePic={
                 groupedReceived[0].sender._id === currentUser._id
                   ? groupedReceived[0].receiver.pictures[0]

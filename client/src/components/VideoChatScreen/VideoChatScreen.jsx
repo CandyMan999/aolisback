@@ -23,6 +23,15 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [showThumbsUp, setShowThumbsUp] = useState(false);
   const [disableSendNumber, setDisableSendNumber] = useState(false);
   const intervalIdRef = useRef(null); // Use useRef to store interval ID
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
@@ -160,6 +169,22 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           backgroundColor: COLORS.white,
         }}
       >
+        {/* <motion.div
+          initial={{ opacity: 0, y: 0, height: 0 }}
+          animate={{
+            opacity: 1,
+            y: [-100, 0, -100],
+            display: ["block", "block", "none"],
+          }}
+          exit={{ opacity: 0, y: -100, height: 0 }}
+          transition={{ duration: 3 }}
+        >
+          <Text bold center color={COLORS.pink}>
+            Take a screenshot to automatically send inappropriate content to
+            administration
+          </Text>
+        </motion.div> */}
+
         <img
           style={{ position: "absolute", top: 0, left: 0 }}
           height={100}
