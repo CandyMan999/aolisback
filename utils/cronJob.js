@@ -4,12 +4,77 @@ const { pushNotificationProfile } = require("../utils/middleware");
 const cloudinary = require("cloudinary").v2;
 const moment = require("moment"); // Ensure you have moment.js installed
 require("dotenv").config();
+const BATCH_SIZE = 100;
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 });
+
+const resetVideoMinutesUsed = async () => {
+  try {
+    let totalUpdated = 0;
+    let hasMoreUsers = true;
+    let skip = 0;
+
+    while (hasMoreUsers) {
+      const users = await User.find().skip(skip).limit(BATCH_SIZE);
+      if (users.length === 0) {
+        hasMoreUsers = false;
+        break;
+      }
+
+      const userIds = users.map((user) => user._id);
+      const result = await User.updateMany(
+        { _id: { $in: userIds } },
+        { "plan.videoMinutesUsed": 0 }
+      );
+
+      totalUpdated += result.nModified;
+      console.log(`Batch updated. Total users updated so far: ${totalUpdated}`);
+
+      // Move to the next batch
+      skip += BATCH_SIZE;
+    }
+
+    console.log(`Reset videoMinutesUsed for ${totalUpdated} users.`);
+  } catch (err) {
+    console.error("Error resetting video minutes used:", err);
+  }
+};
+
+const resetMessagesSent = async () => {
+  try {
+    let totalUpdated = 0;
+    let hasMoreUsers = true;
+    let skip = 0;
+
+    while (hasMoreUsers) {
+      const users = await User.find().skip(skip).limit(BATCH_SIZE);
+      if (users.length === 0) {
+        hasMoreUsers = false;
+        break;
+      }
+
+      const userIds = users.map((user) => user._id);
+      const result = await User.updateMany(
+        { _id: { $in: userIds } },
+        { "plan.messagesSent": 0 }
+      );
+
+      totalUpdated += result.nModified;
+      console.log(`Batch updated. Total users updated so far: ${totalUpdated}`);
+
+      // Move to the next batch
+      skip += BATCH_SIZE;
+    }
+
+    console.log(`Reset messages sent for ${totalUpdated} users.`);
+  } catch (err) {
+    console.error("Error resetting video minutes used:", err);
+  }
+};
 
 const cronJob = async () => {
   try {
@@ -116,9 +181,9 @@ const cronJob = async () => {
     cron.schedule(
       "0 0 * * *",
       async () => {
-        await User.updateMany({}, { "plan.messagesSent": 0 });
-        console.log("Reset messagesSent to 0 for all users.");
+        await resetMessagesSent();
       },
+
       { scheduled: true, timezone: "America/Denver" }
     );
 
@@ -126,8 +191,7 @@ const cronJob = async () => {
     cron.schedule(
       "0 0 * * 0",
       async () => {
-        await User.updateMany({}, { "plan.videoMinutesUsed": 0 });
-        console.log("Reset videoMinutesUsed to 0 for all users.");
+        await resetVideoMinutesUsed();
       },
       { scheduled: true, timezone: "America/Denver" }
     );

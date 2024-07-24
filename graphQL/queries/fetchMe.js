@@ -79,7 +79,6 @@ module.exports = {
 
       const now = moment();
       const notificationInterval = 4; // 4 hours
-      console.log("now: ", now);
 
       for (const match of user.matchedUsers) {
         try {
