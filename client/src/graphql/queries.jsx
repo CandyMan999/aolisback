@@ -161,6 +161,7 @@ export const FETCH_ME = gql`
         url
         publicId
         createdAt
+        viewed
         sender {
           username
           _id
@@ -325,6 +326,7 @@ export const GET_VIDEOS_QUERY = gql`
       url
       publicId
       createdAt
+      viewed
       sender {
         _id
         username

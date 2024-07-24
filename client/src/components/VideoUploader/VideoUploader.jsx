@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import iOSLogo from "../../pictures/iOSLogo.png";
-import { Loading, Text, Button, Box, Icon, ICON_SIZES } from "..";
+import { Loading, Text, Button, Box, Icon, ICON_SIZES, FONT_SIZES } from "..";
 
 import { COLORS } from "../../constants";
 
@@ -28,11 +28,18 @@ const VideoUploader = ({ senderID, receiverID, handleSending }) => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        height: "100%",
+        justifyContent: "space-around",
+        flexDirection: "column",
+      }}
+    >
       {submitting ? (
         <Loading ring size={150} />
       ) : (
-        <Box width="100%" column alignItems="center">
+        <Box width="100%" column flex alignItems="center" marginTop={50}>
           <img
             height={100}
             width={100}
@@ -66,6 +73,17 @@ const VideoUploader = ({ senderID, receiverID, handleSending }) => {
           </Button>
         </Box>
       )}
+      <Text
+        fontSize={FONT_SIZES.MEDIUM}
+        width={"100%"}
+        center
+        paddingX={20}
+        bold
+        color={COLORS.black}
+      >
+        Note: Users can flag messages for inappropriate content, which could
+        result in you being BANNED!
+      </Text>
     </div>
   );
 };

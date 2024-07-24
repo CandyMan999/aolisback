@@ -24,9 +24,7 @@ We just launched in your city! More users are joining soon. Start sending video 
                                                 messagesPerPlan: x number
                                                 videoChat seconds per plan: x number,
                                                 }
-19. Clear out the messages sent every day, and seconds of video every week with cron job. - make seed users and test this with a large dataset for chunking with cron
-20. Watched video has been seen UI
-21. change verbage on record video to not do innapropriate content
+
 22. maybe popup error modal to say take a screenshot to report any innapropriate behavior on videoChat
 23. make protected route for candyman to easily watch flagged videos - screenshots and ban users / delete the content. 
 24. create room might be too wide and the scrollview for reload might have white edge

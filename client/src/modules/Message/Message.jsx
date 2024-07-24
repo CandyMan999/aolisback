@@ -19,6 +19,7 @@ import {
   Loading,
   Picture,
   BottomDrawer,
+  Span,
 } from "../../components";
 
 import VideoModal from "../../modules/gridSearch/video-modal";
@@ -175,69 +176,83 @@ const Message = () => {
 
         <Box
           display="flex"
-          margin={20}
+          marginTop={20}
           justifyContent="space-around"
           height={"auto"}
-          width="auto"
+          width="100vw"
           column
         >
-          {groupedReceived.map((video, i) => (
-            <Box
-              key={`${video.publicId}-${i}`}
-              width="100%"
-              display="flex"
-              justifyContent={
-                video.sender._id === currentUser._id ? "flex-end" : undefined
-              }
-            >
+          {groupedReceived.map((video, i) => {
+            const isSender = video.sender._id === currentUser._id;
+            const verb = isSender ? "Sent" : "Received";
+            const action =
+              !video.viewed && !isSender
+                ? "Watch Me"
+                : video.viewed
+                ? "Viewed ✅"
+                : "Sent";
+
+            return (
               <Box
-                column
-                maxWidth={300}
-                alignItems="center"
+                key={`${video.publicId}-${i}`}
+                width={mobile ? "95%" : "98%"}
                 display="flex"
-                marginTop={20}
+                justifyContent={isSender ? "flex-end" : "flex-start"}
+                padding="10px"
               >
-                {video.sender._id !== currentUser._id && (
-                  <Box position={"absolute"} top={-20} right={0}>
-                    <Icon
-                      style={{ zIndex: 1000 }}
-                      name="threeDot"
-                      size={ICON_SIZES.X_LARGE}
-                      color={COLORS.vividBlue}
-                      onClick={() => handleToggleBottomDrawer(video)}
-                    />
-                  </Box>
-                )}
-
-                <VideoPlayer
-                  videoUrl={video.url}
-                  publicId={video.publicId}
-                  controls={true}
-                  height={250}
-                  width={"auto"}
-                  borderRadius={"10px"}
-                  fullScreen={true}
-                  receiverWatching={video.receiver._id === currentUser._id}
-                  _id={video._id}
-                  client={client}
-                />
-
-                <Text center bold margin={0}>
-                  {video.sender._id === currentUser._id
-                    ? "Sent Video "
-                    : "Received Video "}
-                </Text>
-                <Text
-                  color={COLORS.facebookBlue}
-                  margin={0}
-                  center
-                  fontSize={FONT_SIZES.SMALL}
+                <Box
+                  column
+                  maxWidth={300}
+                  alignItems="center"
+                  display="flex"
+                  marginTop={20}
                 >
-                  {formatDistanceToNow(Number(video.createdAt))} ago
-                </Text>
+                  {!isSender && (
+                    <Box position={"absolute"} top={-20} right={0}>
+                      <Icon
+                        style={{ zIndex: 1000 }}
+                        name="threeDot"
+                        size={ICON_SIZES.X_LARGE}
+                        color={COLORS.vividBlue}
+                        onClick={() => handleToggleBottomDrawer(video)}
+                      />
+                    </Box>
+                  )}
+
+                  <VideoPlayer
+                    videoUrl={video.url}
+                    publicId={video.publicId}
+                    controls={true}
+                    height={250}
+                    width={"auto"}
+                    borderRadius={"10px"}
+                    fullScreen={true}
+                    receiverWatching={video.receiver._id === currentUser._id}
+                    _id={video._id}
+                    client={client}
+                  />
+
+                  <Text center bold margin={0} marginTop={5}>
+                    {verb} Video{" "}
+                    <Span
+                      fontSize={FONT_SIZES.SMALL}
+                      color={COLORS.facebookBlue}
+                    >
+                      {formatDistanceToNow(Number(video.createdAt))} ago
+                    </Span>
+                  </Text>
+                  <Text
+                    color={COLORS.facebookBlue}
+                    margin={0}
+                    center
+                    fontSize={FONT_SIZES.SMALL}
+                  >
+                    {action}
+                  </Text>
+                </Box>
               </Box>
-            </Box>
-          ))}
+            );
+          })}
         </Box>
         <Box width="100%" justifyContent="center">
           <Button
