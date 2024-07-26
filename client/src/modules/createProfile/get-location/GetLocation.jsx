@@ -130,13 +130,18 @@ const GetLocation = ({
           <Button
             style={{
               display: "flex",
+              justifyContent: "center",
               alignItems: "center",
-              boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+              boxShadow: `0px 2px 10px ${COLORS.pink}`,
               borderRadius: "20px",
-              paddingLeft: "20px",
-              paddingRight: "20px",
+              height: "60px",
+              border: `solid 1px ${COLORS.pink}`,
+              marginTop: 30,
+              paddingLeft: 15,
+              paddingRight: 15,
             }}
-            color={COLORS.black}
+            disabled={spinner}
+            color={locationSuccess ? COLORS.black : COLORS.lightGrey}
             onClick={handleLocation}
             width="fit-content"
           >
@@ -150,11 +155,14 @@ const GetLocation = ({
               </Text>
             )}
           </Button>
-          {locationSuccess && <Box alignItems="center">👍</Box>}
+          {locationSuccess && (
+            <Box alignItems="center">
+              <Text fontSize={FONT_SIZES.XX_LARGE}>👍</Text>
+            </Box>
+          )}
           {!locationSuccess && (
             <Box alignItems="center">
-              👎
-              <Text>Where are you?</Text>
+              <Text fontSize={FONT_SIZES.XX_LARGE}>👎</Text>
             </Box>
           )}
         </Box>

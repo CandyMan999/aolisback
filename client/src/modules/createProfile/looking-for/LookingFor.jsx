@@ -9,6 +9,7 @@ import {
   ICON_SIZES,
   FONT_SIZES,
   AgeRangeSlider,
+  MotionButton,
 } from "../../../components";
 import { LOOKING_FOR_MUTATION } from "../../../graphql/mutations";
 import { COLORS } from "../../../constants";
@@ -36,6 +37,7 @@ const LookingFor = ({
 
   const [profile, setProfile] = useState(initialProfileState);
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSliderChange = ([lowEnd, highEnd]) => {
     setProfile((prevState) => ({
@@ -65,6 +67,7 @@ const LookingFor = ({
       );
       dispatch({ type: "UPDATE_LOOKING_FOR", payload: lookingFor });
       setLoading(false);
+      setSubmitted(true);
     } catch (err) {
       setLoading(false);
       console.error("Error submitting lookingFor: ", err);
@@ -78,7 +81,7 @@ const LookingFor = ({
       title={"Looking For"}
       total={total}
       completed={completed}
-      // onClose={handleFormSubmit}
+      onClose={submitted}
     >
       <Box column width={"100%"} height={"100%"}>
         <Box
@@ -128,65 +131,26 @@ const LookingFor = ({
                 </Box>
                 <Box display="flex" alignItems="center" width="100%">
                   <Box display="flex" justifyContent="center" width="100%">
-                    <Button
+                    <MotionButton
                       onClick={() => handleButtonClick("sex", "Male")}
-                      color={
-                        profile.sex === "Male"
-                          ? COLORS.deepPurple
-                          : COLORS.lightPurple
-                      }
-                      style={{
-                        ...buttonStyle,
-                        transform:
-                          profile.sex === "Male" ? "scale(1.15)" : "scale(1)",
-                        boxShadow:
-                          profile.sex === "Male"
-                            ? `2px 2px 4px 2px ${COLORS.pink}`
-                            : buttonStyle.boxShadow,
-                      }}
+                      isSelected={profile.sex === "Male"}
                     >
-                      Men
-                    </Button>
-                    <Button
+                      Male
+                    </MotionButton>
+
+                    <MotionButton
                       onClick={() => handleButtonClick("sex", "Female")}
-                      color={
-                        profile.sex === "Female"
-                          ? COLORS.deepPurple
-                          : COLORS.lightPurple
-                      }
-                      style={{
-                        ...buttonStyle,
-                        transform:
-                          profile.sex === "Female" ? "scale(1.15)" : "scale(1)",
-                        boxShadow:
-                          profile.sex === "Female"
-                            ? `2px 2px 4px 2px ${COLORS.pink}`
-                            : buttonStyle.boxShadow,
-                      }}
+                      isSelected={profile.sex === "Female"}
                     >
-                      Women
-                    </Button>
-                    <Button
+                      Female
+                    </MotionButton>
+
+                    <MotionButton
                       onClick={() => handleButtonClick("sex", "Gender_Diverse")}
-                      color={
-                        profile.sex === "Gender_Diverse"
-                          ? COLORS.deepPurple
-                          : COLORS.lightPurple
-                      }
-                      style={{
-                        ...buttonStyle,
-                        transform:
-                          profile.sex === "Gender_Diverse"
-                            ? "scale(1.15)"
-                            : "scale(1)",
-                        boxShadow:
-                          profile.sex === "Gender_Diverse"
-                            ? `2px 2px 4px 2px ${COLORS.pink}`
-                            : buttonStyle.boxShadow,
-                      }}
+                      isSelected={profile.sex === "Gender_Diverse"}
                     >
                       Gender Diverse
-                    </Button>
+                    </MotionButton>
                   </Box>
                 </Box>
               </Box>
@@ -204,44 +168,19 @@ const LookingFor = ({
                 </Box>
                 <Box display="flex" alignItems="center" width="100%">
                   <Box display="flex" justifyContent="center" width="100%">
-                    <Button
+                    <MotionButton
                       onClick={() => handleButtonClick("kids", "Yes")}
-                      color={
-                        profile.kids === "Yes"
-                          ? COLORS.deepPurple
-                          : COLORS.lightPurple
-                      }
-                      style={{
-                        ...buttonStyle,
-                        transform:
-                          profile.kids === "Yes" ? "scale(1.15)" : "scale(1)",
-                        boxShadow:
-                          profile.kids === "Yes"
-                            ? `2px 2px 4px 2px ${COLORS.pink}`
-                            : buttonStyle.boxShadow,
-                      }}
+                      isSelected={profile.kids === "Yes"}
                     >
                       Open
-                    </Button>
-                    <Button
+                    </MotionButton>
+
+                    <MotionButton
                       onClick={() => handleButtonClick("kids", "No")}
-                      color={
-                        profile.kids === "No"
-                          ? COLORS.deepPurple
-                          : COLORS.lightPurple
-                      }
-                      style={{
-                        ...buttonStyle,
-                        transform:
-                          profile.kids === "No" ? "scale(1.15)" : "scale(1)",
-                        boxShadow:
-                          profile.kids === "No"
-                            ? `2px 2px 4px 2px ${COLORS.pink}`
-                            : buttonStyle.boxShadow,
-                      }}
+                      isSelected={profile.kids === "No"}
                     >
                       Deal Breaker
-                    </Button>
+                    </MotionButton>
                   </Box>
                 </Box>
               </Box>
@@ -251,7 +190,6 @@ const LookingFor = ({
                 justifyContent="center"
                 paddingBottom={20}
                 marginTop={30}
-                // height={mobile ? 60 : 80}
               >
                 <Button
                   color={COLORS.black}
@@ -260,9 +198,10 @@ const LookingFor = ({
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+                    boxShadow: `0px 2px 10px ${COLORS.pink}`,
                     borderRadius: "20px",
                     height: "60px",
+                    border: `solid 1px ${COLORS.pink}`,
                   }}
                   width="80%"
                   disabled={isDisabled}
@@ -282,18 +221,6 @@ const LookingFor = ({
       </Box>
     </CollapsableHeader>
   );
-};
-
-const buttonStyle = {
-  padding: "10px 20px",
-  margin: "10px",
-  borderRadius: "8px",
-  border: `1px solid ${COLORS.pink}`,
-  boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
-  textAlign: "center",
-  cursor: "pointer",
-  width: "fit-content",
-  transition: "transform 0.2s, box-shadow 0.2s",
 };
 
 export default LookingFor;

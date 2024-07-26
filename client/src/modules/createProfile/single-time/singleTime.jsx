@@ -24,30 +24,49 @@ const SingleTime = ({
 }) => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async () => {
     try {
       setSubmitted(false);
       setLoading(true);
-      const variables = {
-        ...currentUser,
-        singleTime: profile.singleTime,
-      };
+      setError("");
 
-      const { createProfile } = await client.request(
-        CREATE_PROFILE_MUTATION,
-        variables
-      );
+      const valid = await handleValidate(profile.singleTime);
 
-      if (createProfile) {
-        setSubmitted(true);
+      if (valid) {
+        const variables = {
+          ...currentUser,
+          singleTime: profile.singleTime,
+        };
+
+        const { createProfile } = await client.request(
+          CREATE_PROFILE_MUTATION,
+          variables
+        );
+
+        if (createProfile) {
+          setSubmitted(true);
+          setLoading(false);
+          dispatch({ type: "UPDATE_USER", payload: createProfile });
+        }
+      } else {
         setLoading(false);
-        dispatch({ type: "UPDATE_USER", payload: createProfile });
       }
     } catch (err) {
       setLoading(false);
       console.log(err);
+      setError("An error occurred while submitting the profile.");
     }
+  };
+
+  const handleValidate = async (singleTime) => {
+    // If singleTime is in the future, return false and set the error message
+    if (moment(singleTime).isAfter(moment())) {
+      setError("Date cannot be in the future");
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -105,11 +124,15 @@ const SingleTime = ({
             />
           </div>
         </label>
+        {error && (
+          <Text color={COLORS.darkRed} marginTop={10} marginBottom={10}>
+            {error}
+          </Text>
+        )}
         <Button
           style={{
             display: "flex",
             justifyContent: "center",
-
             boxShadow: `2px 2px 4px 2px ${COLORS.deepPurple}`,
             borderRadius: "20px", // Match the app's rounded button style
             backgroundColor: COLORS.pink,

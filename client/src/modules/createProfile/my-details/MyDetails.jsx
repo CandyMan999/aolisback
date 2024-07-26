@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import {
   CollapsableHeader,
   Box,
-  Button,
   Loading,
   Text,
   Icon,
   ICON_SIZES,
   FONT_SIZES,
+  MotionButton,
+  Button,
 } from "../../../components";
 import { COLORS } from "../../../constants";
 import { FaBirthdayCake, FaVenusMars } from "react-icons/fa";
@@ -68,12 +69,7 @@ const MyDetails = ({
       completed={completed}
       onClose={submitted}
     >
-      <Box
-        column
-        width={"100%"}
-        height={"100%"}
-        // style={{ overflowX: "hidden" }}
-      >
+      <Box column width={"100%"} height={"100%"}>
         <Box
           column
           center
@@ -197,65 +193,24 @@ const MyDetails = ({
               </Box>
               <Box display="flex" alignItems="center" width="100%">
                 <Box display="flex" justifyContent="center" width="100%">
-                  <Button
+                  <MotionButton
+                    isSelected={profile.sex === "Male"}
                     onClick={() => handleButtonClick("sex", "Male")}
-                    color={
-                      profile.sex === "Male"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.sex === "Male" ? "scale(1.15)" : "scale(1)",
-                      boxShadow:
-                        profile.sex === "Male"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Male
-                  </Button>
-                  <Button
+                  </MotionButton>
+                  <MotionButton
+                    isSelected={profile.sex === "Female"}
                     onClick={() => handleButtonClick("sex", "Female")}
-                    color={
-                      profile.sex === "Female"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.sex === "Female" ? "scale(1.15)" : "scale(1)",
-                      boxShadow:
-                        profile.sex === "Female"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Female
-                  </Button>
-                  <Button
+                  </MotionButton>
+                  <MotionButton
+                    isSelected={profile.sex === "Gender_Diverse"}
                     onClick={() => handleButtonClick("sex", "Gender_Diverse")}
-                    color={
-                      profile.sex === "Gender_Diverse"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.sex === "Gender_Diverse"
-                          ? "scale(1.15)"
-                          : "scale(1)",
-                      boxShadow:
-                        profile.sex === "Gender_Diverse"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Gender Diverse
-                  </Button>
+                  </MotionButton>
                 </Box>
               </Box>
               {errors.sex && <Text color={COLORS.darkRed}>{errors.sex}</Text>}
@@ -275,44 +230,18 @@ const MyDetails = ({
 
               <Box display="flex" alignItems="center" width="100%">
                 <Box display="flex" justifyContent="center" width="100%">
-                  <Button
+                  <MotionButton
+                    isSelected={profile.kids === "Yes"}
                     onClick={() => handleButtonClick("kids", "Yes")}
-                    color={
-                      profile.kids === "Yes"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.kids === "Yes" ? "scale(1.15)" : "scale(1)",
-                      boxShadow:
-                        profile.kids === "Yes"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Yes
-                  </Button>
-                  <Button
+                  </MotionButton>
+                  <MotionButton
+                    isSelected={profile.kids === "No"}
                     onClick={() => handleButtonClick("kids", "No")}
-                    color={
-                      profile.kids === "No"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.kids === "No" ? "scale(1.15)" : "scale(1)",
-                      boxShadow:
-                        profile.kids === "No"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     No
-                  </Button>
+                  </MotionButton>
                 </Box>
               </Box>
               {errors.kids && <Text color={COLORS.darkRed}>{errors.kids}</Text>}
@@ -333,65 +262,24 @@ const MyDetails = ({
               </Box>
               <Box display="flex" alignItems="center" width="100%">
                 <Box display="flex" justifyContent="center" width="100%">
-                  <Button
+                  <MotionButton
+                    isSelected={profile.drink === "Yes"}
                     onClick={() => handleButtonClick("drink", "Yes")}
-                    color={
-                      profile.drink === "Yes"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.drink === "Yes" ? "scale(1.15)" : "scale(1)",
-                      boxShadow:
-                        profile.drink === "Yes"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Yes
-                  </Button>
-                  <Button
+                  </MotionButton>
+                  <MotionButton
+                    isSelected={profile.drink === "Socially"}
                     onClick={() => handleButtonClick("drink", "Socially")}
-                    color={
-                      profile.drink === "Socially"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.drink === "Socially"
-                          ? "scale(1.15)"
-                          : "scale(1)",
-                      boxShadow:
-                        profile.drink === "Socially"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Socially
-                  </Button>
-                  <Button
+                  </MotionButton>
+                  <MotionButton
+                    isSelected={profile.drink === "Never"}
                     onClick={() => handleButtonClick("drink", "Never")}
-                    color={
-                      profile.drink === "Never"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.drink === "Never" ? "scale(1.15)" : "scale(1)",
-                      boxShadow:
-                        profile.drink === "Never"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Never
-                  </Button>
+                  </MotionButton>
                 </Box>
               </Box>
               {errors.drink && (
@@ -414,65 +302,24 @@ const MyDetails = ({
               </Box>
               <Box display="flex" alignItems="center" width="100%">
                 <Box display="flex" justifyContent="center" width="100%">
-                  <Button
+                  <MotionButton
+                    isSelected={profile.smoke === "Yes"}
                     onClick={() => handleButtonClick("smoke", "Yes")}
-                    color={
-                      profile.smoke === "Yes"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.smoke === "Yes" ? "scale(1.15)" : "scale(1)",
-                      boxShadow:
-                        profile.smoke === "Yes"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Yes
-                  </Button>
-                  <Button
+                  </MotionButton>
+                  <MotionButton
+                    isSelected={profile.smoke === "Socially"}
                     onClick={() => handleButtonClick("smoke", "Socially")}
-                    color={
-                      profile.smoke === "Socially"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.smoke === "Socially"
-                          ? "scale(1.15)"
-                          : "scale(1)",
-                      boxShadow:
-                        profile.smoke === "Socially"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Socially
-                  </Button>
-                  <Button
+                  </MotionButton>
+                  <MotionButton
+                    isSelected={profile.smoke === "Never"}
                     onClick={() => handleButtonClick("smoke", "Never")}
-                    color={
-                      profile.smoke === "Never"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.smoke === "Never" ? "scale(1.15)" : "scale(1)",
-                      boxShadow:
-                        profile.smoke === "Never"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Never
-                  </Button>
+                  </MotionButton>
                 </Box>
               </Box>
               {errors.smoke && (
@@ -493,48 +340,18 @@ const MyDetails = ({
               </Box>
               <Box display="flex" alignItems="center" width="100%">
                 <Box display="flex" justifyContent="center" width="100%">
-                  <Button
+                  <MotionButton
+                    isSelected={profile.marijuana === "Friendly"}
                     onClick={() => handleButtonClick("marijuana", "Friendly")}
-                    color={
-                      profile.marijuana === "Friendly"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.marijuana === "Friendly"
-                          ? "scale(1.15)"
-                          : "scale(1)",
-                      boxShadow:
-                        profile.marijuana === "Friendly"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Friendly
-                  </Button>
-                  <Button
+                  </MotionButton>
+                  <MotionButton
+                    isSelected={profile.marijuana === "Unfriendly"}
                     onClick={() => handleButtonClick("marijuana", "Unfriendly")}
-                    color={
-                      profile.marijuana === "Unfriendly"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.marijuana === "Unfriendly"
-                          ? "scale(1.15)"
-                          : "scale(1)",
-                      boxShadow:
-                        profile.marijuana === "Unfriendly"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Unfriendly
-                  </Button>
+                  </MotionButton>
                 </Box>
               </Box>
               {errors.marijuana && (
@@ -562,65 +379,24 @@ const MyDetails = ({
 
               <Box display="flex" alignItems="center" width="100%">
                 <Box display="flex" justifyContent="center" width="100%">
-                  <Button
+                  <MotionButton
+                    isSelected={profile.drugs === "Yes"}
                     onClick={() => handleButtonClick("drugs", "Yes")}
-                    color={
-                      profile.drugs === "Yes"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.drugs === "Yes" ? "scale(1.15)" : "scale(1)",
-                      boxShadow:
-                        profile.drugs === "Yes"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Yes
-                  </Button>
-                  <Button
+                  </MotionButton>
+                  <MotionButton
+                    isSelected={profile.drugs === "No"}
                     onClick={() => handleButtonClick("drugs", "No")}
-                    color={
-                      profile.drugs === "No"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.drugs === "No" ? "scale(1.15)" : "scale(1)",
-                      boxShadow:
-                        profile.drugs === "No"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     No
-                  </Button>
-                  <Button
+                  </MotionButton>
+                  <MotionButton
+                    isSelected={profile.drugs === "Recreational"}
                     onClick={() => handleButtonClick("drugs", "Recreational")}
-                    color={
-                      profile.drugs === "Recreational"
-                        ? COLORS.deepPurple
-                        : COLORS.lightPurple
-                    }
-                    style={{
-                      ...buttonStyle,
-                      transform:
-                        profile.drugs === "Recreational"
-                          ? "scale(1.15)"
-                          : "scale(1)",
-                      boxShadow:
-                        profile.drugs === "Recreational"
-                          ? `2px 2px 4px 2px ${COLORS.pink}`
-                          : buttonStyle.boxShadow,
-                    }}
                   >
                     Recreational
-                  </Button>
+                  </MotionButton>
                 </Box>
               </Box>
               {errors.drugs && (
@@ -641,9 +417,10 @@ const MyDetails = ({
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+                  boxShadow: `0px 2px 10px ${COLORS.pink}`,
                   borderRadius: "20px",
                   height: "60px",
+                  border: `solid 1px ${COLORS.pink}`,
                 }}
                 width="80%"
                 disabled={isDisabled}
@@ -668,18 +445,6 @@ const MyDetails = ({
       </Box>
     </CollapsableHeader>
   );
-};
-
-const buttonStyle = {
-  padding: "10px 20px",
-  margin: "10px",
-  borderRadius: "8px",
-  border: `1px solid ${COLORS.pink}`,
-  boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
-  textAlign: "center",
-  cursor: "pointer",
-  width: "fit-content",
-  transition: "transform 0.2s, box-shadow 0.2s",
 };
 
 export default MyDetails;

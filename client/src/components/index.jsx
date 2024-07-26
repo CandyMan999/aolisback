@@ -48,3 +48,4 @@ export { default as LikeButton } from "./LikeButton";
 export { default as UnlikeButton } from "./UnlikeButton";
 export { default as ButtonsWithShuffle } from "./ButtonsWithShuffle";
 export { default as Span } from "./Span";
+export { default as MotionButton } from "./MotionButton";

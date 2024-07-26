@@ -187,11 +187,9 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
               backgroundColor={COLORS.lightPurple}
               position="relative"
               borderRadius="10px"
-              borderColor={COLORS.pink}
-              borderWidth={1}
+              style={{ border: `solid 1px ${COLORS.pink}`, cursor: "pointer" }}
               as="label"
               htmlFor="upload-photo"
-              cursor="pointer"
               marginTop={10}
             >
               {loadingIndex === photos.length ? (
@@ -222,25 +220,18 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
 
         <Button
           style={{
-            paddingVertical: 12,
-            borderRadius: "20px",
-            shadowColor: COLORS.vividBlue,
-            shadowOffset: { width: 2, height: 4 },
-            shadowOpacity: 0.8,
-            shadowRadius: 6,
-            elevation: 10,
-            height: 70,
-            boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+            display: "flex",
             justifyContent: "center",
-            backgroundColor: COLORS.black,
-            borderColor: COLORS.vividBlue,
-            borderWidth: 1,
-            marginVertical: 20,
+            alignItems: "center",
+            boxShadow: `0px 2px 10px ${COLORS.pink}`,
+            borderRadius: "20px",
+            height: "60px",
+            border: `solid 1px ${COLORS.pink}`,
             marginTop: 30,
-            marginBottom: 50,
-            width: "80%",
           }}
+          width={"80%"}
           onClick={handleClose}
+          color={COLORS.black}
         >
           <Box flexDirection="row" alignItems="center" justifyContent="center">
             <Text bold color={COLORS.pink} fontSize={20} paddingRight={15}>
