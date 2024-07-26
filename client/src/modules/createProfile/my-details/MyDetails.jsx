@@ -10,15 +10,8 @@ import {
   FONT_SIZES,
 } from "../../../components";
 import { COLORS } from "../../../constants";
-import {
-  FaBeer,
-  FaSmoking,
-  FaCannabis,
-  FaChild,
-  FaBriefcase,
-  FaBirthdayCake,
-  FaVenusMars,
-} from "react-icons/fa";
+import { FaBirthdayCake, FaVenusMars } from "react-icons/fa";
+import { IoIosMicrophone } from "react-icons/io";
 
 const MyDetails = ({
   handleSubmit,
@@ -75,7 +68,12 @@ const MyDetails = ({
       completed={completed}
       onClose={submitted}
     >
-      <Box column width={"100%"} height={"100%"}>
+      <Box
+        column
+        width={"100%"}
+        height={"100%"}
+        // style={{ overflowX: "hidden" }}
+      >
         <Box
           column
           center
@@ -90,9 +88,17 @@ const MyDetails = ({
           )}
           <Box column width="90%" justifyContent="space-between" center>
             <Box display="flex" column alignItems="center" width="100%">
-              <Text bold fontSize={FONT_SIZES.X_LARGE}>
-                Intro
-              </Text>
+              <Box alignItems={"center"}>
+                <IoIosMicrophone
+                  color={COLORS.pink}
+                  size={24}
+                  style={{ marginRight: "10px" }}
+                />
+                <Text bold fontSize={FONT_SIZES.X_LARGE}>
+                  Intro
+                </Text>
+              </Box>
+
               <textarea
                 name="intro"
                 placeholder="Tell us about yourself"
@@ -104,8 +110,9 @@ const MyDetails = ({
                   maxLength: 500,
                   padding: "10px",
                   borderRadius: "8px",
-                  borderColor: COLORS.black,
-                  borderWidth: "1px",
+                  borderColor: COLORS.deepPurple,
+                  borderWidth: "2px",
+                  backgroundColor: COLORS.lightPurple,
                 }}
               />
               {errors.intro && (
@@ -114,15 +121,17 @@ const MyDetails = ({
             </Box>
 
             <Box display="flex" column alignItems="center">
-              <Text bold fontSize={FONT_SIZES.X_LARGE}>
-                Age
-              </Text>
-              <Box display="flex" alignItems="center" width="100%">
+              <Box alignItems="center">
                 <FaBirthdayCake
                   color={COLORS.pink}
                   size={24}
                   style={{ marginRight: "10px" }}
                 />
+                <Text bold fontSize={FONT_SIZES.X_LARGE}>
+                  Age
+                </Text>
+              </Box>
+              <Box display="flex" alignItems="center" width="100%">
                 <input
                   name="age"
                   type="number"
@@ -133,23 +142,27 @@ const MyDetails = ({
                     width: mobile ? "200px" : "280px",
                     padding: "10px",
                     borderRadius: "8px",
-                    borderColor: COLORS.black,
-                    borderWidth: "1px",
+                    borderColor: COLORS.deepPurple,
+                    borderWidth: "2px",
+                    backgroundColor: COLORS.lightPurple,
                   }}
                 />
               </Box>
               {errors.age && <Text color={COLORS.darkRed}>{errors.age}</Text>}
             </Box>
             <Box display="flex" column alignItems="center">
-              <Text bold fontSize={FONT_SIZES.X_LARGE}>
-                Occupation
-              </Text>
-              <Box display="flex" alignItems="center" width="100%">
+              <Box alignItems="center">
                 <Icon
                   name="job"
                   color={COLORS.pink}
                   size={ICON_SIZES.XX_LARGE}
                 />
+                <Text bold fontSize={FONT_SIZES.X_LARGE}>
+                  Occupation
+                </Text>
+              </Box>
+
+              <Box display="flex" alignItems="center" width="100%">
                 <input
                   name="occupation"
                   type="text"
@@ -160,8 +173,9 @@ const MyDetails = ({
                     width: mobile ? "200px" : "280px",
                     padding: "10px",
                     borderRadius: "8px",
-                    borderColor: COLORS.black,
-                    borderWidth: "1px",
+                    borderColor: COLORS.deepPurple,
+                    borderWidth: "2px",
+                    backgroundColor: COLORS.lightPurple,
                   }}
                 />
               </Box>
@@ -615,9 +629,9 @@ const MyDetails = ({
             </Box>
 
             <Box
-              width={mobile ? "140%" : "60%"}
+              width={mobile ? "100%" : "60%"}
               justifyContent="center"
-              paddingBottom={100}
+              paddingBottom={20}
               height={mobile ? 60 : 80}
             >
               <Button
@@ -629,6 +643,7 @@ const MyDetails = ({
                   alignItems: "center",
                   boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
                   borderRadius: "20px",
+                  height: "60px",
                 }}
                 width="80%"
                 disabled={isDisabled}

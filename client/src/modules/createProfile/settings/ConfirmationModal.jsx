@@ -62,32 +62,34 @@ const ConfirmationModal = ({ state, client, dispatch, onClose }) => {
             </Fragment>
           )}
         </Box>
-
-        <Button
-          coolStyle
-          color={COLORS.red}
-          style={{
-            borderRadius: 12,
-            width: "50%",
-            border: `solid 1px ${COLORS.white}`,
-          }}
-          onClick={handleDeleteAccount}
-        >
-          <Text bold>Delete Account</Text>
-        </Button>
-        <Button
-          onClick={onClose}
-          coolStyle
-          color={COLORS.lightGrey}
-          style={{
-            borderRadius: 12,
-            width: "100%",
-            border: `solid 1px ${COLORS.white}`,
-            marginBottom: 0,
-          }}
-        >
-          <Text bold>Cancel</Text>
-        </Button>
+        <Box width="100%" justifyContent="space-between">
+          <Button
+            coolStyle
+            color={COLORS.red}
+            style={{
+              borderRadius: 12,
+              width: "60%",
+              border: `solid 1px ${COLORS.white}`,
+              boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+            }}
+            onClick={handleDeleteAccount}
+          >
+            <Text bold>Delete Account</Text>
+          </Button>
+          <Button
+            onClick={onClose}
+            coolStyle
+            color={COLORS.lightGrey}
+            style={{
+              borderRadius: 12,
+              width: "60%",
+              border: `solid 1px ${COLORS.white}`,
+              boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+            }}
+          >
+            <Text bold>Cancel</Text>
+          </Button>
+        </Box>
       </Box>
     </Modal>
   );

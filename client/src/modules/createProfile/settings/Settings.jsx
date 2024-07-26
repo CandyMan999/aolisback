@@ -20,6 +20,8 @@ const Settings = ({ state, client, dispatch }) => {
             borderRadius: 12,
             width: "50%",
             border: `solid 1px ${COLORS.white}`,
+
+            boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
           }}
           onClick={() => setShowModal(true)}
         >

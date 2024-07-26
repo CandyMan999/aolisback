@@ -16,11 +16,12 @@ const ProfileProgressSummary = ({ mobile, completed, total }) => {
       column
     >
       <Text
-        color={COLORS.darkBlue}
+        color={COLORS.main}
         bold
         margin={0}
         width={mobile ? "100%" : undefined}
-        fontSize={mobile ? FONT_SIZES.SMALL : undefined}
+        fontSize={mobile ? FONT_SIZES.MEDIUM : undefined}
+        style={{ fontFamily: "cursive" }}
       >
         My Profile Progress
       </Text>
