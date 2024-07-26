@@ -156,7 +156,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
                 )}
                 <input
                   style={{
-                    width: "100%",
+                    width: "98%",
                     borderBottom: "none",
                     borderRadius: "20px",
                     height: "35px",

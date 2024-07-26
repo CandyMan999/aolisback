@@ -240,7 +240,10 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
           {...viewport}
           onClick={handleMapClick}
           scrollZoom={!mobileSize}
-          style={{ overflow: "hidden", overscrollBehavior: "none" }}
+          style={{
+            overflow: "hidden",
+            overscrollBehavior: "none",
+          }}
         >
           <div>
             <NavigationControl

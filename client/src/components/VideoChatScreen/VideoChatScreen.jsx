@@ -51,7 +51,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
   const handleParticipantLeft = async () => {
     try {
-      handleShutScreen();
+      handleHangup();
 
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
@@ -169,22 +169,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           backgroundColor: COLORS.white,
         }}
       >
-        {/* <motion.div
-          initial={{ opacity: 0, y: 0, height: 0 }}
-          animate={{
-            opacity: 1,
-            y: [-100, 0, -100],
-            display: ["block", "block", "none"],
-          }}
-          exit={{ opacity: 0, y: -100, height: 0 }}
-          transition={{ duration: 3 }}
-        >
-          <Text bold center color={COLORS.pink}>
-            Take a screenshot to automatically send inappropriate content to
-            administration
-          </Text>
-        </motion.div> */}
-
         <img
           style={{ position: "absolute", top: 0, left: 0 }}
           height={100}

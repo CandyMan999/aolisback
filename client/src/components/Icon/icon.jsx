@@ -9,7 +9,14 @@ import { iconSizes } from "./icon-sizes";
 class Icon extends React.Component {
   render() {
     return (
-      <Box center justifyContent="center" margin={this.props.margin || ""}>
+      <Box
+        center
+        style={{
+          alignSelf: this.props.alignSelf ? this.props.alignSelf : undefined,
+        }}
+        justifyContent="center"
+        margin={this.props.margin || ""}
+      >
         <Box
           right={this.props.right || ""}
           top={this.props.top || ""}

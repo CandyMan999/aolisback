@@ -87,8 +87,15 @@ const CreateProfile = ({ client, dispatch, state, currentUser }) => {
       if (!Number.isInteger(Number(values.age)))
         err.age = "Age cannot have decimals!";
     }
+    console.log("value: ", values);
     if (!values.intro.length) {
       err.intro = "Tell us about You!";
+    }
+    if (values.intro.length > 500) {
+      err.intro = "Intro cannot be longer than 500 characters!";
+    }
+    if (values.intro.split(" ").some((word) => word.length > 20)) {
+      err.intro = "Words cannot be longer than 20 characters!";
     }
     if (!values.drink === "") {
       err.drink = "Do You Drink?";
@@ -188,7 +195,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser }) => {
                         mobile ? FONT_SIZES.XX_LARGE : FONT_SIZES.XX_LARGE
                       }
                     >
-                      Create Profile
+                      Edit Profile
                     </Text>
                   </Box>
                 </Box>

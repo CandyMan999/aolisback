@@ -176,6 +176,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
         UNBLOCK_USER_MUTATION,
         variables
       );
+
       dispatch({ type: "UPDATE_BLOCKED", payload: unBlock.blockedUsers });
       setUserBlocked(false);
       setLoading(false);

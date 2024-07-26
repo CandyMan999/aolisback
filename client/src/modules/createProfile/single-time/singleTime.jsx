@@ -10,13 +10,12 @@ import {
   ICON_SIZES,
 } from "../../../components";
 import { COLORS } from "../../../constants";
-
 import { CREATE_PROFILE_MUTATION } from "../../../graphql/mutations";
+import moment from "moment";
 
 const SingleTime = ({
   client,
   dispatch,
-
   profile,
   handleChange,
   currentUser,
@@ -59,6 +58,18 @@ const SingleTime = ({
       completed={completed}
     >
       <Box column width={"100%"} marginY={15} alignItems="center">
+        <Text
+          fontSize={FONT_SIZES.XX_LARGE}
+          color={COLORS.main}
+          bold
+          center
+          marginBottom={4}
+        >
+          When did your single journey begin?
+        </Text>
+        <Text center bold fontSize={FONT_SIZES.MEDIUM} marginBottom={4}>
+          Let other users know how long you have been on the market!
+        </Text>
         {profile.singleTime && (
           <Text
             noWrap
@@ -68,24 +79,29 @@ const SingleTime = ({
             marginBottom={15}
             bold
           >
-            Single Since: {profile.singleTime}
+            💔 Single for: {moment(profile.singleTime).fromNow(true)}
           </Text>
         )}
-        <label htmlFor="sobreityTime">
+        <label htmlFor="singleTime">
           <div style={{ display: "flex", alignItems: "center" }}>
             <Icon
               size={ICON_SIZES.XX_LARGE}
               name="calendarAdd"
               color={COLORS.main}
             />
-
             <input
-              style={{ margin: "30px" }}
+              style={{
+                margin: "30px",
+                padding: "8px",
+                borderRadius: "4px",
+                borderColor: COLORS.black,
+              }}
               type="date"
               id="singleTime"
               name="singleTime"
               value={profile.singleTime}
               onChange={handleChange}
+              max={new Date().toISOString().split("T")[0]} // set max attribute to today's date
             />
           </div>
         </label>
@@ -93,19 +109,26 @@ const SingleTime = ({
           style={{
             display: "flex",
             justifyContent: "center",
-            boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
-            borderRadius: "10px",
+
+            boxShadow: `2px 2px 4px 2px ${COLORS.deepPurple}`,
+            borderRadius: "20px", // Match the app's rounded button style
+            backgroundColor: COLORS.pink,
+            borderColor: COLORS.vividBlue,
+            borderWidth: 1,
+            width: "80%",
+            paddingVertical: 12,
+            paddingHorizontal: 24,
+            marginTop: 30,
           }}
-          width="300px"
-          color={COLORS.black}
           onClick={handleSubmit}
+          disabled={loading}
         >
           {loading ? (
-            <Loading bar color={COLORS.vividBlue} />
-          ) : !currentUser.singleTime && !loading ? (
-            <Text bold>Submit</Text>
+            <Loading bar color={COLORS.white} />
           ) : (
-            <Text bold>Update</Text>
+            <Text bold color={COLORS.deepPurple} fontSize={FONT_SIZES.LARGE}>
+              {!currentUser.singleTime ? "Submit" : "Update"}
+            </Text>
           )}
         </Button>
       </Box>

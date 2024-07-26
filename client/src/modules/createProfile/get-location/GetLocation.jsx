@@ -3,11 +3,10 @@ import {
   CollapsableHeader,
   Box,
   Button,
-  Icon,
   Text,
   Loading,
   Map,
-  ICON_SIZES,
+  FONT_SIZES,
 } from "../../../components";
 import { COLORS } from "../../../constants";
 import { useLocation } from "react-router-dom";
@@ -21,7 +20,6 @@ const GetLocation = ({
   completed,
   mobile,
 }) => {
-  const [submitted, setSubmitted] = useState(false);
   const [userCoords, setUserCoords] = useState({ lat: null, lng: null });
   const [spinner, setSpinner] = useState(false);
   const location = useLocation();
@@ -51,7 +49,6 @@ const GetLocation = ({
   const handleGetLocation = useCallback(async () => {
     try {
       setSpinner(true);
-      setSubmitted(false);
 
       let latitude =
         userCoords.lat !== null ? userCoords.lat : currentUser.location.lat;
@@ -112,9 +109,19 @@ const GetLocation = ({
       completed={completed}
     >
       <Box width={"100%"} height={"100%"} column alignItems="center">
+        <Text
+          fontSize={FONT_SIZES.MEDIUM}
+          color={COLORS.textPrimary}
+          marginBottom={15}
+          center
+          bold
+        >
+          It's easier for us to find you matches when we know where you are. We
+          never share your precise location, only an approximate location.
+        </Text>
         <Map
           currentUser={currentUser}
-          width={mobile ? "100vw" : "80%"}
+          width={mobile ? "90vw" : "80%"}
           height={400}
           location={location}
         />
@@ -124,38 +131,29 @@ const GetLocation = ({
             style={{
               display: "flex",
               alignItems: "center",
-              boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
-              borderRadius: "10px",
+              boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+              borderRadius: "20px",
+              paddingLeft: "20px",
+              paddingRight: "20px",
             }}
             color={COLORS.black}
             onClick={handleLocation}
             width="fit-content"
           >
             {spinner ? (
-              <Loading bar color={COLORS.vividBlue} />
+              <Loading bar color={COLORS.pink} />
             ) : noLocation(currentUser.location.coordinates) ? (
-              <Text bold>Get Location</Text>
+              <Text bold>Get Location 📍</Text>
             ) : (
-              <Text bold>Update Location</Text>
+              <Text color={COLORS.pink} bold>
+                Update Location 📍
+              </Text>
             )}
-            <Icon name="pin" color={COLORS.red} style={{ padding: "0px" }} />
           </Button>
-          {locationSuccess && (
-            <Box alignItems="center">
-              <Icon
-                name="thumbsUp"
-                color={COLORS.green}
-                size={ICON_SIZES.XX_LARGE}
-              />
-            </Box>
-          )}
+          {locationSuccess && <Box alignItems="center">👍</Box>}
           {!locationSuccess && (
             <Box alignItems="center">
-              <Icon
-                name="thumbsDown"
-                color={COLORS.textRed}
-                size={ICON_SIZES.XX_LARGE}
-              />
+              👎
               <Text>Where are you?</Text>
             </Box>
           )}

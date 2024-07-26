@@ -209,11 +209,11 @@ const Message = () => {
                   marginTop={20}
                 >
                   {!isSender && (
-                    <Box position={"absolute"} top={-20} right={0}>
+                    <Box position={"absolute"} top={-30} right={0}>
                       <Icon
                         style={{ zIndex: 1000 }}
                         name="threeDot"
-                        size={ICON_SIZES.X_LARGE}
+                        size={ICON_SIZES.XX_LARGE}
                         color={COLORS.vividBlue}
                         onClick={() => handleToggleBottomDrawer(video)}
                       />

@@ -1,6 +1,15 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Box, Text, FONT_SIZES, Button, Picture } from "../../../components";
+import {
+  Box,
+  Text,
+  FONT_SIZES,
+  Button,
+  Picture,
+  Span,
+  ICON_SIZES,
+  Icon,
+} from "../../../components";
 import { COLORS } from "../../../constants";
 import { formatDistanceToNow } from "date-fns";
 import { motion } from "framer-motion";
@@ -46,15 +55,6 @@ const Username = styled(Text)`
   margin-top: 15px;
   display: flex;
   flex-direction: row;
-`;
-
-const Timestamp = styled(Text)`
-  font-size: 10px;
-  color: ${COLORS.darkGrey};
-  align-self: flex-end;
-  margin-top: 5px;
-  margin: 0,
-  padding: 0
 `;
 
 const Message = ({
@@ -110,36 +110,52 @@ const Message = ({
             color: COLORS.black,
           }}
         >
-          {username}
-        </Username>
-
-        <MessageBubble isCurrentUser={isCurrentUser}>
-          <Text fontSize={FONT_SIZES.SMALL}>
-            <Button
-              style={{
-                border: `solid 1px ${COLORS.white}`,
-                borderRadius: 6,
-                width: 12,
-                height: 22,
-                padding: 6,
-                margin: 0,
-                marginRight: 4,
-                backgroundColor: isCurrentUser ? COLORS.pink : COLORS.main,
-              }}
+          {isCurrentUser && (
+            <Icon
+              name="speaker"
+              size={ICON_SIZES.LARGE}
+              color={COLORS.pink}
+              // alignSelf={"flex-start"}
+              // marginTop={5}
+              marginRight={4}
               onClick={() =>
                 handleSpeech(text, isCurrentUser ? "male" : "female")
               }
             />
-            {text}
-          </Text>
-          <Timestamp
+          )}
+          {username}
+          {!isCurrentUser && (
+            <Icon
+              name="speaker"
+              size={ICON_SIZES.LARGE}
+              color={COLORS.pink}
+              // alignSelf={"flex-start"}
+              // marginTop={5}
+              marginLeft={4}
+              onClick={() =>
+                handleSpeech(text, isCurrentUser ? "male" : "female")
+              }
+            />
+          )}
+        </Username>
+
+        <MessageBubble isCurrentUser={isCurrentUser}>
+          <Box>
+            <Text fontSize={FONT_SIZES.SMALL}>{text}</Text>
+          </Box>
+          <Span
             style={{
+              fontSize: 10,
+              alignSelf: "flex-end",
+              marginTop: 5,
+              margin: 0,
+              paddingBottom: 5,
               width: !isCurrentUser ? "100%" : undefined,
               color: isCurrentUser ? COLORS.darkerGrey : COLORS.white,
             }}
           >
             {formatDistanceToNow(Number(createdAt))} ago
-          </Timestamp>
+          </Span>
         </MessageBubble>
       </div>
       {isCurrentUser && (

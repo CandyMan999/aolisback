@@ -66,7 +66,7 @@ const BottomDrawer = ({
     setMounted(true);
 
     setBlocked();
-  }, []);
+  }, [blockedUsers]);
 
   const setBlocked = () => {
     setIsBlocked(false);

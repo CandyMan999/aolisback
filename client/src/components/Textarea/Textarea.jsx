@@ -1,9 +1,7 @@
 import React from "react";
 import { connect } from "formik";
-
 import { Box, Text } from "..";
 import { COLORS } from "../../constants";
-
 import styled from "@emotion/styled";
 import { css } from "@emotion/css";
 
@@ -63,7 +61,7 @@ class Textarea extends React.PureComponent {
         <Box
           position="absolute"
           right={10}
-          bottom={-10}
+          bottom={-20}
           display="flex"
           justifyContent="flex-end"
         >
@@ -71,7 +69,6 @@ class Textarea extends React.PureComponent {
             {currentValue.length} of {maxLength} characters
           </Text>
         </Box>
-
         {hasError && <p className={errorStyles}>{errors[name]}</p>}
       </Box>
     );
@@ -89,12 +86,12 @@ const StyledTextarea = styled("textarea")(
     padding: "6px 4px",
     height: height ? `${height}px` : undefined,
     transition: "border 0.5s",
-    // width: width ? width : "100%",
+    width: width ? width : "100%",
     resize: "vertical",
-    [":focus"]: {
+    ":focus": {
       outline: 0,
     },
-    ["::placeholder"]: {
+    "::placeholder": {
       color: COLORS.grey,
     },
   })
@@ -102,10 +99,11 @@ const StyledTextarea = styled("textarea")(
 
 const errorStyles = css`
   color: ${COLORS.darkRed};
-  font-size: "11px";
+  font-size: 11px;
   margin: 0;
-  position: "absolute";
-  top: "36px";
+  position: absolute;
+  bottom: -20px;
+  right: 10px;
 `;
 
 export default connect(Textarea);
