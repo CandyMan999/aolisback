@@ -245,6 +245,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser }) => {
                   total={totalCounts.lookingFor}
                   mobile={mobile}
                 />
+
                 <Settings state={state} client={client} dispatch={dispatch} />
               </Box>
             );

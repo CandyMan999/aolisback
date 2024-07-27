@@ -139,6 +139,13 @@ export const FETCH_ME = gql`
       username
       expoToken
       inCall
+      plan {
+        planType
+        messages
+        messagesSent
+        videoMinutes
+        videoMinutesUsed
+      }
       phoneNumber
       lookingFor {
         ageRange {
@@ -268,6 +275,8 @@ export const FETCH_ME = gql`
       marijuana
       drugs
       kids
+      googleId
+      appleId
     }
   }
 `;

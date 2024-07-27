@@ -11,6 +11,7 @@ const CollapsableHeader = ({
   title,
   children,
   mobile,
+  fullWidth,
 }) => {
   const [isVisible, setIsVisible] = useState(defaultToOpen);
 
@@ -25,9 +26,15 @@ const CollapsableHeader = ({
   };
 
   return (
-    <Box column display="flex" width={"90vW"}>
+    <Box
+      column
+      display="flex"
+      width={isVisible && fullWidth ? "100vW" : "90vW"}
+    >
       <Box
+        width={"90vW"}
         paddingY={4}
+        marginX={isVisible && fullWidth ? "5%" : undefined}
         onClick={handleHeaderToggle}
         borderBottom={`2px solid ${
           isVisible ? COLORS.vividBlue : COLORS.lightGrey

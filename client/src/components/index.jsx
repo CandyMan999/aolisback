@@ -49,3 +49,4 @@ export { default as UnlikeButton } from "./UnlikeButton";
 export { default as ButtonsWithShuffle } from "./ButtonsWithShuffle";
 export { default as Span } from "./Span";
 export { default as MotionButton } from "./MotionButton";
+export { default as Switch } from "./Switch";
