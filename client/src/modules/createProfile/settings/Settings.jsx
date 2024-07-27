@@ -216,6 +216,7 @@ const Settings = ({ state, client, dispatch }) => {
               column
               width="48%"
               marginRight={10}
+              height="80%"
               alignItems="center"
               backgroundColor={COLORS.lightPurple}
               style={{
@@ -248,6 +249,7 @@ const Settings = ({ state, client, dispatch }) => {
               column
               alignItems="center"
               width="48%"
+              height="80%"
               backgroundColor={COLORS.lightPurple}
               style={{
                 padding: "20px",
@@ -279,7 +281,7 @@ const Settings = ({ state, client, dispatch }) => {
         </Box>
 
         <Text bold fontSize={FONT_SIZES.X_LARGE} color={COLORS.main} margin={0}>
-          Account Settings
+          Account Info
         </Text>
         <Box
           width="90%"
@@ -294,12 +296,28 @@ const Settings = ({ state, client, dispatch }) => {
             <CollapsableHeader title="Connected Accounts">
               <Box row alignItems="center">
                 {isGoogleConnected && (
-                  <Button>
+                  <Button
+                    color={COLORS.white}
+                    style={{
+                      border: `solid 1px ${COLORS.black}`,
+                      boxShadow: `0px 2px 10px ${COLORS.lighterGrey}`,
+                      borderRadius: "20px",
+                    }}
+                  >
                     <FaGoogle color={COLORS.pink} size={24} />
                   </Button>
                 )}
                 {isAppleConnected && (
-                  <FaApple color={COLORS.apple} size={ICON_SIZES.MEDIUM} />
+                  <Button
+                    color={COLORS.white}
+                    style={{
+                      border: `solid 1px ${COLORS.black}`,
+                      boxShadow: `0px 2px 10px ${COLORS.lighterGrey}`,
+                      borderRadius: "20px",
+                    }}
+                  >
+                    <FaApple color={COLORS.pink} size={24} />
+                  </Button>
                 )}
                 {!isGoogleConnected && !isAppleConnected && (
                   <Text>No connected accounts</Text>
@@ -317,12 +335,14 @@ const Settings = ({ state, client, dispatch }) => {
             </Box>
             <Box row alignItems="center" justifyContent="space-between">
               <Text>Video Minutes Used</Text>
-              <Box width="50%" justifyContent="flex-end">
-                <Box column>
+              <Box width="60%" justifyContent="flex-end">
+                <Box column justifyContent="flex-end">
                   <Text margin={0} center bold>
                     {videoMinutesUsed} minutes
                   </Text>
-                  <Text margin={0}>(Resets Sunday at midnight)</Text>
+                  <Text center margin={0} style={{ textAlign: "end" }}>
+                    (Resets Sunday at midnight)
+                  </Text>
                 </Box>
               </Box>
             </Box>
@@ -330,10 +350,12 @@ const Settings = ({ state, client, dispatch }) => {
               <Text>Video Messages Sent</Text>
               <Box width="50%" justifyContent="flex-end">
                 <Box column>
-                  <Text margin={0} center bold>
+                  <Text margin={0} bold center>
                     {currentUser.plan.messagesSent}
                   </Text>
-                  <Text margin={0}>(Resets daily at midnight)</Text>
+                  <Text margin={0} style={{ textAlign: "end" }}>
+                    (Resets daily at midnight)
+                  </Text>
                 </Box>
               </Box>
             </Box>

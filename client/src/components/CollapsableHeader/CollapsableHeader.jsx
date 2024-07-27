@@ -29,13 +29,12 @@ const CollapsableHeader = ({
     <Box
       column
       display="flex"
-      width={isVisible && fullWidth ? "100vW" : "90vW"}
+      width={isVisible && fullWidth ? "95vW" : "90vW"}
       style={{ overflowX: "hidden" }}
     >
       <Box
-        width={"90vW"}
+        width={"100%"}
         paddingY={4}
-        marginX={isVisible && fullWidth ? "5%" : undefined}
         onClick={handleHeaderToggle}
         borderBottom={`2px solid ${
           isVisible ? COLORS.vividBlue : COLORS.lightGrey
