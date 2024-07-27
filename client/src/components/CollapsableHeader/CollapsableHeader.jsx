@@ -30,6 +30,7 @@ const CollapsableHeader = ({
       column
       display="flex"
       width={isVisible && fullWidth ? "100vW" : "90vW"}
+      style={{ overflowX: "hidden" }}
     >
       <Box
         width={"90vW"}

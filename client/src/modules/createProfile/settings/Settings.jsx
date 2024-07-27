@@ -48,14 +48,13 @@ const Settings = ({ state, client, dispatch }) => {
 
   return (
     <CollapsableHeader title={"Settings"} fullWidth={true}>
-      <Box
-        column
-        width={"100vw"}
-        height={"100%"}
-        alignItems="center"
-        backgroundColor={COLORS.lighterGrey}
-      >
-        <Text bold fontSize={FONT_SIZES.X_LARGE} color={COLORS.main}>
+      <Box column width={"100%"} height={"100%"} alignItems="center">
+        <Text
+          bold
+          fontSize={FONT_SIZES.X_LARGE}
+          color={COLORS.main}
+          marginTop={0}
+        >
           Plans
         </Text>
 
@@ -64,7 +63,7 @@ const Settings = ({ state, client, dispatch }) => {
             column
             alignItems="center"
             marginBottom={10}
-            backgroundColor={COLORS.white}
+            backgroundColor={COLORS.lightPurple}
             style={{
               padding: "10px",
               borderRadius: "10px",
@@ -109,7 +108,7 @@ const Settings = ({ state, client, dispatch }) => {
             column
             alignItems="center"
             marginBottom={10}
-            backgroundColor={COLORS.white}
+            backgroundColor={COLORS.lightPurple}
             style={{
               padding: "10px",
               borderRadius: "10px",
@@ -153,7 +152,7 @@ const Settings = ({ state, client, dispatch }) => {
           <Box
             column
             alignItems="center"
-            backgroundColor={COLORS.white}
+            backgroundColor={COLORS.lightPurple}
             style={{
               padding: "10px",
               borderRadius: "10px",
@@ -203,9 +202,8 @@ const Settings = ({ state, client, dispatch }) => {
         <Box
           width="100%"
           style={{
-            padding: "20px",
+            paddingTop: "20px",
             borderRadius: "20px",
-            marginBottom: "20px",
           }}
         >
           <Box
@@ -219,7 +217,7 @@ const Settings = ({ state, client, dispatch }) => {
               width="48%"
               marginRight={10}
               alignItems="center"
-              backgroundColor={COLORS.white}
+              backgroundColor={COLORS.lightPurple}
               style={{
                 padding: "20px",
                 borderRadius: "20px",
@@ -250,7 +248,7 @@ const Settings = ({ state, client, dispatch }) => {
               column
               alignItems="center"
               width="48%"
-              backgroundColor={COLORS.white}
+              backgroundColor={COLORS.lightPurple}
               style={{
                 padding: "20px",
                 borderRadius: "20px",
@@ -280,14 +278,14 @@ const Settings = ({ state, client, dispatch }) => {
           </Box>
         </Box>
 
-        <Text bold fontSize={FONT_SIZES.X_LARGE} color={COLORS.main}>
+        <Text bold fontSize={FONT_SIZES.X_LARGE} color={COLORS.main} margin={0}>
           Account Settings
         </Text>
         <Box
           width="90%"
           marginY={15}
           style={{
-            backgroundColor: COLORS.white,
+            backgroundColor: COLORS.lightPurple,
             padding: "20px",
             borderRadius: "20px",
           }}
@@ -341,14 +339,14 @@ const Settings = ({ state, client, dispatch }) => {
             </Box>
           </Box>
         </Box>
-        <Text bold fontSize={FONT_SIZES.X_LARGE} color={COLORS.main}>
+        <Text bold fontSize={FONT_SIZES.X_LARGE} color={COLORS.main} margin={0}>
           Preferences
         </Text>
         <Box
           width="90%"
           marginY={15}
           style={{
-            backgroundColor: COLORS.white,
+            backgroundColor: COLORS.lightPurple,
             padding: "20px",
             borderRadius: "10px",
           }}
@@ -367,14 +365,14 @@ const Settings = ({ state, client, dispatch }) => {
             </Box>
           </Box>
         </Box>
-        <Text bold fontSize={FONT_SIZES.X_LARGE} color={COLORS.main}>
+        <Text bold fontSize={FONT_SIZES.X_LARGE} color={COLORS.main} margin={0}>
           Support
         </Text>
         <Box
           width="90%"
           marginY={15}
           style={{
-            backgroundColor: COLORS.white,
+            backgroundColor: COLORS.lightPurple,
             padding: "20px",
             borderRadius: "10px",
           }}
@@ -394,14 +392,14 @@ const Settings = ({ state, client, dispatch }) => {
             </Box>
           </Box>
         </Box>
-        <Text bold fontSize={FONT_SIZES.X_LARGE} color={COLORS.main}>
+        <Text bold fontSize={FONT_SIZES.X_LARGE} color={COLORS.main} margin={0}>
           Social
         </Text>
         <Box
           width="90%"
           marginY={15}
           style={{
-            backgroundColor: COLORS.white,
+            backgroundColor: COLORS.lightPurple,
             padding: "20px",
             borderRadius: "10px",
           }}
