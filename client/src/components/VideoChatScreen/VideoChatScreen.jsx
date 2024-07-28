@@ -8,12 +8,12 @@ import {
   SEND_PHONE_NUMBER,
   CALL_DURATION_MUTATION,
 } from "../../graphql/mutations";
-import { Loading, Button, Text, FONT_SIZES } from "../../components";
+import { Loading, Button, Text, FONT_SIZES, Box } from "../../components";
 import { JitsiMeeting } from "@jitsi/react-sdk";
 import { useClient } from "../../client";
 
 const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
-  const { state } = useContext(Context);
+  const { state, dispatch } = useContext(Context);
   const client = useClient();
   const { videoChatRequest, currentUser } = state;
   const [isMeetingStarted, setIsMeetingStarted] = useState(false);
@@ -120,6 +120,26 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
     }
   };
 
+  const handleTimeLeft = () => {
+    try {
+      const videoSecondsUsed = currentUser.plan.videoMinutesUsed;
+      const totalVideoSecondsAvailable = currentUser.plan.videoMinutes;
+
+      const remainingSeconds = totalVideoSecondsAvailable - videoSecondsUsed;
+
+      if (remainingSeconds < 0) {
+        return "0 min 0 secs"; // All available minutes are used up
+      }
+
+      const minutesLeft = Math.floor(remainingSeconds / 60);
+      const secondsLeft = remainingSeconds % 60;
+
+      return `${minutesLeft} min ${secondsLeft} secs`; // or `${minutesLeft}:${secondsLeft}`
+    } catch (err) {
+      console.log("err calc minutes left: ", err);
+    }
+  };
+
   const handleParticipantJoined = async () => {
     const sendApiCall = async () => {
       try {
@@ -133,7 +153,16 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           variables
         );
 
-        console.log("updating time: ", callDuration);
+        if (callDuration.outOfTime) {
+          console.log("out of time");
+          // send info via response to react app
+          window.ReactNativeWebView.postMessage("OUT_OF_TIME");
+        }
+
+        dispatch({
+          type: "UPDATE_USER_PLAN",
+          payload: callDuration.user.plan,
+        });
       } catch (err) {
         console.log(err);
       }
@@ -169,13 +198,23 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           backgroundColor: COLORS.white,
         }}
       >
-        <img
-          style={{ position: "absolute", top: 0, left: 0 }}
-          height={100}
-          width={100}
-          src={iOSLogo}
-          alt="Watermark-logo"
-        />
+        <Box column style={{ position: "absolute", top: 0, left: 0 }}>
+          <img height={100} width={100} src={iOSLogo} alt="Watermark-logo" />
+          <Text center paddingLeft={"2%"} bold margin={0}>
+            Available Time
+          </Text>
+          <Text
+            bold
+            paddingLeft={"2%"}
+            margin={0}
+            center
+            color={COLORS.pink}
+            style={{ padding: 0 }}
+            fontSize={FONT_SIZES.SMALL}
+          >
+            {handleTimeLeft()}
+          </Text>
+        </Box>
 
         {isApiReady &&
           isMeetingStarted &&

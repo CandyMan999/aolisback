@@ -51,7 +51,7 @@ const Slide = ({
         variables
       );
 
-      dispatch({ type: "UPDATE_USER", payload: deletePhoto });
+      dispatch({ type: "UPDATE_USER_PHOTOS", payload: deletePhoto.pictures });
       setLoading(false);
       onDelete(id);
     } catch (err) {

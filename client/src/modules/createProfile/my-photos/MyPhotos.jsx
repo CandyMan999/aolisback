@@ -58,7 +58,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
         DELETE_PHOTO_MUTATION,
         variables
       );
-      dispatch({ type: "UPDATE_USER", payload: deletePhoto });
+      dispatch({ type: "UPDATE_USER_PHOTOS", payload: deletePhoto.pictures });
       setPhotos(deletePhoto.pictures);
     } catch (err) {
       setError("Error deleting photo");
@@ -78,7 +78,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
           ADD_PHOTO_MUTATION,
           variables
         );
-        dispatch({ type: "UPDATE_USER", payload: addPhoto });
+        dispatch({ type: "UPDATE_USER_PHOTOS", payload: addPhoto.pictures });
         setPhotos(addPhoto.pictures);
         setSuccess("Photo uploaded successfully!");
         setTimeout(() => {

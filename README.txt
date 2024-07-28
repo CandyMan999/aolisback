@@ -2,12 +2,12 @@
 3.Upgrade heroku before deploy
 4. upgrade vercel before deoploy
 5. upgrade unbuntu servers for Jitsi Instance before delploy- ask AI about how many CPUs to be gucci
-6.
-7. Upgrade UI in "Create Profile" to "Edit Profile"
+
+
 
 9. Add phone number verification to website login process
 10. Shadows on boxes and picture in message center.. Check buttons everywhere
-11. Change the app intro for the main chat open AI response to something better... up the temp.. 
+
 12. fix fucking google login if you can-- have to do development build to test 
 13. add th payment options, build it all out and test
 14. Get everything working on android. 
@@ -20,7 +20,7 @@
                                                 videoChat seconds per plan: x number,
                                                 }
 
-22. maybe popup error modal to say take a screenshot to report any innapropriate behavior on videoChat
+
 23. make protected route for candyman to easily watch flagged videos - screenshots and ban users / delete the content. 
 24 scrollview for reload might have white edge
 25. write a good script that deletes all seed users..similar to the delete account button
@@ -32,7 +32,7 @@ dispatch an update to the user minutes and video messages sent when they are
 26. Check twilio money before deploy
 
                                 
-
+27. put cloudinary info in .env
 
 15. Launch in Austin!
 

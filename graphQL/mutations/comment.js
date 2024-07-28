@@ -44,7 +44,7 @@ module.exports = {
 
       publishCreateComment(newComment);
 
-      if (room.users.length <= 3) {
+      if (room.users.length < 3) {
         let mainRoom = await Room.find({ _id: roomId }).populate({
           path: "comments",
           populate: [{ path: "author", model: "User" }],
@@ -126,7 +126,7 @@ module.exports = {
               content: prompt,
             },
           ],
-          temperature: 0,
+          temperature: 0.5,
           max_tokens: 3000,
           top_p: 1,
           frequency_penalty: 0.3,

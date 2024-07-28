@@ -48,7 +48,10 @@ const SingleTime = ({
         if (createProfile) {
           setSubmitted(true);
           setLoading(false);
-          dispatch({ type: "UPDATE_USER", payload: createProfile });
+          dispatch({
+            type: "UPDATE_USER_SINGLE_TIME",
+            payload: createProfile.singleTime,
+          });
         }
       } else {
         setLoading(false);

@@ -88,6 +88,8 @@ const Root = () => {
     );
   };
 
+  console.log("CurrentUser: ", state.currentUser);
+
   return (
     <Router>
       <ApolloProvider client={client}>

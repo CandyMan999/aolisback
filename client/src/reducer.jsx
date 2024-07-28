@@ -40,6 +40,40 @@ export default function reducer(state, { type, payload }) {
         ...state,
         currentUser: payload,
       };
+    case "UPDATE_USER_PHOTOS":
+      return {
+        ...state,
+        currentUser: { ...state.currentUser, pictures: payload },
+      };
+    case "UPDATE_USER_SINGLE_TIME":
+      return {
+        ...state,
+        currentUser: { ...state.currentUser, singleTime: payload },
+      };
+    case "UPDATE_USER_DETAILS":
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          intro: payload.intro,
+          sex: payload.sex,
+          age: payload.age,
+          occupation: payload.occupation,
+          drink: payload.drink,
+          smoke: payload.smoke,
+          marijuana: payload.marijuana,
+          drugs: payload.drugs,
+          kids: payload.kids,
+        },
+      };
+    case "UPDATE_USER_PLAN":
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          plan: payload,
+        },
+      };
     case "UPDATE_USER_TERMS":
       return {
         ...state,

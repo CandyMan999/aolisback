@@ -67,7 +67,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser }) => {
       );
 
       if (createProfile) {
-        await dispatch({ type: "UPDATE_USER", payload: createProfile });
+        await dispatch({ type: "UPDATE_USER_DETAILS", payload: createProfile });
         setSpinner(false);
         setSuccess(true);
       }

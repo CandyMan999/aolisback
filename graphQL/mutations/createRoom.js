@@ -82,7 +82,7 @@ module.exports = {
         const responseAI = await openai.chat.completions.create({
           model: "gpt-3.5-turbo", // Correct model name for the OpenAI AP
           messages: [{ role: "system", content: prompt }],
-          temperature: 0,
+          temperature: 0.5,
           max_tokens: 3000,
           top_p: 1,
           frequency_penalty: 0.3,
