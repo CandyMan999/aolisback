@@ -28,6 +28,7 @@
 
 
 25. remove jitsi logs from unbuntu server to free up disc space
+dispatch an update to the user minutes and video messages sent when they are
 26. Check twilio money before deploy
 
                                 

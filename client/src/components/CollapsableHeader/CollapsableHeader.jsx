@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Box, Text, Icon, ICON_SIZES } from "..";
+import { Box, Text, Icon, ICON_SIZES, FONT_SIZES } from "..";
 import { COLORS } from "../../constants";
 
 const CollapsableHeader = ({
@@ -12,6 +12,7 @@ const CollapsableHeader = ({
   children,
   mobile,
   fullWidth,
+  settings,
 }) => {
   const [isVisible, setIsVisible] = useState(defaultToOpen);
 
@@ -29,7 +30,7 @@ const CollapsableHeader = ({
     <Box
       column
       display="flex"
-      width={isVisible && fullWidth ? "95vW" : "90vW"}
+      width={isVisible && fullWidth ? "95vW" : settings ? "100%" : "90vW"}
       style={{ overflowX: "hidden" }}
     >
       <Box
@@ -37,11 +38,15 @@ const CollapsableHeader = ({
         paddingY={4}
         onClick={handleHeaderToggle}
         borderBottom={`2px solid ${
-          isVisible ? COLORS.vividBlue : COLORS.lightGrey
+          isVisible
+            ? COLORS.vividBlue
+            : settings
+            ? COLORS.pink
+            : COLORS.lightGrey
         }`}
         justifyContent="space-between"
       >
-        <Box justifyContent="space-between">
+        <Box justifyContent="space-between" alignItems="center">
           <Text
             fontSize="xlarge"
             bold
@@ -51,11 +56,9 @@ const CollapsableHeader = ({
           </Text>
           {title === "Settings" && (
             <Box paddingX={8} center>
-              <Icon
-                name="settings"
-                color={COLORS.grey}
-                size={ICON_SIZES.XX_LARGE}
-              />
+              <Text margin={0} fontSize={FONT_SIZES.XX_LARGE}>
+                ⚙️
+              </Text>
             </Box>
           )}
           {!!total &&

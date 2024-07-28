@@ -17,7 +17,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
         ACCEPT_TERMS_MUTATION,
         variables
       );
-      dispatch({ type: "UPDATE_USER", payload: termsAgreement });
+      dispatch({ type: "UPDATE_USER_TERMS", payload: termsAgreement.terms });
       setLoading(false);
       onClose();
     } catch (err) {
@@ -26,7 +26,13 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
   };
 
   return (
-    <Modal isLoading={loading} onClose={onClose} height={"80%"} state={state}>
+    <Modal
+      isLoading={loading}
+      onClose={onClose}
+      height={"80%"}
+      state={state}
+      width="90%"
+    >
       <Box
         column
         width={"100%"}
@@ -490,32 +496,38 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             omission of any material fact in connection with the App.
           </Text>
         </Box>
-        <Box width={"100%"} justifyContent="space-between">
-          <Button
-            coolStyle
-            onClick={onClose}
-            color={COLORS.red}
-            style={{
-              borderRadius: 12,
-              width: "40%",
-              border: `solid 1px ${COLORS.white}`,
-            }}
-          >
-            <Text bold>Cancel</Text>
-          </Button>
-          <Button
-            onClick={handleAcceptTerms}
-            coolStyle
-            color={COLORS.main}
-            style={{
-              borderRadius: 12,
-              width: "40%",
-              border: `solid 1px ${COLORS.white}`,
-            }}
-          >
-            <Text bold>Accept</Text>
-          </Button>
-        </Box>
+        {!state.currentUser.terms ? (
+          <Box width={"100%"} justifyContent="space-between">
+            (
+            <Button
+              coolStyle
+              onClick={onClose}
+              color={COLORS.red}
+              style={{
+                borderRadius: 12,
+                width: "40%",
+                border: `solid 1px ${COLORS.white}`,
+              }}
+            >
+              <Text bold>Cancel</Text>
+            </Button>
+            <Button
+              onClick={handleAcceptTerms}
+              coolStyle
+              color={COLORS.main}
+              style={{
+                borderRadius: 12,
+                width: "40%",
+                border: `solid 1px ${COLORS.white}`,
+              }}
+            >
+              <Text bold>Accept</Text>
+            </Button>
+            )
+          </Box>
+        ) : (
+          <Text>Already Agreed ✅ </Text>
+        )}
       </Box>
     </Modal>
   );

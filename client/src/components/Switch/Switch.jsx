@@ -23,13 +23,19 @@ const SwitchCircle = styled(motion.div)`
   background-color: ${COLORS.white};
   border-radius: 50%;
   position: absolute;
+  ${"" /* border: solid 1px ${COLORS.black}, */}
   left: ${(props) => (props.checked ? "calc(100% - 20px)" : "2px")};
 `;
 
 const Switch = ({ checked, onChange }) => {
   return (
-    <SwitchContainer checked={checked} onClick={onChange}>
+    <SwitchContainer
+      style={{ border: `solid 1px ${COLORS.lightGrey}` }}
+      checked={checked}
+      onClick={onChange}
+    >
       <SwitchCircle
+        style={{ border: `solid 1px ${COLORS.lightGrey}` }}
         checked={checked}
         animate={{ x: checked ? -1 : 1 }}
         transition={{ type: "spring", stiffness: 300, duration: 0.5 }}

@@ -50,3 +50,5 @@ export { default as ButtonsWithShuffle } from "./ButtonsWithShuffle";
 export { default as Span } from "./Span";
 export { default as MotionButton } from "./MotionButton";
 export { default as Switch } from "./Switch";
+export { default as PrivacyPolicyModal } from "./PrivacyPolicyModal";
+export { default as FeedBackModal } from "./FeedbackModal";

@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  FaGoogle,
-  FaApple,
-  FaInstagram,
-  FaStar,
-  FaRocket,
-  FaCrown,
-} from "react-icons/fa";
+import { FaGoogle, FaApple, FaInstagram, FaCrown } from "react-icons/fa";
 import {
   CollapsableHeader,
   Box,
@@ -17,6 +10,9 @@ import {
   Loading,
   Icon,
   Switch,
+  TermsAgreement,
+  PrivacyPolicyModal,
+  FeedBackModal,
 } from "../../../components";
 import { TbMessageCircleHeart } from "react-icons/tb";
 import { COLORS } from "../../../constants";
@@ -25,12 +21,14 @@ import iOSLogo from "../../../pictures/iOSLogo.png";
 import { MdVideoChat } from "react-icons/md";
 
 const Settings = ({ state, client, dispatch }) => {
-  const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [soundsEnabled, setSoundsEnabled] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [showFeedBackModal, setShowFeedBackModal] = useState(false);
 
   const handleCloseModal = () => {
-    setShowModal(false);
+    setShowDeleteModal(false);
   };
 
   const handleToggleNotifications = () => {
@@ -41,8 +39,27 @@ const Settings = ({ state, client, dispatch }) => {
     setSoundsEnabled(!soundsEnabled);
   };
 
+  const handleToggleTermsOfService = () => {
+    try {
+      dispatch({ type: "SHOW_TERMS", payload: !state.showTerms });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleShowPrivacyModal = () => {
+    setShowPrivacyModal(!showPrivacyModal);
+  };
+
+  const handleToggleFeedBackModal = () => {
+    setShowFeedBackModal(!showFeedBackModal);
+  };
+
   const { currentUser } = state;
-  const videoMinutesUsed = Math.floor(currentUser.plan.videoMinutesUsed / 60);
+  const videoMinutesUsed =
+    currentUser.plan.videoMinutesUsed < 60
+      ? 0
+      : Math.floor(currentUser.plan.videoMinutesUsed / 60);
   const isGoogleConnected = !!currentUser.googleId;
   const isAppleConnected = !!currentUser.appleId;
 
@@ -217,6 +234,7 @@ const Settings = ({ state, client, dispatch }) => {
               width="48%"
               marginRight={10}
               height="80%"
+              justifyContent="space-between"
               alignItems="center"
               backgroundColor={COLORS.lightPurple}
               style={{
@@ -250,6 +268,7 @@ const Settings = ({ state, client, dispatch }) => {
               alignItems="center"
               width="48%"
               height="80%"
+              justifyContent="space-between"
               backgroundColor={COLORS.lightPurple}
               style={{
                 padding: "20px",
@@ -293,7 +312,7 @@ const Settings = ({ state, client, dispatch }) => {
           }}
         >
           <Box column marginY={10} width="100%">
-            <CollapsableHeader title="Connected Accounts">
+            <CollapsableHeader settings={true} title="Connected Accounts">
               <Box row alignItems="center">
                 {isGoogleConnected && (
                   <Button
@@ -324,16 +343,31 @@ const Settings = ({ state, client, dispatch }) => {
                 )}
               </Box>
             </CollapsableHeader>
-            <Box row alignItems="center" justifyContent="space-between">
+            <Box
+              style={{ borderBottom: `solid 1px ${COLORS.pink}` }}
+              row
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <Text>Phone Number</Text>
               <Text>{currentUser.phoneNumber}</Text>
             </Box>
-            <Box row alignItems="center" justifyContent="space-between"></Box>
-            <Box row alignItems="center" justifyContent="space-between">
+
+            <Box
+              style={{ borderBottom: `solid 1px ${COLORS.pink}` }}
+              row
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <Text>Email</Text>
               <Text>{currentUser.email}</Text>
             </Box>
-            <Box row alignItems="center" justifyContent="space-between">
+            <Box
+              style={{ borderBottom: `solid 1px ${COLORS.pink}` }}
+              row
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <Text>Video Minutes Used</Text>
               <Box width="60%" justifyContent="flex-end">
                 <Box column justifyContent="flex-end">
@@ -374,7 +408,12 @@ const Settings = ({ state, client, dispatch }) => {
           }}
         >
           <Box column marginY={10} width="100%">
-            <Box row alignItems="center" justifyContent="space-between">
+            <Box
+              style={{ borderBottom: `solid 1px ${COLORS.pink}` }}
+              row
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <Text>Push Notifications</Text>
               <Switch
                 checked={notificationsEnabled}
@@ -400,17 +439,66 @@ const Settings = ({ state, client, dispatch }) => {
           }}
         >
           <Box column marginY={10} width="100%">
-            <Box row alignItems="center" justifyContent="space-between">
+            <Box
+              style={{ borderBottom: `solid 1px ${COLORS.pink}` }}
+              row
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <Text>Feedback</Text>
-              <Button>Submit</Button>
+              <Button
+                onClick={handleToggleFeedBackModal}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  boxShadow: `0px 2px 10px ${COLORS.pink}`,
+                  borderRadius: "20px",
+                  border: `solid 1px ${COLORS.pink}`,
+                }}
+                color={COLORS.black}
+              >
+                Open
+              </Button>
             </Box>
-            <Box row alignItems="center" justifyContent="space-between">
+            <Box
+              style={{ borderBottom: `solid 1px ${COLORS.pink}` }}
+              row
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <Text>Terms of Service</Text>
-              <Button>View</Button>
+              <Button
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  boxShadow: `0px 2px 10px ${COLORS.pink}`,
+                  borderRadius: "20px",
+                  border: `solid 1px ${COLORS.pink}`,
+                }}
+                color={COLORS.black}
+                onClick={handleToggleTermsOfService}
+              >
+                View
+              </Button>
             </Box>
             <Box row alignItems="center" justifyContent="space-between">
               <Text>Privacy Policy</Text>
-              <Button>View</Button>
+              <Button
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  boxShadow: `0px 2px 10px ${COLORS.pink}`,
+                  borderRadius: "20px",
+                  border: `solid 1px ${COLORS.pink}`,
+                }}
+                color={COLORS.black}
+                onClick={() => handleShowPrivacyModal(true)}
+              >
+                View
+              </Button>
             </Box>
           </Box>
         </Box>
@@ -433,7 +521,16 @@ const Settings = ({ state, client, dispatch }) => {
             width="100%"
           >
             <Text>Follow us on Instagram</Text>
-            <FaInstagram color={COLORS.magenta} size={36} />
+            <Button
+              color={COLORS.white}
+              style={{
+                border: `solid 1px ${COLORS.black}`,
+                boxShadow: `0px 2px 10px ${COLORS.magenta}`,
+                borderRadius: "20px",
+              }}
+            >
+              <FaInstagram color={COLORS.magenta} size={36} />
+            </Button>
           </Box>
         </Box>
 
@@ -447,18 +544,32 @@ const Settings = ({ state, client, dispatch }) => {
             boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
             marginTop: 20,
           }}
-          onClick={() => setShowModal(true)}
+          onClick={() => setShowDeleteModal(true)}
         >
           <Text bold>Delete Account</Text>
         </Button>
       </Box>
-      {showModal && (
+      {showDeleteModal && (
         <ConfirmationModal
           state={state}
           client={client}
           dispatch={dispatch}
           onClose={handleCloseModal}
         />
+      )}
+      {state.showTerms && (
+        <TermsAgreement
+          state={state}
+          client={client}
+          dispatch={dispatch}
+          onClose={handleToggleTermsOfService}
+        />
+      )}
+      {showPrivacyModal && (
+        <PrivacyPolicyModal state={state} onClose={handleShowPrivacyModal} />
+      )}
+      {showFeedBackModal && (
+        <FeedBackModal state={state} onClose={handleToggleFeedBackModal} />
       )}
     </CollapsableHeader>
   );
