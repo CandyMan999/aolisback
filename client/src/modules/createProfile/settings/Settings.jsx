@@ -55,8 +55,12 @@ const Settings = ({ state, client, dispatch }) => {
     setShowFeedBackModal(!showFeedBackModal);
   };
 
-  const handleGetMoreMinuts = () => {
+  const handleGetMoreMinutes = () => {
     window.ReactNativeWebView.postMessage("BUY_MINUTES");
+  };
+
+  const handleGetMoreMessages = () => {
+    window.ReactNativeWebView.postMessage("BUY_MESSAGES");
   };
 
   const { currentUser } = state;
@@ -252,6 +256,7 @@ const Settings = ({ state, client, dispatch }) => {
                 Get More Messages
               </Text>
               <Button
+                onClick={handleGetMoreMessages}
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -285,7 +290,7 @@ const Settings = ({ state, client, dispatch }) => {
                 Get More Video Minutes
               </Text>
               <Button
-                onClick={handleGetMoreMinuts}
+                onClick={handleGetMoreMinutes}
                 style={{
                   display: "flex",
                   justifyContent: "center",

@@ -116,6 +116,10 @@ export default function reducer(state, { type, payload }) {
           sentVideos: state.currentUser.sentVideos
             ? [...state.currentUser.sentVideos, payload]
             : [payload],
+          plan: {
+            ...state.currentUser.plan,
+            messagesSent: state.currentUser.plan.messagesSent + 1,
+          },
         },
       };
     case "JOIN_CHANNEL":

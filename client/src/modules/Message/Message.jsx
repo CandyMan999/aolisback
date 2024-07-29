@@ -104,7 +104,17 @@ const Message = () => {
   };
 
   const toggleModal = () => {
-    dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
+    try {
+      if (currentUser.plan.messages <= currentUser.plan.messagesSent) {
+        console.log("Out of Messages");
+        window.ReactNativeWebView.postMessage("BUY_MESSAGES");
+
+        return;
+      }
+      dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleToggleBottomDrawer = (payload) => {

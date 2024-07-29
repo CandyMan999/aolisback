@@ -29,9 +29,10 @@ module.exports = {
       ).populate("receivedVideos");
 
       // Increment the messagesSent field in the sender's plan
-      await User.updateOne(
+      await User.findByIdAndUpdate(
         { _id: senderID },
-        { $inc: { "plan.messagesSent": 1 } }
+        { $inc: { "plan.messagesSent": 1 } },
+        { new: true }
       );
 
       const newVideo = await Video.findOne({ _id: video._id }).populate([

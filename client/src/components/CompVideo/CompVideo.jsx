@@ -143,7 +143,7 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
         variables
       );
 
-      dispatch({ type: "UPDATE_USER_VIDEO", payload: sendVideo });
+      // dispatch({ type: "UPDATE_USER", payload: sendVideo });
 
       dispatch({ type: "TOGGLE_VIDEO", payload: false });
     } catch (err) {

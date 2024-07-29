@@ -33,6 +33,7 @@ dispatch an update to the user minutes and video messages sent when they are
 
                                 
 27. put cloudinary info in .env
+28. add a counter on likes me button
 
 15. Launch in Austin!
 

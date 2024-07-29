@@ -199,6 +199,13 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleSendVideoMessage = () => {
     try {
+      console.log("currentUser: ", currentUser);
+      if (currentUser.plan.messages <= currentUser.plan.messagesSent) {
+        console.log("Out of Messages");
+        window.ReactNativeWebView.postMessage("BUY_MESSAGES");
+
+        return;
+      }
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
       setShowHearts(false);
       toggleModal();
@@ -592,7 +599,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     ? `You're Blocked`
                     : !isLoggedIn || inCall
                     ? `Send Video Message`
-                    : `Video Chat with ${username}`}
+                    : `Video Call ${username}`}
                 </Text>
               )}
             </Button>
