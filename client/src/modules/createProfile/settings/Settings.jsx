@@ -56,11 +56,33 @@ const Settings = ({ state, client, dispatch }) => {
   };
 
   const handleGetMoreMinutes = () => {
-    window.ReactNativeWebView.postMessage("BUY_MINUTES");
+    try {
+      window.ReactNativeWebView.postMessage("BUY_MINUTES");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleGetMoreMessages = () => {
-    window.ReactNativeWebView.postMessage("BUY_MESSAGES");
+    try {
+      window.ReactNativeWebView.postMessage("BUY_MESSAGES");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleChangeToPremium = () => {
+    try {
+      window.ReactNativeWebView.postMessage("GO_PREMIUM");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleChangeToUnlimited = () => {
+    try {
+      window.ReactNativeWebView.postMessage("GO_UNLIMITED");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const { currentUser } = state;
@@ -157,6 +179,7 @@ const Settings = ({ state, client, dispatch }) => {
               </Text>
             ) : (
               <Button
+                onClick={handleChangeToPremium}
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -205,6 +228,7 @@ const Settings = ({ state, client, dispatch }) => {
               </Text>
             ) : (
               <Button
+                onClick={handleChangeToUnlimited}
                 style={{
                   display: "flex",
                   justifyContent: "center",
