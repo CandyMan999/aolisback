@@ -40,3 +40,55 @@ dispatch an update to the user minutes and video messages sent when they are
 
 
 
+{
+    planType: "Free",
+    messages: 3, daily
+    videoMinutes: 900, weekly (in seconds)
+    withAds: true,
+    showWhoLikesMe: false
+    numberOfLikes: 10 - daily
+    price: $0
+}
+
+{
+    planType: "Premuim",
+    messages: 6, daily
+    videoMinutes: 1800, weekly (in seconds)
+    withAds: false,
+    showWhoLikesMe: true
+    numberOfLikes: 20 - daily
+    price: $24.99 Monthly
+}
+
+{
+    planType: "Unlimited",
+    messages: unlimited, daily
+    videoMinutes: unlimited, weekly
+    withAds: false,
+    showWhoLikesMe: true
+    numberOfLikes: unlimited - daily
+    price: $49.99 Monthly
+}
+
+{
+    buy Just extra video minutes: 
+    cost{
+        10 min: $7.99
+        20 min: $12.99
+        30 min: $19.99
+        60 min: $26.99
+    }
+}
+
+{
+    buy Just extra video messages: 
+    cost{
+        1 message: $1.99
+        3  messages: $2.99
+        5 messages: $3.99
+        10 messages: $5.99
+    }
+}
+
+
+

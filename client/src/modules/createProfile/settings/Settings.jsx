@@ -55,6 +55,10 @@ const Settings = ({ state, client, dispatch }) => {
     setShowFeedBackModal(!showFeedBackModal);
   };
 
+  const handleGetMoreMinuts = () => {
+    window.ReactNativeWebView.postMessage("BUY_MINUTES");
+  };
+
   const { currentUser } = state;
   const videoMinutesUsed =
     currentUser.plan.videoMinutesUsed < 60
@@ -281,6 +285,7 @@ const Settings = ({ state, client, dispatch }) => {
                 Get More Video Minutes
               </Text>
               <Button
+                onClick={handleGetMoreMinuts}
                 style={{
                   display: "flex",
                   justifyContent: "center",

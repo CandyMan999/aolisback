@@ -154,7 +154,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
         );
 
         if (callDuration.outOfTime) {
-          console.log("out of time");
           // send info via response to react app
           window.ReactNativeWebView.postMessage("OUT_OF_TIME");
         }
