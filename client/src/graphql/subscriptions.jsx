@@ -50,6 +50,15 @@ export const CREATE_VIDEO_SUBSCRIPTION = gql`
         _id
         expoToken
         isLoggedIn
+        plan {
+          planType
+          messages
+          messagesSent
+          videoMinutes
+          videoMinutesUsed
+          withAds
+          showWhoLikesMe
+        }
         pictures {
           _id
           url

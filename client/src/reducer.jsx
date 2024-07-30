@@ -118,7 +118,7 @@ export default function reducer(state, { type, payload }) {
             : [payload],
           plan: {
             ...state.currentUser.plan,
-            messagesSent: state.currentUser.plan.messagesSent + 1,
+            messagesSent: payload.sender.plan.messagesSent,
           },
         },
       };

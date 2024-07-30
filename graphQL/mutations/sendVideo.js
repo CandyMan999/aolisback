@@ -29,7 +29,7 @@ module.exports = {
       ).populate("receivedVideos");
 
       // Increment the messagesSent field in the sender's plan
-      await User.findByIdAndUpdate(
+      const user = await User.findByIdAndUpdate(
         { _id: senderID },
         { $inc: { "plan.messagesSent": 1 } },
         { new: true }
@@ -57,6 +57,7 @@ module.exports = {
       if (receiver && receiver.expoToken) {
         sendPushNotification(receiver.expoToken, sender.username);
       }
+
       publishCreateVideo(newVideo);
 
       return newVideo;

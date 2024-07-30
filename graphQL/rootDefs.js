@@ -67,6 +67,7 @@ module.exports = gql`
     publicId: String
     viewed: Boolean
     flagged: Boolean
+    messagesSent: Int
   }
 
   type LookingFor {

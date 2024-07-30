@@ -81,6 +81,8 @@ const Root = () => {
             location.pathname !== "/message"
           ) {
             dispatch({ type: "TOGGLE_VIDEO", payload: false });
+
+            console.log("create video data: ", createVideo);
             dispatch({ type: "UPDATE_USER_VIDEO", payload: createVideo });
           }
         }}

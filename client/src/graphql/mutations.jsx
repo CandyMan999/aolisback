@@ -301,6 +301,7 @@ export const SEND_VIDEO_MUTATION = gql`
       createdAt
       viewed
       flagged
+
       sender {
         _id
         username
