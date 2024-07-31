@@ -118,6 +118,7 @@ export const LOGIN_MUTATION = gql`
         isLoggedIn
         username
         terms
+
         plan {
           planType
           messages

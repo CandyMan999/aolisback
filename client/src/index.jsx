@@ -91,8 +91,6 @@ const Root = () => {
     );
   };
 
-  console.log("CurrentUser: ", state.currentUser);
-
   if (isAndroid) {
     return (
       <div style={{ padding: "20px", textAlign: "center" }}>

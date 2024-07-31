@@ -155,8 +155,13 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
         if (callDuration.outOfTime) {
           // send info via response to react app
-          window.ReactNativeWebView.postMessage("OUT_OF_TIME");
+
+          if (intervalIdRef.current) {
+            clearInterval(intervalIdRef.current);
+            intervalIdRef.current = null;
+          }
           handleHangup();
+          window.ReactNativeWebView.postMessage("OUT_OF_TIME");
         }
 
         dispatch({
