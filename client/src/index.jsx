@@ -140,6 +140,8 @@ const Root = () => {
               onSubscriptionData={({ subscriptionData }) => {
                 const { videoChatRequest } = subscriptionData.data;
 
+                console.log("video chat request: ", videoChatRequest);
+
                 if (
                   videoChatRequest.receiver._id === state.currentUser._id ||
                   videoChatRequest.sender._id === state.currentUser._id

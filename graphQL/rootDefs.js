@@ -142,7 +142,7 @@ module.exports = gql`
     status: Status
     sender: User
     receiver: User
-
+    participantLeft: Boolean
     offer: String
     answer: String
     candidates: [String]
@@ -255,7 +255,7 @@ module.exports = gql`
       senderID: ID!
       receiverID: ID!
       status: Status!
-
+      participantLeft: Boolean
       offer: String
       answer: String
       candidate: String

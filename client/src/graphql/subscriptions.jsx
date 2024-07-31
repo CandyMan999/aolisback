@@ -107,6 +107,7 @@ export const VIDEO_CHAT_REQUEST = gql`
       _id
       createdAt
       status
+      participantLeft
       receiver {
         _id
         username

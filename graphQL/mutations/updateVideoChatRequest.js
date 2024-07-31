@@ -10,6 +10,7 @@ module.exports = {
       status,
       _id,
 
+      participantLeft,
       offer,
       answer,
       candidate,
@@ -20,6 +21,7 @@ module.exports = {
         status,
         sender: senderID,
         receiver: receiverID,
+        participantLeft,
       };
 
       // Add offer, answer, and candidate to updateData if they are present

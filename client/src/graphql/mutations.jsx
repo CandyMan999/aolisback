@@ -413,15 +413,23 @@ export const VIDEO_CHAT_REQUEST = gql`
 `;
 
 export const UPDATE_VIDEO_CHAT_REQUEST = gql`
-  mutation ($_id: ID!, $senderID: ID!, $receiverID: ID!, $status: Status!) {
+  mutation (
+    $_id: ID!
+    $senderID: ID!
+    $receiverID: ID!
+    $status: Status!
+    $participantLeft: Boolean
+  ) {
     updateVideoChatRequest(
       _id: $_id
       senderID: $senderID
       receiverID: $receiverID
       status: $status
+      participantLeft: $participantLeft
     ) {
       status
       createdAt
+      participantLeft
       sender {
         _id
         phoneNumber

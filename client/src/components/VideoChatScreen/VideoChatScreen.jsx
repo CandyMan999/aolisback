@@ -23,15 +23,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [showThumbsUp, setShowThumbsUp] = useState(false);
   const [disableSendNumber, setDisableSendNumber] = useState(false);
   const intervalIdRef = useRef(null); // Use useRef to store interval ID
-  const [isVisible, setIsVisible] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(false);
-    }, 10000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
@@ -40,6 +31,12 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
       setIsMeetingStarted(true);
     }
   }, [videoChatRequest]);
+
+  useEffect(() => {
+    if (videoChatRequest.participantLeft) {
+      handleHangup();
+    }
+  }, [videoChatRequest.participantLeft]);
 
   useEffect(() => {
     if (roomName && isMeetingStarted) {
@@ -51,12 +48,11 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
   const handleParticipantLeft = async () => {
     try {
-      handleHangup();
-
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
         intervalIdRef.current = null;
       }
+      handleHangup();
     } catch (err) {
       console.log("error ending video call: ", err);
     }
@@ -76,6 +72,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
         senderID: videoChatRequest.sender._id,
         receiverID: videoChatRequest.receiver._id,
         status: "Cancel",
+        participantLeft: true,
       };
 
       await client.request(UPDATE_VIDEO_CHAT_REQUEST, variables);
@@ -153,12 +150,16 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           variables
         );
 
-        if (callDuration.outOfTime) {
+        if (
+          callDuration.outOfTime &&
+          callDuration.user._id === videoChatRequest.sender._id
+        ) {
           // send info via response to react app
 
           if (intervalIdRef.current) {
             clearInterval(intervalIdRef.current);
             intervalIdRef.current = null;
+            console.log("Interval cleared in callDuration.outOfTime");
           }
           handleHangup();
           window.ReactNativeWebView.postMessage("OUT_OF_TIME");
