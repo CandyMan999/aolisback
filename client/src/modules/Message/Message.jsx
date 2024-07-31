@@ -106,7 +106,6 @@ const Message = () => {
   const toggleModal = () => {
     try {
       if (currentUser.plan.messages <= currentUser.plan.messagesSent) {
-        console.log("Out of Messages");
         window.ReactNativeWebView.postMessage("BUY_MESSAGES");
 
         return;

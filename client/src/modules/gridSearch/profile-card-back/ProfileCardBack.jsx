@@ -39,7 +39,6 @@ const ProfileCardBack = ({
     try {
       await dispatch({ type: "UPDATE_PROFILE", payload: user });
       if (currentUser.plan.messages <= currentUser.plan.messagesSent) {
-        console.log("Out of Messages");
         window.ReactNativeWebView.postMessage("BUY_MESSAGES");
 
         return;

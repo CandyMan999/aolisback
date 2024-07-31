@@ -83,7 +83,6 @@ const Root = () => {
           ) {
             dispatch({ type: "TOGGLE_VIDEO", payload: false });
 
-            console.log("create video data: ", createVideo);
             dispatch({ type: "UPDATE_USER_VIDEO", payload: createVideo });
           }
         }}
@@ -139,8 +138,6 @@ const Root = () => {
               subscription={VIDEO_CHAT_REQUEST}
               onSubscriptionData={({ subscriptionData }) => {
                 const { videoChatRequest } = subscriptionData.data;
-
-                console.log("video chat request: ", videoChatRequest);
 
                 if (
                   videoChatRequest.receiver._id === state.currentUser._id ||

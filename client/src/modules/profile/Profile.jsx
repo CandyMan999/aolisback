@@ -125,7 +125,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const handleVideoChatRequest = async () => {
     try {
       if (currentUser.plan.videoMinutes <= currentUser.plan.videoMinutesUsed) {
-        console.log("Out of Minutes");
         window.ReactNativeWebView.postMessage("BUY_MINUTES");
 
         return;
@@ -199,9 +198,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleSendVideoMessage = () => {
     try {
-      console.log("currentUser: ", currentUser);
       if (currentUser.plan.messages <= currentUser.plan.messagesSent) {
-        console.log("Out of Messages");
         window.ReactNativeWebView.postMessage("BUY_MESSAGES");
 
         return;

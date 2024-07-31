@@ -87,7 +87,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser }) => {
       if (!Number.isInteger(Number(values.age)))
         err.age = "Age cannot have decimals!";
     }
-    console.log("value: ", values);
+
     if (!values.intro.length) {
       err.intro = "Tell us about You!";
     }

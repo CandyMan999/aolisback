@@ -21,6 +21,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [roomName, setRoomName] = useState("");
   const [loading, setLoading] = useState(false);
   const [showThumbsUp, setShowThumbsUp] = useState(false);
+  const [showSendNumberButton, setShowSendNumberButton] = useState(true);
   const [disableSendNumber, setDisableSendNumber] = useState(false);
   const intervalIdRef = useRef(null); // Use useRef to store interval ID
 
@@ -34,7 +35,11 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
   useEffect(() => {
     if (videoChatRequest.participantLeft) {
-      handleHangup();
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
+      }
+      handleShutScreen();
     }
   }, [videoChatRequest.participantLeft]);
 
@@ -52,7 +57,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
         clearInterval(intervalIdRef.current);
         intervalIdRef.current = null;
       }
-      handleHangup();
+      handleShutScreen();
     } catch (err) {
       console.log("error ending video call: ", err);
     }
@@ -60,13 +65,11 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
   const handleHangup = async () => {
     try {
-      handleShutScreen();
-
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
         intervalIdRef.current = null;
       }
-
+      handleShutScreen();
       const variables = {
         _id: videoChatRequest._id,
         senderID: videoChatRequest.sender._id,
@@ -159,7 +162,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           if (intervalIdRef.current) {
             clearInterval(intervalIdRef.current);
             intervalIdRef.current = null;
-            console.log("Interval cleared in callDuration.outOfTime");
           }
           handleHangup();
           window.ReactNativeWebView.postMessage("OUT_OF_TIME");
@@ -225,7 +227,8 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
         {isApiReady &&
           isMeetingStarted &&
           currentUser.expoToken &&
-          videoChatRequest.receiver.expoToken && (
+          videoChatRequest.receiver.expoToken &&
+          showSendNumberButton && (
             <motion.div
               drag="y"
               dragConstraints={{ top: 0, bottom: window.innerHeight - 100 }}
@@ -315,6 +318,13 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                   "participantLeft",
                   handleParticipantLeft
                 );
+                externalApi.addListener("toolbarButtonClicked", (event) => {
+                  if (event.key === "settings") {
+                    setShowSendNumberButton(false);
+                  } else {
+                    setShowSendNumberButton(true);
+                  }
+                });
 
                 externalApi.executeCommand(
                   "pinParticipant",

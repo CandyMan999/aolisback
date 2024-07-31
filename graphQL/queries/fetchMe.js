@@ -18,7 +18,7 @@ module.exports = {
         { _id: id },
         {
           isLoggedIn: true,
-          inCall: false,
+          // inCall: false,
           roomInfo: { subscribedAt: moment() },
         },
         { new: true }

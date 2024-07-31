@@ -26,6 +26,7 @@ module.exports = {
 
       // Add offer, answer, and candidate to updateData if they are present
       const inCall = status === "Accept" || status === "Pending" ? true : false;
+
       if (candidate) {
         const chatRequest = await ChatRequest.findById(_id);
         chatRequest.candidates.push(candidate);

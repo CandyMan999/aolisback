@@ -650,6 +650,8 @@ export const CALL_DURATION_MUTATION = gql`
     callDuration(userID: $userID, time: $time) {
       user {
         username
+        _id
+        inCall
         plan {
           messages
           messagesSent

@@ -114,6 +114,7 @@ const RequestModal = ({
         senderID: sender._id,
         receiverID: receiver._id,
         status: payload,
+        participantLeft: false,
       };
       const { updateVideoChatRequest } = await client.request(
         UPDATE_VIDEO_CHAT_REQUEST,
