@@ -10,6 +10,14 @@ export const GOOGLE_SIGNUP_MUTATION = gql`
         terms
         isLoggedIn
         username
+        inCall
+        plan {
+          planType
+          messages
+          messagesSent
+          videoMinutes
+          videoMinutesUsed
+        }
         pictures {
           _id
           url
@@ -45,6 +53,13 @@ export const GOOGLE_LOGIN_MUTATION = gql`
         terms
         isLoggedIn
         username
+        plan {
+          planType
+          messages
+          messagesSent
+          videoMinutes
+          videoMinutesUsed
+        }
         pictures {
           _id
           url
@@ -78,6 +93,14 @@ export const SIGNUP_MUTATION = gql`
         username
         email
         terms
+        isLoggedIn
+        plan {
+          planType
+          messages
+          messagesSent
+          videoMinutes
+          videoMinutesUsed
+        }
       }
     }
   }
@@ -95,6 +118,13 @@ export const LOGIN_MUTATION = gql`
         isLoggedIn
         username
         terms
+        plan {
+          planType
+          messages
+          messagesSent
+          videoMinutes
+          videoMinutesUsed
+        }
         pictures {
           _id
           url
@@ -632,6 +662,13 @@ export const ACCEPT_TERMS_MUTATION = gql`
       isLoggedIn
       username
       inCall
+      plan {
+        planType
+        messages
+        messagesSent
+        videoMinutes
+        videoMinutesUsed
+      }
       lookingFor {
         ageRange {
           lowEnd

@@ -12,6 +12,7 @@ import RequestModal from "./modules/requestModal";
 import { VideoChatScreen } from "./components";
 import Profile from "./modules/profile";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { isAndroid } from "react-device-detect";
 
 import Context from "./context";
 import reducer from "./reducer";
@@ -91,6 +92,18 @@ const Root = () => {
   };
 
   console.log("CurrentUser: ", state.currentUser);
+
+  if (isAndroid) {
+    return (
+      <div style={{ padding: "20px", textAlign: "center" }}>
+        <h1>Not Supported</h1>
+        <p>
+          This website is not supported on Android devices. We are working on
+          it.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <Router>
