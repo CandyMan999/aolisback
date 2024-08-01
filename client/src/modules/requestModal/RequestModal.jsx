@@ -53,17 +53,6 @@ const RequestModal = ({
     switch (action) {
       case "Accept":
         toggleChatRequest();
-
-        // Construct the new URL with updated query parameters
-        const params = new URLSearchParams(location.search);
-        params.set("videoChat", true);
-
-        // Navigate to the constructed URL
-        history.replace({
-          pathname: location.pathname,
-          search: params.toString(),
-        });
-
         break;
       case "Decline":
         setTimeout(() => {

@@ -23,6 +23,8 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [showThumbsUp, setShowThumbsUp] = useState(false);
   const [showSendNumberButton, setShowSendNumberButton] = useState(true);
   const [disableSendNumber, setDisableSendNumber] = useState(false);
+  const [videoPermissions, setVideoPermissions] = useState(false);
+  const [audioPermissions, setAudioPermissions] = useState(false);
   const intervalIdRef = useRef(null); // Use useRef to store interval ID
 
   useEffect(() => {
@@ -32,6 +34,16 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
       setIsMeetingStarted(true);
     }
   }, [videoChatRequest]);
+
+  useEffect(() => {
+    if (videoPermissions && audioPermissions) {
+      try {
+        window.ReactNativeWebView.postMessage("SCREENSHOT_WARNING");
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, [videoPermissions, audioPermissions]);
 
   useEffect(() => {
     if (videoChatRequest.participantLeft) {
@@ -206,23 +218,35 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           backgroundColor: COLORS.white,
         }}
       >
-        <Box column style={{ position: "absolute", top: 0, left: 0 }}>
-          <img height={100} width={100} src={iOSLogo} alt="Watermark-logo" />
-          <Text center paddingLeft={"2%"} bold margin={0}>
-            Available Time
-          </Text>
-          <Text
-            bold
-            paddingLeft={"2%"}
-            margin={0}
-            center
-            color={COLORS.pink}
-            style={{ padding: 0 }}
-            fontSize={FONT_SIZES.SMALL}
+        {showSendNumberButton && (
+          <Box
+            column
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              alignItems: "center",
+            }}
           >
-            {handleTimeLeft()}
-          </Text>
-        </Box>
+            <img height={100} width={100} src={iOSLogo} alt="Watermark-logo" />
+            <Box column>
+              <Text center paddingLeft={"2%"} bold margin={0}>
+                Available Time
+              </Text>
+              <Text
+                bold
+                paddingLeft={"2%"}
+                margin={0}
+                center
+                color={COLORS.pink}
+                style={{ padding: 0 }}
+                fontSize={FONT_SIZES.SMALL}
+              >
+                {handleTimeLeft()}
+              </Text>
+            </Box>
+          </Box>
+        )}
 
         {isApiReady &&
           isMeetingStarted &&
@@ -298,7 +322,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 TOOLBAR_BUTTONS: [
                   "microphone",
                   "camera",
-                  "desktop",
+
                   "hangup",
                   "tileview",
                   "toggle-camera",
@@ -321,11 +345,27 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 externalApi.addListener("toolbarButtonClicked", (event) => {
                   if (event.key === "settings") {
                     setShowSendNumberButton(false);
+                    setTimeout(() => {
+                      setShowSendNumberButton(true);
+                    }, 30000);
                   } else {
                     setShowSendNumberButton(true);
                   }
                 });
 
+                externalApi.addListener("videoAvailabilityChanged", (event) => {
+                  console.log("!!!!!!!!!!!!!!!VIDEO VIDEO: ", event);
+                  if (event.available) {
+                    setVideoPermissions(true);
+                  }
+                });
+
+                externalApi.addListener("audioAvailabilityChanged", (event) => {
+                  console.log("!!!!!!!!!!!!!!!Audio Audio: ", event);
+                  if (event.available) {
+                    setAudioPermissions(true);
+                  }
+                });
                 externalApi.executeCommand(
                   "pinParticipant",
                   videoChatRequest.receiver.username ===
