@@ -225,12 +225,11 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleLikeUser = async () => {
     try {
-      setLoading(true);
       if (currentUser.plan.likes <= currentUser.plan.likesSent) {
         window.ReactNativeWebView.postMessage("BUY_LIKES");
         return;
       }
-
+      setLoading(true);
       const variables = {
         userID: currentUser._id,
         likeID: _id,
