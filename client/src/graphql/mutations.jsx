@@ -818,6 +818,15 @@ export const LIKE_MUTATION = gql`
   mutation ($userID: ID!, $likeID: ID!) {
     like(userID: $userID, likeID: $likeID) {
       username
+      plan {
+        planType
+        messages
+        messagesSent
+        videoMinutes
+        videoMinutesUsed
+        likes
+        likesSent
+      }
       likedUsers {
         _id
       }

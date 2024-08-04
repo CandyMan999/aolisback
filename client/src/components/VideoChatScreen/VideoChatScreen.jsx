@@ -354,14 +354,12 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 });
 
                 externalApi.addListener("videoAvailabilityChanged", (event) => {
-                  console.log("!!!!!!!!!!!!!!!VIDEO VIDEO: ", event);
                   if (event.available) {
                     setVideoPermissions(true);
                   }
                 });
 
                 externalApi.addListener("audioAvailabilityChanged", (event) => {
-                  console.log("!!!!!!!!!!!!!!!Audio Audio: ", event);
                   if (event.available) {
                     setAudioPermissions(true);
                   }

@@ -15,8 +15,6 @@ import {
 } from "../../graphql/mutations";
 import { useClient } from "../../client";
 
-import { useHistory, useLocation } from "react-router-dom";
-
 import notification from "../../sounds/notification.mp3";
 
 const RequestModal = ({
@@ -29,8 +27,6 @@ const RequestModal = ({
   status,
 }) => {
   const client = useClient();
-  const history = useHistory();
-  const location = useLocation();
 
   useEffect(() => {
     handleStatus(status);

@@ -3,7 +3,7 @@ const { User } = require("../../models");
 
 module.exports = {
   getLikedUsersResolver: async (root, args, ctx) => {
-    const { userID } = args; // Assuming you pass the userId as an argument to this resolver
+    const { userID } = args;
 
     try {
       // Find the user by userId to get the list of likedUsers

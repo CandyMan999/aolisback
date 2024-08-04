@@ -37,7 +37,10 @@ module.exports = {
         // If mutual like, add each other to matchedUsers array
         await User.findByIdAndUpdate(
           userID,
-          { $push: { likedUsers: likeID, matchedUsers: likeID } },
+          {
+            $push: { likedUsers: likeID, matchedUsers: likeID },
+            $inc: { "plan.likesSent": 1 },
+          },
           { new: true }
         );
         await User.findByIdAndUpdate(likeID, {
@@ -52,9 +55,14 @@ module.exports = {
         pushNotificationNewMatch(user.username, likedUser.expoToken);
       } else {
         // Add the likeID to the user's likedUsers array
-        await User.findByIdAndUpdate(userID, {
-          $push: { likedUsers: likeID },
-        });
+        await User.findByIdAndUpdate(
+          userID,
+          {
+            $push: { likedUsers: likeID },
+            $inc: { "plan.likesSent": 1 },
+          },
+          { new: true }
+        );
         await User.findByIdAndUpdate(likeID, {
           $push: { usersLikedMe: userID },
         });

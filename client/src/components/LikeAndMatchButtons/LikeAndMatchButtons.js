@@ -81,7 +81,6 @@ const LikeAndMatchButtons = ({
     if (selectedButton === "Likes Me") {
       try {
         if (currentUser && currentUser.plan.planType === "Free") {
-          console.log("go premium");
           window.ReactNativeWebView.postMessage("GO_PREMIUM");
         } else {
           handleGetUsersWhoLikeMe();
@@ -129,7 +128,7 @@ const LikeAndMatchButtons = ({
       }
     }
   };
-  console.log("selected button: ", selectedButton);
+
   return (
     <ButtonContainer style={{ marginTop: "2%" }}>
       {["Matches", "My Likes", "Likes Me"].map((button) => (
