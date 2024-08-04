@@ -73,9 +73,10 @@ const SearchResults = ({
               bold
               color={COLORS.deepPurple}
             >
-              Sorry, you don't have any matches yet! Get back out there and send
-              some likes and video messages! More users should be arriving soon
-              since we JUST LAUNCHED.
+              No matches yet? Don't worry! Take the initiative and send some
+              likes and video messages. Our community is growing rapidly since
+              our recent launch, so stay active and new matches will come your
+              way soon.
             </Text>
           </Box>
         </Box>
@@ -100,8 +101,9 @@ const SearchResults = ({
               bold
               color={COLORS.deepPurple}
             >
-              You haven't Liked anyone yet! Get out there and mingle. More users
-              should be arriving soon since we JUST LAUNCHED.
+              You haven't liked anyone yet! Get out there and start mingling.
+              With our recent launch, more users are joining every day,
+              increasing your chances of reeling in connections.
             </Text>
           </Box>
         </Box>
@@ -120,10 +122,18 @@ const SearchResults = ({
           marginTop="50px"
         >
           <Box centerText padding={"5%"}>
-            <Text center fontSize={FONT_SIZES.X_LARGE} bold>
-              Sorry, No one likes you yet! Get out there and send some likes and
-              video messages! Don't be discouraged as this is a new app and more
-              users should be arriving soon!
+            <Text
+              center
+              fontSize={FONT_SIZES.X_LARGE}
+              bold
+              color={COLORS.deepPurple}
+            >
+              It looks like you haven't received any likes yet. Don't be
+              discouraged! Take the initiative and start sending likes and video
+              messages to connect with others. Remember, Gone Chatting is a new
+              and growing community. More users are joining every day,
+              increasing your chances of reeling in connections. Stay active and
+              keep engaging!
             </Text>
           </Box>
         </Box>

@@ -28,7 +28,7 @@ const resetVideoMinutesUsed = async () => {
       const userIds = users.map((user) => user._id);
       const result = await User.updateMany(
         { _id: { $in: userIds } },
-        { "plan.videoMinutesUsed": 0 }
+        { $set: { "plan.videoMinutesUsed": 0 } }
       );
 
       totalUpdated += result.nModified;
@@ -60,7 +60,7 @@ const resetMessagesSent = async () => {
       const userIds = users.map((user) => user._id);
       const result = await User.updateMany(
         { _id: { $in: userIds } },
-        { "plan.messagesSent": 0 }
+        { $set: { "plan.messagesSent": 0, "plan.likesSent": 0 } }
       );
 
       totalUpdated += result.nModified;
@@ -72,13 +72,60 @@ const resetMessagesSent = async () => {
 
     console.log(`Reset messages sent for ${totalUpdated} users.`);
   } catch (err) {
-    console.error("Error resetting video minutes used:", err);
+    console.error("Error resetting messages sent:", err);
+  }
+};
+
+const deleteOldVideos = async () => {
+  try {
+    const videos = await Video.find();
+    const publicIDs = [];
+
+    await Promise.all(
+      videos.map(async (video) => {
+        const viewedAndOld =
+          moment(video.createdAt).isBefore(moment().subtract(2, "days")) &&
+          video.viewed &&
+          !video.flagged;
+
+        const old = moment(video.createdAt).isBefore(
+          moment().subtract(7, "days")
+        );
+
+        if (viewedAndOld || old) {
+          publicIDs.push(video.publicId);
+          const receiver = video.receiver._id;
+          const sender = video.sender._id;
+
+          await Video.deleteOne({ _id: video._id });
+
+          await User.findByIdAndUpdate(
+            receiver,
+            { $pull: { receivedVideos: video._id } },
+            { new: true }
+          );
+
+          await User.findByIdAndUpdate(
+            sender,
+            { $pull: { sentVideos: video._id } },
+            { new: true }
+          );
+        }
+      })
+    );
+
+    if (publicIDs.length) {
+      await cloudinary.api.delete_resources(publicIDs, {
+        resource_type: "video",
+      });
+    }
+  } catch (err) {
+    console.error("Error deleting old videos:", err);
   }
 };
 
 const cronJob = async () => {
   try {
-    // Notification cron job
     cron.schedule(
       "0 0 */2 * * *",
       async () => {
@@ -103,91 +150,19 @@ const cronJob = async () => {
           }
         }
 
-        // Video deletion job
-        const videos = await Video.find();
-        const videosNotFlagedandViewed = await Video.find({
-          viewed: true,
-          flagged: false,
-        });
-        const publicIDs = [];
-
-        await Promise.all(
-          videosNotFlagedandViewed.map(async (video) => {
-            const pastDue = moment(video.createdAt).isBefore(
-              moment().subtract(2, "days")
-            );
-
-            if (pastDue) {
-              publicIDs.push(video.publicId);
-              const receiver = video.receiver._id;
-              const sender = video.sender._id;
-
-              await Video.deleteOne({ _id: video._id });
-
-              await User.findByIdAndUpdate(
-                receiver,
-                { $pull: { receivedVideos: video._id } },
-                { new: true }
-              );
-
-              await User.findByIdAndUpdate(
-                sender,
-                { $pull: { sentVideos: video._id } },
-                { new: true }
-              );
-            }
-          })
-        );
-
-        await Promise.all(
-          videos.map(async (video) => {
-            const pastDue = moment(video.createdAt).isBefore(
-              moment().subtract(7, "days")
-            );
-
-            if (pastDue) {
-              publicIDs.push(video.publicId);
-              const receiver = video.receiver._id;
-              const sender = video.sender._id;
-
-              await Video.deleteOne({ _id: video._id });
-
-              await User.findByIdAndUpdate(
-                receiver,
-                { $pull: { receivedVideos: video._id } },
-                { new: true }
-              );
-
-              await User.findByIdAndUpdate(
-                sender,
-                { $pull: { sentVideos: video._id } },
-                { new: true }
-              );
-            }
-          })
-        );
-
-        if (publicIDs.length) {
-          await cloudinary.api.delete_resources(
-            publicIDs,
-
-            { resource_type: "video" }
-          );
-        }
+        await deleteOldVideos();
       },
-
       { scheduled: true, timezone: "America/Denver" }
     );
+
     cron.schedule(
       "0 0 * * *",
       async () => {
         await resetMessagesSent();
       },
-
       { scheduled: true, timezone: "America/Denver" }
     );
 
-    // Reset videoMinutesUsed to 0 every 7 days
     cron.schedule(
       "0 0 * * 0",
       async () => {

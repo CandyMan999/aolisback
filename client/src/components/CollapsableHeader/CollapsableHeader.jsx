@@ -31,7 +31,7 @@ const CollapsableHeader = ({
       column
       display="flex"
       width={isVisible && fullWidth ? "95vW" : settings ? "100%" : "90vW"}
-      style={{ overflowX: "hidden" }}
+      // style={{ overflowX: "hidden" }}
     >
       <Box
         width={"100%"}

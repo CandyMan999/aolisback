@@ -46,7 +46,7 @@ export { default as Slideshow } from "./Slider";
 export { VideoChatScreen } from "./VideoChatScreen";
 export { default as LikeButton } from "./LikeButton";
 export { default as UnlikeButton } from "./UnlikeButton";
-export { default as ButtonsWithShuffle } from "./ButtonsWithShuffle";
+export { default as LikeAndMatchButtons } from "./LikeAndMatchButtons";
 export { default as Span } from "./Span";
 export { default as MotionButton } from "./MotionButton";
 export { default as Switch } from "./Switch";

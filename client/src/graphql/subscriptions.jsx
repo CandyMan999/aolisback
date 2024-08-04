@@ -58,6 +58,8 @@ export const CREATE_VIDEO_SUBSCRIPTION = gql`
           videoMinutesUsed
           withAds
           showWhoLikesMe
+          likes
+          likesSent
         }
         pictures {
           _id

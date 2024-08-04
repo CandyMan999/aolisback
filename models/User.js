@@ -224,6 +224,14 @@ const UserSchema = new mongoose.Schema({
       type: Boolean,
       default: true,
     },
+    likes: {
+      type: Number,
+      default: 20,
+    },
+    likesSent: {
+      type: Number,
+      default: 0,
+    },
   },
 });
 

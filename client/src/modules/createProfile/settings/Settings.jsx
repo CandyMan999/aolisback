@@ -13,12 +13,14 @@ import {
   TermsAgreement,
   PrivacyPolicyModal,
   FeedBackModal,
+  LikeButton,
 } from "../../../components";
 import { TbMessageCircleHeart } from "react-icons/tb";
 import { COLORS } from "../../../constants";
 import ConfirmationModal from "./ConfirmationModal";
 import iOSLogo from "../../../pictures/iOSLogo.png";
 import { MdVideoChat } from "react-icons/md";
+import { GiInfinity } from "react-icons/gi";
 
 const Settings = ({ state, client, dispatch }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -70,6 +72,14 @@ const Settings = ({ state, client, dispatch }) => {
       console.log(err);
     }
   };
+
+  const handleGetMoreLikes = () => {
+    try {
+      window.ReactNativeWebView.postMessage("BUY_LIKES");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const handleChangeToPremium = () => {
     try {
       window.ReactNativeWebView.postMessage("GO_PREMIUM");
@@ -85,11 +95,23 @@ const Settings = ({ state, client, dispatch }) => {
     }
   };
 
+  const handleChangeToFree = () => {
+    try {
+      window.ReactNativeWebView.postMessage("GO_FREE");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const { currentUser } = state;
   const videoMinutesUsed =
     currentUser.plan.videoMinutesUsed < 60
       ? 0
       : Math.floor(currentUser.plan.videoMinutesUsed / 60);
+  const videoMinutes =
+    currentUser.plan.videoMinutes < 60
+      ? 0
+      : Math.floor(currentUser.plan.videoMinutes / 60);
   const isGoogleConnected = !!currentUser.googleId;
   const isAppleConnected = !!currentUser.appleId;
 
@@ -142,6 +164,7 @@ const Settings = ({ state, client, dispatch }) => {
                   borderRadius: "20px",
                   border: `solid 1px ${COLORS.pink}`,
                 }}
+                onClick={handleChangeToFree}
                 width="80%"
                 color={COLORS.black}
               >
@@ -165,10 +188,15 @@ const Settings = ({ state, client, dispatch }) => {
                   : "none",
             }}
           >
-            <Box row>
+            <Box row alignItems="center">
               <img height={50} width={50} src={iOSLogo} alt="Watermark-logo" />
 
               <Text>GoneChatting - Premium</Text>
+              <FaCrown
+                size={24}
+                color={COLORS.deepPurple}
+                style={{ marginLeft: 10 }}
+              />
             </Box>
             <Text bold center>
               6 messages per day, 30 Video Chat minutes per week & more!
@@ -212,8 +240,8 @@ const Settings = ({ state, client, dispatch }) => {
           >
             <Box row alignItems="center">
               <img height={50} width={50} src={iOSLogo} alt="Watermark-logo" />
-              <Text>GoneChatting - Unlimited</Text>{" "}
-              <FaCrown
+              <Text>GoneChatting - Unlimited</Text>
+              <GiInfinity
                 size={24}
                 color={COLORS.deepPurple}
                 style={{ marginLeft: 10 }}
@@ -332,6 +360,46 @@ const Settings = ({ state, client, dispatch }) => {
             </Box>
           </Box>
         </Box>
+        <Box
+          column
+          alignItems="center"
+          width="100%"
+          justifyContent="space-between"
+          alignContent="center"
+          backgroundColor={COLORS.lightPurple}
+          style={{
+            paddingTop: 10,
+            paddingBottom: 10,
+            borderRadius: "20px",
+            marginBottom: 10,
+          }}
+        >
+          <LikeButton
+            relative
+            bgColor={COLORS.white}
+            onClick={handleGetMoreLikes}
+          />
+          <Text center marginLeft={10}>
+            Get More Likes
+          </Text>
+          <Button
+            onClick={handleGetMoreLikes}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              boxShadow: `0px 2px 10px ${COLORS.pink}`,
+              borderRadius: "20px",
+              border: `solid 1px ${COLORS.pink}`,
+              width: "80%",
+            }}
+            color={COLORS.black}
+          >
+            <Text bold margin={5} color={COLORS.pink}>
+              Get
+            </Text>
+          </Button>
+        </Box>
 
         <Text bold fontSize={FONT_SIZES.X_LARGE} color={COLORS.main} margin={0}>
           Account Info
@@ -377,39 +445,24 @@ const Settings = ({ state, client, dispatch }) => {
                 )}
               </Box>
             </CollapsableHeader>
-            <Box
-              style={{ borderBottom: `solid 1px ${COLORS.pink}` }}
-              row
-              alignItems="center"
-              justifyContent="space-between"
-            >
+            <Box row alignItems="center" justifyContent="space-between">
               <Text>Phone Number</Text>
               <Text>{currentUser.phoneNumber}</Text>
             </Box>
 
-            <Box
-              style={{ borderBottom: `solid 1px ${COLORS.pink}` }}
-              row
-              alignItems="center"
-              justifyContent="space-between"
-            >
+            <Box row alignItems="center" justifyContent="space-between">
               <Text>Email</Text>
               <Text>{currentUser.email}</Text>
             </Box>
-            <Box
-              style={{ borderBottom: `solid 1px ${COLORS.pink}` }}
-              row
-              alignItems="center"
-              justifyContent="space-between"
-            >
+            <Box row alignItems="center" justifyContent="space-between">
               <Text>Video Minutes Used</Text>
               <Box width="60%" justifyContent="flex-end">
                 <Box column justifyContent="flex-end">
                   <Text margin={0} center bold>
-                    {videoMinutesUsed} minutes
+                    {videoMinutesUsed} of {videoMinutes}
                   </Text>
                   <Text center margin={0} style={{ textAlign: "end" }}>
-                    (Resets Sunday at midnight)
+                    (Resets Sun. at midnight)
                   </Text>
                 </Box>
               </Box>
@@ -419,7 +472,21 @@ const Settings = ({ state, client, dispatch }) => {
               <Box width="50%" justifyContent="flex-end">
                 <Box column>
                   <Text margin={0} bold center>
-                    {currentUser.plan.messagesSent}
+                    {currentUser.plan.messagesSent} of{" "}
+                    {currentUser.plan.messages}
+                  </Text>
+                  <Text margin={0} style={{ textAlign: "end" }}>
+                    (Resets daily at midnight)
+                  </Text>
+                </Box>
+              </Box>
+            </Box>
+            <Box row alignItems="center" justifyContent="space-between">
+              <Text>Likes Sent</Text>
+              <Box width="50%" justifyContent="flex-end">
+                <Box column>
+                  <Text margin={0} bold center>
+                    {currentUser.plan.likesSent} of {currentUser.plan.likes}
                   </Text>
                   <Text margin={0} style={{ textAlign: "end" }}>
                     (Resets daily at midnight)
@@ -442,12 +509,7 @@ const Settings = ({ state, client, dispatch }) => {
           }}
         >
           <Box column marginY={10} width="100%">
-            <Box
-              style={{ borderBottom: `solid 1px ${COLORS.pink}` }}
-              row
-              alignItems="center"
-              justifyContent="space-between"
-            >
+            <Box row alignItems="center" justifyContent="space-between">
               <Text>Push Notifications</Text>
               <Switch
                 checked={notificationsEnabled}
@@ -473,12 +535,7 @@ const Settings = ({ state, client, dispatch }) => {
           }}
         >
           <Box column marginY={10} width="100%">
-            <Box
-              style={{ borderBottom: `solid 1px ${COLORS.pink}` }}
-              row
-              alignItems="center"
-              justifyContent="space-between"
-            >
+            <Box row alignItems="center" justifyContent="space-between">
               <Text>Feedback</Text>
               <Button
                 onClick={handleToggleFeedBackModal}
@@ -495,12 +552,7 @@ const Settings = ({ state, client, dispatch }) => {
                 Open
               </Button>
             </Box>
-            <Box
-              style={{ borderBottom: `solid 1px ${COLORS.pink}` }}
-              row
-              alignItems="center"
-              justifyContent="space-between"
-            >
+            <Box row alignItems="center" justifyContent="space-between">
               <Text>Terms of Service</Text>
               <Button
                 style={{

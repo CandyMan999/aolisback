@@ -50,6 +50,8 @@ module.exports = gql`
     videoMinutesUsed: Int
     withAds: Boolean
     showWhoLikesMe: Boolean
+    likes: Int
+    likesSent: Int
   }
 
   enum PlanType {

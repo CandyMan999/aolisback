@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
-import { Button, Text, Loading } from "../../components"; // Adjust the import path based on your project structure
+import { Text, Loading } from ".."; // Adjust the import path based on your project structure
 import { COLORS } from "../../constants";
 
 const ButtonContainer = styled.div`
@@ -11,6 +11,7 @@ const ButtonContainer = styled.div`
 `;
 
 const StyledButton = styled(motion.button)`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,7 +36,19 @@ const StyledButton = styled(motion.button)`
     box-shadow 0.2s ease;
 `;
 
-const ButtonsWithSelection = ({
+const CountBox = styled.div`
+  position: absolute;
+  top: -10px;
+  left: -5px;
+  background-color: ${COLORS.pink};
+  border-radius: 50%;
+  padding: 5px 10px;
+  color: ${COLORS.white};
+  font-weight: bold;
+  border: solid 1px ${COLORS.lighterGrey};
+`;
+
+const LikeAndMatchButtons = ({
   handleGetLikedUsers,
   loading,
   handleGetAllUsers,
@@ -43,13 +56,13 @@ const ButtonsWithSelection = ({
   handleGetMatchedUsers,
   currentUser,
   setSearch,
+  usersWhoLikeMeCount,
 }) => {
   const [selectedButton, setSelectedButton] = useState(null);
 
   useEffect(() => {
     if (!selectedButton) {
       try {
-        // setSearch("Browse");
         handleGetAllUsers();
       } catch (err) {
         console.log(
@@ -60,7 +73,6 @@ const ButtonsWithSelection = ({
     }
     if (selectedButton === "My Likes") {
       try {
-        // setSearch("My Likes");
         handleGetLikedUsers();
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
@@ -68,15 +80,18 @@ const ButtonsWithSelection = ({
     }
     if (selectedButton === "Likes Me") {
       try {
-        // setSearch("Likes Me");
-        handleGetUsersWhoLikeMe();
+        if (currentUser && currentUser.plan.planType === "Free") {
+          console.log("go premium");
+          window.ReactNativeWebView.postMessage("GO_PREMIUM");
+        } else {
+          handleGetUsersWhoLikeMe();
+        }
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
       }
     }
     if (selectedButton === "Matches") {
       try {
-        // setSearch("Matches");
         handleGetMatchedUsers();
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
@@ -90,15 +105,18 @@ const ButtonsWithSelection = ({
     if (button === "My Likes") {
       try {
         setSearch("My Likes");
-        handleGetLikedUsers();
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
       }
     }
     if (button === "Likes Me") {
       try {
-        setSearch("Likes Me");
-        handleGetUsersWhoLikeMe();
+        if (currentUser && currentUser.plan.planType === "Free") {
+          setSelectedButton(null);
+          window.ReactNativeWebView.postMessage("GO_PREMIUM");
+        } else {
+          setSearch("Likes Me");
+        }
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
       }
@@ -106,13 +124,12 @@ const ButtonsWithSelection = ({
     if (button === "Matches") {
       try {
         setSearch("Matches");
-        handleGetMatchedUsers();
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
       }
     }
   };
-
+  console.log("selected button: ", selectedButton);
   return (
     <ButtonContainer style={{ marginTop: "2%" }}>
       {["Matches", "My Likes", "Likes Me"].map((button) => (
@@ -131,10 +148,13 @@ const ButtonsWithSelection = ({
               {button}
             </Text>
           )}
+          {button === "Likes Me" && usersWhoLikeMeCount > 0 && (
+            <CountBox>{usersWhoLikeMeCount}</CountBox>
+          )}
         </StyledButton>
       ))}
     </ButtonContainer>
   );
 };
 
-export default ButtonsWithSelection;
+export default LikeAndMatchButtons;

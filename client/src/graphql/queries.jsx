@@ -145,6 +145,8 @@ export const FETCH_ME = gql`
         messagesSent
         videoMinutes
         videoMinutesUsed
+        likes
+        likesSent
       }
       phoneNumber
       lookingFor {

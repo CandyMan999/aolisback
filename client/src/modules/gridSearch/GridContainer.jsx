@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import GridSearch from "./GridSearch";
-
 import Context from "../../context";
 import {
   GET_ALL_USERS,
@@ -8,7 +7,7 @@ import {
   GET_USERS_WHO_LIKE_ME_QUERY,
   GET_MATCHED_USERS_QUERY,
 } from "../../graphql/queries";
-import { Loading, Box, ButtonsWithShuffle } from "../../components";
+import { Loading, Box, LikeAndMatchButtons } from "../../components";
 import { useClient } from "../../client";
 import { getDistanceFromCoords } from "../../utils/helpers";
 
@@ -19,16 +18,17 @@ const GridContainer = () => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("Browse");
+  const [usersWhoLikeMeCount, setUsersWhoLikeMeCount] = useState(0);
 
   useEffect(() => {
     if (!!currentUser.username) {
       fetchData();
+      fetchUsersWhoLikeMeCount();
     }
   }, [currentUser.username]);
 
   const fetchData = async () => {
     setLoading(true);
-
     try {
       const variables = {
         latitude: currentUser.location.coordinates[1],
@@ -46,6 +46,22 @@ const GridContainer = () => {
     } catch (err) {
       setLoading(false);
       console.log("err fetching users: ", err);
+    }
+  };
+
+  const fetchUsersWhoLikeMeCount = async () => {
+    try {
+      const variables = {
+        userID: currentUser._id,
+      };
+      const { getUsersWhoLikedMe } = await client.request(
+        GET_USERS_WHO_LIKE_ME_QUERY,
+        variables
+      );
+
+      setUsersWhoLikeMeCount(getUsersWhoLikedMe.length);
+    } catch (err) {
+      console.log("error getting users who like me count: ", err);
     }
   };
 
@@ -105,7 +121,7 @@ const GridContainer = () => {
       setUsers(sortedUsers);
       setLoading(false);
     } catch (err) {
-      console.log("error getting liked users: ", err);
+      console.log("error getting matched users: ", err);
     }
   };
 
@@ -135,7 +151,7 @@ const GridContainer = () => {
 
   return (
     <Box width="100vw" height="100vh" column>
-      <ButtonsWithShuffle
+      <LikeAndMatchButtons
         handleGetLikedUsers={handleGetLikedUsers}
         handleGetUsersWhoLikeMe={handleGetUsersWhoLikeMe}
         handleGetAllUsers={fetchData}
@@ -143,6 +159,7 @@ const GridContainer = () => {
         currentUser={currentUser}
         loading={loading}
         setSearch={setSearch}
+        usersWhoLikeMeCount={usersWhoLikeMeCount} // Pass the count to the component
       />
 
       {loading ? (

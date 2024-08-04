@@ -3,12 +3,21 @@ import styled from "@emotion/styled";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
 
-const LikeButton = ({ onClick, disabled, dontScale, type }) => (
+const LikeButton = ({
+  onClick,
+  disabled,
+  dontScale,
+  type,
+  relative,
+  bgColor,
+}) => (
   <StyledButton
     whileTap={{ scale: 0.7 }}
     whileHover={{ scale: dontScale ? 1 : 1.1 }}
     onClick={disabled ? undefined : onClick}
     type={type || "button"}
+    relative={relative}
+    bgColor={bgColor}
   >
     <span role="img" aria-label="thumbs-up">
       👍
@@ -24,7 +33,7 @@ const StyledButton = styled(motion.button)`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: ${(props) => (props.bgColor ? props.bgColor : "transparent")};
   color: ${COLORS.black};
   border: none;
   border-radius: 40px;
@@ -34,7 +43,7 @@ const StyledButton = styled(motion.button)`
   font-size: 24px;
   cursor: pointer;
   outline: none;
-  position: absolute;
+  position: ${(props) => (props.relative ? "relative" : "absolute")};
   top: 2px;
   left: 10px;
   margin-top: 2px;
