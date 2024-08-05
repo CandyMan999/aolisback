@@ -53,6 +53,7 @@ const {
   callDurationResolver,
   likeResolver,
   unLikeResolver,
+  flagPhotoResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -88,6 +89,7 @@ const resolvers = {
     createProfile: createProfileResolver,
     updateLocation: updateLocationResolver,
     addPhoto: addPhotoResolver,
+    flagPhoto: flagPhotoResolver,
     sendVideo: sendVideoResolver,
     deletePhoto: deletePhotoResolver,
     videoChatRequest: videoChatRequestResolver,

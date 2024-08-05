@@ -11,7 +11,7 @@ const { loginResolver, appleLoginResolver } = require("./login");
 const { createCommentResolver } = require("./comment");
 const { createProfileResolver } = require("./createProfile");
 const { updateLocationResolver } = require("./updateLocation");
-const { addPhotoResolver } = require("./addPhoto");
+const { addPhotoResolver, flagPhotoResolver } = require("./addPhoto");
 const { sendVideoResolver } = require("./sendVideo");
 const { createRoomResolver } = require("./createRoom");
 const { deletePhotoResolver } = require("./deletePhoto");
@@ -64,4 +64,5 @@ module.exports = {
   callDurationResolver,
   likeResolver,
   unLikeResolver,
+  flagPhotoResolver,
 };

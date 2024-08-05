@@ -850,3 +850,17 @@ export const UNLIKE_MUTATION = gql`
     }
   }
 `;
+
+export const FLAG_PHOTO_MUTATION = gql`
+  mutation ($url: String!, $publicId: String!, $flaggedUserID: ID!) {
+    flagPhoto(url: $url, publicId: $publicId, flaggedUserID: $flaggedUserID) {
+      url
+      flagged
+      publicId
+      user {
+        username
+        _id
+      }
+    }
+  }
+`;

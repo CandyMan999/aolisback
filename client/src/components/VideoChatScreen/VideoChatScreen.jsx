@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
 import iOSLogo from "../../pictures/iOSLogo.png";
-import { FaCamera } from "react-icons/fa";
+import { RiCameraLensFill } from "react-icons/ri";
+import axios from "axios";
+import notification from "../../sounds/shutter.mp3";
 import Context from "../../context";
 import {
   UPDATE_VIDEO_CHAT_REQUEST,
   SEND_PHONE_NUMBER,
   CALL_DURATION_MUTATION,
+  FLAG_PHOTO_MUTATION,
 } from "../../graphql/mutations";
 import { Loading, Button, Text, FONT_SIZES, Box } from "../../components";
 import { JitsiMeeting } from "@jitsi/react-sdk";
@@ -26,7 +29,8 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [disableSendNumber, setDisableSendNumber] = useState(false);
   const [videoPermissions, setVideoPermissions] = useState(false);
   const [audioPermissions, setAudioPermissions] = useState(false);
-  const intervalIdRef = useRef(null);
+  const [api, setApi] = useState(null);
+  const [flash, setFlash] = useState(false);
 
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
@@ -48,10 +52,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
   useEffect(() => {
     if (videoChatRequest.participantLeft) {
-      if (intervalIdRef.current) {
-        clearInterval(intervalIdRef.current);
-        intervalIdRef.current = null;
-      }
       handleShutScreen();
     }
   }, [videoChatRequest.participantLeft]);
@@ -66,10 +66,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
   const handleParticipantLeft = async () => {
     try {
-      if (intervalIdRef.current) {
-        clearInterval(intervalIdRef.current);
-        intervalIdRef.current = null;
-      }
       handleShutScreen();
     } catch (err) {
       console.log("error ending video call: ", err);
@@ -78,10 +74,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
   const handleHangup = async () => {
     try {
-      if (intervalIdRef.current) {
-        clearInterval(intervalIdRef.current);
-        intervalIdRef.current = null;
-      }
       handleShutScreen();
       const variables = {
         _id: videoChatRequest._id,
@@ -170,10 +162,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           callDuration.outOfTime &&
           callDuration.user._id === videoChatRequest.sender._id
         ) {
-          if (intervalIdRef.current) {
-            clearInterval(intervalIdRef.current);
-            intervalIdRef.current = null;
-          }
           handleHangup();
           window.ReactNativeWebView.postMessage("OUT_OF_TIME");
         }
@@ -187,73 +175,75 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
       }
     };
 
-    intervalIdRef.current = setInterval(() => {
+    setInterval(() => {
       sendApiCall();
     }, 10000); // 10 seconds interval
   };
 
-  useEffect(() => {
-    return () => {
-      if (intervalIdRef.current) {
-        clearInterval(intervalIdRef.current);
-      }
-    };
-  }, []);
-
-  const captureScreenshot = async () => {
+  const handleImageUpload = async (image) => {
     try {
-      const storedCanvas = document.createElement("canvas");
-      const storedCanvasContext = storedCanvas.getContext("2d");
+      const data = new FormData();
+      data.append("file", image);
+      data.append("upload_preset", "northShoreExpress");
+      data.append("cloud_name", "aolisback");
 
-      const vids = document
-        .querySelector("#jitsiConferenceFrame0")
-        .contentWindow.document.querySelectorAll("video#largeVideo");
-      if (vids.length > 0) {
-        const video = vids[0];
-        video.play();
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/localmassagepros/image/upload",
+        data
+      );
 
-        storedCanvas.height = parseInt(video.videoHeight, 10);
-        storedCanvas.width = parseInt(video.videoWidth, 10);
-        storedCanvasContext.drawImage(
-          video,
-          0,
-          0,
-          video.videoWidth,
-          video.videoHeight
-        );
+      return { url: res.data.url, publicId: res.data.public_id };
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-        storedCanvas.toBlob(
-          (blob) => {
-            console.debug(blob);
+  const playSound = () => {
+    try {
+      const audio = new Audio(notification);
+      audio.play();
+    } catch (err) {
+      console.log("err playing sound:", err);
+    }
+  };
 
-            var data = new FormData();
-            data.append("file", blob);
-            console.log("data: ", data);
-          }
-          //   // Example API URL - replace with your actual API URL
-          //   const S3_API_URL = "https://your-api-url.com/upload";
+  const handleScreenshot = async () => {
+    try {
+      if (api) {
+        playSound();
+        setFlash(true);
 
-          //   fetch(S3_API_URL, {
-          //     method: 'POST',
-          //     body: data
-          //   }).then(response => {
-          //     if (response.ok) {
-          //       console.log("Screenshot uploaded successfully");
-          //     } else {
-          //       console.error("Screenshot upload failed");
-          //     }
-          //   }).catch(error => {
-          //     console.error("Error uploading screenshot:", error);
-          //   });
-          // },
-          // 'image/png',
-          // 1.0,
-        );
-      } else {
-        console.error("Video element not found");
+        api.captureLargeVideoScreenshot().then(async (data) => {
+          const base64Response = await fetch(data.dataURL);
+          const blob = await base64Response.blob();
+
+          const { url, publicId } = await handleImageUpload(blob);
+
+          const variables = {
+            url,
+            publicId,
+            flaggedUserID:
+              videoChatRequest.receiver._id === state.currentUser._id
+                ? videoChatRequest.sender._id
+                : videoChatRequest.receiver._id,
+          };
+
+          const { flagPhoto } = await client.request(
+            FLAG_PHOTO_MUTATION,
+            variables
+          );
+          setFlash(false);
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({
+              type: "USER_FLAGGED",
+              flaggedUserID: variables.flaggedUserID,
+            })
+          );
+          console.log("Creepy user flagged: ", flagPhoto);
+        });
       }
-    } catch (error) {
-      console.error("Error capturing screenshot:", error);
+    } catch (err) {
+      console.log("error with screenshot: ", err);
     }
   };
 
@@ -273,6 +263,22 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           backgroundColor: COLORS.white,
         }}
       >
+        {flash && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "white",
+              zIndex: 30001,
+            }}
+          />
+        )}
         {showSendNumberButton && (
           <Box
             column
@@ -302,7 +308,22 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
             </Box>
           </Box>
         )}
-
+        {showSendNumberButton && (
+          <motion.div
+            style={{
+              position: "absolute",
+              top: 30,
+              left: "45%",
+              transform: "translateX(-50%)",
+              zIndex: 30001,
+              cursor: "pointer",
+            }}
+            whileTap={{ scale: 2.7 }}
+            onClick={handleScreenshot}
+          >
+            <RiCameraLensFill size={30} color={COLORS.pink} />
+          </motion.div>
+        )}
         {isApiReady &&
           isMeetingStarted &&
           currentUser.expoToken &&
@@ -317,7 +338,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
               style={{
                 position: "absolute",
                 top: 20,
-                right: "10%",
+                right: "6%",
                 zIndex: 30001,
                 width: "30%", // fixed width
               }}
@@ -330,7 +351,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 color={COLORS.white}
                 style={{
                   borderBottom: `solid 2px ${COLORS.pink}`,
-                  boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+                  boxShadow: `0px 2px 10px ${COLORS.pink}`,
                   borderRadius: 25,
                   padding: 0,
                   minHeight: 40,
@@ -352,7 +373,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
               </Button>
             </motion.div>
           )}
-
         {!isApiReady ? (
           <Loading ring color={COLORS.pink} size={250} />
         ) : (
@@ -386,6 +406,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 displayName: state.currentUser.username,
               }}
               onApiReady={(externalApi) => {
+                setApi(externalApi);
                 externalApi.addListener("videoConferenceLeft", handleHangup);
                 externalApi.addListener(
                   "participantJoined",
@@ -405,13 +426,11 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                     setShowSendNumberButton(true);
                   }
                 });
-
                 externalApi.addListener("videoAvailabilityChanged", (event) => {
                   if (event.available) {
                     setVideoPermissions(true);
                   }
                 });
-
                 externalApi.addListener("audioAvailabilityChanged", (event) => {
                   if (event.available) {
                     setAudioPermissions(true);
@@ -431,19 +450,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
             />
           )
         )}
-        <div
-          style={{
-            position: "absolute",
-            top: "10%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 30001,
-            cursor: "pointer",
-          }}
-          onClick={captureScreenshot}
-        >
-          <FaCamera size={30} color={COLORS.pink} />
-        </div>
       </motion.div>
     )
   );

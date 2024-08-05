@@ -129,6 +129,8 @@ module.exports = gql`
     _id: ID
     url: String
     publicId: String
+    flagged: Boolean
+    user: User
   }
 
   type Room {
@@ -243,6 +245,7 @@ module.exports = gql`
     ): User
     updateLocation(_id: ID!, latitude: Float!, longitude: Float!): Location
     addPhoto(_id: ID!, url: String!, publicId: String!): User
+    flagPhoto(flaggedUserID: ID!, url: String!, publicId: String!): Picture
     sendVideo(
       url: String!
       publicId: String!
