@@ -5,7 +5,7 @@ const moment = require("moment");
 
 module.exports = {
   getAllUsersResolver: async (root, args, ctx) => {
-    const { latitude, longitude } = args;
+    const { latitude, longitude, limit, skip } = args; // Default limit to 50 and skip to 0
     const { ageRange, kids, sex } = ctx.currentUser.lookingFor;
 
     try {
@@ -16,7 +16,7 @@ module.exports = {
               type: "Point",
               coordinates: [longitude, latitude], // The order is [longitude, latitude]
             },
-            $maxDistance: 12500 * 1609.34, // Convert miles to meters (1 mile = 1609.34 meters), we will use half of the distance of the largest possible circumfrence of the earth 12500 to return all users until we need a smaller API call
+            $maxDistance: 12500 * 1609.34, // Convert miles to meters (1 mile = 1609.34 meters)
           },
         },
         age: {
@@ -44,7 +44,8 @@ module.exports = {
           $gte: !!ctx.currentUser.age ? ctx.currentUser.age : 18,
         },
       })
-        .limit(200)
+        .skip(skip) // Skip the number of users specified
+        .limit(limit) // Limit the number of users returned
         .populate([
           "room",
           "blockedUsers",

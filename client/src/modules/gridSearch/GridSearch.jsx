@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "../../components";
+import { Box, Text } from "../../components";
 import { COLORS } from "../../constants";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -12,29 +12,33 @@ const GridSearch = ({
   currentUser,
   users,
   search,
+  fetchData,
+  skip,
 }) => {
   const mobile = useMediaQuery("(max-width: 740px)");
 
   return (
-    <Box
-      height={"calc(100vH - 60px)"}
-      width="100%"
-      maxHeight={1066}
-      paddingBottom={mobile ? 100 : undefined}
-      justifyContent="center"
+    <div
+      style={{
+        width: "100%",
+        paddingBottom: mobile ? 50 : undefined,
+        display: "flex",
+        justifyContent: "center",
+      }}
     >
       <Box
         style={{
           display: "grid",
           margin: "20px",
           marginTop: !users || !users.length ? 20 : 5,
+          border: !users.length ? `solid 2px ${COLORS.pink}` : undefined,
         }}
         background={!users || !users.length ? COLORS.lightPurple : undefined}
         width="100%"
         height="fit-content"
         minHeight={"100%"}
         justifyContent="stretch"
-        card={!users.length ? true : mobile ? false : true}
+        card={!users.length ? true : false}
       >
         <SearchResults
           state={state}
@@ -44,9 +48,11 @@ const GridSearch = ({
           mobile={mobile}
           users={users}
           search={search}
+          fetchData={fetchData}
+          skip={skip}
         />
       </Box>
-    </Box>
+    </div>
   );
 };
 

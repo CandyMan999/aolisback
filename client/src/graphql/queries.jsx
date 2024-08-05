@@ -284,8 +284,13 @@ export const FETCH_ME = gql`
 `;
 
 export const GET_ALL_USERS = gql`
-  query ($latitude: Float!, $longitude: Float!) {
-    getAllUsers(latitude: $latitude, longitude: $longitude) {
+  query ($latitude: Float!, $longitude: Float!, $limit: Int, $skip: Int) {
+    getAllUsers(
+      latitude: $latitude
+      longitude: $longitude
+      limit: $limit
+      skip: $skip
+    ) {
       _id
       name
       isBanned

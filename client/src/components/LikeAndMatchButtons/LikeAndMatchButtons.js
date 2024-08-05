@@ -63,6 +63,7 @@ const LikeAndMatchButtons = ({
   useEffect(() => {
     if (!selectedButton) {
       try {
+        setSearch("Browse");
         handleGetAllUsers();
       } catch (err) {
         console.log(

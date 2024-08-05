@@ -1,9 +1,12 @@
 import React from "react";
 import styled from "@emotion/styled";
-
 import { COLORS } from "../../constants/colors";
 
-const Box = (props) => <StyledDiv {...props}>{props.children}</StyledDiv>;
+const Box = (props) => (
+  <StyledDiv {...props} onScroll={props.onScroll}>
+    {props.children}
+  </StyledDiv>
+);
 
 const StyledDiv = styled.div(
   ({
@@ -23,7 +26,6 @@ const StyledDiv = styled.div(
     centerText,
     column,
     color,
-
     direction,
     display,
     isDisabled,

@@ -183,7 +183,12 @@ module.exports = gql`
     getComments(roomId: ID!): [Comment]
     findUser(_id: ID!): User
     getUsersMap(latitude: Float!, longitude: Float!): [User]
-    getAllUsers(latitude: Float!, longitude: Float!): [User]
+    getAllUsers(
+      latitude: Float!
+      longitude: Float!
+      limit: Int
+      skip: Int
+    ): [User]
     getVideos(senderID: ID!, receiverID: ID!): [Video]
     getLikedUsers(userID: ID!): [User]
     getUsersWhoLikedMe(userID: ID!): [User]

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Box, Text, FONT_SIZES, FlipCard } from "../../../components";
+import { Box, Text, FONT_SIZES, FlipCard, Button } from "../../../components";
 import { COLORS } from "../../../constants";
 import ProfileCardFront from "../profile-card-front";
 import ProfileCardBack from "../profile-card-back/ProfileCardBack";
@@ -15,6 +15,8 @@ const SearchResults = ({
   dispatch,
   currentUser,
   search,
+  fetchData,
+  skip,
 }) => {
   const [activeID, setActiveID] = useState(null);
 
@@ -34,10 +36,10 @@ const SearchResults = ({
           height={"100%"}
           column
           width="100%"
-          justifyContent="space-around"
           alignItems="center"
           textAlign="center"
           marginTop="50px"
+          backgroundColor={COLORS.lightPurple}
         >
           <Box centerText padding={"5%"}>
             <Text
@@ -61,10 +63,10 @@ const SearchResults = ({
           height={"100%"}
           column
           width="100%"
-          justifyContent="space-around"
           alignItems="center"
           textAlign="center"
           marginTop="50px"
+          backgroundColor={COLORS.lightPurple}
         >
           <Box centerText padding={"5%"}>
             <Text
@@ -89,10 +91,10 @@ const SearchResults = ({
           height={"100%"}
           column
           width="100%"
-          justifyContent="space-around"
           alignItems="center"
           textAlign="center"
           marginTop="50px"
+          backgroundColor={COLORS.lightPurple}
         >
           <Box centerText padding={"5%"}>
             <Text
@@ -116,10 +118,10 @@ const SearchResults = ({
           height={"100%"}
           column
           width="100%"
-          justifyContent="space-around"
           alignItems="center"
           textAlign="center"
           marginTop="50px"
+          backgroundColor={COLORS.lightPurple}
         >
           <Box centerText padding={"5%"}>
             <Text
@@ -148,7 +150,7 @@ const SearchResults = ({
         style={{ display: users.length ? "grid" : "" }}
         width="100%"
       >
-        {!!users.length
+        {users.length
           ? users.map((user, i) => (
               <FlipCard
                 key={`card${user.username}-${i}`}
@@ -186,20 +188,41 @@ const SearchResults = ({
             ))
           : handleComponent()}
       </Box>
+      {users.length &&
+        search === "Browse" &&
+        (Number(skip) > 0 || users.length === 50) && (
+          <Box width="100%" display="flex" justifyContent="center">
+            <Button
+              onClick={() => fetchData(true)}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                boxShadow: `0px 2px 10px ${COLORS.pink}`,
+                borderRadius: "20px",
+                border: `solid 1px ${COLORS.pink}`,
+                marginTop: 40,
+              }}
+              width="80%"
+              color={COLORS.black}
+            >
+              <Text bold margin={5} color={COLORS.vividBlue}>
+                Load More
+              </Text>
+            </Button>
+          </Box>
+        )}
     </Box>
   );
 };
 
 const gridStyle = (mobile) =>
   css({
-    // display: "grid",
     gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
     justifyItems: "center",
     paddingBottom: "0px",
 
     marginBottom: "0px",
-    maxHeight: mobile ? undefined : "1220px",
-    overflowY: !mobile ? "scroll" : undefined,
     "@media (max-width: 1757px)": {
       gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
     },

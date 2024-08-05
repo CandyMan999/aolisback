@@ -19,29 +19,47 @@ const GridContainer = () => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("Browse");
   const [usersWhoLikeMeCount, setUsersWhoLikeMeCount] = useState(0);
+  const [skip, setSkip] = useState(0);
 
   useEffect(() => {
     if (!!currentUser.username) {
-      fetchData();
+      fetchData(false);
       fetchUsersWhoLikeMeCount();
     }
   }, [currentUser.username]);
 
-  const fetchData = async () => {
+  const fetchData = async (paginate) => {
     setLoading(true);
     try {
       const variables = {
         latitude: currentUser.location.coordinates[1],
         longitude: currentUser.location.coordinates[0],
+        limit: 50,
+        skip: paginate ? skip : 0,
       };
       const { getAllUsers } = await client.request(GET_ALL_USERS, variables);
 
-      const filteredUsers = await getAllUsers.filter(
+      const filteredUsers = getAllUsers.filter(
         (user) => user.username !== state.currentUser.username
       );
-      const filteredAndSorted = await sortByDistance(filteredUsers);
+      const filteredAndSorted = sortByDistance(filteredUsers);
 
-      setUsers(filteredAndSorted);
+      if (paginate) {
+        if (getAllUsers.length === 0) {
+          // If no more users to fetch, reset to beginning
+          setSkip(0);
+          fetchData(false);
+        } else {
+          // Append new users to existing list
+          setUsers(filteredAndSorted);
+          setSkip((prevSkip) => prevSkip + 50);
+        }
+      } else {
+        // Reset the users list and skip value
+        setUsers(filteredAndSorted);
+        setSkip(50);
+      }
+
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -76,7 +94,7 @@ const GridContainer = () => {
         variables
       );
 
-      const sortedUsers = await sortByDistance(getLikedUsers);
+      const sortedUsers = sortByDistance(getLikedUsers);
 
       setUsers(sortedUsers);
       setLoading(false);
@@ -96,7 +114,7 @@ const GridContainer = () => {
         variables
       );
 
-      const sortedUsers = await sortByDistance(getUsersWhoLikedMe);
+      const sortedUsers = sortByDistance(getUsersWhoLikedMe);
 
       setUsers(sortedUsers);
       setLoading(false);
@@ -116,7 +134,7 @@ const GridContainer = () => {
         variables
       );
 
-      const sortedUsers = await sortByDistance(getMatchedUsers);
+      const sortedUsers = sortByDistance(getMatchedUsers);
 
       setUsers(sortedUsers);
       setLoading(false);
@@ -150,16 +168,16 @@ const GridContainer = () => {
   };
 
   return (
-    <Box width="100vw" height="100vh" column>
+    <Box width="100vw" height={`calc(100vh - 70px)`} column>
       <LikeAndMatchButtons
         handleGetLikedUsers={handleGetLikedUsers}
         handleGetUsersWhoLikeMe={handleGetUsersWhoLikeMe}
-        handleGetAllUsers={fetchData}
+        handleGetAllUsers={() => fetchData(false)}
         handleGetMatchedUsers={handleGetMatchedUsers}
         currentUser={currentUser}
         loading={loading}
         setSearch={setSearch}
-        usersWhoLikeMeCount={usersWhoLikeMeCount} // Pass the count to the component
+        usersWhoLikeMeCount={usersWhoLikeMeCount}
       />
 
       {loading ? (
@@ -174,6 +192,8 @@ const GridContainer = () => {
           currentUser={state.currentUser}
           users={users}
           search={search}
+          fetchData={fetchData}
+          skip={skip}
         />
       )}
     </Box>

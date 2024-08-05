@@ -13,7 +13,7 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
-const TOTAL_USERS = 500;
+const TOTAL_USERS = 2000;
 const EXCLUDED_USER_ID = "6686f5e8af94620002482764"; // The user ID to exclude
 
 const seedUsers = async () => {
@@ -79,11 +79,11 @@ const seedUsers = async () => {
     };
 
     // Deleting all users except the excluded user
-    await Promise.all(USERS.map((user) => deleteUserAndAssociatedData(user)));
+    // await Promise.all(USERS.map((user) => deleteUserAndAssociatedData(user)));
 
     const handleIsBanned = () => Math.random() < 0.5;
     const handleIsLoggedIn = () => Math.random() < 0.5;
-    const handleAge = () => Math.floor(Math.random() * (80 - 18 + 1)) + 18;
+    const handleAge = () => Math.floor(Math.random() * (30 - 18 + 1)) + 18;
     const getRandomGender = (gender) => {
       const genders = ["Female", "Male", "Gender_Diverse"];
       const getGender = gender === "female" ? "Female" : "Male";
@@ -141,7 +141,9 @@ const seedUsers = async () => {
     for (let i = 0; i < TOTAL_USERS; i++) {
       const randomCoords = await handleCoordinates();
       const ageRange = getRandomAgeRange();
-      const { data } = await axios.get("https://randomuser.me/api/");
+      const { data } = await axios.get(
+        "https://randomuser.me/api/?gender=female"
+      );
 
       const newUser = await User.create({
         username: handleUsername(),
@@ -151,7 +153,8 @@ const seedUsers = async () => {
         password: "Katie1221",
         intro: `${faker.person.bio()}, I am dummy data and will not be here for long. I am Just here for the Beta launch to show how the application works.`,
         age: handleAge(),
-        sex: getRandomGender(data.results[0].gender),
+        // sex: getRandomGender(data.results[0].gender),
+        sex: "Female",
         kids: handleKids(),
         occupation: faker.person.jobTitle(),
         singleTime: faker.date.past(),
@@ -165,9 +168,12 @@ const seedUsers = async () => {
           coordinates: randomCoords,
         },
         lookingFor: {
-          ageRange,
-          kids: handleKids(),
-          sex: getRandomSex(),
+          ageRange: {
+            lowEnd: 18,
+            highEnd: 80,
+          },
+          kids: "Yes",
+          sex: "Male",
         },
       });
 
