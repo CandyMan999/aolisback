@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
 import iOSLogo from "../../pictures/iOSLogo.png";
+import { FaCamera } from "react-icons/fa";
 import Context from "../../context";
 import {
   UPDATE_VIDEO_CHAT_REQUEST,
@@ -25,7 +26,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [disableSendNumber, setDisableSendNumber] = useState(false);
   const [videoPermissions, setVideoPermissions] = useState(false);
   const [audioPermissions, setAudioPermissions] = useState(false);
-  const intervalIdRef = useRef(null); // Use useRef to store interval ID
+  const intervalIdRef = useRef(null);
 
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
@@ -169,8 +170,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           callDuration.outOfTime &&
           callDuration.user._id === videoChatRequest.sender._id
         ) {
-          // send info via response to react app
-
           if (intervalIdRef.current) {
             clearInterval(intervalIdRef.current);
             intervalIdRef.current = null;
@@ -193,7 +192,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
     }, 10000); // 10 seconds interval
   };
 
-  // Clear interval when component unmounts
   useEffect(() => {
     return () => {
       if (intervalIdRef.current) {
@@ -201,6 +199,63 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
       }
     };
   }, []);
+
+  const captureScreenshot = async () => {
+    try {
+      const storedCanvas = document.createElement("canvas");
+      const storedCanvasContext = storedCanvas.getContext("2d");
+
+      const vids = document
+        .querySelector("#jitsiConferenceFrame0")
+        .contentWindow.document.querySelectorAll("video#largeVideo");
+      if (vids.length > 0) {
+        const video = vids[0];
+        video.play();
+
+        storedCanvas.height = parseInt(video.videoHeight, 10);
+        storedCanvas.width = parseInt(video.videoWidth, 10);
+        storedCanvasContext.drawImage(
+          video,
+          0,
+          0,
+          video.videoWidth,
+          video.videoHeight
+        );
+
+        storedCanvas.toBlob(
+          (blob) => {
+            console.debug(blob);
+
+            var data = new FormData();
+            data.append("file", blob);
+            console.log("data: ", data);
+          }
+          //   // Example API URL - replace with your actual API URL
+          //   const S3_API_URL = "https://your-api-url.com/upload";
+
+          //   fetch(S3_API_URL, {
+          //     method: 'POST',
+          //     body: data
+          //   }).then(response => {
+          //     if (response.ok) {
+          //       console.log("Screenshot uploaded successfully");
+          //     } else {
+          //       console.error("Screenshot upload failed");
+          //     }
+          //   }).catch(error => {
+          //     console.error("Error uploading screenshot:", error);
+          //   });
+          // },
+          // 'image/png',
+          // 1.0,
+        );
+      } else {
+        console.error("Video element not found");
+      }
+    } catch (error) {
+      console.error("Error capturing screenshot:", error);
+    }
+  };
 
   return (
     videoChatRequest &&
@@ -279,7 +334,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                   borderRadius: 25,
                   padding: 0,
                   minHeight: 40,
-                  // width: "30%",
                   opacity: 0.8,
                 }}
               >
@@ -322,7 +376,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 TOOLBAR_BUTTONS: [
                   "microphone",
                   "camera",
-
                   "hangup",
                   "tileview",
                   "toggle-camera",
@@ -378,6 +431,19 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
             />
           )
         )}
+        <div
+          style={{
+            position: "absolute",
+            top: "10%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 30001,
+            cursor: "pointer",
+          }}
+          onClick={captureScreenshot}
+        >
+          <FaCamera size={30} color={COLORS.pink} />
+        </div>
       </motion.div>
     )
   );
