@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useMemo } from "react";
 import GridSearch from "./GridSearch";
 import Context from "../../context";
 import {
@@ -20,16 +20,20 @@ const GridContainer = () => {
   const [search, setSearch] = useState("Browse");
   const [usersWhoLikeMeCount, setUsersWhoLikeMeCount] = useState(0);
   const [skip, setSkip] = useState(0);
+  const [spinner, setSpinner] = useState(false);
 
   useEffect(() => {
-    if (!!currentUser.username) {
+    if (currentUser.username) {
       fetchData(false);
       fetchUsersWhoLikeMeCount();
     }
   }, [currentUser.username]);
 
   const fetchData = async (paginate) => {
-    setLoading(true);
+    if (skip === 0 || search !== "Browse") {
+      setLoading(true);
+    }
+    setSpinner(true);
     try {
       const variables = {
         latitude: currentUser.location.coordinates[1],
@@ -46,21 +50,19 @@ const GridContainer = () => {
 
       if (paginate) {
         if (getAllUsers.length === 0) {
-          // If no more users to fetch, reset to beginning
           setSkip(0);
           fetchData(false);
         } else {
-          // Append new users to existing list
-          setUsers(filteredAndSorted);
+          setUsers((prevUsers) => [...prevUsers, ...filteredAndSorted]);
           setSkip((prevSkip) => prevSkip + 50);
         }
       } else {
-        // Reset the users list and skip value
         setUsers(filteredAndSorted);
         setSkip(50);
       }
 
       setLoading(false);
+      setSpinner(false);
     } catch (err) {
       setLoading(false);
       console.log("err fetching users: ", err);
@@ -167,6 +169,8 @@ const GridContainer = () => {
     return newArray;
   };
 
+  const usersMemo = useMemo(() => users, [users]);
+
   return (
     <Box width="100vw" height={`calc(100vh - 70px)`} column>
       <LikeAndMatchButtons
@@ -190,10 +194,11 @@ const GridContainer = () => {
           client={client}
           dispatch={dispatch}
           currentUser={state.currentUser}
-          users={users}
+          users={usersMemo}
           search={search}
           fetchData={fetchData}
           skip={skip}
+          spinner={spinner}
         />
       )}
     </Box>

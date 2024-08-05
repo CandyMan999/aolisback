@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 
-import { Box, Text, FONT_SIZES, FlipCard, Button } from "../../../components";
+import {
+  Box,
+  Text,
+  FONT_SIZES,
+  FlipCard,
+  Button,
+  Loading,
+} from "../../../components";
 import { COLORS } from "../../../constants";
 import ProfileCardFront from "../profile-card-front";
 import ProfileCardBack from "../profile-card-back/ProfileCardBack";
@@ -17,6 +24,7 @@ const SearchResults = ({
   search,
   fetchData,
   skip,
+  spinner,
 }) => {
   const [activeID, setActiveID] = useState(null);
 
@@ -142,7 +150,7 @@ const SearchResults = ({
       );
     }
   };
-
+  console.log("WTF is skip: ", skip);
   return (
     <Box width="100%" height={"100%"} column>
       <Box
@@ -190,7 +198,7 @@ const SearchResults = ({
       </Box>
       {users.length &&
         search === "Browse" &&
-        (Number(skip) > 0 || users.length === 50) && (
+        (skip > 50 || users.length === 50) && (
           <Box width="100%" display="flex" justifyContent="center">
             <Button
               onClick={() => fetchData(true)}
@@ -202,13 +210,24 @@ const SearchResults = ({
                 borderRadius: "20px",
                 border: `solid 1px ${COLORS.pink}`,
                 marginTop: 40,
+                height: 60,
               }}
+              disabled={spinner}
               width="80%"
-              color={COLORS.black}
+              color={spinner ? COLORS.white : COLORS.black}
             >
-              <Text bold margin={5} color={COLORS.vividBlue}>
-                Load More
-              </Text>
+              {spinner ? (
+                <Loading logo size={50} />
+              ) : (
+                <Text
+                  bold
+                  fontSize={FONT_SIZES.X_LARGE}
+                  margin={5}
+                  color={COLORS.vividBlue}
+                >
+                  Load More
+                </Text>
+              )}
             </Button>
           </Box>
         )}

@@ -67,7 +67,7 @@ const FloatingHeart = ({ activate, currentUser, profileID }) => {
       );
       setIsMatch(isMatch);
     }
-  }, [currentUser]);
+  }, [currentUser.matchedUsers]);
 
   return (
     <>

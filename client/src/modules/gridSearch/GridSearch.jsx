@@ -14,6 +14,7 @@ const GridSearch = ({
   search,
   fetchData,
   skip,
+  spinner,
 }) => {
   const mobile = useMediaQuery("(max-width: 740px)");
 
@@ -21,7 +22,7 @@ const GridSearch = ({
     <div
       style={{
         width: "100%",
-        paddingBottom: mobile ? 50 : undefined,
+        paddingBottom: mobile ? 100 : undefined,
         display: "flex",
         justifyContent: "center",
       }}
@@ -50,6 +51,7 @@ const GridSearch = ({
           search={search}
           fetchData={fetchData}
           skip={skip}
+          spinner={spinner}
         />
       </Box>
     </div>
