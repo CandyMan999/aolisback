@@ -29,6 +29,11 @@ const { addPhoneResolver } = require("./addPhone");
 const { sendPhoneNumberResolver } = require("./sendPhoneNumber");
 const { callDurationResolver } = require("./callDuration");
 const { likeResolver, unLikeResolver } = require("./like");
+const {
+  unflagPictureResolver,
+  unflagVideoResolver,
+  banUserResolver,
+} = require("./adminControls");
 
 module.exports = {
   createRoomResolver,
@@ -65,4 +70,7 @@ module.exports = {
   likeResolver,
   unLikeResolver,
   flagPhotoResolver,
+  unflagPictureResolver,
+  unflagVideoResolver,
+  banUserResolver,
 };

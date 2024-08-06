@@ -8,6 +8,10 @@ const { getVideosResolver } = require("./getVideos");
 const { getLikedUsersResolver } = require("./getLikedUsers");
 const { getUsersWhoLikedMeResolver } = require("./getUsersWhoLikedMe");
 const { getMatchedUsersResolver } = require("./getMatches");
+const {
+  getFlaggedPicturesResolver,
+  getFlaggedVideosResolver,
+} = require("./getFlagged");
 
 module.exports = {
   fetchMeResolver,
@@ -20,4 +24,6 @@ module.exports = {
   getLikedUsersResolver,
   getUsersWhoLikedMeResolver,
   getMatchedUsersResolver,
+  getFlaggedPicturesResolver,
+  getFlaggedVideosResolver,
 };

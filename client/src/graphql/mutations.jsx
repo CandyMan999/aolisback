@@ -864,3 +864,30 @@ export const FLAG_PHOTO_MUTATION = gql`
     }
   }
 `;
+
+export const UNFLAG_VIDEO = gql`
+  mutation UnflagVideo($videoId: ID!) {
+    unflagVideo(videoId: $videoId) {
+      _id
+      flagged
+    }
+  }
+`;
+
+export const UNFLAG_PICTURE = gql`
+  mutation UnflagPicture($pictureId: ID!) {
+    unflagPicture(pictureId: $pictureId) {
+      _id
+      flagged
+    }
+  }
+`;
+
+export const BAN_USER = gql`
+  mutation BanUser($userId: ID!) {
+    banUser(userId: $userId) {
+      _id
+      isBanned
+    }
+  }
+`;

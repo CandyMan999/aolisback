@@ -195,6 +195,8 @@ module.exports = gql`
     getLikedUsers(userID: ID!): [User]
     getUsersWhoLikedMe(userID: ID!): [User]
     getMatchedUsers(userID: ID!): [User]
+    getFlaggedVideos: [Video]
+    getFlaggedPictures: [Picture]
   }
 
   type GoogleAuth {
@@ -295,6 +297,9 @@ module.exports = gql`
     callDuration(userID: ID!, time: Int!): CallDuration
     like(userID: ID!, likeID: ID!): User
     unLike(userID: ID!, unLikeID: ID!): User
+    unflagVideo(videoId: ID!): Video
+    unflagPicture(pictureId: ID!): Picture
+    banUser(userId: ID!): User
   }
 
   type Subscription {

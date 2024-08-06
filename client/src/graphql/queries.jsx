@@ -495,3 +495,33 @@ export const GET_MATCHED_USERS_QUERY = gql`
     }
   }
 `;
+
+export const GET_FLAGGED_VIDEOS = gql`
+  query {
+    getFlaggedVideos {
+      _id
+      url
+      sender {
+        _id
+        username
+      }
+      receiver {
+        _id
+        username
+      }
+    }
+  }
+`;
+
+export const GET_FLAGGED_PICTURES = gql`
+  query {
+    getFlaggedPictures {
+      _id
+      url
+      user {
+        _id
+        username
+      }
+    }
+  }
+`;
