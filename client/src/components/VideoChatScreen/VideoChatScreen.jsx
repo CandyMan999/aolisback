@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
 import iOSLogo from "../../pictures/iOSLogo.png";
@@ -31,6 +31,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [audioPermissions, setAudioPermissions] = useState(false);
   const [api, setApi] = useState(null);
   const [flash, setFlash] = useState(false);
+  const intervalIdRef = useRef(null);
 
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
@@ -52,6 +53,10 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
   useEffect(() => {
     if (videoChatRequest.participantLeft) {
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
+      }
       handleShutScreen();
     }
   }, [videoChatRequest.participantLeft]);
@@ -66,6 +71,10 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
   const handleParticipantLeft = async () => {
     try {
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
+      }
       handleShutScreen();
     } catch (err) {
       console.log("error ending video call: ", err);
@@ -74,6 +83,10 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
   const handleHangup = async () => {
     try {
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
+      }
       handleShutScreen();
       const variables = {
         _id: videoChatRequest._id,
@@ -162,6 +175,10 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           callDuration.outOfTime &&
           callDuration.user._id === videoChatRequest.sender._id
         ) {
+          if (intervalIdRef.current) {
+            clearInterval(intervalIdRef.current);
+            intervalIdRef.current = null;
+          }
           handleHangup();
           window.ReactNativeWebView.postMessage("OUT_OF_TIME");
         }
@@ -175,7 +192,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
       }
     };
 
-    setInterval(() => {
+    intervalIdRef.current = setInterval(() => {
       sendApiCall();
     }, 10000); // 10 seconds interval
   };
@@ -233,12 +250,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
             variables
           );
           setFlash(false);
-          window.ReactNativeWebView.postMessage(
-            JSON.stringify({
-              type: "USER_FLAGGED",
-              flaggedUserID: variables.flaggedUserID,
-            })
-          );
+
           console.log("Creepy user flagged: ", flagPhoto);
         });
       }
@@ -246,6 +258,15 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
       console.log("error with screenshot: ", err);
     }
   };
+
+  // Clear interval when component unmounts
+  useEffect(() => {
+    return () => {
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+      }
+    };
+  }, []);
 
   return (
     videoChatRequest &&

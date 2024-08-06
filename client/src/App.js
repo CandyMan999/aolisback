@@ -9,6 +9,7 @@ import CreateProfile from "./modules/createProfile";
 import GridSearch from "./modules/gridSearch";
 import MessageCenter from "./modules/messageCenter";
 import Message from "./modules/Message";
+import AdminPage from "./modules/admin";
 import { Map, FloatingHeart } from "./components";
 
 import "./App.css";
@@ -26,6 +27,7 @@ class App extends React.PureComponent {
           <Route path="/message-center" component={MessageCenter} />
           <Route path="/message" component={Message} />
           <Route path="/grid-search" component={GridSearch} />
+          <ProtectedRoute exact path="/admin" component={AdminPage} />
         </Switch>
       </Fragment>
     );

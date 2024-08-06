@@ -26,7 +26,27 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
   ]);
 
   useEffect(() => {
-    if (!!currentUser && !!currentUser.username) {
+    if (!!currentUser && currentUser.username === "Smokey 💨") {
+      setItems([
+        { name: "Chat Rooms", icon: "chat", route: "/" },
+        { name: "My Profile", icon: "user", route: "/profile" },
+        {
+          name: "Message Center",
+          icon: "videoMessage",
+          route: "/message-center",
+        },
+        { name: "View Users Locations", icon: "search", route: "/location" },
+
+        { name: "Browse Users", icon: "browseLogo", route: "/grid-search" },
+        { name: "Logout", icon: "signout", route: "/" },
+        { name: "Admin", icon: "user", route: "/admin" },
+      ]);
+    }
+    if (
+      !!currentUser &&
+      !!currentUser.username &&
+      currentUser.username !== "Smokey 💨"
+    ) {
       setItems([
         { name: "Chat Rooms", icon: "chat", route: "/" },
         { name: "My Profile", icon: "user", route: "/profile" },
