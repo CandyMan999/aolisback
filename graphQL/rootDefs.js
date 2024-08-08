@@ -308,5 +308,6 @@ module.exports = gql`
     createComment: Comment
     createVideo: Video
     videoChatRequest: ChatRequest
+    changePlan: User
   }
 `;

@@ -5,6 +5,7 @@ const {
   createCommentSubscription,
   createVideoSubscription,
   videoChatRequestSubscription,
+  changePlanSubscription,
 } = require("./subscription/subscription");
 
 const {
@@ -70,6 +71,7 @@ const resolvers = {
     createComment: createCommentSubscription,
     createVideo: createVideoSubscription,
     videoChatRequest: videoChatRequestSubscription,
+    changePlan: changePlanSubscription,
   },
   Query: {
     fetchMe: fetchMeResolver,

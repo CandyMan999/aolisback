@@ -26,6 +26,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import {
   VIDEO_CHAT_REQUEST,
   CREATE_VIDEO_SUBSCRIPTION,
+  CHANGE_PLAN_SUBSCRIPTION,
 } from "./graphql/subscriptions";
 
 export const WS_URL =
@@ -150,6 +151,21 @@ const Root = () => {
                   setVideoChat(videoChatRequest);
 
                   toggleChatRequest(true);
+                }
+              }}
+            />
+
+            <Subscription
+              subscription={CHANGE_PLAN_SUBSCRIPTION}
+              onSubscriptionData={({ subscriptionData }) => {
+                const { changePlan } = subscriptionData.data;
+
+                if (changePlan._id === state.currentUser._id) {
+                  console.log("changing plan via subscription");
+                  dispatch({
+                    type: "UPDATE_USER",
+                    payload: changePlan,
+                  });
                 }
               }}
             />

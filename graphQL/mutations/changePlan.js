@@ -1,5 +1,6 @@
 const { AuthenticationError } = require("apollo-server");
 const { User } = require("../../models");
+const { publishChangePlan } = require("../subscription/subscription");
 
 module.exports = {
   changePlanResolver: async (root, args, ctx) => {
@@ -91,6 +92,7 @@ module.exports = {
           ],
         },
       ]);
+      publishChangePlan(user);
 
       return user;
     } catch (err) {

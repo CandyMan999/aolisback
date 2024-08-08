@@ -130,3 +130,157 @@ export const VIDEO_CHAT_REQUEST = gql`
     }
   }
 `;
+
+export const CHANGE_PLAN_SUBSCRIPTION = gql`
+  subscription {
+    changePlan {
+      _id
+      name
+      terms
+      isLoggedIn
+      username
+      expoToken
+      inCall
+      plan {
+        planType
+        messages
+        messagesSent
+        videoMinutes
+        videoMinutesUsed
+        likes
+        likesSent
+      }
+      phoneNumber
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
+      pictures {
+        _id
+        url
+        publicId
+      }
+      location {
+        coordinates
+      }
+      sentVideos {
+        _id
+        url
+        publicId
+        createdAt
+        viewed
+        sender {
+          username
+          _id
+          pictures {
+            _id
+            url
+            publicId
+          }
+        }
+        receiver {
+          _id
+          username
+          pictures {
+            _id
+            url
+            publicId
+          }
+        }
+      }
+      receivedVideos {
+        _id
+        url
+        publicId
+        createdAt
+        flagged
+        viewed
+        sender {
+          username
+          _id
+          isLoggedIn
+          pictures {
+            _id
+            url
+            publicId
+          }
+          blockedUsers {
+            _id
+          }
+          intro
+          sex
+          location {
+            coordinates
+          }
+          age
+          occupation
+          lookingFor {
+            ageRange {
+              lowEnd
+              highEnd
+            }
+            sex
+            kids
+          }
+          singleTime
+          drink
+          smoke
+          marijuana
+          drugs
+          kids
+        }
+        receiver {
+          _id
+          username
+          intro
+          sex
+          age
+          occupation
+          singleTime
+          drink
+          smoke
+          marijuana
+          drugs
+          kids
+          location {
+            coordinates
+          }
+          pictures {
+            _id
+            url
+            publicId
+          }
+        }
+      }
+      blockedUsers {
+        _id
+      }
+      likedUsers {
+        _id
+      }
+      matchedUsers {
+        _id
+      }
+      usersLikedMe {
+        _id
+      }
+      email
+      intro
+      sex
+      age
+      occupation
+      singleTime
+      drink
+      smoke
+      marijuana
+      drugs
+      kids
+      googleId
+      appleId
+    }
+  }
+`;
