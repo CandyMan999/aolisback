@@ -59,6 +59,7 @@ const {
   unflagPictureResolver,
   unflagVideoResolver,
   banUserResolver,
+  changePlanResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -122,6 +123,7 @@ const resolvers = {
     unflagPicture: unflagPictureResolver,
     unflagVideo: unflagVideoResolver,
     banUser: banUserResolver,
+    changePlan: changePlanResolver,
   },
 };
 

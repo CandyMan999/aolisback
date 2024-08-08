@@ -25,7 +25,6 @@ module.exports = {
   flagPhotoResolver: async (root, args, ctx) => {
     const { url, publicId, flaggedUserID } = args;
 
-    console.log("args: ", args);
     try {
       const picture = await Picture.create({ url, publicId, flagged: true });
       const user = await User.findById(flaggedUserID);

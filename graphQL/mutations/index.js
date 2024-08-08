@@ -34,6 +34,7 @@ const {
   unflagVideoResolver,
   banUserResolver,
 } = require("./adminControls");
+const { changePlanResolver } = require("./changePlan");
 
 module.exports = {
   createRoomResolver,
@@ -73,4 +74,5 @@ module.exports = {
   unflagPictureResolver,
   unflagVideoResolver,
   banUserResolver,
+  changePlanResolver,
 };

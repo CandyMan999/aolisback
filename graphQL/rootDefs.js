@@ -300,6 +300,7 @@ module.exports = gql`
     unflagVideo(videoId: ID!): Video
     unflagPicture(pictureId: ID!): Picture
     banUser(userId: ID!): User
+    changePlan(_id: ID!, planType: PlanType!): User
   }
 
   type Subscription {
