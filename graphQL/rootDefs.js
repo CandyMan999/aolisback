@@ -52,6 +52,9 @@ module.exports = gql`
     showWhoLikesMe: Boolean
     likes: Int
     likesSent: Int
+    additionalMinutes: Int
+    additionalLikes: Int
+    additionalMessages: Int
   }
 
   enum PlanType {
@@ -301,6 +304,9 @@ module.exports = gql`
     unflagPicture(pictureId: ID!): Picture
     banUser(userId: ID!): User
     changePlan(_id: ID!, planType: PlanType!): User
+    buyLikes(_id: ID!, numberLikes: Int!): User
+    buyMessages(_id: ID!, numberMessages: Int!): User
+    buyVideoMinutes(_id: ID!, numberMinutes: Int!): User
   }
 
   type Subscription {
@@ -309,5 +315,8 @@ module.exports = gql`
     createVideo: Video
     videoChatRequest: ChatRequest
     changePlan: User
+    buyLikes: User
+    buyMessages: User
+    buyVideoMinutes: User
   }
 `;

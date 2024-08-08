@@ -60,6 +60,9 @@ export const CREATE_VIDEO_SUBSCRIPTION = gql`
           showWhoLikesMe
           likes
           likesSent
+          additionalMinutes
+          additionalLikes
+          additionalMessages
         }
         pictures {
           _id
@@ -131,6 +134,66 @@ export const VIDEO_CHAT_REQUEST = gql`
   }
 `;
 
+export const BUY_MINUTES_SUBSCRIPTION = gql`
+  subscription {
+    buyVideoMinutes {
+      _id
+      plan {
+        planType
+        messages
+        messagesSent
+        videoMinutes
+        videoMinutesUsed
+        likes
+        likesSent
+        additionalLikes
+        additionalMinutes
+        additionalMessages
+      }
+    }
+  }
+`;
+
+export const BUY_LIKES_SUBSCRIPTION = gql`
+  subscription {
+    buyLikes {
+      _id
+      plan {
+        planType
+        messages
+        messagesSent
+        videoMinutes
+        videoMinutesUsed
+        likes
+        likesSent
+        additionalLikes
+        additionalMinutes
+        additionalMessages
+      }
+    }
+  }
+`;
+
+export const BUY_MESSAGES_SUBSCRIPTION = gql`
+  subscription {
+    buyMessages {
+      _id
+      plan {
+        planType
+        messages
+        messagesSent
+        videoMinutes
+        videoMinutesUsed
+        likes
+        likesSent
+        additionalLikes
+        additionalMinutes
+        additionalMessages
+      }
+    }
+  }
+`;
+
 export const CHANGE_PLAN_SUBSCRIPTION = gql`
   subscription {
     changePlan {
@@ -149,6 +212,9 @@ export const CHANGE_PLAN_SUBSCRIPTION = gql`
         videoMinutesUsed
         likes
         likesSent
+        additionalMinutes
+        additionalLikes
+        additionalMessages
       }
       phoneNumber
       lookingFor {

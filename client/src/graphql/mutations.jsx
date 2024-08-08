@@ -19,6 +19,9 @@ export const GOOGLE_SIGNUP_MUTATION = gql`
           videoMinutesUsed
           likes
           likesSent
+          additionalMinutes
+          additionalLikes
+          additionalMessages
         }
         pictures {
           _id
@@ -63,6 +66,9 @@ export const GOOGLE_LOGIN_MUTATION = gql`
           videoMinutesUsed
           likes
           likesSent
+          additionalMinutes
+          additionalLikes
+          additionalMessages
         }
         pictures {
           _id
@@ -106,6 +112,9 @@ export const SIGNUP_MUTATION = gql`
           videoMinutesUsed
           likes
           likesSent
+          additionalMinutes
+          additionalLikes
+          additionalMessages
         }
       }
     }
@@ -133,6 +142,9 @@ export const LOGIN_MUTATION = gql`
           videoMinutesUsed
           likes
           likesSent
+          additionalMinutes
+          additionalLikes
+          additionalMessages
         }
         pictures {
           _id
@@ -667,6 +679,9 @@ export const CALL_DURATION_MUTATION = gql`
           videoMinutesUsed
           likes
           likesSent
+          additionalMinutes
+          additionalLikes
+          additionalMessages
         }
       }
       outOfTime
@@ -691,6 +706,9 @@ export const ACCEPT_TERMS_MUTATION = gql`
         videoMinutesUsed
         likes
         likesSent
+        additionalMinutes
+        additionalLikes
+        additionalMessages
       }
       lookingFor {
         ageRange {
@@ -826,6 +844,9 @@ export const LIKE_MUTATION = gql`
         videoMinutesUsed
         likes
         likesSent
+        additionalMinutes
+        additionalLikes
+        additionalMessages
       }
       likedUsers {
         _id

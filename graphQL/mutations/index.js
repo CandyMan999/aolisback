@@ -35,6 +35,11 @@ const {
   banUserResolver,
 } = require("./adminControls");
 const { changePlanResolver } = require("./changePlan");
+const {
+  buyLikesResolver,
+  buyMessagesResolver,
+  buyVideoMinutesResolver,
+} = require("./inAppPurchases");
 
 module.exports = {
   createRoomResolver,
@@ -75,4 +80,7 @@ module.exports = {
   unflagVideoResolver,
   banUserResolver,
   changePlanResolver,
+  buyLikesResolver,
+  buyMessagesResolver,
+  buyVideoMinutesResolver,
 };

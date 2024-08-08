@@ -27,6 +27,9 @@ import {
   VIDEO_CHAT_REQUEST,
   CREATE_VIDEO_SUBSCRIPTION,
   CHANGE_PLAN_SUBSCRIPTION,
+  BUY_LIKES_SUBSCRIPTION,
+  BUY_MESSAGES_SUBSCRIPTION,
+  BUY_MINUTES_SUBSCRIPTION,
 } from "./graphql/subscriptions";
 
 export const WS_URL =
@@ -165,6 +168,51 @@ const Root = () => {
                   dispatch({
                     type: "UPDATE_USER",
                     payload: changePlan,
+                  });
+                }
+              }}
+            />
+
+            <Subscription
+              subscription={BUY_LIKES_SUBSCRIPTION}
+              onSubscriptionData={({ subscriptionData }) => {
+                const { buyLikes } = subscriptionData.data;
+
+                if (buyLikes._id === state.currentUser._id) {
+                  console.log("changing plan via subscription");
+                  dispatch({
+                    type: "UPDATE_USER_PLAN",
+                    payload: buyLikes.plan,
+                  });
+                }
+              }}
+            />
+
+            <Subscription
+              subscription={BUY_MESSAGES_SUBSCRIPTION}
+              onSubscriptionData={({ subscriptionData }) => {
+                const { buyMessages } = subscriptionData.data;
+
+                if (buyMessages._id === state.currentUser._id) {
+                  console.log("changing plan via subscription");
+                  dispatch({
+                    type: "UPDATE_USER_PLAN",
+                    payload: buyMessages.plan,
+                  });
+                }
+              }}
+            />
+
+            <Subscription
+              subscription={BUY_MINUTES_SUBSCRIPTION}
+              onSubscriptionData={({ subscriptionData }) => {
+                const { buyVideoMinutes } = subscriptionData.data;
+
+                if (buyVideoMinutes._id === state.currentUser._id) {
+                  console.log("changing plan via subscription");
+                  dispatch({
+                    type: "UPDATE_USER_PLAN",
+                    payload: buyVideoMinutes.plan,
                   });
                 }
               }}

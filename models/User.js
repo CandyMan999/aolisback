@@ -232,6 +232,18 @@ const UserSchema = new mongoose.Schema({
       type: Number,
       default: 0,
     },
+    additionalMinutes: {
+      type: Number,
+      default: 0,
+    },
+    additionalMessages: {
+      type: Number,
+      default: 0,
+    },
+    additionalLikes: {
+      type: Number,
+      default: 0,
+    },
   },
 });
 

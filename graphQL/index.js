@@ -6,6 +6,9 @@ const {
   createVideoSubscription,
   videoChatRequestSubscription,
   changePlanSubscription,
+  buyLikesSubscription,
+  buyMessagesSubscription,
+  buyMinutesSubscription,
 } = require("./subscription/subscription");
 
 const {
@@ -61,6 +64,9 @@ const {
   unflagVideoResolver,
   banUserResolver,
   changePlanResolver,
+  buyLikesResolver,
+  buyMessagesResolver,
+  buyVideoMinutesResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -72,6 +78,9 @@ const resolvers = {
     createVideo: createVideoSubscription,
     videoChatRequest: videoChatRequestSubscription,
     changePlan: changePlanSubscription,
+    buyLikes: buyLikesSubscription,
+    buyMessages: buyMessagesSubscription,
+    buyVideoMinutes: buyMinutesSubscription,
   },
   Query: {
     fetchMe: fetchMeResolver,
@@ -126,6 +135,9 @@ const resolvers = {
     unflagVideo: unflagVideoResolver,
     banUser: banUserResolver,
     changePlan: changePlanResolver,
+    buyLikes: buyLikesResolver,
+    buyMessages: buyMessagesResolver,
+    buyVideoMinutes: buyVideoMinutesResolver,
   },
 };
 
