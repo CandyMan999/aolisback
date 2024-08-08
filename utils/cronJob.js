@@ -28,7 +28,7 @@ const resetVideoMinutesUsed = async () => {
       const userIds = users.map((user) => user._id);
       const result = await User.updateMany(
         { _id: { $in: userIds } },
-        { $set: { "plan.videoMinutesUsed": 0 } }
+        { $set: { "plan.videoMinutesUsed": 0, inCall: false } }
       );
 
       totalUpdated += result.nModified;

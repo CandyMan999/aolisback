@@ -13,27 +13,21 @@
 14. Get everything working on android. 
 15. check that Cloudinary is not raping me in the ass anymore on price 
 17. prescreen for the app store review ? this is a maybe... 
-18. Biuld a plan object, free, pro, unlimited.. {plan: "Free"
-                                                messagesSent: 2,
-                                                videoChat: sconds
-                                                messagesPerPlan: x number
-                                                videoChat seconds per plan: x number,
-                                                }
 
 
-23. make protected route for candyman to easily watch flagged videos - screenshots and ban users / delete the content. 
+
 24 scrollview for reload might have white edge
 25. write a good script that deletes all seed users..similar to the delete account button
 26. @currentUser make text background different. Also make type ahead
 
 
 25. remove jitsi logs from unbuntu server to free up disc space
-dispatch an update to the user minutes and video messages sent when they are
+
 26. Check twilio money before deploy
 
                                 
 27. put cloudinary info in .env
-28. add a counter on likes me button
+
 
 15. Launch in Austin!
 

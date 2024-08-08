@@ -7,7 +7,10 @@ module.exports = {
     try {
       const user = await User.findByIdAndUpdate(
         { _id: userID },
-        { $inc: { "plan.videoMinutesUsed": time } },
+        {
+          $inc: { "plan.videoMinutesUsed": time },
+          $set: { inCall: true },
+        },
         { new: true }
       ).populate(["pictures", "blockedUsers"]);
 
