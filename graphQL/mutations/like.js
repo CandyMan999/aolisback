@@ -8,7 +8,7 @@ module.exports = {
 
     try {
       // Find the user
-      const user = await User.findById(userID).populate([
+      let user = await User.findById(userID).populate([
         "pictures",
         "blockedUsers",
         "likedUsers",
@@ -16,9 +16,8 @@ module.exports = {
       ]);
 
       // Check if the likeID is already in the user's likedUsers array
-
       const isAlreadyLiked = user.likedUsers.some(
-        (user) => user._id.toString() === likeID
+        (likedUser) => likedUser._id.toString() === likeID
       );
 
       if (isAlreadyLiked) {
@@ -30,39 +29,66 @@ module.exports = {
       const likedUser = await User.findById(likeID);
 
       const isMutualLike = likedUser.likedUsers.some(
-        (user) => user._id.toString() === userID
+        (likedUser) => likedUser._id.toString() === userID
       );
 
       if (isMutualLike) {
         // If mutual like, add each other to matchedUsers array
-        await User.findByIdAndUpdate(
-          userID,
-          {
-            $push: { likedUsers: likeID, matchedUsers: likeID },
-            $inc: { "plan.likesSent": 1 },
-          },
-          { new: true }
-        );
+        if (user.plan.likesSent < user.plan.likes) {
+          // Increment likesSent if still within the plan's allowed likes
+          await User.findByIdAndUpdate(
+            userID,
+            {
+              $push: { likedUsers: likeID, matchedUsers: likeID },
+              $inc: { "plan.likesSent": 1 },
+            },
+            { new: true }
+          );
+        } else if (
+          user.plan.likesSent >= user.plan.likes &&
+          user.plan.additionalLikes > 0
+        ) {
+          // Use additionalLikes if the plan's allowed likes are exhausted
+          await User.findByIdAndUpdate(
+            userID,
+            {
+              $push: { likedUsers: likeID, matchedUsers: likeID },
+              $inc: { "plan.additionalLikes": -1 },
+            },
+            { new: true }
+          );
+        }
         await User.findByIdAndUpdate(likeID, {
-          $push: { usersLikedMe: userID },
+          $push: { usersLikedMe: userID, matchedUsers: userID },
         });
-        await User.findByIdAndUpdate(
-          likeID,
-          { $push: { matchedUsers: userID } },
-          { new: true }
-        );
 
         pushNotificationNewMatch(user.username, likedUser.expoToken);
       } else {
-        // Add the likeID to the user's likedUsers array
-        await User.findByIdAndUpdate(
-          userID,
-          {
-            $push: { likedUsers: likeID },
-            $inc: { "plan.likesSent": 1 },
-          },
-          { new: true }
-        );
+        // Regular like flow
+        if (user.plan.likesSent < user.plan.likes) {
+          // Increment likesSent if still within the plan's allowed likes
+          await User.findByIdAndUpdate(
+            userID,
+            {
+              $push: { likedUsers: likeID },
+              $inc: { "plan.likesSent": 1 },
+            },
+            { new: true }
+          );
+        } else if (
+          user.plan.likesSent >= user.plan.likes &&
+          user.plan.additionalLikes > 0
+        ) {
+          // Use additionalLikes if the plan's allowed likes are exhausted
+          await User.findByIdAndUpdate(
+            userID,
+            {
+              $push: { likedUsers: likeID },
+              $inc: { "plan.additionalLikes": -1 },
+            },
+            { new: true }
+          );
+        }
         await User.findByIdAndUpdate(likeID, {
           $push: { usersLikedMe: userID },
         });
@@ -80,6 +106,7 @@ module.exports = {
       throw new AuthenticationError(err.message);
     }
   },
+
   unLikeResolver: async (root, args, ctx) => {
     const { userID, unLikeID } = args;
     try {

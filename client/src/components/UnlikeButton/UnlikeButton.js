@@ -1,21 +1,30 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "@emotion/styled";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
+import { Loading } from "../../components";
 
-const UnlikeButton = ({ onClick, disabled, dontScale, type }) => (
+const UnlikeButton = ({ onClick, disabled, dontScale, type, loading }) => (
   <StyledButton
     whileTap={{ scale: 0.7 }}
     whileHover={{ scale: dontScale ? 1 : 1.1 }}
     onClick={disabled ? undefined : onClick}
     type={type || "button"}
   >
-    <span role="img" aria-label="thumbs-down">
-      👎
-    </span>
-    <span role="img" aria-label="broken-heart">
-      💔
-    </span>
+    <Fragment>
+      {loading ? (
+        <Loading ring />
+      ) : (
+        <Fragment>
+          <span role="img" aria-label="thumbs-down">
+            👎
+          </span>
+          <span role="img" aria-label="broken-heart">
+            💔
+          </span>
+        </Fragment>
+      )}
+    </Fragment>
   </StyledButton>
 );
 

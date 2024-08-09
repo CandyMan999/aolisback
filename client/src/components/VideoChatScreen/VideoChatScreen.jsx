@@ -141,18 +141,20 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const handleTimeLeft = () => {
     try {
       const videoSecondsUsed = currentUser.plan.videoMinutesUsed;
-      const totalVideoSecondsAvailable = currentUser.plan.videoMinutes;
+      const totalVideoSecondsAvailable =
+        currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes;
 
       const remainingSeconds = totalVideoSecondsAvailable - videoSecondsUsed;
 
-      if (remainingSeconds < 0) {
-        return "0 min 0 secs"; // All available minutes are used up
+      // If remainingSeconds is less than or equal to zero, return 0 min 0 secs
+      if (remainingSeconds <= 0) {
+        return "0 min 0 secs";
       }
 
       const minutesLeft = Math.floor(remainingSeconds / 60);
       const secondsLeft = remainingSeconds % 60;
 
-      return `${minutesLeft} min ${secondsLeft} secs`; // or `${minutesLeft}:${secondsLeft}`
+      return `${minutesLeft} min ${secondsLeft} secs`;
     } catch (err) {
       console.log("err calc minutes left: ", err);
     }
@@ -170,7 +172,10 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           CALL_DURATION_MUTATION,
           variables
         );
-
+        dispatch({
+          type: "UPDATE_USER_PLAN",
+          payload: callDuration.user.plan,
+        });
         if (
           callDuration.outOfTime &&
           callDuration.user._id === videoChatRequest.sender._id
@@ -182,11 +187,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           handleHangup();
           window.ReactNativeWebView.postMessage("OUT_OF_TIME");
         }
-
-        dispatch({
-          type: "UPDATE_USER_PLAN",
-          payload: callDuration.user.plan,
-        });
       } catch (err) {
         console.log(err);
       }
@@ -250,8 +250,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
             variables
           );
           setFlash(false);
-
-          console.log("Creepy user flagged: ", flagPhoto);
         });
       }
     } catch (err) {

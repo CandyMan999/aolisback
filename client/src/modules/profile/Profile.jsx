@@ -124,7 +124,10 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleVideoChatRequest = async () => {
     try {
-      if (currentUser.plan.videoMinutes <= currentUser.plan.videoMinutesUsed) {
+      if (
+        currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
+        currentUser.plan.videoMinutesUsed
+      ) {
         window.ReactNativeWebView.postMessage("BUY_MINUTES");
 
         return;
@@ -198,7 +201,10 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleSendVideoMessage = () => {
     try {
-      if (currentUser.plan.messages <= currentUser.plan.messagesSent) {
+      if (
+        currentUser.plan.messages + currentUser.plan.additionalMessages <=
+        currentUser.plan.messagesSent
+      ) {
         window.ReactNativeWebView.postMessage("BUY_MESSAGES");
 
         return;
@@ -225,7 +231,10 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleLikeUser = async () => {
     try {
-      if (currentUser.plan.likes <= currentUser.plan.likesSent) {
+      if (
+        currentUser.plan.likes + currentUser.plan.additionalLikes <=
+        currentUser.plan.likesSent
+      ) {
         window.ReactNativeWebView.postMessage("BUY_LIKES");
         return;
       }
@@ -280,9 +289,17 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           />
           {!itsMe &&
             (!showHearts ? (
-              <UnlikeButton disabled={loading} onClick={handleLikeUser} />
+              <UnlikeButton
+                disabled={loading}
+                onClick={handleLikeUser}
+                loading={loading}
+              />
             ) : (
-              <LikeButton disabled={loading} onClick={handleUnLikeUser} />
+              <LikeButton
+                disabled={loading}
+                onClick={handleUnLikeUser}
+                loading={loading}
+              />
             ))}
           {showHearts && (
             <FloatingHeart

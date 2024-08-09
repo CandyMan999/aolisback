@@ -119,6 +119,7 @@ export default function reducer(state, { type, payload }) {
           plan: {
             ...state.currentUser.plan,
             messagesSent: payload.sender.plan.messagesSent,
+            additionalMessages: payload.sender.plan.additionalMessages,
           },
         },
       };
@@ -165,10 +166,7 @@ export default function reducer(state, { type, payload }) {
           ...state.currentUser,
           likedUsers: payload.likedUsers,
           matchedUsers: payload.matchedUsers,
-          plan: {
-            ...state.currentUser.plan,
-            likesSent: payload.likesSent,
-          },
+          plan: payload.plan,
         },
       };
 

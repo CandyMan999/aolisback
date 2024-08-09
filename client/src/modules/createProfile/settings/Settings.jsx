@@ -108,10 +108,14 @@ const Settings = ({ state, client, dispatch }) => {
     currentUser.plan.videoMinutesUsed < 60
       ? 0
       : Math.floor(currentUser.plan.videoMinutesUsed / 60);
+
   const videoMinutes =
-    currentUser.plan.videoMinutes < 60
+    currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes < 60
       ? 0
-      : Math.floor(currentUser.plan.videoMinutes / 60);
+      : Math.floor(
+          (currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes) /
+            60
+        );
   const isGoogleConnected = !!currentUser.googleId;
   const isAppleConnected = !!currentUser.appleId;
 
@@ -473,7 +477,8 @@ const Settings = ({ state, client, dispatch }) => {
                 <Box column>
                   <Text margin={0} bold center>
                     {currentUser.plan.messagesSent} of{" "}
-                    {currentUser.plan.messages}
+                    {currentUser.plan.messages +
+                      currentUser.plan.additionalMessages}
                   </Text>
                   <Text margin={0} style={{ textAlign: "end" }}>
                     (Resets daily at midnight)
@@ -486,7 +491,8 @@ const Settings = ({ state, client, dispatch }) => {
               <Box width="50%" justifyContent="flex-end">
                 <Box column>
                   <Text margin={0} bold center>
-                    {currentUser.plan.likesSent} of {currentUser.plan.likes}
+                    {currentUser.plan.likesSent} of{" "}
+                    {currentUser.plan.likes + currentUser.plan.additionalLikes}
                   </Text>
                   <Text margin={0} style={{ textAlign: "end" }}>
                     (Resets daily at midnight)

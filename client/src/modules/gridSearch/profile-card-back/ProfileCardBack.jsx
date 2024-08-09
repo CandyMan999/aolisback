@@ -38,7 +38,10 @@ const ProfileCardBack = ({
   const handleMessage = async () => {
     try {
       await dispatch({ type: "UPDATE_PROFILE", payload: user });
-      if (currentUser.plan.messages <= currentUser.plan.messagesSent) {
+      if (
+        currentUser.plan.messages + currentUser.plan.additionalMessages <=
+        currentUser.plan.messagesSent
+      ) {
         window.ReactNativeWebView.postMessage("BUY_MESSAGES");
 
         return;

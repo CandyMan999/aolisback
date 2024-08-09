@@ -1,7 +1,6 @@
 const { AuthenticationError, PubSub } = require("apollo-server");
 const { User, Video } = require("../../models");
 const { sendPushNotification } = require("../../utils/middleware");
-
 const { publishCreateVideo } = require("../subscription/subscription");
 
 module.exports = {
@@ -9,6 +8,7 @@ module.exports = {
     const { url, publicId, receiverID, senderID } = args;
 
     try {
+      // Create the video entry
       const video = await Video.create({
         url,
         publicId,
@@ -16,6 +16,7 @@ module.exports = {
         receiver: receiverID,
       });
 
+      // Update the sender and receiver with the new video
       const sender = await User.findByIdAndUpdate(
         { _id: senderID },
         { $push: { sentVideos: video } },
@@ -28,13 +29,29 @@ module.exports = {
         { new: true }
       ).populate("receivedVideos");
 
-      // Increment the messagesSent field in the sender's plan
-      const user = await User.findByIdAndUpdate(
-        { _id: senderID },
-        { $inc: { "plan.messagesSent": 1 } },
-        { new: true }
-      );
+      // Handle message allowance
+      const user = await User.findById(senderID);
 
+      if (user.plan.messagesSent < user.plan.messages) {
+        // If within the regular message limit, increment messagesSent
+        await User.findByIdAndUpdate(
+          { _id: senderID },
+          { $inc: { "plan.messagesSent": 1 } },
+          { new: true }
+        );
+      } else if (
+        user.plan.messagesSent >= user.plan.messages &&
+        user.plan.additionalMessages > 0
+      ) {
+        // If the regular message limit is exceeded, decrement additionalMessages
+        await User.findByIdAndUpdate(
+          { _id: senderID },
+          { $inc: { "plan.additionalMessages": -1 } },
+          { new: true }
+        );
+      }
+
+      // Populate the new video with sender and receiver details
       const newVideo = await Video.findOne({ _id: video._id }).populate([
         {
           path: "sender",
@@ -54,10 +71,12 @@ module.exports = {
         },
       ]);
 
+      // Send a push notification to the receiver
       if (receiver && receiver.expoToken) {
         sendPushNotification(receiver.expoToken, sender.username);
       }
 
+      // Publish the new video for subscriptions
       publishCreateVideo(newVideo);
 
       return newVideo;

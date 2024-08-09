@@ -150,7 +150,7 @@ const SearchResults = ({
       );
     }
   };
-  console.log("WTF is skip: ", skip);
+
   return (
     <Box width="100%" height={"100%"} column>
       <Box

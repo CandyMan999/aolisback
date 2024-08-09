@@ -13,6 +13,7 @@ module.exports = {
       const user = await User.findByIdAndUpdate(
         { _id },
         { $inc: { "plan.additionalMinutes": numberMinutes } },
+
         { new: true }
       );
 

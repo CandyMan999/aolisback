@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "@emotion/styled";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
+import { Loading } from "../../components";
 
 const LikeButton = ({
   onClick,
@@ -10,6 +11,7 @@ const LikeButton = ({
   type,
   relative,
   bgColor,
+  loading,
 }) => (
   <StyledButton
     whileTap={{ scale: 0.7 }}
@@ -19,12 +21,20 @@ const LikeButton = ({
     relative={relative}
     bgColor={bgColor}
   >
-    <span role="img" aria-label="thumbs-up">
-      👍
-    </span>
-    <span role="img" aria-label="heart">
-      ❤️
-    </span>
+    <Fragment>
+      {loading ? (
+        <Loading ring />
+      ) : (
+        <Fragment>
+          <span role="img" aria-label="thumbs-up">
+            👍
+          </span>
+          <span role="img" aria-label="heart">
+            ❤️
+          </span>
+        </Fragment>
+      )}
+    </Fragment>
   </StyledButton>
 );
 

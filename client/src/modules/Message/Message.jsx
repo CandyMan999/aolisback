@@ -105,7 +105,10 @@ const Message = () => {
 
   const toggleModal = () => {
     try {
-      if (currentUser.plan.messages <= currentUser.plan.messagesSent) {
+      if (
+        currentUser.plan.messages + currentUser.plan.additionalMessages <=
+        currentUser.plan.messagesSent
+      ) {
         window.ReactNativeWebView.postMessage("BUY_MESSAGES");
 
         return;
@@ -354,6 +357,10 @@ const Message = () => {
               setGroupedReceived([...groupedReceived, createVideo]);
               setLoading(false);
               dispatch({ type: "TOGGLE_VIDEO", payload: false });
+              dispatch({
+                type: "UPDATE_USER_PLAN",
+                payload: createVideo.sender.plan,
+              });
             }
           }}
         />

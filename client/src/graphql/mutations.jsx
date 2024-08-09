@@ -862,6 +862,18 @@ export const UNLIKE_MUTATION = gql`
   mutation ($userID: ID!, $unLikeID: ID!) {
     unLike(userID: $userID, unLikeID: $unLikeID) {
       username
+      plan {
+        planType
+        messages
+        messagesSent
+        videoMinutes
+        videoMinutesUsed
+        likes
+        likesSent
+        additionalMinutes
+        additionalLikes
+        additionalMessages
+      }
       likedUsers {
         _id
       }
