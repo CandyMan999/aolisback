@@ -673,6 +673,7 @@ export const CALL_DURATION_MUTATION = gql`
         _id
         inCall
         plan {
+          planType
           messages
           messagesSent
           videoMinutes
