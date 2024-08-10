@@ -150,6 +150,9 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
       if (remainingSeconds <= 0) {
         return "0 min 0 secs";
       }
+      if (currentUser.plan.planType === "Unlimited") {
+        return "Unlimited";
+      }
 
       const minutesLeft = Math.floor(remainingSeconds / 60);
       const secondsLeft = remainingSeconds % 60;

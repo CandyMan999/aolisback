@@ -498,7 +498,6 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
         </Box>
         {!state.currentUser.terms ? (
           <Box width={"100%"} justifyContent="space-between">
-            (
             <Button
               coolStyle
               onClick={onClose}
@@ -523,7 +522,6 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             >
               <Text bold>Accept</Text>
             </Button>
-            )
           </Box>
         ) : (
           <Text>Already Agreed ✅ </Text>
