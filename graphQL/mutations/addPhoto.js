@@ -1,5 +1,6 @@
 const { AuthenticationError } = require("apollo-server");
 const { User, Picture } = require("../../models");
+const { publishFlagUser } = require("../subscription/subscription");
 
 module.exports = {
   addPhotoResolver: async (root, args, ctx) => {
@@ -34,6 +35,7 @@ module.exports = {
         { new: true }
       ).populate("user");
 
+      publishFlagUser(flaggedPic);
       return flaggedPic;
     } catch (err) {
       throw new AuthenticationError(err.message);

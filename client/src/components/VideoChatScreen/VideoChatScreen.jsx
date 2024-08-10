@@ -250,6 +250,9 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
             variables
           );
           setFlash(false);
+          if (flagPhoto) {
+            window.ReactNativeWebView.postMessage("SCREEN_SHOT_SUCCESS");
+          }
         });
       }
     } catch (err) {

@@ -10,6 +10,7 @@ const CHANGE_PLAN = "CHANGE_PLAN";
 const BUY_LIKES = "BUY_LIKES";
 const BUY_MESSAGES = "BUY_MESSAGES";
 const BUY_MINUTES = "BUY_MINUTES";
+const FLAG_USER = "FLAG_USER";
 
 const roomCreatedOrUpdatedSubscription = {
   subscribe: () => pubsub.asyncIterator(ROOM_CREATED_OR_UPDATED),
@@ -37,6 +38,16 @@ const buyMessagesSubscription = {
 };
 const buyMinutesSubscription = {
   subscribe: () => pubsub.asyncIterator(BUY_MINUTES),
+};
+
+const flagUserSubscription = {
+  subscribe: () => pubsub.asyncIterator(FLAG_USER),
+};
+
+const publishFlagUser = (request) => {
+  pubsub.publish(FLAG_USER, {
+    flagUser: request,
+  });
 };
 
 const publishBuyLikes = (request) => {
@@ -96,6 +107,7 @@ module.exports = {
   buyLikesSubscription,
   buyMessagesSubscription,
   buyMinutesSubscription,
+  flagUserSubscription,
   publishCreateComment,
   publishRoomCreatedOrUpdated,
   publishCreateVideo,
@@ -104,4 +116,5 @@ module.exports = {
   publishBuyLikes,
   publishBuyMessages,
   publishBuyMinutes,
+  publishFlagUser,
 };

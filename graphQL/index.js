@@ -9,6 +9,7 @@ const {
   buyLikesSubscription,
   buyMessagesSubscription,
   buyMinutesSubscription,
+  flagUserSubscription,
 } = require("./subscription/subscription");
 
 const {
@@ -81,6 +82,7 @@ const resolvers = {
     buyLikes: buyLikesSubscription,
     buyMessages: buyMessagesSubscription,
     buyVideoMinutes: buyMinutesSubscription,
+    flagUser: flagUserSubscription,
   },
   Query: {
     fetchMe: fetchMeResolver,

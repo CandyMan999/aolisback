@@ -318,5 +318,6 @@ module.exports = gql`
     buyLikes: User
     buyMessages: User
     buyVideoMinutes: User
+    flagUser: Picture
   }
 `;
