@@ -35,7 +35,7 @@ const RoomList = ({
     <motion.div
       onClick={() => handleTermsAgreement()}
       style={{
-        marginRight: 15,
+        paddingRight: 3,
         flexDirection: "column",
         alignItems: "center",
         height: "100%",

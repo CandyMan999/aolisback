@@ -16,7 +16,7 @@
 
 
 
-24 scrollview for reload might have white edge
+
 25. write a good script that deletes all seed users..similar to the delete account button
 26. @currentUser make text background different. Also make type ahead
 

@@ -15,6 +15,7 @@ import {
 } from "../../../graphql/mutations";
 import { FaTimesCircle } from "react-icons/fa";
 import { AiOutlinePlus } from "react-icons/ai";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import axios from "axios";
 import Context from "../../../context";
@@ -27,6 +28,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [photos, setPhotos] = useState(currentUser.pictures || []);
+  const mobile = useMediaQuery("(max-width: 800px)");
 
   const handleImageUpload = async (file) => {
     const data = new FormData();
@@ -38,7 +40,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
 
     try {
       const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/aolisback/image/upload",
+        process.env.REACT_APP_CLOUDINARY_IMAGE,
         data
       );
       let secureUrl = response.data.secure_url;
@@ -128,7 +130,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
             <Box
               key={index}
               width="48%"
-              height="150px"
+              height={"auto"}
               justifyContent="center"
               alignItems="center"
               marginVertical={8}

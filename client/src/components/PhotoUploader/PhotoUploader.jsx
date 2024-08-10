@@ -42,7 +42,7 @@ const PhotoUploader = () => {
       data.append("cloud_name", "aolisback");
 
       const res = await axios.post(
-        "https://api.cloudinary.com/v1_1/localmassagepros/image/upload",
+        process.env.REACT_APP_CLOUDINARY_IMAGE,
         data
       );
 
