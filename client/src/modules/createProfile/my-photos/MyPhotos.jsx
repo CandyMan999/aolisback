@@ -15,7 +15,6 @@ import {
 } from "../../../graphql/mutations";
 import { FaTimesCircle } from "react-icons/fa";
 import { AiOutlinePlus } from "react-icons/ai";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import axios from "axios";
 import Context from "../../../context";
@@ -28,15 +27,14 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [photos, setPhotos] = useState(currentUser.pictures || []);
-  const mobile = useMediaQuery("(max-width: 800px)");
 
   const handleImageUpload = async (file) => {
     const data = new FormData();
     data.append("file", file);
     data.append("upload_preset", "northShoreExpress");
     data.append("cloud_name", "aolisback");
-    data.append("api_key", "486825584244645");
-    data.append("api_secret", "gGEJC6n-rlo4CFNqTiyUs38eZlw");
+    data.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
+    data.append("api_secret", process.env.REACT_APP_CLOUDINARY_API_SECRET);
 
     try {
       const response = await axios.post(
