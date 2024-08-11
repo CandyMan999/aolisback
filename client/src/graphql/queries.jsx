@@ -528,3 +528,16 @@ export const GET_FLAGGED_PICTURES = gql`
     }
   }
 `;
+
+export const GET_REAL_USERS = gql`
+  query {
+    getRealUsers {
+      username
+      _id
+      isBanned
+      pictures {
+        url
+      }
+    }
+  }
+`;

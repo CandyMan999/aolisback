@@ -200,6 +200,7 @@ module.exports = gql`
     getMatchedUsers(userID: ID!): [User]
     getFlaggedVideos: [Video]
     getFlaggedPictures: [Picture]
+    getRealUsers: [User]
   }
 
   type GoogleAuth {
@@ -307,6 +308,8 @@ module.exports = gql`
     buyLikes(_id: ID!, numberLikes: Int!): User
     buyMessages(_id: ID!, numberMessages: Int!): User
     buyVideoMinutes(_id: ID!, numberMinutes: Int!): User
+    deleteUser(_id: ID!): Account
+    deleteSeeders: Account
   }
 
   type Subscription {

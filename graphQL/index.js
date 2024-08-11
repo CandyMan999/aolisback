@@ -25,6 +25,7 @@ const {
   getMatchedUsersResolver,
   getFlaggedPicturesResolver,
   getFlaggedVideosResolver,
+  getRealUsersResolver,
 } = require("./queries");
 const {
   createRoomResolver,
@@ -68,6 +69,8 @@ const {
   buyLikesResolver,
   buyMessagesResolver,
   buyVideoMinutesResolver,
+  deleteUserResolver,
+  deleteSeedersResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -97,6 +100,7 @@ const resolvers = {
     getMatchedUsers: getMatchedUsersResolver,
     getFlaggedPictures: getFlaggedPicturesResolver,
     getFlaggedVideos: getFlaggedVideosResolver,
+    getRealUsers: getRealUsersResolver,
   },
   Mutation: {
     createRoom: createRoomResolver,
@@ -140,6 +144,8 @@ const resolvers = {
     buyLikes: buyLikesResolver,
     buyMessages: buyMessagesResolver,
     buyVideoMinutes: buyVideoMinutesResolver,
+    deleteUser: deleteUserResolver,
+    deleteSeeders: deleteSeedersResolver,
   },
 };
 

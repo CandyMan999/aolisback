@@ -108,7 +108,7 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
       formData.append("video_codec", "auto");
 
       const res = await axios.post(
-        process.env.REACT_APP_CLOUDINARY_VIDEO,
+        `https://api.cloudinary.com/v1_1/localmassagepros/video/upload`,
         formData
       );
 

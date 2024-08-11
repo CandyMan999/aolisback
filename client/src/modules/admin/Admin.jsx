@@ -3,17 +3,21 @@ import { Text, Button, Box, Loading } from "../../components";
 import {
   GET_FLAGGED_PICTURES,
   GET_FLAGGED_VIDEOS,
+  GET_REAL_USERS,
 } from "../../graphql/queries";
 import {
   UNFLAG_PICTURE,
   UNFLAG_VIDEO,
   BAN_USER,
+  DELETE_USER_MUTATION,
+  DELETE_SEEDERS_MUTATION,
 } from "../../graphql/mutations";
 import { useClient } from "../../client";
+import { COLORS } from "../../constants";
 
 const AdminPage = () => {
   const client = useClient();
-
+  const [users, setUsers] = useState([]);
   const [videos, setVideos] = useState([]);
   const [pictures, setPictures] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,6 +32,9 @@ const AdminPage = () => {
     try {
       const { getFlaggedVideos } = await client.request(GET_FLAGGED_VIDEOS);
       setVideos(getFlaggedVideos);
+
+      const { getRealUsers } = await client.request(GET_REAL_USERS);
+      setUsers(getRealUsers);
 
       const { getFlaggedPictures } = await client.request(GET_FLAGGED_PICTURES);
       setPictures(getFlaggedPictures);
@@ -74,10 +81,52 @@ const AdminPage = () => {
     }
   };
 
+  const handleDeleteUser = async (userId) => {
+    try {
+      setSpinner(true);
+
+      const varibables = {
+        _id: userId,
+      };
+      const { deleteUser } = await client.request(
+        DELETE_USER_MUTATION,
+        varibables
+      );
+
+      console.log("data: ", deleteUser);
+      if (deleteUser.status) {
+        console.log("succeess deleting");
+        setUsers(users.filter((user) => user._id !== userId)); // Remove user from state
+        setSpinner(false);
+      }
+    } catch (err) {
+      setSpinner(false);
+      console.log("Error deleting user: ", err);
+    }
+  };
+
+  const handleDeleteSeeders = async () => {
+    try {
+      setSpinner(true);
+
+      const { deleteSeeders } = await client.request(DELETE_SEEDERS_MUTATION);
+
+      console.log("data: ", deleteSeeders);
+      if (deleteSeeders.status) {
+        console.log("succeess deleting seeders");
+
+        setSpinner(false);
+      }
+    } catch (err) {
+      setSpinner(false);
+      console.log("Error deleting user: ", err);
+    }
+  };
+
   if (loading) {
     return <Text center>Loading...</Text>;
   }
-
+  console.log("users:", users);
   return (
     <Box
       width="100%"
@@ -154,7 +203,39 @@ const AdminPage = () => {
               )}
             </Box>
           ))}
+        {users.length > 0 &&
+          users.map((user) => (
+            <Box
+              key={user._id}
+              column
+              alignItems="center"
+              textAlign="center"
+              background={COLORS.lightPurple}
+            >
+              {user.pictures.length > 0 && (
+                <img
+                  src={user.pictures[0].url} // Display the first picture
+                  alt={user.username}
+                  style={{ width: "100%", borderRadius: "8px" }}
+                />
+              )}
+              <Text>{user.username}</Text>
+              <Text>Banned: {user.isBanned ? "Yes" : "No"}</Text>
+              {spinner ? (
+                <Loading ring />
+              ) : (
+                <Button onClick={() => handleDeleteUser(user._id)} width="80%">
+                  Delete User
+                </Button>
+              )}
+            </Box>
+          ))}
       </div>
+      <Box wodth="100%" justifyContent="center">
+        <Button width="50%" color={COLORS.pink} onClick={handleDeleteSeeders}>
+          <Text bold>Delete Seeders</Text>
+        </Button>
+      </Box>
     </Box>
   );
 };

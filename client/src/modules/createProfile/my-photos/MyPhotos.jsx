@@ -187,7 +187,11 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
               backgroundColor={COLORS.lightPurple}
               position="relative"
               borderRadius="10px"
-              style={{ border: `solid 1px ${COLORS.pink}`, cursor: "pointer" }}
+              style={{
+                border: `solid 1px ${COLORS.pink}`,
+                cursor: "pointer",
+                minWidth: 150,
+              }}
               as="label"
               htmlFor="upload-photo"
               marginTop={10}

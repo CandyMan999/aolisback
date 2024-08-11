@@ -164,7 +164,6 @@ const Root = () => {
                 const { changePlan } = subscriptionData.data;
 
                 if (changePlan._id === state.currentUser._id) {
-                  console.log("changing plan via subscription");
                   dispatch({
                     type: "UPDATE_USER",
                     payload: changePlan,
@@ -179,7 +178,6 @@ const Root = () => {
                 const { buyLikes } = subscriptionData.data;
 
                 if (buyLikes._id === state.currentUser._id) {
-                  console.log("changing plan via subscription");
                   dispatch({
                     type: "UPDATE_USER_PLAN",
                     payload: buyLikes.plan,
@@ -194,7 +192,6 @@ const Root = () => {
                 const { buyMessages } = subscriptionData.data;
 
                 if (buyMessages._id === state.currentUser._id) {
-                  console.log("changing plan via subscription");
                   dispatch({
                     type: "UPDATE_USER_PLAN",
                     payload: buyMessages.plan,

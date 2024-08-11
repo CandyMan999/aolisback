@@ -13,8 +13,12 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
-const TOTAL_USERS = 2000;
-const EXCLUDED_USER_ID = "6686f5e8af94620002482764"; // The user ID to exclude
+const TOTAL_USERS = 1000;
+const EXCLUDED_USER_IDS = [
+  "6686f5e8af94620002482764",
+  "669c616afe75e0000284581c",
+  "669c61eefe75e00002845865",
+];
 
 const seedUsers = async () => {
   try {
@@ -29,7 +33,7 @@ const seedUsers = async () => {
     const USERS = await User.find();
 
     const deleteUserAndAssociatedData = async (user) => {
-      if (user._id.toString() !== EXCLUDED_USER_ID) {
+      if (!EXCLUDED_USER_IDS.includes(user._id.toString())) {
         // Delete all pictures
         for (const pic of user.pictures) {
           const data = await Picture.findById(pic._id);
@@ -79,7 +83,7 @@ const seedUsers = async () => {
     };
 
     // Deleting all users except the excluded user
-    // await Promise.all(USERS.map((user) => deleteUserAndAssociatedData(user)));
+    await Promise.all(USERS.map((user) => deleteUserAndAssociatedData(user)));
 
     const handleIsBanned = () => Math.random() < 0.5;
     const handleIsLoggedIn = () => Math.random() < 0.5;
@@ -138,12 +142,18 @@ const seedUsers = async () => {
       return `${name.slice(0, 5)}Dummy${randomSuffix}`;
     };
 
+    const generatePhone = () => {
+      let randomNumber = "";
+      for (let i = 0; i < 16; i++) {
+        randomNumber += Math.floor(Math.random() * 10);
+      }
+      return randomNumber;
+    };
+
     for (let i = 0; i < TOTAL_USERS; i++) {
       const randomCoords = await handleCoordinates();
       const ageRange = getRandomAgeRange();
-      const { data } = await axios.get(
-        "https://randomuser.me/api/?gender=female"
-      );
+      const { data } = await axios.get("https://randomuser.me/api/");
 
       const newUser = await User.create({
         username: handleUsername(),
@@ -153,8 +163,8 @@ const seedUsers = async () => {
         password: "Katie1221",
         intro: `${faker.person.bio()}, I am dummy data and will not be here for long. I am Just here for the Beta launch to show how the application works.`,
         age: handleAge(),
-        // sex: getRandomGender(data.results[0].gender),
-        sex: "Female",
+        sex: getRandomGender(data.results[0].gender),
+        // sex: "Female",
         kids: handleKids(),
         occupation: faker.person.jobTitle(),
         singleTime: faker.date.past(),
@@ -163,7 +173,8 @@ const seedUsers = async () => {
         marijuana: handle420(),
         drugs: handleDrugs(),
         profileComplete: true,
-        isBanned: handleIsBanned(),
+        isBanned: false,
+        phoneNumber: generatePhone(),
         location: {
           coordinates: randomCoords,
         },
@@ -173,7 +184,7 @@ const seedUsers = async () => {
             highEnd: 80,
           },
           kids: "Yes",
-          sex: "Male",
+          sex: getRandomSex(),
         },
       });
 

@@ -665,6 +665,22 @@ export const DELETE_ACCOUNT_MUTATION = gql`
   }
 `;
 
+export const DELETE_SEEDERS_MUTATION = gql`
+  mutation {
+    deleteSeeders {
+      status
+    }
+  }
+`;
+
+export const DELETE_USER_MUTATION = gql`
+  mutation ($_id: ID!) {
+    deleteUser(_id: $_id) {
+      status
+    }
+  }
+`;
+
 export const CALL_DURATION_MUTATION = gql`
   mutation ($userID: ID!, $time: Int!) {
     callDuration(userID: $userID, time: $time) {

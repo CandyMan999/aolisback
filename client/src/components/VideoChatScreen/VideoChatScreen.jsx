@@ -417,44 +417,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 disableEndConference: true,
                 enableFeaturesBasedOnToken: false,
                 disableThirdPartyRequests: true,
-                resolution: 1080, // Set resolution to 1080p
-                constraints: {
-                  video: {
-                    height: { ideal: 1080, max: 1080, min: 1080 }, // Force 1080p
-                    width: { ideal: 1920, max: 1920, min: 1920 },
-                  },
-                },
-                disableSimulcast: true, // Disable simulcast to prioritize highest resolution stream
-                enableLayerSuspension: false, // Keep all layers active, no suspension of video layers
-                p2p: {
-                  enabled: true, // Ensure peer-to-peer is enabled
-                  useStunTurn: true, // Use STUN/TURN for better connectivity in P2P
-                  iceTransportPolicy: "all", // Allow both UDP and TCP for ICE transport
-                },
-                videoQuality: {
-                  maxBitratesVideo: {
-                    low: 200000, // 200 kbps for low quality
-                    standard: 500000, // 500 kbps for standard quality
-                    high: 1500000, // 1.5 Mbps for high quality
-                  },
-                },
-                apiLogLevels: ["error"], // Only log errors
-                logging: {
-                  defaultLogLevel: "error", // Set default log level to error
-                  loggers: {
-                    "modules/RTC/TraceablePeerConnection.js": "error",
-                    "modules/statistics/CallStats.js": "error",
-                    "modules/xmpp/strophe.util.js": "error",
-                    "modules/statistics/LocalStatsCollector.js": "error",
-                  },
-                },
-                preferH264: true, // Prefer H.264 codec for better quality in P2P
-                disableH264: false, // Ensure H.264 is not disabled
-                disableAudioLevels: true, // Disable audio level processing for better performance
-                enableTcc: true, // Enable transport-cc for better video quality
-                enableRemb: false, // Disable REMB, using TCC instead
-                useNewBandwidthAllocationStrategy: true, // Use a new strategy for bandwidth allocation
-                enableLipSync: true, // Ensure lip sync is enabled for better quality
               }}
               interfaceConfigOverwrite={{
                 TOOLBAR_BUTTONS: [
@@ -500,6 +462,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                     setVideoPermissions(true);
                   }
                 });
+
                 externalApi.addListener("audioAvailabilityChanged", (event) => {
                   if (event.available) {
                     setAudioPermissions(true);

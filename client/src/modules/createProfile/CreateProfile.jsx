@@ -150,7 +150,7 @@ const CreateProfile = ({ client, dispatch, state, currentUser }) => {
                 <Banner
                   fixed
                   mobile={mobile}
-                  show={completedCounts.total >= 8}
+                  show={currentUser.lookingFor.sex ? false : true}
                   message={
                     "Congratulations! Your profile will now show in search results, for best results be sure to fill out what you are looking for"
                   }
