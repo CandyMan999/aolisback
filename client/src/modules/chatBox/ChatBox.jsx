@@ -33,7 +33,7 @@ const ChatBox = () => {
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const [messages, setMessages] = useState([]);
-
+  const [usernames, setUsernames] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
   const mobile = useMediaQuery("(max-width: 650px)");
@@ -85,12 +85,29 @@ const ChatBox = () => {
 
       if (!!getComments) {
         setMessages(getComments);
+
+        // Function to get all unique usernames
+        const uniqueUsernames = getUniqueUsernames(getComments);
+
+        setUsernames(uniqueUsernames);
       }
       setLoading(false);
     } catch (err) {
       setLoading(false);
       console.log(err.message);
     }
+  };
+
+  const getUniqueUsernames = (comments) => {
+    const usernameSet = new Set();
+
+    comments.forEach((comment) => {
+      if (comment.author && comment.author.username) {
+        usernameSet.add(comment.author.username);
+      }
+    });
+
+    return Array.from(usernameSet);
   };
 
   const subscribeToRoom = async (roomId) => {
@@ -193,6 +210,7 @@ const ChatBox = () => {
         dispatch={dispatch}
         currentUserID={!!currentUser && currentUser._id}
         showRoomList={state.showRoomList}
+        usernames={usernames}
       />
 
       <Subscription
@@ -209,6 +227,13 @@ const ChatBox = () => {
         onSubscriptionData={({ subscriptionData }) => {
           const { createComment } = subscriptionData.data;
 
+          // Function to get all unique usernames
+          const uniqueUsernames = getUniqueUsernames([
+            ...messages,
+            createComment,
+          ]);
+
+          setUsernames(uniqueUsernames);
           setMessages([...messages, createComment]);
         }}
       />

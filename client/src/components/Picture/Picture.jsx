@@ -13,6 +13,7 @@ const Picture = ({
   border,
   marginLeft,
   withShadow,
+  withShadowColor,
 }) => {
   return !!profilePic ? (
     !!profilePic.publicId ? (
@@ -28,7 +29,9 @@ const Picture = ({
               border: `solid 1px ${COLORS.vividBlue}`,
               objectFit: "scale-down",
               boxShadow: withShadow
-                ? `2px 2px 4px 2px ${COLORS.darkGrey}`
+                ? `2px 2px 4px 2px ${
+                    withShadowColor ? COLORS.pink : COLORS.darkGrey
+                  }`
                 : null,
             }}
             quality={100}

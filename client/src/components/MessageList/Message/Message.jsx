@@ -144,6 +144,7 @@ const Message = ({
         <AvatarContainer onClick={() => usernameClick(authorId)}>
           <Picture
             withShadow
+            withShadowColor={hasMention && !isCurrentUser}
             profilePic={picture}
             name={picture._id}
             height={65}
