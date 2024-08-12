@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Icon, Box, Text } from "../../components";
 import { COLORS } from "../../constants";
 import { isMobile } from "react-device-detect";
@@ -14,6 +14,8 @@ const SendMessageForm = ({
   const [filteredUsernames, setFilteredUsernames] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedUsernameIndex, setSelectedUsernameIndex] = useState(0);
+  const [dropdownPosition, setDropdownPosition] = useState({ left: 0 }); // State to track dropdown position
+  const inputRef = useRef(null); // Ref to keep track of the input element
 
   useEffect(() => {
     const lastWord = message.split(" ").pop();
@@ -24,6 +26,12 @@ const SendMessageForm = ({
       );
       setFilteredUsernames(matchingUsernames);
       setShowDropdown(matchingUsernames.length > 0);
+
+      if (inputRef.current) {
+        const inputRect = inputRef.current.getBoundingClientRect();
+        const cursorPosition = calculateCursorPosition(inputRect);
+        setDropdownPosition({ left: cursorPosition });
+      }
     } else {
       setShowDropdown(false);
     }
@@ -47,11 +55,23 @@ const SendMessageForm = ({
             filteredUsernames.length
         );
         e.preventDefault();
-      } else if (e.key === "Enter" && filteredUsernames.length > 0) {
+      } else if (
+        (e.key === "Enter" || e.key === " ") && // Check for Enter or Space
+        filteredUsernames.length > 0
+      ) {
         insertUsername(filteredUsernames[selectedUsernameIndex]);
         e.preventDefault();
       }
     }
+  };
+
+  const calculateCursorPosition = (inputRect) => {
+    const inputWidth = inputRect.width;
+    const maxCursorX = inputRect.left + inputWidth * 0.7; // Max 70% to the right
+    const cursorX = inputRect.left + inputRef.current.selectionStart * 7; // Approximate calculation
+
+    // Return the cursor position, but don't let it go beyond 70% of the input width
+    return Math.min(cursorX, maxCursorX);
   };
 
   const insertUsername = (username) => {
@@ -59,6 +79,7 @@ const SendMessageForm = ({
     words.pop();
     setMessage(`${words.join(" ")} @${username} `);
     setShowDropdown(false);
+    inputRef.current.focus();
   };
 
   const handleSubmit = (e) => {
@@ -114,16 +135,20 @@ const SendMessageForm = ({
             value={message}
             placeholder="Type your message and hit ENTER"
             type="text"
+            ref={inputRef}
           />
           {showDropdown && (
             <Box
               position="absolute"
               bottom="100%"
-              left="0"
+              left={dropdownPosition.left}
               width="90%"
               backgroundColor="white"
-              boxShadow="0px 2px 4px rgba(0, 0, 0, 0.2)"
-              borderRadius="8px"
+              style={{
+                boxShadow: `2px 2px 4px 2px ${COLORS.lightGrey}`,
+                border: `dotted 2px ${COLORS.pink}`,
+              }}
+              borderRadius="20px 20px 20px 0px"
               zIndex={1000}
               padding="10px"
               overflowX="auto"
@@ -145,10 +170,14 @@ const SendMessageForm = ({
                       ? COLORS.white
                       : COLORS.black
                   }
-                  borderRadius="5px"
+                  borderRadius="15px"
                   style={{
                     cursor: "pointer",
                     flexWrap: "nowrap",
+                    boxShadow:
+                      index === selectedUsernameIndex
+                        ? `2px 2px 4px 2px ${COLORS.pink}`
+                        : `2px 2px 4px 2px ${COLORS.lighterGrey}`,
                   }}
                   onClick={() => insertUsername(username)}
                 >
