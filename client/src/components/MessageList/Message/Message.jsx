@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import {
   Box,
@@ -13,6 +13,7 @@ import {
 import { COLORS } from "../../../constants";
 import { formatDistanceToNow } from "date-fns";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const MessageRow = styled.div`
   display: flex;
@@ -68,16 +69,48 @@ const Message = ({
   picture,
   createdAt,
 }) => {
-  const handleSpeech = async (text, voiceType) => {
+  const [loading, setLoading] = useState(false);
+  // const handleSpeech = async (text, voiceType) => {
+  //   try {
+  //     window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+  //   } catch (err) {
+  //     console.log("error talking: ", err);
+  //   }
+  // };
+
+  const handleSpeech = async (text, gender) => {
+    console.log("Gender: ", gender);
     try {
-      window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-    } catch (err) {
-      console.log("error talking: ", err);
+      setLoading(true);
+      const open = process.env.REACT_APP_OPEN_AI;
+      const url = "https://api.openai.com/v1/audio/speech";
+
+      const data = {
+        model: "tts-1",
+        input: text,
+        voice: gender === "female" ? "shimmer" : "echo",
+      };
+
+      const response = await axios.post(url, data, {
+        headers: {
+          Authorization: `Bearer ${open}`,
+          "Content-Type": "application/json",
+        },
+        responseType: "blob",
+      });
+
+      const audioBlob = new Blob([response.data], { type: "audio/mpeg" });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      audio.play();
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error fetching or playing speech:", error);
     }
   };
-
   const isCurrentUser = currentUser === authorId;
-
+  //test
   return (
     <MessageRow
       isCurrentUser={isCurrentUser}
@@ -114,12 +147,14 @@ const Message = ({
             <Icon
               name="speaker"
               size={ICON_SIZES.LARGE}
-              color={COLORS.pink}
+              color={loading ? COLORS.lightGrey : COLORS.pink}
               // alignSelf={"flex-start"}
               // marginTop={5}
               marginRight={4}
               onClick={() =>
-                handleSpeech(text, isCurrentUser ? "male" : "female")
+                loading
+                  ? undefined
+                  : handleSpeech(text, isCurrentUser ? "female" : "male")
               }
             />
           )}
@@ -128,12 +163,14 @@ const Message = ({
             <Icon
               name="speaker"
               size={ICON_SIZES.LARGE}
-              color={COLORS.pink}
+              color={loading ? COLORS.lightGrey : COLORS.pink}
               // alignSelf={"flex-start"}
               // marginTop={5}
               marginLeft={4}
               onClick={() =>
-                handleSpeech(text, isCurrentUser ? "male" : "female")
+                loading
+                  ? undefined
+                  : handleSpeech(text, !isCurrentUser ? "male" : "female")
               }
             />
           )}
