@@ -101,13 +101,14 @@ class MessageList extends Component {
                 text={message.text}
                 roomId={this.props.roomId}
                 messageRoomId={message.room._id}
-                currentUser={
+                currentUserID={
                   !!this.props.currentUserID && this.props.currentUserID
                 }
                 authorId={message.author._id}
                 picture={
                   !!message.author.pictures.length && message.author.pictures[0]
                 }
+                currentUser={this.props.currentUser}
                 createdAt={message.createdAt}
               />
             );

@@ -4,7 +4,6 @@ import {
   Box,
   Text,
   FONT_SIZES,
-  Button,
   Picture,
   Span,
   ICON_SIZES,
@@ -12,7 +11,6 @@ import {
 } from "../../../components";
 import { COLORS } from "../../../constants";
 import { formatDistanceToNow } from "date-fns";
-import { motion } from "framer-motion";
 import axios from "axios";
 
 const MessageRow = styled.div`
@@ -27,11 +25,12 @@ const MessageBubble = styled.div`
   color: ${(props) => (props.isCurrentUser ? COLORS.white : COLORS.black)};
   border-radius: ${(props) =>
     props.isCurrentUser ? "15px 15px 0 15px" : "15px 15px 15px 0"};
-
   padding-left: 10px;
   padding-right: 10px;
-  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.3);
-
+  box-shadow: ${(props) =>
+    props.hasMention && !props.isCurrentUser
+      ? `2px 2px 8px 2px ${COLORS.pink}`
+      : "2px 2px 4px 2px rgba(0, 0, 0, 0.3)"};
   display: flex;
   flex-direction: column;
   margin-left: ${(props) => (props.isCurrentUser ? "0" : "10px")};
@@ -64,12 +63,15 @@ const Message = ({
   usernameClick,
   roomId,
   messageRoomId,
+  currentUserID,
   currentUser,
   authorId,
   picture,
   createdAt,
 }) => {
   const [loading, setLoading] = useState(false);
+
+  // Original comment preserved:
   // const handleSpeech = async (text, voiceType) => {
   //   try {
   //     window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
@@ -109,8 +111,25 @@ const Message = ({
       console.error("Error fetching or playing speech:", error);
     }
   };
-  const isCurrentUser = currentUser === authorId;
-  //test
+
+  const isCurrentUser = currentUserID === authorId;
+
+  // Function to check for mention
+  const checkForMention = (text) => {
+    const words = text.split(" ");
+    const isMentioned = words.some((word) => {
+      // Trim spaces and remove trailing special characters from the word
+      const trimmedWord = word.trim().replace(/[.,!?;:()]/g, "");
+      if (trimmedWord === `@${currentUser.username}`) {
+        return true; // Stop further checks and return true if a match is found
+      }
+      return false;
+    });
+    return isMentioned;
+  };
+
+  const hasMention = checkForMention(text);
+
   return (
     <MessageRow
       isCurrentUser={isCurrentUser}
@@ -138,7 +157,6 @@ const Message = ({
             justifyContent: !isCurrentUser ? "flex-start" : "flex-end",
             marginRight: isCurrentUser ? "8px" : undefined,
             marginLeft: !isCurrentUser ? "8px" : undefined,
-
             textShadow: `-0.5px -0.5px 0 ${COLORS.vividBlue}, 1px -0.5px 0 ${COLORS.vividBlue}, -0.5px 0.5px 0 ${COLORS.vividBlue}, 0.5px 0.5px 0 ${COLORS.vividBlue}`,
             color: COLORS.black,
           }}
@@ -148,8 +166,6 @@ const Message = ({
               name="speaker"
               size={ICON_SIZES.LARGE}
               color={loading ? COLORS.lightGrey : COLORS.pink}
-              // alignSelf={"flex-start"}
-              // marginTop={5}
               marginRight={4}
               onClick={() =>
                 loading
@@ -164,8 +180,6 @@ const Message = ({
               name="speaker"
               size={ICON_SIZES.LARGE}
               color={loading ? COLORS.lightGrey : COLORS.pink}
-              // alignSelf={"flex-start"}
-              // marginTop={5}
               marginLeft={4}
               onClick={() =>
                 loading
@@ -176,7 +190,7 @@ const Message = ({
           )}
         </Username>
 
-        <MessageBubble isCurrentUser={isCurrentUser}>
+        <MessageBubble isCurrentUser={isCurrentUser} hasMention={hasMention}>
           <Box>
             <Text fontSize={FONT_SIZES.SMALL}>{text}</Text>
           </Box>
