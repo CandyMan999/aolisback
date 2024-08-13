@@ -10,7 +10,7 @@ import GridSearch from "./modules/gridSearch";
 import MessageCenter from "./modules/messageCenter";
 import Message from "./modules/Message";
 import AdminPage from "./modules/admin";
-import { Map, FloatingHeart } from "./components";
+import { Map } from "./components";
 
 import "./App.css";
 

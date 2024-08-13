@@ -139,7 +139,8 @@ const Message = () => {
           display="flex"
           justifyContent="space-around"
           paddingX={"3%"}
-          backgroundColor={COLORS.lighterGrey}
+          backgroundColor={COLORS.lightPurple}
+          style={{ borderBottom: `solid 1px ${COLORS.deepPurple}` }}
         >
           <Box
             zIndex={4}
@@ -168,6 +169,7 @@ const Message = () => {
               paddingLeft={"2%"}
               width={"100%"}
               bold
+              color={COLORS.deepPurple}
               fontSize={FONT_SIZES.X_LARGE}
               center
             >{`${
@@ -181,7 +183,7 @@ const Message = () => {
             <Icon
               name="reverse"
               size={ICON_SIZES.XXX_LARGE}
-              color={COLORS.black}
+              color={COLORS.deepPurple}
               onClick={handleOnClick}
             />
           </Box>

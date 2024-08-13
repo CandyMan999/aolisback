@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Box, Icon, ICON_SIZES, Text } from "../../components";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
@@ -7,6 +7,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
   const [roomName, setRoomName] = useState("");
   const [error, setError] = useState("");
+  const hiddenInputRef = useRef(null);
 
   const mobile = useMediaQuery("(max-width: 950px)");
   const { showRoomList, roomId } = state;
@@ -34,6 +35,11 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
       name: roomName.trim(),
       _id: currentUserID,
     };
+
+    if (hiddenInputRef.current) {
+      hiddenInputRef.current.focus();
+    }
+
     createRoom(variables);
     setRoomName("");
     dispatch({ type: "CREATE_ROOM", payload: false });
@@ -133,6 +139,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
                   boxShadow={`1px 1px 1px 2px rgba(0, 0, 0, 0.2)`}
                   borderRadius={"50%"}
                   padding={3}
+                  zIndex={4}
                 >
                   <Icon
                     onClick={handleClose}
@@ -149,37 +156,68 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
                     width="100%"
                     textAlign="center"
                     color={COLORS.red}
-                    fontSize="14px" // Adjust font size as needed
+                    fontSize="14px"
                   >
                     <Text>{error}</Text>
                   </Box>
                 )}
-                <input
+                <Box
+                  flex={1}
+                  position="relative"
                   style={{
-                    width: "98%",
-                    borderBottom: "none",
+                    display: "flex",
+                    alignItems: "center",
                     borderRadius: "20px",
-                    height: "35px",
-                    textAlign: "center",
-                    fontSize: 20,
+                    marginLeft: "1%",
+                    boxShadow: `0px 1px 8px 4px ${
+                      !!roomName.length && !error
+                        ? COLORS.vividBlue
+                        : `rgba(0, 0, 0, 0.3)`
+                    }`,
                   }}
-                  value={roomName}
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Create Room"
-                  required
-                />
-                {!!roomName.length && !error && (
-                  <Box position="absolute" right={4} top={5}>
-                    <Icon
-                      onClick={handleSubmit}
-                      name="send"
-                      size={ICON_SIZES.X_LARGE}
-                      color={COLORS.pink}
-                    />
-                  </Box>
-                )}
+                >
+                  <input
+                    style={{
+                      border: "none",
+                      flex: 1,
+                      height: "100%",
+                      padding: "10px",
+                      borderRadius: "20px",
+                      outline: "none",
+                      backgroundColor: `${COLORS.lightPurple}52`,
+                    }}
+                    value={roomName}
+                    onChange={handleChange}
+                    type="text"
+                    placeholder="Create Room"
+                    required
+                  />
+                  {!!roomName.length && !error && (
+                    <Box
+                      position="absolute"
+                      right={10}
+                      top={"10%"}
+                      transform="translateY(-50%)"
+                    >
+                      <Icon
+                        onClick={handleSubmit}
+                        name="send"
+                        size={ICON_SIZES.X_LARGE}
+                        color={COLORS.pink}
+                      />
+                    </Box>
+                  )}
+                </Box>
               </motion.div>
+              <input
+                ref={hiddenInputRef}
+                style={{
+                  position: "absolute",
+                  opacity: 0,
+                  pointerEvents: "none",
+                }}
+                tabIndex="-1"
+              />
             </form>
           )}
         </motion.div>

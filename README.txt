@@ -26,7 +26,7 @@
 
 26. Check twilio money before deploy
 
-           27. FIX THE DISPATCH FLOW ON LOGIN, CHECK ALL POSSIBLE WAYS TO LOGIN.. MAKE NEW AI THAT IS NOT APPLEID.. NO PLAN.PLANTYPE in outOFMINUTES function                     
+              
 
 
 

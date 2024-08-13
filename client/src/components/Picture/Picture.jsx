@@ -14,11 +14,12 @@ const Picture = ({
   marginLeft,
   withShadow,
   withShadowColor,
+  onClick,
 }) => {
   return !!profilePic ? (
     !!profilePic.publicId ? (
       <CloudinaryContext cloudName="localmassagepros">
-        <motion.div whileTap={{ scale: 0.7 }}>
+        <motion.div whileTap={{ scale: 0.7 }} onClick={onClick}>
           <Image
             alt={`${name}-profile-pic`}
             style={{
@@ -42,7 +43,7 @@ const Picture = ({
         </motion.div>
       </CloudinaryContext>
     ) : (
-      <motion.div whileTap={{ scale: 0.7 }}>
+      <motion.div whileTap={{ scale: 0.7 }} onClick={onClick}>
         <img
           alt={`${name}-profile-pic`}
           style={{

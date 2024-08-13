@@ -155,6 +155,7 @@ const RequestModal = ({
               height={100}
               width={100}
               profilePic={sender.pictures[0]}
+              onClick={() => handleViewProfile(sender)}
             />
 
             <Box display="flex" column width={"100%"}>

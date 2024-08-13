@@ -106,14 +106,14 @@ const ProfileCardFront = ({
 
       <Box
         width="105%"
-        background={`${COLORS.darkestGrey}22`}
+        background={`${COLORS.lightPurple}66`}
         bottom={0}
         borderRadius={"0px 0px 10px 10px"}
         justifyContent="center"
         height={40}
         alignItems="center"
       >
-        <Icon name="distance" color={COLORS.red} size={ICON_SIZES.LARGE} />
+        <Icon name="distance" color={COLORS.pink} size={ICON_SIZES.LARGE} />
         <Text margin={0} paddingRight={4}>
           {distance}
         </Text>

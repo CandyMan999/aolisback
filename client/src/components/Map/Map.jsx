@@ -219,6 +219,52 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
     handleFlyTo(lat, lng, markerZoom);
   };
 
+  const onMapLoad = (event) => {
+    const map = event.target;
+
+    // Add 3D terrain if you want
+    map.addSource("mapbox-dem", {
+      type: "raster-dem",
+      url: "mapbox://mapbox.mapbox-terrain-dem-v1",
+      tileSize: 512,
+      maxzoom: 14,
+    });
+
+    map.setTerrain({ source: "mapbox-dem", exaggeration: 1.5 });
+
+    // Add 3D buildings layer
+    map.addLayer({
+      id: "3d-buildings",
+      source: "composite",
+      "source-layer": "building",
+      filter: ["==", "extrude", "true"],
+      type: "fill-extrusion",
+      minzoom: 15,
+      paint: {
+        "fill-extrusion-color": "#aaa",
+        "fill-extrusion-height": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          15,
+          0,
+          15.05,
+          ["get", "height"],
+        ],
+        "fill-extrusion-base": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          15,
+          0,
+          15.05,
+          ["get", "min_height"],
+        ],
+        "fill-extrusion-opacity": 0.6,
+      },
+    });
+  };
+
   return (
     <Fragment>
       {loading ? (
@@ -237,6 +283,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
           mapStyle={"mapbox://styles/mapbox/streets-v12"}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
           onViewportChange={(newViewport) => setViewport(newViewport)}
+          onLoad={onMapLoad}
           {...viewport}
           onClick={handleMapClick}
           scrollZoom={!mobileSize}
@@ -257,20 +304,28 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
                 bottom={0}
                 left={-10}
                 zIndex={900}
-                style={{ color: COLORS.deepPurple }}
               >
                 <Button
-                  coolStyle
                   width={"100%"}
                   style={{
-                    minHeight: 60,
-                    borderRadius: 20,
-                    backgroundColor: COLORS.deepPurple,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    boxShadow: `0px 2px 10px ${COLORS.pink}`,
+                    borderRadius: "20px",
                     border: `solid 1px ${COLORS.pink}`,
+                    minHeight: 60,
                   }}
+                  color={COLORS.white}
                   onClick={handleMapMove}
                 >
-                  {mapLoading ? <Loading bar /> : <Text bold>UPDATE MAP</Text>}
+                  {mapLoading ? (
+                    <Loading bar />
+                  ) : (
+                    <Text color={COLORS.black} bold>
+                      UPDATE MAP
+                    </Text>
+                  )}
                 </Button>
               </Box>
             )}
@@ -296,7 +351,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
                     size={ICON_SIZES.X_LARGE}
                     color={
                       state.currentUser._id === user._id
-                        ? COLORS.deepPurple
+                        ? COLORS.vividBlue
                         : COLORS.pink
                     }
                   />

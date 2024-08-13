@@ -28,7 +28,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
   useEffect(() => {
     if (
       !!currentUser &&
-      (currentUser.username === "Smokey💨" ||
+      (currentUser.username === "CandyMan🍭" ||
         currentUser.username === "AsianAngel")
     ) {
       setItems([
@@ -49,8 +49,8 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
     if (
       !!currentUser &&
       !!currentUser.username &&
-      (currentUser.username !== "Smokey💨" ||
-        currentUser.username !== "AsianAngel")
+      currentUser.username !== "CandyMan🍭" &&
+      currentUser.username !== "AsianAngel"
     ) {
       setItems([
         { name: "Chat Rooms", icon: "chat", route: "/" },
