@@ -13,6 +13,7 @@ import { VideoChatScreen } from "./components";
 import Profile from "./modules/profile";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { isAndroid } from "react-device-detect";
+import { track } from "@vercel/analytics";
 
 import Context from "./context";
 import reducer from "./reducer";
@@ -80,6 +81,11 @@ const Root = () => {
         subscription={CREATE_VIDEO_SUBSCRIPTION}
         onSubscriptionData={({ subscriptionData }) => {
           const { createVideo } = subscriptionData.data;
+          track("Video_Message", {
+            url: createVideo.url,
+            sender: createVideo.sender._id,
+            receiver: createVideo.receiver._id,
+          });
 
           if (
             createVideo.sender._id === currentUser._id &&

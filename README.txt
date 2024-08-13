@@ -6,7 +6,6 @@
 
 
 9. Add phone number verification to website login process
-10. Shadows on boxes and picture in message center.. Check buttons everywhere
 
 
 

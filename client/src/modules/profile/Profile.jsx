@@ -14,6 +14,7 @@ import {
   LikeButton,
   UnlikeButton,
 } from "../../components";
+import { track } from "@vercel/analytics";
 
 import { COLORS } from "../../constants";
 import { formatDistanceToNow } from "date-fns";
@@ -133,6 +134,11 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
         return;
       }
 
+      track("Video_Call", {
+        sender: state.currentUser.username,
+        reciever: _id,
+      });
+
       setLoading(true);
       const variables = {
         senderID: state.currentUser._id,
@@ -152,6 +158,12 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     } catch (err) {
       setLoading(false);
       console.log(err);
+      // Track the error for debugging in production
+      track("Video_Call_Error", {
+        sender: state.currentUser.username,
+        receiver: _id,
+        error: err.message,
+      });
     }
   };
 

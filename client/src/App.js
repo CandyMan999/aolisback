@@ -11,8 +11,12 @@ import MessageCenter from "./modules/messageCenter";
 import Message from "./modules/Message";
 import AdminPage from "./modules/admin";
 import { Map } from "./components";
+import { inject } from "@vercel/analytics";
 
 import "./App.css";
+
+// Inject Vercel Analytics
+inject();
 
 class App extends React.PureComponent {
   render() {
