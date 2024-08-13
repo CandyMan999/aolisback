@@ -12,6 +12,14 @@ module.exports = {
         { $push: { pictures: picture } },
         { new: true }
       ).populate("pictures");
+
+      if (user.pictures.length >= 4 && user.phoneNumber) {
+        await User.findByIdAndUpdate(
+          { _id },
+          { profileComplete: true },
+          { new: true }
+        ).populate("pictures");
+      }
       await Picture.findByIdAndUpdate(
         { _id: picture._id },
         { user },
