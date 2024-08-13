@@ -2,14 +2,12 @@ import React, { useState, useRef } from "react";
 import { Box, Icon, ICON_SIZES, Text } from "../../components";
 import { motion } from "framer-motion";
 import { COLORS } from "../../constants";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
   const [roomName, setRoomName] = useState("");
   const [error, setError] = useState("");
-  const hiddenInputRef = useRef(null);
+  const nonInteractiveDivRef = useRef(null);
 
-  const mobile = useMediaQuery("(max-width: 950px)");
   const { showRoomList, roomId } = state;
 
   const handleChange = (e) => {
@@ -31,14 +29,14 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
     e.preventDefault();
     if (error) return;
 
+    if (nonInteractiveDivRef.current) {
+      nonInteractiveDivRef.current.focus();
+    }
+
     const variables = {
       name: roomName.trim(),
       _id: currentUserID,
     };
-
-    if (hiddenInputRef.current) {
-      hiddenInputRef.current.focus();
-    }
 
     createRoom(variables);
     setRoomName("");
@@ -57,6 +55,12 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
 
   const handleClose = () => {
     dispatch({ type: "CREATE_ROOM", payload: false });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit(e);
+    }
   };
 
   const inputContainerVariants = {
@@ -81,6 +85,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
           width: showRoomList ? "100vw" : "100%",
           zIndex: showRoomList ? 5000 : undefined,
         }}
+        ref={nonInteractiveDivRef}
         transition={{ ease: "linear", duration: 0.5 }}
       >
         <Box
@@ -177,6 +182,7 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
                   }}
                 >
                   <input
+                    onKeyDown={handleKeyDown}
                     style={{
                       border: "none",
                       flex: 1,
@@ -209,15 +215,6 @@ const CreateRoom = ({ currentUserID, createRoom, dispatch, state }) => {
                   )}
                 </Box>
               </motion.div>
-              <input
-                ref={hiddenInputRef}
-                style={{
-                  position: "absolute",
-                  opacity: 0,
-                  pointerEvents: "none",
-                }}
-                tabIndex="-1"
-              />
             </form>
           )}
         </motion.div>
