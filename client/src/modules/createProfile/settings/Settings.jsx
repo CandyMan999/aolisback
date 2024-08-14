@@ -5,10 +5,7 @@ import {
   Box,
   Button,
   Text,
-  ICON_SIZES,
   FONT_SIZES,
-  Loading,
-  Icon,
   Switch,
   TermsAgreement,
   PrivacyPolicyModal,
@@ -24,8 +21,8 @@ import { GiInfinity } from "react-icons/gi";
 
 const Settings = ({ state, client, dispatch }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-  const [soundsEnabled, setSoundsEnabled] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [soundsEnabled, setSoundsEnabled] = useState(true);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showFeedBackModal, setShowFeedBackModal] = useState(false);
 

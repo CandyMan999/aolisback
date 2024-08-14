@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { Modal, Text, Box, Button, FONT_SIZES } from "../../components";
 import { COLORS } from "../../constants";
 import { ACCEPT_TERMS_MUTATION } from "../../graphql/mutations";
@@ -50,7 +49,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             (as defined further below) and we want you to know yours and our
             rights before you use the GoneChatting website or application
             (“GoneChatting” or the “App”). Please take a few moments to read
-            these Terms before enjoying the App, because once you access, view
+            these Terms before enjoying the App, because once you access, view,
             or use the App, you are going to be legally bound by these Terms (so
             probably best to read them first!).
           </Text>
@@ -62,18 +61,39 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             services, unless you cancel your subscription in accordance with
             Section 5 below.
           </Text>
+          <Text bold center fontSize={FONT_SIZES.X_LARGE}>
+            1. Subscription and Payment Terms
+          </Text>
           <Text>
-            And a notice to California subscribers: You may cancel your
-            subscription and request a refund at any time prior to midnight of
-            the third business day following the date you subscribed. If you
-            subscribed using your Apple ID, refunds are handled by Apple, not
-            GoneChatting. If you wish to request a refund, please visit
-            https://getsupport.apple.com. If you subscribed using your Google
-            Play Store account or through GoneChatting, please contact customer
-            support.
+            GoneChatting offers various subscription plans. By subscribing to
+            one of our plans, you agree to pay the subscription fee specified at
+            the time of purchase. All payments will be charged to your iTunes
+            account upon confirmation of purchase.
+          </Text>
+          <Text>
+            Subscriptions automatically renew unless auto-renew is turned off at
+            least 24 hours before the end of the current period. Your account
+            will be charged for renewal within 24 hours prior to the end of the
+            current period, at the same cost as your initial subscription unless
+            otherwise specified. You can manage your subscription and turn off
+            auto-renewal by going to your Account Settings after purchase.
+          </Text>
+          <Text>
+            Any unused portion of a free trial period, if offered, will be
+            forfeited when you purchase a subscription, where applicable.
+          </Text>
+          <Text bold>Refunds</Text>
+          <Text>
+            If you subscribed using your Apple ID, refunds are handled by Apple,
+            not GoneChatting. To request a refund, please visit{" "}
+            <a href="https://getsupport.apple.com">
+              https://getsupport.apple.com
+            </a>
+            . GoneChatting does not provide refunds for any subscriptions
+            purchased through the App Store.
           </Text>
           <Text bold center fontSize={FONT_SIZES.X_LARGE}>
-            Privacy and Data Protection
+            2. Privacy and Data Protection
           </Text>
           <Text>
             We take your privacy very seriously and are committed to protecting
@@ -90,11 +110,11 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             .
           </Text>
           <Text bold center fontSize={FONT_SIZES.X_LARGE}>
-            1. GoneChatting RULES
+            3. GoneChatting RULES
           </Text>
           <Text>
             Before you can use the App, you will need to register for an account
-            (“Account”). In order to create an Account you must:
+            (“Account”). In order to create an Account, you must:
           </Text>
           <ol>
             <li>
@@ -111,17 +131,17 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             </li>
           </ol>
           <Text>
-            You can create an Account via manual registration, or by using your
+            You can create an Account via manual registration or by using your
             Google or Apple login details. If you create an Account using your
-            Google or Apple login details, you authorize us to access, display
+            Google or Apple login details, you authorize us to access, display,
             and use certain information from your account (e.g. profile
             pictures, email, name). For more information about what information
             we use and how we use it, please check out our{" "}
             <a href="https://candyman999.github.io/goneChattingSupport/">
               Privacy Policy
             </a>
-            . By using our App, you acknowledge that we may collect and use of
-            your data and information in accordance with our Privacy Policy
+            . By using our App, you acknowledge that we may collect and use your
+            data and information in accordance with our Privacy Policy.
           </Text>
           <Text>
             Unfortunately, we cannot allow you to use another person’s Account
@@ -144,7 +164,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             to monitor and review accounts and messages for content that
             indicates breaches of these Terms. We reserve the right at our sole
             discretion to terminate or suspend any Account, restrict access to
-            the App, or make use of any operational, technological, legal or
+            the App, or make use of any operational, technological, legal, or
             other means available to enforce the Terms (including without
             limitation blocking specific IP addresses), at any time without
             liability and without the need to give you prior notice. Without
@@ -161,22 +181,17 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             you will not receive a refund for any paid service or features you
             have already been charged for.
           </Text>
-          <Text>
-            You may not access, tamper with, or use non-public areas of the App
-            or our systems. Certain portions of the App may not be accessible if
-            you have not registered for an Account.
-          </Text>
           <Text bold center fontSize={FONT_SIZES.X_LARGE}>
-            2. TYPES OF CONTENT
+            4. Types of Content
           </Text>
-          <Text>content that you upload and provide (“Your Content”);</Text>
+          <Text>Content that you upload and provide (“Your Content”);</Text>
           <ol>
             <li>
-              <Text>content that members provide (“Member Content”); and</Text>
+              <Text>Content that members provide (“Member Content”); and</Text>
             </li>
             <li>
               <Text>
-                content that the GoneChatting Group provides (including, without
+                Content that the GoneChatting Group provides (including, without
                 limitation, database(s) and/or software) (“Our Content”).
               </Text>
             </li>
@@ -185,9 +200,9 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             There is certain content we can’t allow on GoneChatting
           </Text>
           <Text>
-            We want our users to be able express themselves as much as possible
-            and post all sorts of things on GoneChatting, but we have to impose
-            restrictions on certain content which:
+            We want our users to be able to express themselves as much as
+            possible and post all sorts of things on GoneChatting, but we have
+            to impose restrictions on certain content which:
           </Text>
           <ul>
             <li>
@@ -197,36 +212,27 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
                 person (including for example and without limitation, language
                 that could be deemed discriminatory towards an individual’s
                 race, color, ethnicity, national origin, religion, disability,
-                sexual orientation, gender expression, gender identity or
+                sexual orientation, gender expression, gender identity, or
                 physical appearance);
               </Text>
             </li>
             <li>
               <Text>
                 is obscene, pornographic, violent or otherwise may offend human
-                dignity (including for example and without limitation, language
-                that could be deemed discriminatory towards an individual’s
-                race, color, ethnicity, national origin, religion, disability,
-                sexual orientation, gender expression, gender identity or
-                physical appearance);
+                dignity;
               </Text>
             </li>
             <li>
               <Text>
                 is abusive, insulting or threatening, discriminatory or which
-                promotes or encourages racism, sexism, hatred or bigotry
-                (including for example and without limitation, language that
-                could be deemed discriminatory towards an individual’s race,
-                color, ethnicity, national origin, religion, disability, sexual
-                orientation, gender expression, gender identity or physical
-                appearance);
+                promotes or encourages racism, sexism, hatred, or bigotry;
               </Text>
             </li>
             <li>
               <Text>
                 encourages any illegal activity including, without limitation,
-                terrorism, inciting racial hatred or the submission of which in
-                itself constitutes committing a criminal offence
+                terrorism, inciting racial hatred, or the submission of which in
+                itself constitutes committing a criminal offense;
               </Text>
             </li>
             <li>
@@ -235,7 +241,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             <li>
               <Text>
                 relates to commercial activities (including, without limitation,
-                sales, competitions and advertising, links to other websites or
+                sales, competitions, and advertising, links to other websites or
                 premium line telephone numbers);
               </Text>
             </li>
@@ -245,7 +251,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             <li>
               <Text>
                 contains any spyware, adware, viruses, corrupt files, worm
-                programs or other malicious code designed to interrupt, damage
+                programs, or other malicious code designed to interrupt, damage
                 or limit the functionality of or disrupt any software, hardware,
                 telecommunications, networks, servers or other equipment, Trojan
                 horse or any other material designed to damage, interfere with,
@@ -281,15 +287,14 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             content.
           </Text>
           <Text bold center fontSize={FONT_SIZES.X_LARGE}>
-            Your Content Guidelines
+            5. Your Content Guidelines
           </Text>
           <Text>
-            You agree that Your Content must comply with our Guidelines at as
+            You agree that Your Content must comply with our Guidelines as
             updated from time to time. As Your Content is unique, you are
             responsible and liable for Your Content and will indemnify, defend,
             release, and hold us harmless from any claims made in connection
-            with Your Content. Sorry that was a bit of a mouthful, but you are
-            what you post!
+            with Your Content.
           </Text>
           <Text>
             These Guidelines and our Terms and Conditions are designed to ensure
@@ -300,26 +305,23 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
           <Text bold>Upload only your own photos</Text>
           <Text>
             We take copyrights very seriously. If you don’t own the rights to a
-            photo or video, please don’t post it. Same goes for dogs. If the dog
-            isn’t yours-- don’t post it…(only joking!)
+            photo or video, please don’t post it.
           </Text>
           <Text bold>Respect all users</Text>
           <Text>
             We’re a very diverse community. This means you should respect other
             people’s beliefs, interests and property while on GoneChatting.
             GoneChatting takes a strong stance against hate speech, rude or
-            abusive behaviour, bullying, and misogyny. You should behave the
-            same way on GoneChatting as you would in real life. Additionally we
+            abusive behavior, bullying, and misogyny. You should behave the same
+            way on GoneChatting as you would in real life. Additionally, we
             encourage all of our users to report anyone who does not follow
-            these behavioural guidelines. As a community rooted in kindness and
-            respect, we expect all of our users to respect each other,
-            themselves, and the GoneChatting staff.
+            these behavioral guidelines.
           </Text>
           <Text bold>Don't pretend you're someone you're not</Text>
           <Text>
-            As previously stated, do not post photos that are not of you. We
-            also recommend using our photo verification tool to let other users
-            know that your profile is legit.
+            Do not post photos that are not of you. We also recommend using our
+            photo verification tool to let other users know that your profile is
+            legit.
           </Text>
           <Text>GoneChatting photo guidelines:</Text>
           <ul>
@@ -336,7 +338,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
               <Text>No pictures in underwear.</Text>
             </li>
             <li>
-              <Text>No Shirtless/underwear Mirror Selfies.</Text>
+              <Text>No shirtless/underwear mirror selfies.</Text>
             </li>
             <li>
               <Text>Face must be clearly visible in all photos.</Text>
@@ -351,7 +353,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
               <Text>No graphic hunting photos.</Text>
             </li>
             <li>
-              <Text>no guns</Text>
+              <Text>No guns.</Text>
             </li>
           </ul>
           <Text bold>Don’t do anything illegal on our site</Text>
@@ -375,18 +377,8 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             In addition, all children must be completely clothed. This is safer
             for both children and their parents.
           </Text>
-          <Text>
-            We use a combination of automated systems and a team of moderators
-            to monitor and review accounts and messages for content that
-            indicates breaches of these Guidelines and our Terms and Conditions.
-            If you don’t follow these guidelines, you’ll receive a warning
-            (unless our team decides to block or restrict access without warning
-            at our discretion). If you ignore this warning, you risk losing your
-            account. These guidelines are designed to make GoneChatting a
-            friendly and safe place for all our users.
-          </Text>
-          <Text center bold fontSize={FONT_SIZES.X_LARGE}>
-            3. RESTRICTIONS ON THE APP
+          <Text bold center fontSize={FONT_SIZES.X_LARGE}>
+            6. Restrictions on the App
           </Text>
           <Text>You agree to:</Text>
           <ul>
@@ -400,7 +392,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             <li>
               <Text>
                 use your real name and real age in creating your GoneChatting
-                account and a username for your alias on your profile you; and
+                account and a username for your alias on your profile;
               </Text>
             </li>
             <li>
@@ -434,7 +426,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             <li>
               <Text>
                 create or operate a pyramid scheme, fraud or other similar
-                practice, or;
+                practice;
               </Text>
             </li>
             <li>
@@ -454,10 +446,10 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             us, outlining the abuse and/or complaint. You can also report a user
             directly from a profile or in chat by clicking the ‘Block & Report’
             link. We reserve the right to investigate any possible violations of
-            these Terms, any GoneChatting user’s rights, or any third party
+            these Terms, any GoneChatting user’s rights, or any third-party
             rights and we may, in our sole discretion, immediately terminate any
             user’s right to use of the App without prior notice, as set out
-            further in Section 1 above, and/or remove any improper, infringing
+            further in Section 3 above, and/or remove any improper, infringing
             or otherwise unauthorized Member Content submitted to the App.
           </Text>
           <Text>
@@ -492,8 +484,25 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             damages, rights and actions of any kind, including personal
             injuries, death or property damage for any unconscionable commercial
             practice by GoneChatting Group or for such party’s fraud, deception,
-            false, promise, misrepresentation or concealment, suppression or
+            false promise, misrepresentation or concealment, suppression or
             omission of any material fact in connection with the App.
+          </Text>
+          <Text bold center fontSize={FONT_SIZES.X_LARGE}>
+            7. Changes to Terms
+          </Text>
+          <Text>
+            GoneChatting may update these Terms from time to time. We will
+            notify you of any changes by posting the new Terms on this page. You
+            are advised to review these Terms periodically for any changes.
+            Changes to these Terms are effective when they are posted on this
+            page.
+          </Text>
+          <Text bold center fontSize={FONT_SIZES.X_LARGE}>
+            8. Contact Us
+          </Text>
+          <Text>
+            If you have any questions about these Terms, please contact us at{" "}
+            <Text bold>support@gonechatting.com</Text>.
           </Text>
         </Box>
         {!state.currentUser.terms ? (
@@ -506,6 +515,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
                 borderRadius: 12,
                 width: "40%",
                 border: `solid 1px ${COLORS.white}`,
+                boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
               }}
             >
               <Text bold>Cancel</Text>
@@ -518,6 +528,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
                 borderRadius: 12,
                 width: "40%",
                 border: `solid 1px ${COLORS.white}`,
+                boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
               }}
             >
               <Text bold>Accept</Text>

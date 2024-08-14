@@ -1,6 +1,6 @@
-2. Add analytics to vercel
+
 3.Upgrade heroku before deploy
-4. upgrade vercel before deoploy
+
 5. upgrade unbuntu servers for Jitsi Instance before delploy- ask AI about how many CPUs to be gucci
 
 

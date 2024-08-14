@@ -8,6 +8,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+
 import RequestModal from "./modules/requestModal";
 import { VideoChatScreen } from "./components";
 import Profile from "./modules/profile";
@@ -23,7 +24,7 @@ import { ApolloClient } from "apollo-client";
 import { WebSocketLink } from "apollo-link-ws";
 
 import { InMemoryCache } from "apollo-cache-inmemory";
-
+import { inject } from "@vercel/analytics";
 import {
   VIDEO_CHAT_REQUEST,
   CREATE_VIDEO_SUBSCRIPTION,
@@ -37,6 +38,9 @@ export const WS_URL =
   process.env.NODE_ENV === "production"
     ? `wss://aolisback.herokuapp.com/graphql`
     : `ws://localhost:4000/graphql`;
+
+// Inject Vercel Analytics as early as possible
+inject();
 
 const wsLink = new WebSocketLink({
   uri: WS_URL,
