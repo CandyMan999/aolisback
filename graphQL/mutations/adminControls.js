@@ -126,11 +126,15 @@ module.exports = {
       const deleteUserAndAssociatedData = async (user) => {
         // Delete all pictures
         for (const pic of user.pictures) {
-          const data = await Picture.findById(pic._id);
-          if (data && data.publicId) {
-            await cloudinary.uploader.destroy(data.publicId);
+          try {
+            const data = await Picture.findById(pic._id);
+            if (data && data.publicId) {
+              await cloudinary.uploader.destroy(data.publicId);
+            }
+            await Picture.deleteOne({ _id: pic._id });
+          } catch (err) {
+            console.log(err);
           }
-          await Picture.deleteOne({ _id: pic._id });
         }
 
         // Delete all comments

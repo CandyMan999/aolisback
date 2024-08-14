@@ -10,7 +10,7 @@
 
 
 14. Get everything working on android. 
-15. doubld load on homescreen fix
+
 
 
 
