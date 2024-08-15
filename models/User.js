@@ -138,6 +138,10 @@ const UserSchema = new mongoose.Schema({
       default: [0, 0], // Default coordinates if not specified
       index: "2dsphere", // Specify the index type as 2dsphere for geospatial indexing
     },
+    showOnMap: {
+      type: Boolean,
+      default: false,
+    },
   },
   blockedUsers: [
     {

@@ -7,6 +7,7 @@ module.exports = {
     try {
       const users = await User.find({
         "location.coordinates": { $ne: [0, 0] },
+        "location.showOnMap": true,
         location: {
           $near: {
             $geometry: {

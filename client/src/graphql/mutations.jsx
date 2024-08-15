@@ -30,6 +30,7 @@ export const GOOGLE_SIGNUP_MUTATION = gql`
         }
         location {
           coordinates
+          showOnMap
         }
         email
         intro
@@ -77,6 +78,7 @@ export const GOOGLE_LOGIN_MUTATION = gql`
         }
         location {
           coordinates
+          showOnMap
         }
         email
         intro
@@ -153,6 +155,7 @@ export const LOGIN_MUTATION = gql`
         }
         location {
           coordinates
+          showOnMap
         }
         email
         intro
@@ -271,6 +274,7 @@ export const CREATE_PROFILE_MUTATION = gql`
       }
       location {
         coordinates
+        showOnMap
       }
       blockedUsers {
         _id
@@ -291,9 +295,20 @@ export const CREATE_PROFILE_MUTATION = gql`
 `;
 
 export const UPDATE_LOCATION_MUTATION = gql`
-  mutation ($_id: ID!, $latitude: Float!, $longitude: Float!) {
-    updateLocation(_id: $_id, latitude: $latitude, longitude: $longitude) {
+  mutation (
+    $_id: ID!
+    $latitude: Float!
+    $longitude: Float!
+    $showOnMap: Boolean
+  ) {
+    updateLocation(
+      _id: $_id
+      latitude: $latitude
+      longitude: $longitude
+      showOnMap: $showOnMap
+    ) {
       coordinates
+      showOnMap
     }
   }
 `;
@@ -329,6 +344,7 @@ export const ADD_PHOTO_MUTATION = gql`
       }
       location {
         coordinates
+        showOnMap
       }
     }
   }
@@ -397,6 +413,7 @@ export const DELETE_PHOTO_MUTATION = gql`
       }
       location {
         coordinates
+        showOnMap
       }
     }
   }
@@ -534,6 +551,7 @@ export const FLAG_VIDEO_MUTATION = gql`
         sex
         location {
           coordinates
+          showOnMap
         }
         age
         occupation
@@ -585,6 +603,7 @@ export const VIEWED_VIDEO_MUTATION = gql`
         sex
         location {
           coordinates
+          showOnMap
         }
         age
         lookingFor {
@@ -742,6 +761,7 @@ export const ACCEPT_TERMS_MUTATION = gql`
       }
       location {
         coordinates
+        showOnMap
       }
       sentVideos {
         _id
@@ -790,6 +810,7 @@ export const ACCEPT_TERMS_MUTATION = gql`
           sex
           location {
             coordinates
+            showOnMap
           }
           age
           occupation
@@ -823,6 +844,7 @@ export const ACCEPT_TERMS_MUTATION = gql`
           kids
           location {
             coordinates
+            showOnMap
           }
           pictures {
             _id

@@ -63,7 +63,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     lookingFor,
     inCall,
   } = user;
-
+  console.log("user clicked location: ", location);
   useEffect(() => {
     if (!!state.isProfile) {
       handleImBlocked();
@@ -637,17 +637,22 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               style={{
                 margin: 0,
                 border: `solid 2px ${
-                  location && noLocation(location.coordinates)
+                  (location && noLocation(location.coordinates)) ||
+                  (location && !location.showOnMap)
                     ? COLORS.grey
                     : COLORS.pink
                 }`,
                 borderRadius: 10,
               }}
-              disabled={location && noLocation(location.coordinates)}
+              disabled={
+                (location && noLocation(location.coordinates)) ||
+                (location && !location.showOnMap)
+              }
               onClick={() => handleLocation(_id, location)}
               coolStyle
               color={
-                location && noLocation(location.coordinates)
+                (location && noLocation(location.coordinates)) ||
+                (location && !location.showOnMap)
                   ? COLORS.lightGrey
                   : COLORS.lightPurple
               }
@@ -657,7 +662,8 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 margin={0}
                 bold
                 color={
-                  location && noLocation(location.coordinates)
+                  (location && noLocation(location.coordinates)) ||
+                  (location && !location.showOnMap)
                     ? COLORS.white
                     : COLORS.deepPurple
                 }

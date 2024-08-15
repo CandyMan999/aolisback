@@ -9,7 +9,7 @@ import React, {
 import { VIEWED_VIDEO_MUTATION } from "../../graphql/mutations";
 import { useLocation } from "react-router-dom";
 import { Cloudinary } from "@cloudinary/url-gen";
-import { Box, Loading, Text } from "../../components";
+import { Box, Loading, Text, Button } from "../../components";
 import { COLORS } from "../../constants";
 import { thumbnail } from "@cloudinary/url-gen/actions/resize";
 import { quality, format } from "@cloudinary/url-gen/actions/delivery";
@@ -25,11 +25,17 @@ const VideoPlayer = ({
   receiverWatching,
   _id,
   client,
+  flagged,
 }) => {
   const location = useLocation();
   const [isFullScreen, setIsFullScreen] = useState(false);
-
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(flagged); // Overlay initially shown if video is flagged
+
+  const videoRef = useRef();
+  const cloudinaryRef = useRef(
+    new Cloudinary({ cloud: { cloudName: "localmassagepros" } })
+  );
 
   const handlePlayPause = () => {
     const video = videoRef.current;
@@ -41,10 +47,6 @@ const VideoPlayer = ({
       setIsPlaying(false);
     }
   };
-  const videoRef = useRef();
-  const cloudinaryRef = useRef(
-    new Cloudinary({ cloud: { cloudName: "localmassagepros" } })
-  );
 
   const handleViewVideo = async () => {
     try {
@@ -67,6 +69,10 @@ const VideoPlayer = ({
     if (!document.fullscreenElement) {
       setIsFullScreen(false);
     }
+  };
+
+  const handleDismissOverlay = () => {
+    setShowOverlay(false);
   };
 
   useEffect(() => {
@@ -96,8 +102,45 @@ const VideoPlayer = ({
             width: "100%",
             height: "fit-content",
             boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+            position: "relative", // To position overlay on top
           }}
         >
+          {showOverlay && (
+            <Box
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "white",
+                borderRadius: borderRadius,
+                zIndex: 10,
+              }}
+            >
+              <Text style={{ marginBottom: "16px", textAlign: "center" }}>
+                This video has been flagged by our AI or yourself and may
+                include inappropriate content.
+              </Text>
+              <Button
+                onClick={handleDismissOverlay}
+                style={{
+                  backgroundColor: COLORS.pink,
+                  color: COLORS.white,
+                  padding: "8px 16px",
+                  borderRadius: "4px",
+                }}
+              >
+                View Anyway
+              </Button>
+            </Box>
+          )}
+
           <video
             ref={videoRef}
             src={videoUrl}
@@ -108,6 +151,7 @@ const VideoPlayer = ({
               borderRadius: borderRadius || undefined,
               maxWidth: isFullScreen ? undefined : 300,
               width: "100%",
+              opacity: showOverlay ? 0.5 : 1, // Dim the video if overlay is shown
             }}
           />
         </Box>
@@ -119,8 +163,45 @@ const VideoPlayer = ({
             backgroundColor: COLORS.black,
             borderRadius: borderRadius,
             height: height || 250,
+            position: "relative", // To position overlay on top
           }}
         >
+          {showOverlay && (
+            <Box
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "white",
+                borderRadius: borderRadius,
+                zIndex: 10,
+              }}
+            >
+              <Text style={{ marginBottom: "16px", textAlign: "center" }}>
+                This video has been flagged by our AI or yourself and may
+                include inappropriate content.
+              </Text>
+              <Button
+                onClick={handleDismissOverlay}
+                style={{
+                  backgroundColor: COLORS.pink,
+                  color: COLORS.white,
+                  padding: "8px 16px",
+                  borderRadius: "4px",
+                }}
+              >
+                View Anyway
+              </Button>
+            </Box>
+          )}
+
           <video
             ref={videoRef}
             src={videoUrl}
@@ -133,6 +214,7 @@ const VideoPlayer = ({
               borderRadius: borderRadius || undefined,
               maxWidth: isFullScreen ? undefined : 300,
               width: "100%",
+              opacity: showOverlay ? 0.5 : 1, // Dim the video if overlay is shown
             }}
           />
         </Box>
@@ -152,23 +234,6 @@ const VideoPlayer = ({
           />
         </Box>
       )}
-      {/* {(isLoading || !videoUrl) && location.pathname !== "/message-center" && (
-        <Box
-          width={150}
-          height={height || 250}
-          background={COLORS.lightGrey}
-          borderRadius={8}
-          flex
-          column
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Loading ring size={35} color={COLORS.pink} />
-          <Text center padding={0} bold color={COLORS.white}>
-            Processing HD...
-          </Text>
-        </Box>
-      )} */}
     </Fragment>
   );
 };

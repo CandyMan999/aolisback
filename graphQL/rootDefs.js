@@ -118,6 +118,7 @@ module.exports = gql`
   type Location {
     type: String
     coordinates: [Float]
+    showOnMap: Boolean
   }
 
   type Comment {
@@ -249,7 +250,12 @@ module.exports = gql`
       drugs: Drugs
       kids: String
     ): User
-    updateLocation(_id: ID!, latitude: Float!, longitude: Float!): Location
+    updateLocation(
+      _id: ID!
+      latitude: Float!
+      longitude: Float!
+      showOnMap: Boolean
+    ): Location
     addPhoto(_id: ID!, url: String!, publicId: String!): User
     flagPhoto(flaggedUserID: ID!, url: String!, publicId: String!): Picture
     sendVideo(

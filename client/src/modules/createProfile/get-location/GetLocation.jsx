@@ -63,6 +63,7 @@ const GetLocation = ({
         latitude,
         longitude,
         _id: currentUser._id,
+        showOnMap: true,
       };
 
       const { updateLocation } = await client.request(
@@ -73,7 +74,7 @@ const GetLocation = ({
       if (updateLocation) {
         await dispatch({
           type: "UPDATE_LOCATION",
-          payload: updateLocation.coordinates,
+          payload: updateLocation,
         });
 
         setLocationSuccess(true);

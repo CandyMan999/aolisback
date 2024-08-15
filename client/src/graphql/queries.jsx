@@ -77,6 +77,7 @@ export const FIND_USER_QUERY = gql`
       kids
       location {
         coordinates
+        showOnMap
       }
     }
   }
@@ -124,6 +125,7 @@ export const GET_USERS_MAP_QUERY = gql`
       kids
       location {
         coordinates
+        showOnMap
       }
     }
   }
@@ -139,6 +141,10 @@ export const FETCH_ME = gql`
       username
       expoToken
       inCall
+      location {
+        coordinates
+        showOnMap
+      }
       plan {
         planType
         messages
@@ -216,6 +222,7 @@ export const FETCH_ME = gql`
           sex
           location {
             coordinates
+            showOnMap
           }
           age
           occupation
@@ -249,6 +256,7 @@ export const FETCH_ME = gql`
           kids
           location {
             coordinates
+            showOnMap
           }
           pictures {
             _id
@@ -323,6 +331,7 @@ export const GET_ALL_USERS = gql`
       isLoggedIn
       location {
         coordinates
+        showOnMap
       }
       intro
       sex
@@ -390,6 +399,7 @@ export const GET_LIKED_USERS_QUERY = gql`
       isLoggedIn
       location {
         coordinates
+        showOnMap
       }
       intro
       sex
@@ -484,6 +494,7 @@ export const GET_MATCHED_USERS_QUERY = gql`
       isLoggedIn
       location {
         coordinates
+        showOnMap
       }
       intro
       sex

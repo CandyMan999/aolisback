@@ -18,6 +18,7 @@ const EXCLUDED_USER_IDS = [
   "6686f5e8af94620002482764",
   "669c616afe75e0000284581c",
   "669c61eefe75e00002845865",
+  "66bcfd62bee04800023aded7",
 ];
 
 const seedUsers = async () => {
@@ -177,6 +178,7 @@ const seedUsers = async () => {
         phoneNumber: generatePhone(),
         location: {
           coordinates: randomCoords,
+          showOnMap: true,
         },
         lookingFor: {
           ageRange: {

@@ -29,7 +29,8 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
     if (
       !!currentUser &&
       (currentUser.username === "CandyMan🍭" ||
-        currentUser.username === "AsianAngel")
+        currentUser.username === "AsianAngel" ||
+        currentUser.username === "Smokey💨")
     ) {
       setItems([
         { name: "Chat Rooms", icon: "chat", route: "/" },
@@ -50,7 +51,8 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
       !!currentUser &&
       !!currentUser.username &&
       currentUser.username !== "CandyMan🍭" &&
-      currentUser.username !== "AsianAngel"
+      currentUser.username !== "AsianAngel" &&
+      currentUser.username !== "Smokey💨"
     ) {
       setItems([
         { name: "Chat Rooms", icon: "chat", route: "/" },

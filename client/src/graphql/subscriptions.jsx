@@ -76,6 +76,7 @@ export const CREATE_VIDEO_SUBSCRIPTION = gql`
         sex
         location {
           coordinates
+          showOnMap
         }
         age
         occupation
@@ -232,6 +233,7 @@ export const CHANGE_PLAN_SUBSCRIPTION = gql`
       }
       location {
         coordinates
+        showOnMap
       }
       sentVideos {
         _id
@@ -281,6 +283,7 @@ export const CHANGE_PLAN_SUBSCRIPTION = gql`
           sex
           location {
             coordinates
+            showOnMap
           }
           age
           occupation
@@ -314,6 +317,7 @@ export const CHANGE_PLAN_SUBSCRIPTION = gql`
           kids
           location {
             coordinates
+            showOnMap
           }
           pictures {
             _id

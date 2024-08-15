@@ -245,6 +245,7 @@ const Message = () => {
                     receiverWatching={video.receiver._id === currentUser._id}
                     _id={video._id}
                     client={client}
+                    flagged={video.flagged}
                   />
 
                   <Text center bold margin={0} marginTop={5}>

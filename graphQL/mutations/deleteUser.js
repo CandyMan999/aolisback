@@ -14,13 +14,13 @@ module.exports = {
     const { _id } = args;
 
     try {
-      const currentUser = await User.findById(_id).populate(
+      const currentUser = await User.findById(_id).populate([
         "pictures",
         "comments",
         "sentVideos",
         "blockedUsers",
-        "receivedVideos"
-      );
+        "receivedVideos",
+      ]);
 
       if (!currentUser) {
         throw new AuthenticationError("User not found");
@@ -28,93 +28,109 @@ module.exports = {
 
       const deleteAllPhotos = async () => {
         try {
-          const deletePhotoPromises = (currentUser.pictures || []).map(
-            async (pic) => {
-              const picture = await Picture.findById(pic._id);
-              if (picture && picture.publicId) {
-                await cloudinary.uploader.destroy(picture.publicId);
-                await Picture.deleteOne({ _id: picture._id });
-              }
+          if (!currentUser.pictures || currentUser.pictures.length === 0) {
+            return;
+          }
+
+          const deletePhotoPromises = currentUser.pictures.map(async (pic) => {
+            const picture = await Picture.findById(pic._id);
+            if (picture && picture.publicId) {
+              await cloudinary.uploader.destroy(picture.publicId);
+              await Picture.deleteOne({ _id: picture._id });
             }
-          );
+          });
+
           await Promise.all(deletePhotoPromises);
         } catch (err) {
-          throw new AuthenticationError(err.message);
+          console.error("Error deleting photos:", err.message);
         }
       };
 
       const deleteAllComments = async () => {
         try {
-          const deleteCommentPromises = (currentUser.comments || []).map(
+          if (!currentUser.comments || currentUser.comments.length === 0) {
+            return;
+          }
+
+          const deleteCommentPromises = currentUser.comments.map(
             async (comment) => {
               await Comment.deleteOne({ _id: comment._id });
             }
           );
+
           await Promise.all(deleteCommentPromises);
 
-          // Remove references to the user's comments in any associated rooms
           const rooms = await Room.find({
             comments: { $in: currentUser.comments },
           });
-          const updateRoomPromises = rooms.map(async (room) => {
-            await Room.updateOne(
-              { _id: room._id },
-              { $pull: { comments: { $in: currentUser.comments } } }
-            );
-          });
-          await Promise.all(updateRoomPromises);
+
+          if (rooms.length > 0) {
+            const updateRoomPromises = rooms.map(async (room) => {
+              await Room.updateOne(
+                { _id: room._id },
+                { $pull: { comments: { $in: currentUser.comments } } }
+              );
+            });
+            await Promise.all(updateRoomPromises);
+          }
         } catch (err) {
-          throw new AuthenticationError(err.message);
+          console.error("Error deleting comments:", err.message);
         }
       };
 
       const deleteAllVideos = async () => {
         try {
           const publicIDs = [];
-          const deleteSentVideoPromises = (currentUser.sentVideos || []).map(
-            async (videoId) => {
-              const video = await Video.findById(videoId);
-              if (video && video.publicId) {
-                publicIDs.push(video.publicId);
+
+          if (currentUser.sentVideos && currentUser.sentVideos.length > 0) {
+            const deleteSentVideoPromises = currentUser.sentVideos.map(
+              async (videoId) => {
+                const video = await Video.findById(videoId);
+                if (video && video.publicId) {
+                  publicIDs.push(video.publicId);
+                }
+                if (video && video.receiver) {
+                  await User.findByIdAndUpdate(
+                    { _id: video.receiver._id },
+                    { $pull: { receivedVideos: video._id } }
+                  );
+                }
+                await Video.deleteOne({ _id: video._id });
               }
-              if (video && video.receiver) {
-                await User.findByIdAndUpdate(
-                  { _id: video.receiver._id },
-                  { $pull: { receivedVideos: video._id } }
-                );
+            );
+
+            await Promise.all(deleteSentVideoPromises);
+          }
+
+          if (
+            currentUser.receivedVideos &&
+            currentUser.receivedVideos.length > 0
+          ) {
+            const deleteReceivedVideoPromises = currentUser.receivedVideos.map(
+              async (videoId) => {
+                const video = await Video.findById(videoId);
+                if (video && video.publicId) {
+                  publicIDs.push(video.publicId);
+                }
+                await Video.deleteOne({ _id: video._id });
               }
-              await Video.deleteOne({ _id: video._id });
-            }
-          );
+            );
 
-          const deleteReceivedVideoPromises = (
-            currentUser.receivedVideos || []
-          ).map(async (videoId) => {
-            const video = await Video.findById(videoId);
-            if (video && video.publicId) {
-              publicIDs.push(video.publicId);
-            }
-            await Video.deleteOne({ _id: video._id });
-          });
+            await Promise.all(deleteReceivedVideoPromises);
+          }
 
-          await Promise.all([
-            ...deleteSentVideoPromises,
-            ...deleteReceivedVideoPromises,
-          ]);
-
-          if (publicIDs.length) {
+          if (publicIDs.length > 0) {
             await cloudinary.api.delete_resources(publicIDs, {
               resource_type: "video",
             });
           }
         } catch (err) {
-          throw new AuthenticationError(err.message);
+          console.error("Error deleting videos:", err.message);
         }
       };
 
       const removeUserReferences = async () => {
         try {
-          // Update other users' matchedUsers, likedUsers, and usersLikedMe arrays
           await User.updateMany(
             { matchedUsers: currentUser._id },
             { $pull: { matchedUsers: currentUser._id } }
@@ -132,7 +148,7 @@ module.exports = {
             { $pull: { blockedUsers: currentUser._id } }
           );
         } catch (err) {
-          throw new AuthenticationError(err.message);
+          console.error("Error removing user references:", err.message);
         }
       };
 
@@ -140,7 +156,7 @@ module.exports = {
         try {
           await User.deleteOne({ _id: currentUser._id });
         } catch (err) {
-          throw new AuthenticationError(err.message);
+          console.error("Error deleting user:", err.message);
         }
       };
 
@@ -152,6 +168,7 @@ module.exports = {
 
       return { status: true };
     } catch (err) {
+      console.error("Error in deleteUserResolver:", err.message);
       throw new AuthenticationError(err.message);
     }
   },
