@@ -182,7 +182,21 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             have already been charged for.
           </Text>
           <Text bold center fontSize={FONT_SIZES.X_LARGE}>
-            4. Types of Content
+            4. End User License Agreement (EULA)
+          </Text>
+          <Text>
+            By using the GoneChatting application, you agree to abide by the
+            terms set forth in the Apple End User License Agreement (EULA). The
+            standard Apple EULA governs the use of our application and can be
+            reviewed in full at the following link:
+            <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">
+              https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+            </a>
+            .
+          </Text>
+
+          <Text bold center fontSize={FONT_SIZES.X_LARGE}>
+            5. Types of Content
           </Text>
           <Text>Content that you upload and provide (“Your Content”);</Text>
           <ol>
@@ -287,7 +301,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             content.
           </Text>
           <Text bold center fontSize={FONT_SIZES.X_LARGE}>
-            5. Your Content Guidelines
+            7. Your Content Guidelines
           </Text>
           <Text>
             You agree that Your Content must comply with our Guidelines as
@@ -488,7 +502,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             omission of any material fact in connection with the App.
           </Text>
           <Text bold center fontSize={FONT_SIZES.X_LARGE}>
-            7. Changes to Terms
+            8. Changes to Terms
           </Text>
           <Text>
             GoneChatting may update these Terms from time to time. We will

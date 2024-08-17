@@ -52,6 +52,42 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   }, [videoPermissions, audioPermissions]);
 
   useEffect(() => {
+    let retryCount = 0;
+    const maxRetries = 3; // Set your desired number of retries
+
+    const checkVideoConnection = () => {
+      if (api) {
+        api.addListener("videoAvailabilityChanged", (event) => {
+          if (event.available) {
+            setVideoPermissions(true);
+          } else {
+            if (retryCount < maxRetries) {
+              retryCount++;
+              setTimeout(() => {
+                console.log(`Retrying video connection attempt ${retryCount}`);
+                api.executeCommand("toggleVideo");
+              }, 2000); // Retry every 2 seconds
+            } else {
+              console.log("Max retry attempts reached. Video not available.");
+            }
+          }
+        });
+      }
+    };
+
+    if (isApiReady && isMeetingStarted) {
+      checkVideoConnection();
+    }
+
+    // Cleanup on unmount
+    return () => {
+      if (api) {
+        api.removeListener("videoAvailabilityChanged");
+      }
+    };
+  }, [isApiReady, isMeetingStarted, api]);
+
+  useEffect(() => {
     if (videoChatRequest.participantLeft) {
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
