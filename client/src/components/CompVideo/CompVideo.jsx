@@ -118,10 +118,10 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
       // Ensure the URL uses HTTPS and has a .mov extension
       url = url.replace(/^http:\/\//i, "https://").replace(/\.mkv$/i, ".mov");
 
-      setSubmitting(false);
       handleSending(false);
       return { url, publicId };
     } catch (err) {
+      setSubmitting(false);
       console.log(err);
       setError(err.message);
     }
@@ -143,7 +143,9 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
         variables
       );
 
-      // dispatch({ type: "UPDATE_USER", payload: sendVideo });
+      if (sendVideo) {
+        setSubmitting(false);
+      }
 
       dispatch({ type: "TOGGLE_VIDEO", payload: false });
     } catch (err) {
