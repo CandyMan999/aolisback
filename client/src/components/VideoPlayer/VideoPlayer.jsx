@@ -124,8 +124,9 @@ const VideoPlayer = ({
               }}
             >
               <Text style={{ marginBottom: "16px", textAlign: "center" }}>
-                This video has been flagged by our AI or yourself and may
-                include inappropriate content.
+                {receiverWatching
+                  ? "This video has been flagged by our AI or yourself and may include inappropriate content."
+                  : "Our AI has flagged this video for Nudity, if so you will be banned!"}
               </Text>
               <Button
                 onClick={handleDismissOverlay}
@@ -134,9 +135,12 @@ const VideoPlayer = ({
                   color: COLORS.white,
                   padding: "8px 16px",
                   borderRadius: "4px",
+                  boxShadow: `0px 2px 10px 2px ${COLORS.white}`,
                 }}
               >
-                View Anyway
+                <Text bold margin={0}>
+                  View Anyway
+                </Text>
               </Button>
             </Box>
           )}

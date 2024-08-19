@@ -63,7 +63,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     lookingFor,
     inCall,
   } = user;
-  console.log("user clicked location: ", location);
+
   useEffect(() => {
     if (!!state.isProfile) {
       handleImBlocked();

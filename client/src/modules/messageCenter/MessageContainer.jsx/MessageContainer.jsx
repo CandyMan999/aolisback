@@ -45,6 +45,7 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
     <Box width="100%" column display="flex">
       {receivedVideos.map((group, i) => {
         const isLastMessage = i === receivedVideos.length - 1;
+        const isVideoFlagged = group[group.length - 1].flagged;
         return (
           <Box
             display="flex"
@@ -101,14 +102,30 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
                 maxWidth={120}
                 onClick={() => handleOnClick(group[0].sender._id)}
               >
-                <VideoPlayer
-                  publicId={group[group.length - 1].publicId}
-                  // videoUrl={group[group.length - 1].url}
-                  height={90}
-                  controls={false}
-                  fullScreen={true}
-                  borderRadius={"10px"}
-                />
+                {isVideoFlagged ? (
+                  <Box
+                    style={{
+                      height: 90,
+                      width: 90,
+                      borderRadius: 20,
+                      backgroundColor: COLORS.black,
+                      alignItems: "center",
+                      boxShadow: `2px 2px 4px 2px ${COLORS.darkGrey}`,
+                    }}
+                  >
+                    <Text bold center color={COLORS.pink}>
+                      Video Was Flagged
+                    </Text>
+                  </Box>
+                ) : (
+                  <VideoPlayer
+                    publicId={group[group.length - 1].publicId}
+                    height={90}
+                    controls={false}
+                    fullScreen={true}
+                    borderRadius={"10px"}
+                  />
+                )}
               </Box>
             </Box>
           </Box>

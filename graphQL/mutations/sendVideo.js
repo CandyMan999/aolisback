@@ -21,12 +21,10 @@ module.exports = {
           },
           data: {
             url,
-            seek: 10,
+            seek: 5,
           },
         };
         try {
-          console.log("url sent: ", options.url);
-
           const response = await axios.request(options);
           console.log(response.data);
           return response.data;
@@ -128,3 +126,109 @@ module.exports = {
     }
   },
 };
+
+// Step 1: Submit the video for analysis
+// const analyzeVideo = async () => {
+//   const options = {
+//     method: "POST",
+//     url: "https://video-moderation-api-for-nudity-detection.p.rapidapi.com/v1/video/find-explicit-content",
+//     headers: {
+//       "x-rapidapi-key": process.env.RAPID_API_KEY,
+//       "x-rapidapi-host":
+//         "video-moderation-api-for-nudity-detection.p.rapidapi.com",
+//       "Content-Type": "application/json",
+//     },
+//     data: {
+//       type: "url",
+//       url: url,
+//     },
+//   };
+//   try {
+//     const response = await axios.request(options);
+//     console.log("Analysis response: ", response.data);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Video analysis failed: ", error.message);
+//     return null;
+//   }
+// };
+
+// // Step 2: Call the analysis function
+// const analysisResponse = await analyzeVideo();
+// if (!analysisResponse || !analysisResponse.PublicId) {
+//   console.log("Proceeding without flagging since analysis failed.");
+//   throw new Error("Failed to analyze video.");
+// }
+
+// const publicId = analysisResponse.PublicId;
+
+// // Step 3: Polling function to check the result until it's ready or timeout occurs
+// const pollResults = async (publicId, threshold = 0.7) => {
+//   const options = {
+//     method: "GET",
+//     url: "https://video-moderation-api-for-nudity-detection.p.rapidapi.com/v1/video/get-result-by-id",
+//     headers: {
+//       "x-rapidapi-key": process.env.RAPID_API_KEY,
+//       "x-rapidapi-host":
+//         "video-moderation-api-for-nudity-detection.p.rapidapi.com",
+//     },
+//     params: {
+//       publicId: publicId,
+//       threshold: threshold,
+//     },
+//   };
+
+//   try {
+//     const response = await axios.request(options);
+//     console.log("Moderation result: ", response.data);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Failed to get moderation results: ", error.message);
+//     return null;
+//   }
+// };
+
+// const waitForResults = async () => {
+//   const maxTime = 30000; // 30 seconds
+//   const pollInterval = 1000; // 1 second
+//   const startTime = Date.now();
+
+//   // Initial delay of 3 seconds
+//   await new Promise((resolve) => setTimeout(resolve, 3000));
+
+//   let moderationResults = await pollResults(publicId);
+
+//   // Keep polling every second until results are not null or timeout is reached
+//   while (
+//     (!moderationResults ||
+//       moderationResults.ContainsInAppropriateNudityContentInVideo ===
+//         null) &&
+//     Date.now() - startTime < maxTime
+//   ) {
+//     await new Promise((resolve) => setTimeout(resolve, pollInterval));
+//     moderationResults = await pollResults(publicId);
+//   }
+
+//   // If the timeout is reached and results are still null, proceed with isExplicit as false
+//   if (
+//     !moderationResults ||
+//     moderationResults.ContainsInAppropriateNudityContentInVideo === null
+//   ) {
+//     console.log(
+//       "Timeout reached without results. Proceeding with isExplicit set to false."
+//     );
+//     return { isExplicit: false };
+//   }
+
+//   return moderationResults;
+// };
+
+// const moderationResults = await waitForResults();
+// let isExplicit = false;
+
+// // Step 4: Use `some()` to determine if any time segment contains explicit content
+// if (moderationResults && moderationResults.Results) {
+//   isExplicit = moderationResults.Results.some(
+//     (result) => result.ContainsInAppropriateNudityContent
+//   );
+// }
