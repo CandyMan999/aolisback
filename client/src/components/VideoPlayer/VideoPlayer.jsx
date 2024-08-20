@@ -9,7 +9,7 @@ import React, {
 import { VIEWED_VIDEO_MUTATION } from "../../graphql/mutations";
 import { useLocation } from "react-router-dom";
 import { Cloudinary } from "@cloudinary/url-gen";
-import { Box, Loading, Text, Button } from "../../components";
+import { Box, Text, Button } from "../../components";
 import { COLORS } from "../../constants";
 import { thumbnail } from "@cloudinary/url-gen/actions/resize";
 import { quality, format } from "@cloudinary/url-gen/actions/delivery";
@@ -29,7 +29,7 @@ const VideoPlayer = ({
 }) => {
   const location = useLocation();
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+
   const [showOverlay, setShowOverlay] = useState(flagged); // Overlay initially shown if video is flagged
 
   const videoRef = useRef();
@@ -37,21 +37,17 @@ const VideoPlayer = ({
     new Cloudinary({ cloud: { cloudName: "localmassagepros" } })
   );
 
-  const handlePlayPause = () => {
-    const video = videoRef.current;
-    if (video.paused) {
-      video.play();
-      setIsPlaying(true);
-    } else {
-      video.pause();
-      setIsPlaying(false);
-    }
-  };
-
   const handleViewVideo = async () => {
     try {
       const variables = { _id, viewed: true };
-      await client.request(VIEWED_VIDEO_MUTATION, variables);
+      const { viewVideo } = await client.request(
+        VIEWED_VIDEO_MUTATION,
+        variables
+      );
+
+      if (viewVideo.viewed && !viewVideo.flagged) {
+        window.ReactNativeWebView.postMessage("SHOW_REVIEW_REQUEST");
+      }
     } catch (err) {
       console.log("Error setting video watched: ", err);
     }
@@ -189,8 +185,8 @@ const VideoPlayer = ({
               }}
             >
               <Text style={{ marginBottom: "16px", textAlign: "center" }}>
-                This video has been flagged by our AI or yourself and may
-                include inappropriate content.
+                Our AI has flagged this video for Nudity, if so you will be
+                banned!
               </Text>
               <Button
                 onClick={handleDismissOverlay}

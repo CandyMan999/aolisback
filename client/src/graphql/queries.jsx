@@ -180,6 +180,7 @@ export const FETCH_ME = gql`
         publicId
         createdAt
         viewed
+        flagged
         sender {
           username
           _id

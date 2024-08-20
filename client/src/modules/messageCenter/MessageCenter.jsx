@@ -40,7 +40,7 @@ const MessageCenter = () => {
       };
 
       const { fetchMe } = await client.request(FETCH_ME, variables);
-      // await handleDeleteVideos(fetchMe._id);
+
       await setReceivedVideos(fetchMe.receivedVideos);
 
       await dispatch({ type: "LOGIN_USER", payload: fetchMe });
