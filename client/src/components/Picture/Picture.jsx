@@ -30,7 +30,7 @@ const Picture = ({
               border: `solid 1px ${COLORS.vividBlue}`,
               objectFit: "scale-down",
               boxShadow: withShadow
-                ? `2px 2px 4px 2px ${
+                ? `0px 2px 5px 2px ${
                     withShadowColor ? COLORS.pink : COLORS.darkGrey
                   }`
                 : null,

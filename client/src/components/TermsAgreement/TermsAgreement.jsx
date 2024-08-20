@@ -216,7 +216,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
           <Text>
             We want our users to be able to express themselves as much as
             possible and post all sorts of things on GoneChatting, but we have
-            to impose restrictions on certain content which:
+            ZERO TOLERANCE on certain content which:
           </Text>
           <ul>
             <li>
@@ -512,7 +512,7 @@ const TermsAgreement = ({ state, onClose, client, dispatch }) => {
             page.
           </Text>
           <Text bold center fontSize={FONT_SIZES.X_LARGE}>
-            8. Contact Us
+            9. Contact Us
           </Text>
           <Text>
             If you have any questions about these Terms, please contact us at{" "}
