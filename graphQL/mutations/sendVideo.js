@@ -10,38 +10,60 @@ module.exports = {
     const { url, publicId, receiverID, senderID } = args;
 
     try {
-      const analyzeVideo = async () => {
-        const options = {
-          method: "POST",
-          url: "https://nsfw-video-detector.p.rapidapi.com/nsfw",
-          headers: {
-            "x-rapidapi-key": process.env.RAPID_API_KEY,
-            "x-rapidapi-host": "nsfw-video-detector.p.rapidapi.com",
-            "Content-Type": "application/json",
-          },
-          data: {
-            url,
-            seek: 5,
-          },
-        };
+      // const analyzeVideo = async () => {
+      //   const options = {
+      //     method: "POST",
+      //     url: "https://nsfw-video-detector.p.rapidapi.com/nsfw",
+      //     headers: {
+      //       "x-rapidapi-key": process.env.RAPID_API_KEY,
+      //       "x-rapidapi-host": "nsfw-video-detector.p.rapidapi.com",
+      //       "Content-Type": "application/json",
+      //     },
+      //     data: {
+      //       url,
+      //       seek: 5,
+      //     },
+      //   };
+      //   try {
+      //     const response = await axios.request(options);
+      //     console.log(response.data);
+      //     return response.data;
+      //   } catch (error) {
+      //     console.error("Video analysis failed: ", error.message);
+      //     // Return null to indicate the analysis failed
+      //     return null;
+      //   }
+      // };
+
+      // const response = await analyzeVideo();
+
+      let isExplicit = false;
+
+      // Define the API endpoint and the video URL to analyze
+      const apiUrl = process.env.NUDE_DETECTOR_URL;
+      const videoData = {
+        video_url: url,
+      };
+
+      // Function to send POST request
+      const detectNudity = async () => {
         try {
-          const response = await axios.request(options);
-          console.log(response.data);
+          const response = await axios.post(apiUrl, videoData);
           return response.data;
         } catch (error) {
-          console.error("Video analysis failed: ", error.message);
-          // Return null to indicate the analysis failed
+          console.error("Error detecting nudity:", error);
           return null;
         }
       };
 
-      const response = await analyzeVideo();
+      // Call the function to detect nudity
+      const response = await detectNudity();
 
-      let isExplicit = false;
+      console.log("response: ", response);
 
-      if (response) {
+      if (response && response.nudity_detected) {
         // Determine if the video should be flagged
-        isExplicit = response.nsfw > 0.75;
+        isExplicit = true;
       } else {
         console.log("Proceeding without flagging since analysis failed.");
       }
