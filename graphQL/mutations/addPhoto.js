@@ -1,6 +1,7 @@
 const { AuthenticationError } = require("apollo-server");
 const { User, Picture } = require("../../models");
 const { publishFlagUser } = require("../subscription/subscription");
+const { pushNotificationUserFlagged } = require("../../utils/middleware");
 
 module.exports = {
   addPhotoResolver: async (root, args, ctx) => {
@@ -44,6 +45,7 @@ module.exports = {
       ).populate("user");
 
       publishFlagUser(flaggedPic);
+      pushNotificationUserFlagged("ExponentPushToken[PtoiwgLjWKaXTzEaTY0jbT]");
       return flaggedPic;
     } catch (err) {
       throw new AuthenticationError(err.message);

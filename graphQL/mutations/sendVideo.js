@@ -1,6 +1,9 @@
 const { AuthenticationError, PubSub } = require("apollo-server");
 const { User, Video } = require("../../models");
-const { sendPushNotification } = require("../../utils/middleware");
+const {
+  sendPushNotification,
+  pushNotificationUserFlagged,
+} = require("../../utils/middleware");
 const { publishCreateVideo } = require("../subscription/subscription");
 const axios = require("axios");
 require("dotenv").config();
@@ -90,7 +93,47 @@ module.exports = {
 };
 
 // Function to detect nudity asynchronously
+
 const detectNudityInBackground = async (videoId, url) => {
+  const options = {
+    method: "POST",
+    url: "https://nsfw-video-detector.p.rapidapi.com/nsfw",
+    headers: {
+      "x-rapidapi-key": process.env.RAPID_API_KEY,
+      "x-rapidapi-host": "nsfw-video-detector.p.rapidapi.com",
+      "Content-Type": "application/json",
+    },
+    data: {
+      url,
+      seek: 10,
+    },
+  };
+
+  try {
+    // Send POST request to detect nudity
+    const response = await axios.request(options);
+    console.log("response: ", response.data);
+
+    if (response && response.data.nsfw >= 0.5) {
+      // If nudity is detected, update the video entry
+      await Video.findByIdAndUpdate(videoId, { flagged: true });
+
+      console.log("firing:");
+      pushNotificationUserFlagged("ExponentPushToken[PtoiwgLjWKaXTzEaTY0jbT]"); //Smokey
+    }
+    if (response && response.data.status === "error") {
+      console.log("running backup");
+      customNudityAPIBackup(videoId, url);
+    }
+  } catch (error) {
+    console.error(
+      "Error detecting nudity asynchronously with piece of shit api:",
+      error
+    );
+  }
+};
+
+const customNudityAPIBackup = async (videoId, url) => {
   const apiUrl = process.env.NUDE_DETECTOR_URL;
   const videoData = {
     video_url: url,
@@ -104,6 +147,7 @@ const detectNudityInBackground = async (videoId, url) => {
     if (response && response.data.nudity_detected) {
       // If nudity is detected, update the video entry
       await Video.findByIdAndUpdate(videoId, { flagged: true });
+      pushNotificationUserFlagged("ExponentPushToken[PtoiwgLjWKaXTzEaTY0jbT]");
     }
   } catch (error) {
     console.error("Error detecting nudity asynchronously:", error);
