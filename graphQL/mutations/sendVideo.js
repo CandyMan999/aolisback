@@ -8,6 +8,9 @@ const { publishCreateVideo } = require("../subscription/subscription");
 const axios = require("axios");
 require("dotenv").config();
 
+let processingQueue = [];
+let isProcessing = false;
+
 module.exports = {
   sendVideoResolver: async (root, args, ctx) => {
     const { url, publicId, receiverID, senderID } = args;
@@ -22,8 +25,8 @@ module.exports = {
         flagged: false, // Default to false, update later if nudity is detected
       });
 
-      // Perform nudity detection in the background
-      detectNudityInBackground(video._id, url);
+      // Add the video to the processing queue
+      addToQueue(video._id, url);
 
       // Update the sender and receiver with the new video
       const sender = await User.findByIdAndUpdate(
@@ -92,8 +95,31 @@ module.exports = {
   },
 };
 
-// Function to detect nudity asynchronously
+// Function to add video processing to the queue
+const addToQueue = (videoId, url) => {
+  processingQueue.push({ videoId, url });
+  if (!isProcessing) {
+    processQueue();
+  }
+};
 
+// Function to process the queue
+const processQueue = async () => {
+  if (processingQueue.length === 0) {
+    isProcessing = false;
+    return;
+  }
+
+  isProcessing = true;
+  const { videoId, url } = processingQueue.shift();
+
+  await detectNudityInBackground(videoId, url);
+
+  // Continue processing the next video in the queue
+  processQueue();
+};
+
+// Function to detect nudity asynchronously
 const detectNudityInBackground = async (videoId, url) => {
   const options = {
     method: "POST",
@@ -118,7 +144,6 @@ const detectNudityInBackground = async (videoId, url) => {
       // If nudity is detected, update the video entry
       await Video.findByIdAndUpdate(videoId, { flagged: true });
 
-      console.log("firing:");
       pushNotificationUserFlagged("ExponentPushToken[PtoiwgLjWKaXTzEaTY0jbT]"); //Smokey
     }
     if (response && response.data.status === "error") {
@@ -130,6 +155,8 @@ const detectNudityInBackground = async (videoId, url) => {
       "Error detecting nudity asynchronously with piece of shit api:",
       error
     );
+    console.log("running backup");
+    customNudityAPIBackup(videoId, url);
   }
 };
 
@@ -153,30 +180,3 @@ const customNudityAPIBackup = async (videoId, url) => {
     console.error("Error detecting nudity asynchronously:", error);
   }
 };
-
-// const analyzeVideo = async () => {
-//   const options = {
-//     method: "POST",
-//     url: "https://nsfw-video-detector.p.rapidapi.com/nsfw",
-//     headers: {
-//       "x-rapidapi-key": process.env.RAPID_API_KEY,
-//       "x-rapidapi-host": "nsfw-video-detector.p.rapidapi.com",
-//       "Content-Type": "application/json",
-//     },
-//     data: {
-//       url,
-//       seek: 5,
-//     },
-//   };
-//   try {
-//     const response = await axios.request(options);
-//     console.log(response.data);
-//     return response.data;
-//   } catch (error) {
-//     console.error("Video analysis failed: ", error.message);
-//     // Return null to indicate the analysis failed
-//     return null;
-//   }
-// };
-
-// const response = await analyzeVideo();
