@@ -16,10 +16,12 @@ const resetVideoMinutesUsed = async () => {
   try {
     let totalUpdated = 0;
     let hasMoreUsers = true;
-    let skip = 0;
+    let lastProcessedId = null; // Use this for efficient pagination
 
     while (hasMoreUsers) {
-      const users = await User.find().skip(skip).limit(BATCH_SIZE);
+      const query = lastProcessedId ? { _id: { $gt: lastProcessedId } } : {};
+      const users = await User.find(query).limit(BATCH_SIZE).sort({ _id: 1 });
+
       if (users.length === 0) {
         hasMoreUsers = false;
         break;
@@ -34,8 +36,8 @@ const resetVideoMinutesUsed = async () => {
       totalUpdated += result.nModified;
       console.log(`Batch updated. Total users updated so far: ${totalUpdated}`);
 
-      // Move to the next batch
-      skip += BATCH_SIZE;
+      // Set last processed user ID for the next iteration
+      lastProcessedId = users[users.length - 1]._id;
     }
 
     console.log(`Reset videoMinutesUsed for ${totalUpdated} users.`);
@@ -48,10 +50,12 @@ const resetMessagesSent = async () => {
   try {
     let totalUpdated = 0;
     let hasMoreUsers = true;
-    let skip = 0;
+    let lastProcessedId = null; // Use this for efficient pagination
 
     while (hasMoreUsers) {
-      const users = await User.find().skip(skip).limit(BATCH_SIZE);
+      const query = lastProcessedId ? { _id: { $gt: lastProcessedId } } : {};
+      const users = await User.find(query).limit(BATCH_SIZE).sort({ _id: 1 });
+
       if (users.length === 0) {
         hasMoreUsers = false;
         break;
@@ -60,14 +64,14 @@ const resetMessagesSent = async () => {
       const userIds = users.map((user) => user._id);
       const result = await User.updateMany(
         { _id: { $in: userIds } },
-        { $set: { "plan.messagesSent": 0, "plan.likesSent": 0 } }
+        { $set: { "plan.messagesSent": 0, "plan.likesSent": 0, inCall: false } }
       );
 
       totalUpdated += result.nModified;
       console.log(`Batch updated. Total users updated so far: ${totalUpdated}`);
 
-      // Move to the next batch
-      skip += BATCH_SIZE;
+      // Set last processed user ID for the next iteration
+      lastProcessedId = users[users.length - 1]._id;
     }
 
     console.log(`Reset messages sent for ${totalUpdated} users.`);
