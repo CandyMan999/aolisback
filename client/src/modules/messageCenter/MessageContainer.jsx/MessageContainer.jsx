@@ -20,10 +20,14 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
   }, [receivedVideos]);
 
   const handleOnClick = (senderID) => {
-    history.push({
-      pathname: "/message",
-      search: `?sender=${senderID}`,
-    });
+    try {
+      history.push({
+        pathname: "/message",
+        search: `?sender=${senderID}`,
+      });
+    } catch (err) {
+      console.log("error sending message");
+    }
   };
 
   const sortByNewest = () => {

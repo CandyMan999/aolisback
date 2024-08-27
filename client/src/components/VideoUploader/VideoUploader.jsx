@@ -14,17 +14,31 @@ const VideoUploader = ({ senderID, receiverID, handleSending }) => {
 
   const handleRecordButtonClick = () => {
     // Construct the new URL with updated query parameters
-    const params = new URLSearchParams(location.search);
-    params.set("senderID", senderID);
-    params.set("receiverID", receiverID);
-    params.set("videoMessage", true);
-    setSubmitting(true);
+    try {
+      const params = new URLSearchParams(location.search);
+      params.set("senderID", senderID);
+      params.set("receiverID", receiverID);
+      params.set("videoMessage", true);
+      setSubmitting(true);
 
-    // Navigate to the constructed URL
-    history.replace({
-      pathname: location.pathname,
-      search: params.toString(),
-    });
+      const data = {
+        senderID,
+        receiverID,
+        videoMessage: true,
+      };
+      // Navigate to the constructed URL
+      history.replace({
+        pathname: location.pathname,
+        search: params.toString(),
+      });
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify(data));
+      } else {
+        console.warn("ReactNativeWebView is not available.");
+      }
+    } catch (err) {
+      console.log("error sending video message");
+    }
   };
 
   return (
