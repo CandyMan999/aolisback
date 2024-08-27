@@ -214,7 +214,7 @@ const pushNotificationPhoneNumber = async (
       sound: "default",
       title: "📲 Gone Chatting Alert!",
       subtitle: "Never Catch a Catfish 🎣",
-      body: `✨ ${username} wants to share their number with you: ${phoneNumber}. Give them a call! 📞`,
+      body: `✨ ${username} wants to share their number with you: ${phoneNumber}. Tap to save to contacts! 📞`,
       data: { expoToken, username, phoneNumber, imageUrl },
     });
 

@@ -93,7 +93,6 @@ module.exports = {
         },
       ]);
 
-      console.log("updated user: ", user.plan);
       publishChangePlan(user);
 
       return user;
