@@ -32,6 +32,7 @@ const Message = () => {
   const currentUser = state.currentUser;
   const { sentVideos, receivedVideos } = currentUser;
   const [loading, setLoading] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false); // State to control visibility of the scroll button
   const mobile = useMediaQuery("(max-width: 650px)");
   const senderID = useMemo(
     () => new URLSearchParams(location.search).get("sender"),
@@ -51,6 +52,28 @@ const Message = () => {
       groupVideosBySender(receivedVideos, sentVideos);
     }
   }, [senderID, receivedVideos, sentVideos]);
+
+  useEffect(() => {
+    // Function to check scroll position
+    const handleScroll = () => {
+      const scrollTop = window.scrollY; // How much the user has scrolled
+      const windowHeight = window.innerHeight; // Viewport height
+      const documentHeight = document.documentElement.scrollHeight; // Total height of the document
+
+      const scrolledPercentage = (scrollTop + windowHeight) / documentHeight;
+
+      // Hide the button if the user has scrolled more than 70%
+
+      setShowScrollButton(scrolledPercentage < 0.7);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup scroll event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const setBlocked = async (data) => {
     setIsBlocked(false);
@@ -190,29 +213,41 @@ const Message = () => {
             />
           </Box>
         </Box>
-        <Box display="flex" justifyContent="center">
+
+        {/* Fixed Scroll to Bottom Button */}
+        {showScrollButton && (
           <Box
-            display="flex"
-            justifyContent="center"
-            marginTop={5}
-            onClick={scrollToBottom}
             style={{
-              backgroundColor: COLORS.black,
-              width: "fit-content",
-              borderRadius: "50%",
-              boxShadow: `0px 2px 4px 2px ${COLORS.grey}`,
-              border: `solid 1px ${COLORS.pink}`,
+              position: "fixed",
+              bottom: "3%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: 1000,
             }}
           >
-            <Icon
-              margin={0}
-              padding={0}
-              name={"arrowDown"}
-              color={COLORS.vividBlue}
-              size={ICON_SIZES.XXX_LARGE}
-            />
+            <Box
+              display="flex"
+              justifyContent="center"
+              onClick={scrollToBottom}
+              style={{
+                backgroundColor: COLORS.white,
+                width: "fit-content",
+                borderRadius: "50%",
+                boxShadow: `0px 2px 10px 2px ${COLORS.white}`,
+                border: `solid 1px ${COLORS.vividBlue}`,
+                padding: "10px",
+              }}
+            >
+              <Icon
+                margin={0}
+                padding={0}
+                name={"arrowDown"}
+                color={COLORS.vividBlue}
+                size={ICON_SIZES.XXX_LARGE}
+              />
+            </Box>
           </Box>
-        </Box>
+        )}
 
         <Box
           display="flex"
