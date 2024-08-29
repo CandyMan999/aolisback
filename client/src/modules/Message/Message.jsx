@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useMemo,
-  Fragment,
-} from "react";
+import React, { useContext, useState, useEffect, useMemo, useRef } from "react";
 import { Subscription } from "react-apollo";
 import { formatDistanceToNow } from "date-fns";
 import { CREATE_VIDEO_SUBSCRIPTION } from "../../graphql/subscriptions";
@@ -48,6 +42,9 @@ const Message = () => {
   const [openReport, setOpenReport] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [video, setVideo] = useState(null);
+
+  // Create a ref for the bottom of the page
+  const bottomRef = useRef(null);
 
   useEffect(() => {
     if (receivedVideos?.length && senderID) {
@@ -124,6 +121,11 @@ const Message = () => {
     setOpenReport(!openReport);
   };
 
+  // Function to scroll to the bottom
+  const scrollToBottom = () => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return loading ? (
     <Loading fade size={100} />
   ) : (
@@ -185,6 +187,29 @@ const Message = () => {
               size={ICON_SIZES.XXX_LARGE}
               color={COLORS.deepPurple}
               onClick={handleOnClick}
+            />
+          </Box>
+        </Box>
+        <Box display="flex" justifyContent="center">
+          <Box
+            display="flex"
+            justifyContent="center"
+            marginTop={5}
+            onClick={scrollToBottom}
+            style={{
+              backgroundColor: COLORS.black,
+              width: "fit-content",
+              borderRadius: "50%",
+              boxShadow: `0px 2px 4px 2px ${COLORS.grey}`,
+              border: `solid 1px ${COLORS.pink}`,
+            }}
+          >
+            <Icon
+              margin={0}
+              padding={0}
+              name={"arrowDown"}
+              color={COLORS.vividBlue}
+              size={ICON_SIZES.XXX_LARGE}
             />
           </Box>
         </Box>
@@ -378,6 +403,9 @@ const Message = () => {
           blockID={senderID}
           blockedUsers={currentUser.blockedUsers}
         />
+
+        {/* Element to scroll to */}
+        <div ref={bottomRef} />
       </Box>
     )
   );

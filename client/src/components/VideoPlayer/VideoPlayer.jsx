@@ -147,6 +147,7 @@ const VideoPlayer = ({
             onPlay={receiverWatching ? handleViewVideo : undefined}
             controls={controls}
             onClick={handleFullScreen}
+            loop
             style={{
               borderRadius: borderRadius || undefined,
               maxWidth: isFullScreen ? undefined : 300,
@@ -209,6 +210,7 @@ const VideoPlayer = ({
             controls={controls}
             onClick={handleFullScreen}
             width={width}
+            loop
             height={height || 250}
             style={{
               borderRadius: borderRadius || undefined,
