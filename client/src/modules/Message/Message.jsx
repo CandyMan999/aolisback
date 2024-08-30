@@ -160,13 +160,14 @@ const Message = () => {
         minHeight={"80vh"}
         width="100%"
         justifyContent="space-between"
+        style={{ overflowX: "hidden" }}
       >
         <Box
           display="flex"
           justifyContent="space-around"
           paddingX={"3%"}
           position={changeStyle ? "fixed" : "relative"}
-          width="100%"
+          width={changeStyle ? "100%" : undefined}
           top={changeStyle ? 0 : undefined}
           zIndex={changeStyle ? 100 : undefined}
           backgroundColor={COLORS.lightPurple}
