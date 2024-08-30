@@ -23,6 +23,8 @@ const Picture = ({
           <Image
             alt={`${name}-profile-pic`}
             style={{
+              transition: "width 0.3s ease, height 0.3s ease", // Smooth transition for picture size
+
               borderRadius: "50%",
               backgroundColor: COLORS.black,
               marginLeft: marginLeft ? marginLeft : undefined,
@@ -54,6 +56,8 @@ const Picture = ({
             imageRendering: "auto", // or "crisp-edges" or "pixelated"
             objectFit: "cover", // or "contain" or "none"
             objectPosition: "center",
+
+            transition: "width 0.3s ease, height 0.3s ease", // Smooth transition for picture size
           }}
           src={profilePic.url}
         />

@@ -31,6 +31,7 @@ const Message = () => {
   const client = useClient();
   const currentUser = state.currentUser;
   const { sentVideos, receivedVideos } = currentUser;
+  const [changeStyle, setChangeStyle] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false); // State to control visibility of the scroll button
   const mobile = useMediaQuery("(max-width: 650px)");
@@ -63,7 +64,7 @@ const Message = () => {
       const scrolledPercentage = (scrollTop + windowHeight) / documentHeight;
 
       // Hide the button if the user has scrolled more than 70%
-
+      setChangeStyle(scrollTop > 60);
       setShowScrollButton(scrolledPercentage < 0.7);
     };
 
@@ -164,8 +165,15 @@ const Message = () => {
           display="flex"
           justifyContent="space-around"
           paddingX={"3%"}
+          position={changeStyle ? "fixed" : "relative"}
+          width="100%"
+          top={changeStyle ? 0 : undefined}
+          zIndex={changeStyle ? 100 : undefined}
           backgroundColor={COLORS.lightPurple}
-          style={{ borderBottom: `solid 1px ${COLORS.deepPurple}` }}
+          style={{
+            borderBottom: `solid 1px ${COLORS.deepPurple}`,
+            transition: "all 0.3s ease-in-out",
+          }}
         >
           <Box
             zIndex={4}
@@ -186,17 +194,22 @@ const Message = () => {
                   ? groupedReceived[0].receiver.username
                   : groupedReceived[0].sender.username
               }
-              height={mobile ? 120 : 140}
-              width={mobile ? 120 : 140}
+              height={mobile ? (changeStyle ? 80 : 120) : 140}
+              width={mobile ? (changeStyle ? 80 : 120) : 140}
               marginBottom={8}
             />
             <Text
-              paddingLeft={"2%"}
+              paddingLeft={changeStyle ? "5%" : "2%"}
               width={"100%"}
               bold
               color={COLORS.deepPurple}
-              fontSize={FONT_SIZES.X_LARGE}
+              fontSize={
+                changeStyle && mobile ? FONT_SIZES.MEDIUM : FONT_SIZES.X_LARGE
+              }
               center
+              style={{
+                transition: "font-size 0.3s ease, padding-left 0.3s ease", // Smooth transition for text size and padding
+              }}
             >{`${
               groupedReceived[0].sender._id === currentUser._id
                 ? groupedReceived[0].receiver.username
@@ -233,7 +246,7 @@ const Message = () => {
                 backgroundColor: COLORS.white,
                 width: "fit-content",
                 borderRadius: "50%",
-                boxShadow: `0px 2px 10px 2px ${COLORS.white}`,
+                boxShadow: `0px 2px 10px 2px ${COLORS.lightGrey}`,
                 border: `solid 1px ${COLORS.vividBlue}`,
                 padding: "10px",
               }}
