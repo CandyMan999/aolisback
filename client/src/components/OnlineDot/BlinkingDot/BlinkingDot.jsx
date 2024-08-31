@@ -1,54 +1,109 @@
+import React from "react";
 import { motion } from "framer-motion";
+import { COLORS } from "../../../constants";
 
-const BlinkingDot = () => {
-  const dotVariants = {
-    hidden: {
-      opacity: 0,
-    },
-    visible: {
+const BlinkingDot = ({ online, inCall }) => {
+  const outerDotVariants = {
+    start: {
+      scale: 1,
       opacity: 1,
+      boxShadow: `0px 0px 0px 0px ${inCall ? COLORS.vividBlue : COLORS.green}`,
+      transition: {
+        duration: 1.5,
+        loop: Infinity,
+      },
+    },
+    end: {
+      scale: inCall ? 2 : 1.5,
+      opacity: 0,
+      boxShadow: `0px 0px 20px 8px ${inCall ? COLORS.vividBlue : COLORS.green}`,
+      transition: {
+        duration: 2.5,
+        loop: Infinity,
+      },
     },
   };
 
-  const pulseVariants = {
-    hidden: {
-      scale: 0,
-      opacity: 0,
-    },
-    visible: {
+  const ringOverlayVariants = {
+    start: {
       scale: 1,
       opacity: 1,
+      transition: {
+        duration: 1.5,
+        loop: Infinity,
+      },
+    },
+    end: {
+      scale: inCall ? 4 : 3,
+      opacity: 0,
+      transition: {
+        duration: 2.5,
+        loop: Infinity,
+      },
     },
   };
 
   return (
-    <div style={{ display: "inline-block" }}>
-      <motion.div
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <div
         style={{
           width: "10px",
           height: "10px",
           borderRadius: "50%",
-          backgroundColor: "red",
-          marginRight: "5px",
+          backgroundColor: inCall ? COLORS.vividBlue : COLORS.green,
+          margin: "4px",
         }}
-        variants={dotVariants}
-        initial="hidden"
-        animate="visible"
-        transition={{ duration: 0.5, repeat: Infinity }}
-      />
-      <motion.div
+      >
+        <motion.div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            textAlign: "center",
+            alignItems: "center",
+            width: "10px",
+            height: "10px",
+            borderRadius: "50%",
+            backgroundColor: inCall
+              ? COLORS.vividBlue
+              : online
+              ? COLORS.green
+              : COLORS.red,
+            marginRight: "5px",
+          }}
+          variants={online || inCall ? outerDotVariants : {}}
+          initial="start"
+          animate={online || inCall ? "end" : {}}
+        >
+          {(online || inCall) && (
+            <motion.div
+              style={{
+                width: "7px",
+                height: "6px",
+                borderRadius: "50%",
+                border: `2px solid ${inCall ? COLORS.vividBlue : COLORS.green}`,
+              }}
+              variants={online ? ringOverlayVariants : {}}
+              initial="start"
+              animate={online ? "end" : {}}
+            />
+          )}
+        </motion.div>
+      </div>
+
+      <motion.p
         style={{
-          width: "30px",
-          height: "30px",
-          borderRadius: "50%",
-          border: "1px solid red",
-          position: "absolute",
+          fontSize: "14px",
+          fontWeight: "bold",
+          color: inCall
+            ? COLORS.vividBlue
+            : online
+            ? COLORS.green
+            : COLORS.black,
         }}
-        variants={pulseVariants}
-        initial="hidden"
-        animate="visible"
-        transition={{ duration: 1, repeat: Infinity }}
-      />
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+      ></motion.p>
     </div>
   );
 };

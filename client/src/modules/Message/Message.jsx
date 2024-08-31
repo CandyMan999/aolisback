@@ -63,9 +63,8 @@ const Message = () => {
 
       const scrolledPercentage = (scrollTop + windowHeight) / documentHeight;
 
-      // Hide the button if the user has scrolled more than 70%
-      setChangeStyle(scrollTop > 60);
-      setShowScrollButton(scrolledPercentage < 0.7);
+      setChangeStyle(scrollTop > 60); // fix position the header
+      setShowScrollButton(scrolledPercentage < 0.7); // Hide the button if the user has scrolled more than 70%
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -184,6 +183,11 @@ const Message = () => {
             width={"70%"}
           >
             <Picture
+              online={
+                groupedReceived[0].sender._id === currentUser._id
+                  ? groupedReceived[0].receiver.isLoggedIn
+                  : groupedReceived[0].sender.isLoggedIn
+              }
               withShadow={true}
               profilePic={
                 groupedReceived[0].sender._id === currentUser._id
@@ -195,17 +199,18 @@ const Message = () => {
                   ? groupedReceived[0].receiver.username
                   : groupedReceived[0].sender.username
               }
-              height={mobile ? (changeStyle ? 80 : 120) : 140}
-              width={mobile ? (changeStyle ? 80 : 120) : 140}
+              height={mobile ? (changeStyle ? 80 : 100) : 140}
+              width={mobile ? (changeStyle ? 80 : 100) : 140}
               marginBottom={8}
             />
+
             <Text
               paddingLeft={changeStyle ? "5%" : "2%"}
               width={"100%"}
               bold
               color={COLORS.deepPurple}
               fontSize={
-                changeStyle && mobile ? FONT_SIZES.MEDIUM : FONT_SIZES.X_LARGE
+                changeStyle && mobile ? FONT_SIZES.MEDIUM : FONT_SIZES.LARGE
               }
               center
               style={{
@@ -218,12 +223,20 @@ const Message = () => {
             }'s Messages`}</Text>
           </Box>
 
-          <Box zIndex={20}>
+          <Box
+            zIndex={20}
+            column
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Icon
               name="reverse"
               size={ICON_SIZES.XXX_LARGE}
               color={COLORS.deepPurple}
               onClick={handleOnClick}
+              style={{ margin: 0 }}
             />
           </Box>
         </Box>
@@ -266,6 +279,7 @@ const Message = () => {
         <Box
           display="flex"
           marginTop={20}
+          paddingTop={changeStyle ? 120 : 0}
           justifyContent="space-around"
           height={"auto"}
           width="100vw"

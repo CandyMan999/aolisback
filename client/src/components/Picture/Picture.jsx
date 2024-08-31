@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Image, CloudinaryContext } from "cloudinary-react";
 import { Box, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
+import BlinkingDot from "../OnlineDot/BlinkingDot";
 
 const Picture = ({
   profilePic,
@@ -15,6 +16,7 @@ const Picture = ({
   withShadow,
   withShadowColor,
   onClick,
+  online,
 }) => {
   return !!profilePic ? (
     !!profilePic.publicId ? (
@@ -43,6 +45,11 @@ const Picture = ({
             height={height}
           />
         </motion.div>
+        {online && (
+          <Box position="absolute" top={0}>
+            <BlinkingDot online={online} />
+          </Box>
+        )}
       </CloudinaryContext>
     ) : (
       <motion.div whileTap={{ scale: 0.7 }} onClick={onClick}>

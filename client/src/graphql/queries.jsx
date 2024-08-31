@@ -184,6 +184,7 @@ export const FETCH_ME = gql`
         sender {
           username
           _id
+          isLoggedIn
           pictures {
             _id
             url
@@ -193,6 +194,7 @@ export const FETCH_ME = gql`
         receiver {
           _id
           username
+          isLoggedIn
           pictures {
             _id
             url
