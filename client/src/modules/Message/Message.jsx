@@ -125,14 +125,14 @@ const Message = () => {
 
   const toggleModal = () => {
     try {
-      if (
-        currentUser.plan.messages + currentUser.plan.additionalMessages <=
-        currentUser.plan.messagesSent
-      ) {
-        window.ReactNativeWebView.postMessage("BUY_MESSAGES");
+      // if (
+      //   currentUser.plan.messages + currentUser.plan.additionalMessages <=
+      //   currentUser.plan.messagesSent
+      // ) {
+      //   window.ReactNativeWebView.postMessage("BUY_MESSAGES");
 
-        return;
-      }
+      //   return;
+      // }
       dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
     } catch (err) {
       console.log(err);

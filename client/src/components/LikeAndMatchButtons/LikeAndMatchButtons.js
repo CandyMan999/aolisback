@@ -81,11 +81,12 @@ const LikeAndMatchButtons = ({
     }
     if (selectedButton === "Likes Me") {
       try {
-        if (currentUser && currentUser.plan.planType === "Free") {
-          window.ReactNativeWebView.postMessage("GO_PREMIUM");
-        } else {
-          handleGetUsersWhoLikeMe();
-        }
+        // if (currentUser && currentUser.plan.planType === "Free") {
+        //   window.ReactNativeWebView.postMessage("GO_PREMIUM");
+        // } else {
+        //   handleGetUsersWhoLikeMe();
+        // }
+        handleGetUsersWhoLikeMe(); //delete this after uncommenting code
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
       }
@@ -111,12 +112,13 @@ const LikeAndMatchButtons = ({
     }
     if (button === "Likes Me") {
       try {
-        if (currentUser && currentUser.plan.planType === "Free") {
-          setSelectedButton(null);
-          window.ReactNativeWebView.postMessage("GO_PREMIUM");
-        } else {
-          setSearch("Likes Me");
-        }
+        // if (currentUser && currentUser.plan.planType === "Free") {
+        //   setSelectedButton(null);
+        //   window.ReactNativeWebView.postMessage("GO_PREMIUM");
+        // } else {
+        //   setSearch("Likes Me");
+        // }
+        setSearch("Likes Me"); // delete this line after uncommenting code
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
       }

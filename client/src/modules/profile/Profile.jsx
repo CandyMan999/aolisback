@@ -125,14 +125,14 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleVideoChatRequest = async () => {
     try {
-      if (
-        currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
-        currentUser.plan.videoMinutesUsed
-      ) {
-        window.ReactNativeWebView.postMessage("BUY_MINUTES");
+      // if (
+      //   currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
+      //   currentUser.plan.videoMinutesUsed
+      // ) {
+      //   window.ReactNativeWebView.postMessage("BUY_MINUTES");
 
-        return;
-      }
+      //   return;
+      // }
 
       track("Video_Call", {
         sender: state.currentUser.username,
@@ -213,14 +213,14 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleSendVideoMessage = () => {
     try {
-      if (
-        currentUser.plan.messages + currentUser.plan.additionalMessages <=
-        currentUser.plan.messagesSent
-      ) {
-        window.ReactNativeWebView.postMessage("BUY_MESSAGES");
+      // if (
+      //   currentUser.plan.messages + currentUser.plan.additionalMessages <=
+      //   currentUser.plan.messagesSent
+      // ) {
+      //   window.ReactNativeWebView.postMessage("BUY_MESSAGES");
 
-        return;
-      }
+      //   return;
+      // }
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
       setShowHearts(false);
       toggleModal();
@@ -243,13 +243,13 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleLikeUser = async () => {
     try {
-      if (
-        currentUser.plan.likes + currentUser.plan.additionalLikes <=
-        currentUser.plan.likesSent
-      ) {
-        window.ReactNativeWebView.postMessage("BUY_LIKES");
-        return;
-      }
+      // if (
+      //   currentUser.plan.likes + currentUser.plan.additionalLikes <=
+      //   currentUser.plan.likesSent
+      // ) {
+      //   window.ReactNativeWebView.postMessage("BUY_LIKES");
+      //   return;
+      // }
       setLoading(true);
       const variables = {
         userID: currentUser._id,
