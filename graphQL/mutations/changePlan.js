@@ -10,13 +10,28 @@ module.exports = {
       const getPlanBenefits = (planType) => {
         switch (planType) {
           case "Free":
-            return { messages: 3, videoMinutes: 15 * 60, likes: 20 };
+            return {
+              messages: 6,
+              videoMinutes: 15 * 60,
+              likes: 10,
+              withAds: true,
+            };
           case "Premium":
-            return { messages: 6, videoMinutes: 30 * 60, likes: 30 };
+            return {
+              messages: 20,
+              videoMinutes: 60 * 60,
+              likes: 30,
+              withAds: false,
+            };
           case "Unlimited":
-            return { messages: 1000, videoMinutes: 10000 * 60, likes: 1000 };
+            return {
+              messages: 1000,
+              videoMinutes: 10000 * 60,
+              likes: 1000,
+              withAds: false,
+            };
           default:
-            return { messages: 0, videoMinutes: 0, likes: 0 }; // Default case if planType doesn't match any known type
+            return { messages: 0, videoMinutes: 0, likes: 0, withAds: true }; // Default case if planType doesn't match any known type
         }
       };
 
@@ -34,6 +49,7 @@ module.exports = {
         messages: planBenefits.messages,
         videoMinutes: planBenefits.videoMinutes,
         likes: planBenefits.likes,
+        withAds: planBenefits.withAds,
       });
 
       const user = await User.findByIdAndUpdate(

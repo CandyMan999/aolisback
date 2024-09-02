@@ -122,7 +122,9 @@ const Navbar = ({ props }) => {
             style={{ width: 150 }}
             fontSize={FONT_SIZES.SMALL}
           >
-            Welcome, {currentUser.username}
+            {currentUser.username.length <= 10
+              ? `Welcome, ${currentUser.username}`
+              : currentUser.username}
           </Text>
 
           {!!profilePic && profilePic.publicId && (

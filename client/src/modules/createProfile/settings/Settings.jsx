@@ -155,7 +155,7 @@ const Settings = ({ state, client, dispatch }) => {
               <Text>GoneChatting - Free</Text>
             </Box>
             <Text bold center>
-              3 messages per day, 15 Video Chat minutes per week
+              6 messages per day, 15 Video Chat minutes per week
             </Text>
             {currentUser.plan.planType === "Free" ? (
               <Text bold color={COLORS.pink} fontSize={FONT_SIZES.LARGE}>
@@ -206,7 +206,7 @@ const Settings = ({ state, client, dispatch }) => {
               />
             </Box>
             <Text bold center>
-              6 messages per day, 30 Video Chat minutes per week & more!
+              20 messages per day, 60 Video Chat minutes per week & more!
             </Text>
             {currentUser.plan.planType === "Premium" ? (
               <Text bold color={COLORS.pink} fontSize={FONT_SIZES.LARGE}>

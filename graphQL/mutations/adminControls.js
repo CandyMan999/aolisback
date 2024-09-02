@@ -28,6 +28,17 @@ module.exports = {
         { flagged: false },
         { new: true }
       );
+
+      if (picture.publicId) {
+        await cloudinary.uploader.destroy(picture.publicId);
+      }
+
+      // Remove the picture reference from the associated user
+      await User.updateMany(
+        { pictures: pictureId },
+        { $pull: { pictures: pictureId } }
+      );
+
       return picture;
     } catch (err) {
       throw new AuthenticationError(err.message);
