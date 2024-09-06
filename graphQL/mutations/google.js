@@ -52,19 +52,19 @@ module.exports = {
       roomInfo: { subscribedAt: moment() },
     }).save();
 
-    const newPhoto = await Picture.create({ url: picture, user: user._id });
+    // const newPhoto = await Picture.create({ url: picture, user: user._id });
 
-    const currentUser = await User.findByIdAndUpdate(
-      {
-        _id: user._id,
-      },
-      { $push: { pictures: newPhoto } },
-      { new: true }
-    ).populate("pictures");
+    // const currentUser = await User.findByIdAndUpdate(
+    //   {
+    //     _id: user._id,
+    //   },
+    //   { $push: { pictures: newPhoto } },
+    //   { new: true }
+    // ).populate("pictures");
 
-    const token = await createToken(currentUser._id);
+    const token = await createToken(user._id);
 
-    return { user: currentUser, token };
+    return { user: user, token };
   },
   googleLoginResolver: async (root, args, ctx) => {
     const { idToken } = args;
@@ -264,18 +264,18 @@ module.exports = {
       roomInfo: { subscribedAt: moment() },
     }).save();
 
-    const newPhoto = await Picture.create({ url: picture, user: user._id });
+    // const newPhoto = await Picture.create({ url: picture, user: user._id });
 
-    const currentUser = await User.findByIdAndUpdate(
-      {
-        _id: user._id,
-      },
-      { $push: { pictures: newPhoto } },
-      { new: true }
-    ).populate("pictures");
+    // const currentUser = await User.findByIdAndUpdate(
+    //   {
+    //     _id: user._id,
+    //   },
+    //   { $push: { pictures: newPhoto } },
+    //   { new: true }
+    // ).populate("pictures");
 
-    const token = await createToken(currentUser._id);
+    const token = await createToken(user._id);
 
-    return { user: currentUser, token };
+    return { user: user, token };
   },
 };
