@@ -8,6 +8,7 @@ import {
   Picture,
   Icon,
   ICON_SIZES,
+  LikesMeCarousel,
 } from "../../../components";
 import { COLORS } from "../../../constants";
 import { withRouter } from "react-router-dom";
@@ -47,14 +48,28 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
 
   return receivedVideos && receivedVideos.length > 0 ? (
     <Box width="100%" column display="flex">
+      <LikesMeCarousel viewLikes={true} />
+      <Box display="flex" alignItems="center">
+        <Text
+          fontSize={FONT_SIZES.X_LARGE}
+          bold
+          color={COLORS.deepPurple}
+          margin={0}
+          marginTop={5}
+          paddingLeft={5}
+        >
+          Messages
+        </Text>
+      </Box>
       {receivedVideos.map((group, i) => {
         const isLastMessage = i === receivedVideos.length - 1;
+        const isFirstMessage = i === 0;
         const isVideoFlagged = group[group.length - 1].flagged;
         return (
           <Box
             display="flex"
             width="100%"
-            borderTop={`solid 1px ${COLORS.grey}`}
+            borderTop={isFirstMessage ? undefined : `solid 1px ${COLORS.grey}`}
             borderBottom={
               isLastMessage
                 ? `solid 2px ${COLORS.grey}`
@@ -137,7 +152,8 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
       })}
     </Box>
   ) : (
-    <Box height={"calc(100vH - 60px)"} width="100%" maxHeight={1066}>
+    <Box height={"calc(100vH - 60px)"} width="100%" maxHeight={1066} column>
+      <LikesMeCarousel viewLikes={true} />
       <Box
         style={{
           margin: "20px",
@@ -146,7 +162,6 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
           opacity: 0.8,
         }}
         background={COLORS.lightPurple}
-        width="100%"
         height={"60vH"}
         justifyContent="space-around"
         paddingBottom={"10%"}
