@@ -75,7 +75,7 @@ const LikesMeCarousel = ({ viewLikes }) => {
           bold
           color={COLORS.deepPurple}
           paddingLeft={5}
-          margin={7}
+          marginY={7}
         >
           Who Likes Me?
         </Text>
@@ -103,10 +103,8 @@ const LikesMeCarousel = ({ viewLikes }) => {
         height="150px"
         padding="0 10px" // Fix padding inside the scroll container
         style={{
-          scrollbarWidth: "none", // Hide scrollbar on Firefox
-        }}
-        css={{
-          "&::-webkit-scrollbar": { display: "none" }, // Hide scrollbar on Chrome, Safari
+          scrollbarWidth: "none", // Hide scrollbar on Firefox"
+          "&::WebKitScrollbar": { display: "none" },
         }}
       >
         {likedUsers.map((user) => (
@@ -122,7 +120,6 @@ const LikesMeCarousel = ({ viewLikes }) => {
               marginRight: "10px", // Adjust spacing between images
               width: "100px",
               height: "120px",
-              borderRadius: "10px",
               overflow: "hidden",
               flexShrink: 0, // Prevent shrinking to fit screen
             }}
@@ -147,6 +144,7 @@ const LikesMeCarousel = ({ viewLikes }) => {
               fontSize={FONT_SIZES.SMALL}
               color={COLORS.black}
               marginTop="5px"
+              center
               style={{
                 filter: viewLikes ? undefined : "blur(8px)",
               }}
