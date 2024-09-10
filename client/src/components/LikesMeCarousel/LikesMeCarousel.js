@@ -46,6 +46,14 @@ const LikesMeCarousel = ({ viewLikes }) => {
     dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
   };
 
+  const openGoPremium = async () => {
+    try {
+      window.ReactNativeWebView.postMessage("GO_PREMIUM");
+    } catch (err) {
+      console.log("error: ", err);
+    }
+  };
+
   // Show loading indicator while fetching data
   if (loading) {
     return (
@@ -123,7 +131,7 @@ const LikesMeCarousel = ({ viewLikes }) => {
               overflow: "hidden",
               flexShrink: 0, // Prevent shrinking to fit screen
             }}
-            onClick={() => handleOpenProfile(user)}
+            onClick={viewLikes ? () => handleOpenProfile(user) : openGoPremium}
           >
             <img
               src={user.pictures[0].url}

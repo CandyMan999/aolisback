@@ -450,6 +450,7 @@ export const GET_USERS_WHO_LIKE_ME_QUERY = gql`
       isLoggedIn
       location {
         coordinates
+        showOnMap
       }
       intro
       sex
