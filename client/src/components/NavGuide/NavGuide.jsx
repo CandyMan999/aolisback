@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import { motion, useCycle } from "framer-motion";
@@ -36,10 +36,14 @@ const sidebar = () => {
   };
 };
 
-const Navguide = ({ props }) => {
+const Navguide = ({ props, setNavOpen }) => {
   const [isOpen, toggleOpen] = useCycle(false, true);
   const { state, dispatch } = useContext(Context);
   const mobile = useMediaQuery("(max-width: 650px)");
+
+  useEffect(() => {
+    isOpen ? setNavOpen(true) : setNavOpen(false);
+  }, [isOpen]);
 
   return (
     <motion.nav initial={false} animate={isOpen ? "open" : "closed"}>

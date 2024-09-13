@@ -145,12 +145,12 @@ const LookingFor = ({
                       Women
                     </MotionButton>
 
-                    <MotionButton
+                    {/* <MotionButton
                       onClick={() => handleButtonClick("sex", "Gender_Diverse")}
                       isSelected={profile.sex === "Gender_Diverse"}
                     >
                       Gender Diverse
-                    </MotionButton>
+                    </MotionButton> */}
                   </Box>
                 </Box>
               </Box>

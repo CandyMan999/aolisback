@@ -59,6 +59,23 @@ const LikeAndMatchButtons = ({
   usersWhoLikeMeCount,
 }) => {
   const [selectedButton, setSelectedButton] = useState(null);
+  const [changeStyle, setChangeStyle] = useState(false);
+
+  useEffect(() => {
+    // Function to check scroll position
+    const handleScroll = () => {
+      const scrollTop = window.scrollY; // How much the user has scrolled
+
+      setChangeStyle(scrollTop > 1); // fix position the header
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup scroll event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     if (!selectedButton) {
@@ -133,7 +150,9 @@ const LikeAndMatchButtons = ({
   };
 
   return (
-    <ButtonContainer style={{ marginTop: "2%" }}>
+    <ButtonContainer
+      style={{ marginTop: "2%", zIndex: changeStyle ? undefined : 1 }}
+    >
       {["Matches", "My Likes", "Likes Me"].map((button) => (
         <StyledButton
           key={button}

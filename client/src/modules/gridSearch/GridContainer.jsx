@@ -172,7 +172,7 @@ const GridContainer = () => {
   const usersMemo = useMemo(() => users, [users]);
 
   return (
-    <Box width="100vw" height={`calc(100vh - 70px)`} column>
+    <Box paddingTop={60} width="100vw" height={`calc(100vh - 70px)`} column>
       <LikeAndMatchButtons
         handleGetLikedUsers={handleGetLikedUsers}
         handleGetUsersWhoLikeMe={handleGetUsersWhoLikeMe}

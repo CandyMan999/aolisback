@@ -205,7 +205,7 @@ const UserSchema = new mongoose.Schema({
     },
     messages: {
       type: Number,
-      default: 3, // testing 3 per day to start
+      default: 6, // testing 6 per day to start
     },
     messagesSent: {
       type: Number,
@@ -229,7 +229,7 @@ const UserSchema = new mongoose.Schema({
     },
     likes: {
       type: Number,
-      default: 20,
+      default: 10,
     },
     likesSent: {
       type: Number,

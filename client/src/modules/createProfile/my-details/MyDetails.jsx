@@ -205,12 +205,12 @@ const MyDetails = ({
                   >
                     Female
                   </MotionButton>
-                  <MotionButton
+                  {/* <MotionButton
                     isSelected={profile.sex === "Gender_Diverse"}
                     onClick={() => handleButtonClick("sex", "Gender_Diverse")}
                   >
                     Gender Diverse
-                  </MotionButton>
+                  </MotionButton> */}
                 </Box>
               </Box>
               {errors.sex && <Text color={COLORS.darkRed}>{errors.sex}</Text>}

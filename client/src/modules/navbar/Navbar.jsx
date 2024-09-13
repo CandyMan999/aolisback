@@ -1,13 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { NavLink, withRouter, useLocation } from "react-router-dom";
-import { Image, Transformation, CloudinaryContext } from "cloudinary-react";
+
 import { getToken, setToken } from "../../utils/helpers";
 import NavLogo from "../../pictures/NavLogo.png";
 
 import { Box, FONT_SIZES, Text, NavGuide, Picture } from "../../components";
 
-import { navbar } from "../../styles/classes";
 import SignupModal from "./signup-modal";
 import LoginModal from "./login-modal";
 import { FETCH_ME } from "../../graphql/queries";
@@ -22,6 +21,7 @@ const Navbar = ({ props }) => {
   const { state, dispatch } = useContext(Context);
   const location = useLocation();
   const appToken = new URLSearchParams(location.search).get("token");
+  const [navOpen, setNavOpen] = useState(false);
 
   const client = useClient();
   const token = getToken();
@@ -66,10 +66,26 @@ const Navbar = ({ props }) => {
   const profilePic =
     currentUser && currentUser.pictures && currentUser.pictures[0];
 
+  const changeStyle = location.pathname === "/grid-search";
+
   return (
-    <div className={navbar}>
+    <div
+      style={{
+        background: COLORS.black,
+        height: "60px",
+        display: "flex",
+        flex: 1,
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingLeft: "5px",
+        paddingRight: "5px",
+        position: changeStyle ? "fixed" : "relative",
+        width: changeStyle ? "100%" : undefined,
+        zIndex: changeStyle ? (navOpen ? 3 : 1) : undefined,
+      }}
+    >
       <Box position="absolute" right={0} top={0}>
-        <NavGuide props={props} />
+        <NavGuide setNavOpen={setNavOpen} props={props} />
       </Box>
       {state.showSignup && (
         <SignupModal
@@ -95,7 +111,12 @@ const Navbar = ({ props }) => {
         }}
         whileTap={{ scale: 0.7 }}
       >
-        <NavLink style={{ textDecoration: "none" }} to="/">
+        <NavLink
+          style={{
+            textDecoration: "none",
+          }}
+          to="/"
+        >
           <img
             height={props.mobile ? 160 : 200}
             width={props.mobile ? 160 : 200}
