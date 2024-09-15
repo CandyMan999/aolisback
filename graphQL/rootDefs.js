@@ -64,6 +64,7 @@ module.exports = gql`
     pairedUser: User
     createdAt: String
     location: Location
+    previousMatches: [ID]
   }
 
   enum PlanType {

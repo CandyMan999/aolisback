@@ -5,7 +5,6 @@ import {
   FONT_SIZES,
   Button,
   Box,
-  Picture,
   Loading,
   PhotoSlider,
   Icon,
@@ -29,18 +28,17 @@ const SpeedModal = ({
   currentUser,
   status,
   closeModal,
-  handleAddUserToQueue,
+
+  setUserWantsInQueue,
 }) => {
   const client = useClient();
   const [distance, setDistance] = useState("No Location");
 
   useEffect(() => {
     handleStatus(status);
-    // if (status === "Deciding") {
-    //   playSound();
-    // }
-
-    console.log("status: ", status);
+    if (status === "Deciding") {
+      playSound();
+    }
   }, [status]);
 
   useEffect(() => {
@@ -66,9 +64,7 @@ const SpeedModal = ({
         break;
       case "Cancel":
         setTimeout(() => {
-          console.log("status is cancel: ", action);
           closeModal();
-          handleAddUserToQueue();
         }, 2000);
         break;
 
@@ -151,7 +147,7 @@ const SpeedModal = ({
         variables
       );
 
-      console.log("did we reove the user? ", removeFromQueue);
+      setUserWantsInQueue(false);
       closeModal();
     } catch (err) {
       console.log("err removing from queue: ", err);
@@ -166,7 +162,7 @@ const SpeedModal = ({
           column
           width={"100%"}
           position="absolute"
-          top={30}
+          bottom={30}
           left={0}
           justifyContent="center"
           style={{
@@ -189,7 +185,7 @@ const SpeedModal = ({
             margin={0}
             bold
             fontSize={FONT_SIZES.MEDIUM}
-            color={COLORS.white}
+            color={COLORS.black}
           >
             From
           </Text>

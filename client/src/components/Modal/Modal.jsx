@@ -60,6 +60,8 @@ const Modal = ({
             onClick={onClose}
             className={classes.close}
             zIndex={20}
+            style={{ opacity: 0.5 }}
+            background={COLORS.white}
           >
             <Icon
               color={dark ? COLORS.white : COLORS.darkGrey}

@@ -34,6 +34,7 @@ const QueueSchema = new mongoose.Schema({
       default: false,
     },
   },
+  previousMatches: [{ type: mongoose.Schema.ObjectId }],
   createdAt: {
     type: Date,
     default: Date.now,

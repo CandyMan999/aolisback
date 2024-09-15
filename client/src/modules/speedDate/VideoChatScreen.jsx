@@ -23,6 +23,7 @@ const VideoChatScreen = ({
   status,
   userId,
   pairedUser,
+  setUserWantsInQueue,
 }) => {
   const { state, dispatch } = useContext(Context);
   const client = useClient();
@@ -202,6 +203,7 @@ const VideoChatScreen = ({
         //   }
         //   handleHangup();
         //   handleRemoveFromQueue();
+        //   setUserWantsInQueue(false);
         //   window.ReactNativeWebView.postMessage("OUT_OF_TIME");
         // }
       } catch (err) {

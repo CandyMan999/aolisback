@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Subscription } from "react-apollo";
-import { Box, Text, Picture, Loading } from "../../components";
+import { Box, Text, Picture, Loading, Button } from "../../components";
 import {
   ADD_TO_QUEUE_MUTATION,
   MATCH_USER_MUTATION,
 } from "../../graphql/mutations";
+import { COLORS } from "../../constants";
 import { USER_MATCHED_SUBSCRIPTION } from "../../graphql/subscriptions";
 import Context from "../../context";
 import { useClient } from "../../client";
@@ -16,38 +17,39 @@ export const SpeedDatePage = ({}) => {
   const [showModal, setShowModal] = useState(false);
   const [matchedUser, setMatchedUser] = useState({});
   const [showScreen, setShowScreen] = useState(false);
+  const [userWantsInQueue, setUserWantsInQueue] = useState(true);
+  const [hasAddedToQueue, setHasAddedToQueue] = useState(false); // Track if user has been added to queue
 
   const client = useClient();
   const currentUser = state.currentUser;
-  const outOfTime = currentUser?.plan
-    ? currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
-      currentUser.plan.videoMinutesUsed
-    : false;
+  //   const outOfTime = currentUser?.plan
+  //     ? currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
+  //       currentUser.plan.videoMinutesUsed
+  //     : false;
+
+  //optionally add out of time if trying to enter the queue
 
   useEffect(() => {
-    //add the outOfTime when bringing back the payments don't forget to uncommetnin the video chat screeen as well
-
-    if (
-      currentUser.username &&
-      matchedUser.status !== "Connected" &&
-      matchedUser.status !== "Deciding"
-    ) {
+    if (currentUser.username && !hasAddedToQueue && userWantsInQueue) {
+      // Add the user to the queue once when currentUser is available
       handleAddUserToQueue();
-      setTimeout(() => {
-        handleMatchUser();
-      }, 3000);
+      setHasAddedToQueue(true); // Ensure this is only run once
     }
-  }, [currentUser]);
+  }, [currentUser, hasAddedToQueue]);
 
   useEffect(() => {
-    if (matchedUser && matchedUser.status === "Cancel") {
+    if (matchedUser && matchedUser.status === "Cancel" && userWantsInQueue) {
       setTimeout(() => {
         handleAddUserToQueue();
-        handleMatchUser();
-      }, 3000);
+      }, 2000);
     }
     if (matchedUser && matchedUser.status === "Connected") {
       setShowScreen(true);
+    }
+    if (matchedUser && matchedUser.status === "Waiting") {
+      setTimeout(() => {
+        handleMatchUser();
+      }, 2000);
     }
   }, [matchedUser.status]);
 
@@ -66,15 +68,20 @@ export const SpeedDatePage = ({}) => {
           ADD_TO_QUEUE_MUTATION,
           variables
         );
-        console.log("Added to queue: ", addToQueue);
 
         // Wait 3 seconds to trigger matching
       } else {
         alert("Fill out what you are looking for to use this feature");
+        setUserWantsInQueue(false);
       }
     } catch (err) {
       console.log("Error adding to queue: ", err);
     }
+  };
+
+  const returnUserToQueue = () => {
+    setUserWantsInQueue(true);
+    handleAddUserToQueue();
   };
 
   const handleMatchUser = async () => {
@@ -101,8 +108,6 @@ export const SpeedDatePage = ({}) => {
     setShowScreen(false);
   };
 
-  console.log("what is my status: ", matchedUser.status);
-
   return currentUser.username ? (
     <Box
       width="100%"
@@ -111,25 +116,46 @@ export const SpeedDatePage = ({}) => {
       alignItems="center"
       justifyContent="center"
     >
-      <Box column alignItems="center">
-        <Picture
-          profilePic={
-            currentUser && currentUser.pictures.length
-              ? currentUser.pictures[0]
-              : undefined
-          }
-          searching={true}
-          height={120}
-          width={120}
-        />
-        <Text bold>Searching For Users...</Text>
-      </Box>
+      {userWantsInQueue ? (
+        <Box column alignItems="center">
+          <Picture
+            profilePic={
+              currentUser && currentUser.pictures.length
+                ? currentUser.pictures[0]
+                : undefined
+            }
+            searching={true}
+            height={120}
+            width={120}
+          />
+          <Text bold>Searching For Users...</Text>
+        </Box>
+      ) : (
+        <Box column alignItems="center">
+          <Button
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              boxShadow: `0px 2px 10px ${COLORS.pink}`,
+              borderRadius: "20px",
+              border: `solid 1px ${COLORS.pink}`,
+            }}
+            padding={20}
+            color={COLORS.black}
+            width="fit-content"
+            onClick={returnUserToQueue}
+          >
+            <Text bold>Jump Back In!</Text>
+          </Button>
+          <Text bold>You are OUT of the queue</Text>
+        </Box>
+      )}
       <Subscription
         subscription={USER_MATCHED_SUBSCRIPTION}
         onSubscriptionData={({ subscriptionData }) => {
           const { userMatched } = subscriptionData.data;
 
-          console.log("we got a match: ", userMatched);
           if (userMatched.userId === currentUser._id) {
             setMatchedUser(userMatched);
             if (userMatched.status === "Deciding") {
@@ -147,6 +173,8 @@ export const SpeedDatePage = ({}) => {
           currentUser={currentUser}
           status={matchedUser.status}
           handleAddUserToQueue={handleAddUserToQueue}
+          handleMatchUser={handleMatchUser}
+          setUserWantsInQueue={setUserWantsInQueue}
         />
       )}
       <VideoChatScreen
@@ -155,6 +183,7 @@ export const SpeedDatePage = ({}) => {
         status={matchedUser.status}
         userId={currentUser._id}
         pairedUser={matchedUser.pairedUser}
+        setUserWantsInQueue={setUserWantsInQueue}
       />
     </Box>
   ) : (
