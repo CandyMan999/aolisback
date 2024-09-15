@@ -75,11 +75,8 @@ module.exports = {
             blockedUserId.toString()
           ) || [];
 
-        console.log("other user data: ", matchedUserBlockedUsers);
-
         // Check if the matched user has blocked the current user
         if (matchedUserBlockedUsers.includes(currentUser.userId.toString())) {
-          console.log("Matched user has blocked the current user. Retrying...");
           match = null; // Reset match and retry
           attempts++;
           continue;
@@ -188,8 +185,6 @@ module.exports = {
             model: "Picture",
           },
         });
-
-        console.log("canceled: ", cancelledSelf);
 
         // Notify both users that the match was cancelled
         publishMatchedUser(cancelledSelf);
