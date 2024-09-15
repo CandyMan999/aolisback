@@ -38,7 +38,7 @@ const QueueSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    expires: 3700,
+    expires: 1800,
   },
 });
 
