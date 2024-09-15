@@ -22,6 +22,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
     { name: "View Users Locations", icon: "search", route: "/location" },
     { name: "Chat Rooms", icon: "chat", route: "/" },
     { name: "Browse Users", icon: "browseLogo", route: "/grid-search" },
+    { name: "Speed Date", icon: "speed", route: "/speed-date" },
     { name: "Logout", icon: "signout", route: "/" },
   ]);
 
@@ -41,8 +42,8 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
           route: "/message-center",
         },
         { name: "View Users Locations", icon: "search", route: "/location" },
-
         { name: "Browse Users", icon: "browseLogo", route: "/grid-search" },
+        { name: "Speed Date", icon: "speed", route: "/speed-date" },
         { name: "Logout", icon: "signout", route: "/" },
         { name: "Admin", icon: "user", route: "/admin" },
       ]);
@@ -65,6 +66,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
         { name: "View Users Locations", icon: "search", route: "/location" },
 
         { name: "Browse Users", icon: "browseLogo", route: "/grid-search" },
+        { name: "Speed Date", icon: "speed", route: "/speed-date" },
         { name: "Logout", icon: "signout", route: "/" },
       ]);
     }

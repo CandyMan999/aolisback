@@ -16,6 +16,8 @@ const Modal = ({
   classes,
   state,
   dark,
+  noPadding,
+  overflow,
 }) => (
   <Fragment>
     <BackDrop onClose={onClose} />
@@ -33,7 +35,11 @@ const Modal = ({
         background={dark ? COLORS.darkestGrey : COLORS.white}
         border={dark ? `1px solid ${COLORS.black}` : `1px solid ${COLORS.grey}`}
         borderRadius={8}
-        style={{ opacity: dark ? 0.7 : 1 }}
+        style={{
+          opacity: dark ? 0.7 : 1,
+          paddingTop: noPadding ? 0 : undefined,
+          overflow: overflow ? overflow : undefined,
+        }}
         width={width || 320}
         height={height || 440}
         boxShadow={

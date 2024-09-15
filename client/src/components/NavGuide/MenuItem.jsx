@@ -5,7 +5,7 @@ import { Text, Icon, ICON_SIZES } from "../../components";
 import { COLORS } from "../../constants";
 import { clearToken } from "../../utils/helpers";
 import { LOGOUT_MUTATION } from "../../graphql/mutations";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const variants = {
   open: {
@@ -99,6 +99,12 @@ export const MenuItem = ({
       toggle();
     }
     if (item === "Message Center") {
+      toggle();
+    }
+    if (item === "Speed Date") {
+      toggle();
+    }
+    if (item === "Admin") {
       toggle();
     }
     if (item === "Logout") {

@@ -56,6 +56,15 @@ module.exports = gql`
     additionalLikes: Int
     additionalMessages: Int
   }
+  type Queue {
+    userId: ID!
+    sex: Sex
+    lookingFor: Sex
+    status: SpeedDateStatus
+    pairedUser: User
+    createdAt: String
+    location: Location
+  }
 
   enum PlanType {
     Free
@@ -162,6 +171,18 @@ module.exports = gql`
     Decline
     Block
     Cancel
+  }
+
+  type StatusMessage {
+    message: String
+  }
+
+  enum SpeedDateStatus {
+    Waiting
+    Deciding
+    Connected
+    Cancel
+    Accept
   }
 
   type AuthSignup {
@@ -316,6 +337,10 @@ module.exports = gql`
     buyVideoMinutes(_id: ID!, numberMinutes: Int!): User
     deleteUser(_id: ID!): Account
     deleteSeeders: Account
+    addToQueue(userId: ID!, sex: Sex!, lookingFor: Sex!): Queue
+    matchUser(userId: ID!): Queue
+    updateMatchStatus(userId: ID!, status: SpeedDateStatus): StatusMessage
+    removeFromQueue(userId: ID!): StatusMessage
   }
 
   type Subscription {
@@ -328,5 +353,6 @@ module.exports = gql`
     buyMessages: User
     buyVideoMinutes: User
     flagUser: Picture
+    userMatched: Queue
   }
 `;

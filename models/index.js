@@ -5,4 +5,5 @@ module.exports = {
   Room: require("./Room"),
   Video: require("./Video"),
   ChatRequest: require("./ChatRequest"),
+  Queue: require("./Queue"),
 };

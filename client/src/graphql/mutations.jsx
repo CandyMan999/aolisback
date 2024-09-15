@@ -963,3 +963,81 @@ export const BAN_USER = gql`
     }
   }
 `;
+
+export const ADD_TO_QUEUE_MUTATION = gql`
+  mutation addToQueue($userId: ID!, $sex: Sex!, $lookingFor: Sex!) {
+    addToQueue(userId: $userId, sex: $sex, lookingFor: $lookingFor) {
+      userId
+      sex
+      lookingFor
+      status
+      pairedUser {
+        _id
+        username
+        intro
+        sex
+        age
+        occupation
+        singleTime
+        drink
+        smoke
+        marijuana
+        drugs
+        kids
+        pictures {
+          _id
+          url
+          publicId
+        }
+      }
+      createdAt
+    }
+  }
+`;
+
+export const MATCH_USER_MUTATION = gql`
+  mutation ($userId: ID!) {
+    matchUser(userId: $userId) {
+      userId
+      sex
+      lookingFor
+      status
+      pairedUser {
+        _id
+        username
+        intro
+        sex
+        age
+        occupation
+        singleTime
+        drink
+        smoke
+        marijuana
+        drugs
+        kids
+        pictures {
+          _id
+          url
+          publicId
+        }
+      }
+      createdAt
+    }
+  }
+`;
+
+export const UPDATE_MATCH_STATUS_MUTATION = gql`
+  mutation UpdateMatchStatus($userId: ID!, $status: SpeedDateStatus!) {
+    updateMatchStatus(userId: $userId, status: $status) {
+      message
+    }
+  }
+`;
+
+export const REMOVE_FROM_QUEUE = gql`
+  mutation ($userId: ID!) {
+    removeFromQueue(userId: $userId) {
+      message
+    }
+  }
+`;

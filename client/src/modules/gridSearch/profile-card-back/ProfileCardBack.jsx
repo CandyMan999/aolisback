@@ -169,6 +169,7 @@ const ProfileCardBack = ({
       {!!user.room && online && user.room.name && video && (
         <RoomLink dispatch={dispatch} user={user} video={video} />
       )}
+
       {loading ? (
         <Loading ring />
       ) : video ? (
@@ -188,6 +189,11 @@ const ProfileCardBack = ({
             fullScreen={false}
             borderRadius="8px 8px 8px 8px"
           />
+          <Box position="absolute" bottom={2} zIndex={20}>
+            <Text color={COLORS.white}>
+              {video.viewed ? "Viewed ✅" : "Sent"}
+            </Text>
+          </Box>
         </Box>
       ) : undefined}
 

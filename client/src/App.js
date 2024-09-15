@@ -10,6 +10,7 @@ import GridSearch from "./modules/gridSearch";
 import MessageCenter from "./modules/messageCenter";
 import Message from "./modules/Message";
 import AdminPage from "./modules/admin";
+import SpeedDatePage from "./modules/speedDate";
 import { Map } from "./components";
 
 import "./App.css";
@@ -27,6 +28,7 @@ class App extends React.PureComponent {
           <Route path="/message-center" component={MessageCenter} />
           <Route path="/message" component={Message} />
           <Route path="/grid-search" component={GridSearch} />
+          <Route path="/speed-date" component={SpeedDatePage} />
           <ProtectedRoute exact path="/admin" component={AdminPage} />
         </Switch>
       </Fragment>

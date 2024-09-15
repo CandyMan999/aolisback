@@ -42,6 +42,12 @@ const {
   buyVideoMinutesResolver,
 } = require("./inAppPurchases");
 const { deleteUserResolver } = require("./deleteUser");
+const {
+  addToQueueResolver,
+  matchUserResolver,
+  updateMatchStatusResolver,
+  removeFromQueueResolver,
+} = require("./speedDate");
 
 module.exports = {
   createRoomResolver,
@@ -87,4 +93,8 @@ module.exports = {
   buyVideoMinutesResolver,
   deleteUserResolver,
   deleteSeedersResolver,
+  addToQueueResolver,
+  matchUserResolver,
+  updateMatchStatusResolver,
+  removeFromQueueResolver,
 };

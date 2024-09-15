@@ -10,6 +10,7 @@ const {
   buyMessagesSubscription,
   buyMinutesSubscription,
   flagUserSubscription,
+  userMatchedSubscription,
 } = require("./subscription/subscription");
 
 const {
@@ -71,6 +72,10 @@ const {
   buyVideoMinutesResolver,
   deleteUserResolver,
   deleteSeedersResolver,
+  addToQueueResolver,
+  matchUserResolver,
+  updateMatchStatusResolver,
+  removeFromQueueResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -86,6 +91,7 @@ const resolvers = {
     buyMessages: buyMessagesSubscription,
     buyVideoMinutes: buyMinutesSubscription,
     flagUser: flagUserSubscription,
+    userMatched: userMatchedSubscription,
   },
   Query: {
     fetchMe: fetchMeResolver,
@@ -146,6 +152,10 @@ const resolvers = {
     buyVideoMinutes: buyVideoMinutesResolver,
     deleteUser: deleteUserResolver,
     deleteSeeders: deleteSeedersResolver,
+    addToQueue: addToQueueResolver,
+    matchUser: matchUserResolver,
+    updateMatchStatus: updateMatchStatusResolver,
+    removeFromQueue: removeFromQueueResolver,
   },
 };
 

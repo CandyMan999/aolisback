@@ -354,3 +354,47 @@ export const CHANGE_PLAN_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const USER_MATCHED_SUBSCRIPTION = gql`
+  subscription {
+    userMatched {
+      userId
+      sex
+      lookingFor
+      status
+      pairedUser {
+        _id
+        username
+        intro
+        sex
+        age
+        occupation
+        singleTime
+        drink
+        smoke
+        marijuana
+        drugs
+        kids
+        expoToken
+        location {
+          coordinates
+          showOnMap
+        }
+        lookingFor {
+          ageRange {
+            lowEnd
+            highEnd
+          }
+          sex
+          kids
+        }
+        pictures {
+          _id
+          url
+          publicId
+        }
+      }
+      createdAt
+    }
+  }
+`;
