@@ -4,6 +4,7 @@ import { Box, Text, Picture, Loading, Button } from "../../components";
 import {
   ADD_TO_QUEUE_MUTATION,
   MATCH_USER_MUTATION,
+  REMOVE_FROM_QUEUE,
 } from "../../graphql/mutations";
 import { COLORS } from "../../constants";
 import { USER_MATCHED_SUBSCRIPTION } from "../../graphql/subscriptions";
@@ -11,6 +12,7 @@ import Context from "../../context";
 import { useClient } from "../../client";
 import SpeedModal from "./modal";
 import VideoChatScreen from "./VideoChatScreen";
+import { useHistory } from "react-router-dom";
 
 export const SpeedDatePage = ({}) => {
   const { state, dispatch } = useContext(Context);
@@ -19,15 +21,24 @@ export const SpeedDatePage = ({}) => {
   const [showScreen, setShowScreen] = useState(false);
   const [userWantsInQueue, setUserWantsInQueue] = useState(true);
   const [hasAddedToQueue, setHasAddedToQueue] = useState(false); // Track if user has been added to queue
+  const history = useHistory();
 
   const client = useClient();
   const currentUser = state.currentUser;
-  //   const outOfTime = currentUser?.plan
-  //     ? currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
-  //       currentUser.plan.videoMinutesUsed
-  //     : false;
+  const outOfTime = currentUser?.plan
+    ? currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
+      currentUser.plan.videoMinutesUsed
+    : false;
 
   //optionally add out of time if trying to enter the queue
+
+  useEffect(() => {
+    try {
+      window.ReactNativeWebView.postMessage("SPEED_DATE");
+    } catch (err) {
+      console.log("error sending Speed Date Warning: ", err);
+    }
+  }, []);
 
   useEffect(() => {
     if (currentUser.username && !hasAddedToQueue && userWantsInQueue) {
@@ -53,6 +64,46 @@ export const SpeedDatePage = ({}) => {
     }
   }, [matchedUser.status]);
 
+  useEffect(() => {
+    // Detect route changes
+    const handleRouteChange = (location, action) => {
+      if (action === "PUSH" || action === "POP") {
+        handleRemoveFromQueue();
+      }
+    };
+
+    const unlisten = history.listen(handleRouteChange);
+    // Detect tab close/refresh
+    const handleBeforeUnload = (e) => {
+      handleRemoveFromQueue();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      unlisten(); // Clean up the route listener
+      window.removeEventListener("beforeunload", handleBeforeUnload); // Clean up the tab close listener
+    };
+  }, [currentUser, history]);
+
+  const handleRemoveFromQueue = async () => {
+    try {
+      const variables = {
+        userId: currentUser._id,
+      };
+
+      const { removeFromQueue } = await client.request(
+        REMOVE_FROM_QUEUE,
+        variables
+      );
+
+      setUserWantsInQueue(false);
+      setShowModal(false);
+    } catch (err) {
+      console.log("err removing from queue: ", err);
+    }
+  };
+
   const handleAddUserToQueue = async () => {
     try {
       if (currentUser.sex && currentUser.lookingFor.sex) {
@@ -68,8 +119,6 @@ export const SpeedDatePage = ({}) => {
           ADD_TO_QUEUE_MUTATION,
           variables
         );
-
-        // Wait 3 seconds to trigger matching
       } else {
         alert("Fill out what you are looking for to use this feature");
         setUserWantsInQueue(false);
@@ -80,8 +129,15 @@ export const SpeedDatePage = ({}) => {
   };
 
   const returnUserToQueue = () => {
-    setUserWantsInQueue(true);
-    handleAddUserToQueue();
+    try {
+      //   if (outOfTime) {
+      //     window.ReactNativeWebView.postMessage("BUY_MINUTES");
+      //   }
+      setUserWantsInQueue(true);
+      handleAddUserToQueue();
+    } catch (err) {
+      console.log("error returning user to queue: ", err);
+    }
   };
 
   const handleMatchUser = async () => {
@@ -140,15 +196,18 @@ export const SpeedDatePage = ({}) => {
               boxShadow: `0px 2px 10px ${COLORS.pink}`,
               borderRadius: "20px",
               border: `solid 1px ${COLORS.pink}`,
+              paddingLeft: "20px",
+              paddingRight: "20px",
             }}
-            padding={20}
             color={COLORS.black}
             width="fit-content"
             onClick={returnUserToQueue}
           >
-            <Text bold>Jump Back In!</Text>
+            <Text bold style={{ textAlign: "center" }}>
+              <span style={{ fontSize: 30 }}>🤾‍♂️</span> Jump Back In!
+            </Text>
           </Button>
-          <Text bold>You are OUT of the queue</Text>
+          <Text bold>You are OUT of the queue...</Text>
         </Box>
       )}
       <Subscription

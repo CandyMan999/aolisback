@@ -320,15 +320,13 @@ module.exports = {
       if (queueEntry.pairedUser) {
         // If the user is paired, update the paired user's status to "Cancel"
 
-        await Queue.updateOne(
-          { userId: queueEntry.pairedUser._id },
-          { status: "Cancel" }
-        );
-
-        // Publish a cancellation notification to the paired user
-        const cancelledPairedUser = await Queue.findOne({
-          userId: queueEntry.pairedUser,
-        }).populate({
+        const cancelledPairedUser = await Queue.findOneAndUpdate(
+          {
+            userId: queueEntry.pairedUser._id,
+          },
+          { status: "Cancel" },
+          { new: true }
+        ).populate({
           path: "pairedUser",
           model: "User",
           populate: {
@@ -337,14 +335,14 @@ module.exports = {
           },
         });
 
+        await User.findByIdAndUpdate(
+          { _id: queueEntry.pairedUser._id },
+          { inCall: false },
+          { new: true }
+        );
+
         publishMatchedUser(cancelledPairedUser);
       }
-
-      await User.findByIdAndUpdate(
-        { _id: userId },
-        { inCall: false },
-        { new: true }
-      );
 
       // Remove the user from the queue by deleting their entry
       await Queue.deleteMany({ userId });
