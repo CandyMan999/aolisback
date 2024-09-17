@@ -341,7 +341,7 @@ module.exports = gql`
     addToQueue(userId: ID!, sex: Sex!, lookingFor: Sex!): Queue
     matchUser(userId: ID!): Queue
     updateMatchStatus(userId: ID!, status: SpeedDateStatus): StatusMessage
-    removeFromQueue(userId: ID!): StatusMessage
+    removeFromQueue(userId: ID!, isLoggedIn: Boolean): StatusMessage
   }
 
   type Subscription {

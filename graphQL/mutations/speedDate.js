@@ -301,16 +301,16 @@ module.exports = {
       throw new Error(error.message || "Failed to update match status.");
     }
   },
-  removeFromQueueResolver: async (root, { userId }, ctx) => {
+  removeFromQueueResolver: async (root, { userId, isLoggedIn }, ctx) => {
     try {
       // Find the user in the queue
-      const queueEntry = await Queue.findOne({ userId }).populate("pairedUser");
 
       await User.findByIdAndUpdate(
         { _id: userId },
-        { inCall: false },
+        { inCall: false, isLoggedIn },
         { new: true }
       );
+      const queueEntry = await Queue.findOne({ userId }).populate("pairedUser");
 
       if (!queueEntry) {
         throw new AuthenticationError("User not found in the queue");

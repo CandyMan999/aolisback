@@ -90,6 +90,7 @@ export const SpeedDatePage = ({}) => {
     try {
       const variables = {
         userId: currentUser._id,
+        isLoggedIn: true,
       };
 
       const { removeFromQueue } = await client.request(

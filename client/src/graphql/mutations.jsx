@@ -1035,8 +1035,8 @@ export const UPDATE_MATCH_STATUS_MUTATION = gql`
 `;
 
 export const REMOVE_FROM_QUEUE = gql`
-  mutation ($userId: ID!) {
-    removeFromQueue(userId: $userId) {
+  mutation ($userId: ID!, $isLoggedIn: Boolean) {
+    removeFromQueue(userId: $userId, isLoggedIn: $isLoggedIn) {
       message
     }
   }
