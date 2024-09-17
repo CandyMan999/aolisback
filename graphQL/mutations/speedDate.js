@@ -92,8 +92,7 @@ module.exports = {
             },
             userId: {
               $ne: currentUser.userId, // exclude self
-              $nin: blockedUsers, //exclude blocked users
-              $nin: currentUser.previousMatches, //exculde previous session matches
+              $nin: [...blockedUsers, ...currentUser.previousMatches], //exclude blocked users and current session past matches
             },
           },
           { $set: { status: "Deciding", pairedUser: userId } }, // Lock the matched user by setting their status to "Deciding"
@@ -196,7 +195,7 @@ module.exports = {
     try {
       // Atomically find the current user in the queue
       const currentUser = await Queue.findOneAndUpdate(
-        { userId, status: { $in: ["Deciding", "Connected"] } }, // Only proceed if the user is in "Deciding" or "Connected" status
+        { userId, status: { $in: ["Deciding", "Connected", "Accept"] } }, // Only proceed if the user is in "Deciding" or "Connected" , or "Accept" status
         { new: true }
       );
 
