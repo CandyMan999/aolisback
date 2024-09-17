@@ -88,7 +88,7 @@ const styles = {
   close: {
     color: COLORS.darkestGrey,
     margin: 0,
-    padding: "4px 6px",
+    padding: "4px",
     borderRadius: "50%",
     cursor: "pointer",
     [":hover"]: {
