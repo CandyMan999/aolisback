@@ -205,7 +205,7 @@ const VideoChatScreen = ({
           handleHangup();
           handleRemoveFromQueue();
           setUserWantsInQueue(false);
-          window.ReactNativeWebView.postMessage("OUT_OF_TIME");
+          window.ReactNativeWebView.postMessage("BUY_MINUTES");
         }
       } catch (err) {
         console.log(err);
