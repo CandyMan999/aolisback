@@ -121,7 +121,9 @@ export const SpeedDatePage = ({}) => {
           variables
         );
       } else {
-        alert("Fill out what you are looking for to use this feature");
+        alert(
+          "Fill out your details and what you are looking for to use this feature!"
+        );
         setUserWantsInQueue(false);
       }
     } catch (err) {

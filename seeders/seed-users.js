@@ -14,12 +14,6 @@ cloudinary.config({
 });
 
 const TOTAL_USERS = 1000;
-const EXCLUDED_USER_IDS = [
-  "6686f5e8af94620002482764",
-  "669c616afe75e0000284581c",
-  "669c61eefe75e00002845865",
-  "66bcfd62bee04800023aded7",
-];
 
 const seedUsers = async () => {
   try {
@@ -31,62 +25,6 @@ const seedUsers = async () => {
       .then(() => console.log("DB connected"))
       .catch((err) => console.log(err));
 
-    const USERS = await User.find();
-
-    const deleteUserAndAssociatedData = async (user) => {
-      if (!EXCLUDED_USER_IDS.includes(user._id.toString())) {
-        // Delete all pictures
-        for (const pic of user.pictures) {
-          const data = await Picture.findById(pic._id);
-          if (data && data.publicId) {
-            await cloudinary.uploader.destroy(data.publicId);
-          }
-          await Picture.deleteOne({ _id: pic._id });
-        }
-
-        // Delete all comments
-        for (const comment of user.comments) {
-          await Comment.deleteOne({ _id: comment._id });
-        }
-
-        // Delete all videos
-        const publicIDs = [];
-        for (const video of user.sentVideos) {
-          const videoData = await Video.findById(video);
-          if (videoData) {
-            publicIDs.push(videoData.publicId);
-            if (videoData.receiver) {
-              await User.findByIdAndUpdate(
-                { _id: videoData.receiver },
-                { $pull: { receivedVideos: videoData._id } }
-              );
-            }
-            await Video.deleteOne({ _id: videoData._id });
-          }
-        }
-        for (const video of user.receivedVideos) {
-          const videoData = await Video.findById(video);
-          if (videoData) {
-            publicIDs.push(videoData.publicId);
-            await Video.deleteOne({ _id: videoData._id });
-          }
-        }
-
-        if (publicIDs.length) {
-          await cloudinary.api.delete_resources(publicIDs, {
-            resource_type: "video",
-          });
-        }
-
-        // Delete user
-        await User.deleteOne({ _id: user._id });
-      }
-    };
-
-    // Deleting all users except the excluded user
-    await Promise.all(USERS.map((user) => deleteUserAndAssociatedData(user)));
-
-    const handleIsBanned = () => Math.random() < 0.5;
     const handleIsLoggedIn = () => Math.random() < 0.5;
     const handleAge = () => Math.floor(Math.random() * (30 - 18 + 1)) + 18;
     const getRandomGender = (gender) => {

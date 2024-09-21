@@ -75,8 +75,7 @@ const Settings = ({ state, client, dispatch }) => {
 
   const handleGetMoreLikes = () => {
     try {
-      alert("Everything is unlimited for beta launch, Enjoy!");
-      // window.ReactNativeWebView.postMessage("BUY_LIKES");
+      window.ReactNativeWebView.postMessage("BUY_LIKES");
     } catch (err) {
       console.log(err);
     }

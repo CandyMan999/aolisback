@@ -99,10 +99,10 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
                     top={-20}
                     right={-30}
                     borderRadius={"50%"}
+                    style={{ zIndex: 100 }}
                   >
                     {group.some((video) => !video.viewed) && (
                       <Icon
-                        style={{ zIndex: 100 }}
                         name="new"
                         size={ICON_SIZES.XXX_LARGE}
                         color={COLORS.red}

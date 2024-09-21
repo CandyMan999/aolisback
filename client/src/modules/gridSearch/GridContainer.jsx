@@ -24,10 +24,12 @@ const GridContainer = () => {
 
   useEffect(() => {
     if (currentUser.username) {
-      fetchData(false);
       fetchUsersWhoLikeMeCount();
     }
-  }, [currentUser.username]);
+    if (!users.length) {
+      fetchData(false);
+    }
+  }, []);
 
   const fetchData = async (paginate) => {
     if (skip === 0 || search !== "Browse") {
@@ -193,7 +195,7 @@ const GridContainer = () => {
           state={state}
           client={client}
           dispatch={dispatch}
-          currentUser={state.currentUser}
+          currentUser={currentUser}
           users={usersMemo}
           search={search}
           fetchData={fetchData}

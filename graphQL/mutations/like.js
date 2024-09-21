@@ -22,6 +22,7 @@ module.exports = {
 
       if (isAlreadyLiked) {
         // They already liked the user
+
         return user;
       }
 
