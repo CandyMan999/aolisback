@@ -130,10 +130,10 @@ const Picture = ({
           />
         </motion.div>
         {online && (
-          <Box position="absolute" top={0}>
+          <Box position="absolute" top={0} style={{ zIndex: 3 }}>
             <BlinkingDot online={online} />
           </Box>
-        )}{" "}
+        )}
       </CloudinaryContext>
     ) : (
       <motion.div

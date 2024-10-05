@@ -65,7 +65,7 @@ module.exports = {
         const findAIComments = async () => {
           let comments = [];
           await mainRoom[0].comments.forEach((comment) => {
-            if (comment.author.username === "DatingHost") {
+            if (comment.author.username === "CandyMan🍭") {
               comments.push(comment.text);
             }
           });
