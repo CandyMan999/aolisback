@@ -550,6 +550,10 @@ export const GET_REAL_USERS = gql`
       username
       _id
       isBanned
+      phoneNumber
+      email
+      googleId
+      appleId
       pictures {
         url
       }

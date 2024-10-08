@@ -220,6 +220,15 @@ const AdminPage = () => {
                 />
               )}
               <Text>{user.username}</Text>
+              <Text>{user.phoneNumber ? user.phoneNumber : "NO #"}</Text>
+              <Text>
+                {user.googleId
+                  ? "Account with Google"
+                  : user.appleId
+                  ? "Account with Apple"
+                  : user.email}
+              </Text>
+
               <Text>Banned: {user.isBanned ? "Yes" : "No"}</Text>
               {spinner ? (
                 <Loading ring />
