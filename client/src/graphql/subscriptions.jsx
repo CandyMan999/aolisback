@@ -19,6 +19,13 @@ export const CREATE_COMMENT_SUBSCRIPTION = gql`
       createdAt
       _id
       text
+      replyTo {
+        author {
+          _id
+          username
+        }
+        text
+      }
       author {
         _id
         username

@@ -93,6 +93,14 @@ class MessageList extends Component {
           !!this.props.messages.length &&
           !this.props.showRoomList &&
           this.props.messages.map((message, index) => {
+            const isReply = !!message.replyTo;
+            const replyToAuthor =
+              isReply && message.replyTo.author
+                ? message.replyTo.author.username
+                : null;
+            const replyToText =
+              isReply && message.replyTo.text ? message.replyTo.text : null;
+            console.log("message: ", message);
             return (
               <Message
                 usernameClick={this.props.usernameClick}
@@ -110,6 +118,9 @@ class MessageList extends Component {
                 }
                 currentUser={this.props.currentUser}
                 createdAt={message.createdAt}
+                commentId={message._id}
+                replyToAuthor={replyToAuthor} // Pass replyTo author
+                replyToText={replyToText} // Pass replyT
               />
             );
           })

@@ -2,11 +2,11 @@ import React, { useState, useContext, useEffect } from "react";
 import { Subscription } from "react-apollo";
 import {
   Wrapper,
-  RoomList,
   MessageList,
   CreateRoom,
   SendMessage,
   TermsAgreement,
+  ReplyPreview,
 } from "../../components";
 
 import {
@@ -36,7 +36,7 @@ const ChatBox = () => {
   const [usernames, setUsernames] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
-  const mobile = useMediaQuery("(max-width: 650px)");
+
   const roomMobile = useMediaQuery("(max-width: 950px)");
   const { currentUser } = state;
 
@@ -168,8 +168,9 @@ const ChatBox = () => {
       text,
       userId: currentUser._id,
       roomId: state.roomId,
+      replyToCommentId: state.reply.commentId,
     };
-
+    console.log("variables: ", variables);
     try {
       await client.request(CREATE_COMMENT_MUTATION, variables);
     } catch (err) {
@@ -194,6 +195,7 @@ const ChatBox = () => {
         subscribeToRoom={subscribeToRoom}
         currentUser={currentUser}
         showRoomList={state.showRoomList}
+        state={state}
       />
 
       <CreateRoom
@@ -203,6 +205,9 @@ const ChatBox = () => {
         currentUser={currentUser}
         state={state}
       />
+      {state.reply.commentId && (
+        <ReplyPreview state={state} dispatch={dispatch} />
+      )}
 
       <SendMessage
         disabled={!state.roomId}
@@ -211,6 +216,7 @@ const ChatBox = () => {
         currentUserID={!!currentUser && currentUser._id}
         showRoomList={state.showRoomList}
         usernames={usernames}
+        state={state}
       />
 
       <Subscription

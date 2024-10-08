@@ -137,6 +137,7 @@ module.exports = gql`
     createdAt: String
     author: User
     room: Room
+    replyTo: Comment
   }
 
   type Picture {
@@ -258,7 +259,12 @@ module.exports = gql`
     ): GoogleAuth
     createRoom(name: String!, _id: ID): Room
     changeRoom(roomId: ID!, userId: ID!): Room
-    createComment(text: String!, userId: ID!, roomId: ID!): Comment
+    createComment(
+      text: String!
+      userId: ID!
+      roomId: ID!
+      replyToCommentId: ID
+    ): Comment
     createProfile(
       _id: ID!
       intro: String

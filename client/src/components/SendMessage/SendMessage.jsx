@@ -9,13 +9,27 @@ const SendMessageForm = ({
   dispatch,
   disabled,
   usernames,
+  state,
 }) => {
   const [message, setMessage] = useState("");
   const [filteredUsernames, setFilteredUsernames] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedUsernameIndex, setSelectedUsernameIndex] = useState(0);
-  const [dropdownPosition, setDropdownPosition] = useState({ left: 0 }); // State to track dropdown position
-  const inputRef = useRef(null); // Ref to keep track of the input element
+  const [dropdownPosition, setDropdownPosition] = useState({ left: 0 });
+  const inputRef = useRef(null);
+
+  console.log("state: ", state.reply, !!state.reply.commentId);
+
+  // Focus the input when state.reply.commentId is true
+  useEffect(() => {
+    if (state.reply.commentId && inputRef.current) {
+      inputRef.current.focus();
+      setMessage(`@${state.reply.authorName} `);
+    }
+    if (!state.reply.commentId) {
+      setMessage("");
+    }
+  }, [state.reply.commentId]);
 
   useEffect(() => {
     const lastWord = message.split(" ").pop();
@@ -56,7 +70,7 @@ const SendMessageForm = ({
         );
         e.preventDefault();
       } else if (
-        (e.key === "Enter" || e.key === " ") && // Check for Enter or Space
+        (e.key === "Enter" || e.key === " ") &&
         filteredUsernames.length > 0
       ) {
         insertUsername(filteredUsernames[selectedUsernameIndex]);
@@ -67,10 +81,8 @@ const SendMessageForm = ({
 
   const calculateCursorPosition = (inputRect) => {
     const inputWidth = inputRect.width;
-    const maxCursorX = inputRect.left + inputWidth * 0.7; // Max 70% to the right
-    const cursorX = inputRect.left + inputRef.current.selectionStart * 7; // Approximate calculation
-
-    // Return the cursor position, but don't let it go beyond 70% of the input width
+    const maxCursorX = inputRect.left + inputWidth * 0.7;
+    const cursorX = inputRect.left + inputRef.current.selectionStart * 7;
     return Math.min(cursorX, maxCursorX);
   };
 
@@ -86,11 +98,23 @@ const SendMessageForm = ({
     e.preventDefault();
     sendMessage(message);
     setMessage("");
+    clearReply();
   };
 
   const handleIsLoggedIn = () => {
     if (!currentUserID) {
       dispatch({ type: "TOGGLE_SIGNUP", payload: true });
+    }
+  };
+
+  const clearReply = () => {
+    try {
+      dispatch({
+        type: "SET_REPLY",
+        payload: { commentId: null, text: null, authorName: null },
+      });
+    } catch (err) {
+      console.log("error clearing reply: ", err);
     }
   };
 

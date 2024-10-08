@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "@emotion/styled";
 import {
   Box,
@@ -12,6 +12,7 @@ import {
 import { COLORS } from "../../../constants";
 import { formatDistanceToNow } from "date-fns";
 import axios from "axios";
+import Context from "../../../context";
 
 const MessageRow = styled.div`
   display: flex;
@@ -61,27 +62,19 @@ const Message = ({
   username,
   text,
   usernameClick,
-  roomId,
-  messageRoomId,
+  commentId,
   currentUserID,
   currentUser,
   authorId,
   picture,
   createdAt,
+  replyToAuthor,
+  replyToText,
 }) => {
   const [loading, setLoading] = useState(false);
-
-  // Original comment preserved:
-  // const handleSpeech = async (text, voiceType) => {
-  //   try {
-  //     window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-  //   } catch (err) {
-  //     console.log("error talking: ", err);
-  //   }
-  // };
+  const { state, dispatch } = useContext(Context);
 
   const handleSpeech = async (text, gender) => {
-    console.log("Gender: ", gender);
     try {
       setLoading(true);
       const open = process.env.REACT_APP_OPEN_AI;
@@ -129,6 +122,14 @@ const Message = ({
   };
 
   const hasMention = checkForMention(text);
+
+  const handleCommentReply = async (commentId, text, authorName) => {
+    try {
+      dispatch({ type: "SET_REPLY", payload: { commentId, text, authorName } });
+    } catch (err) {
+      console.log("error setting reply to state");
+    }
+  };
 
   return (
     <MessageRow
@@ -192,22 +193,87 @@ const Message = ({
         </Username>
 
         <MessageBubble isCurrentUser={isCurrentUser} hasMention={hasMention}>
+          {replyToAuthor && (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              paddingTop="6px"
+              paddingLeft="8px"
+              width={"100%"}
+              style={{
+                borderLeft: `4px solid ${
+                  isCurrentUser ? COLORS.white : COLORS.pink
+                }`,
+                // backgroundColor: COLORS.white,
+                // marginBottom: "10px",
+                // borderRadius: "10px",
+                // boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+              }}
+            >
+              <Box flex={1} overflow="hidden" column>
+                {/* Author name */}
+                <Text
+                  bold
+                  fontSize={FONT_SIZES.MEDIUM}
+                  color={COLORS.darkGrey}
+                  margin={0}
+                  padding={0}
+                >
+                  Reply to {replyToAuthor}
+                </Text>
+                {/* Truncated comment text with ellipsis */}
+                <Text
+                  fontSize={FONT_SIZES.SMALL}
+                  color={COLORS.darkGrey}
+                  padding={0}
+                  margin={0}
+                  style={{
+                    maxWidth: "65vw", // Ensuring full width is used
+                    display: "block",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {replyToText}
+                </Text>
+              </Box>
+            </Box>
+          )}
           <Box>
-            <Text fontSize={FONT_SIZES.SMALL}>{text}</Text>
+            <Text
+              marginBottom={0}
+              fontSize={FONT_SIZES.SMALL}
+              style={{ marginBottom: 2 }}
+            >
+              {text}
+            </Text>
           </Box>
-          <Span
-            style={{
-              fontSize: 10,
-              alignSelf: "flex-end",
-              marginTop: 5,
-              margin: 0,
-              paddingBottom: 5,
-              width: !isCurrentUser ? "100%" : undefined,
-              color: isCurrentUser ? COLORS.darkerGrey : COLORS.white,
-            }}
-          >
-            {formatDistanceToNow(Number(createdAt))} ago
-          </Span>
+          <Box>
+            <Span
+              style={{
+                fontSize: 10,
+                alignSelf: "flex-end",
+                marginTop: 5,
+                margin: 0,
+                justifyContent: "space-between",
+                paddingBottom: 5,
+                width: !isCurrentUser ? "100%" : undefined,
+                color: isCurrentUser ? COLORS.darkerGrey : COLORS.white,
+              }}
+            >
+              {formatDistanceToNow(Number(createdAt))} ago
+            </Span>
+            {!isCurrentUser && (
+              <Icon
+                name="reverse"
+                size={ICON_SIZES.LARGE}
+                color={COLORS.pink}
+                onClick={() => handleCommentReply(commentId, text, username)}
+              />
+            )}
+          </Box>
         </MessageBubble>
       </div>
       {isCurrentUser && (

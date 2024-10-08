@@ -154,6 +154,15 @@ export default function reducer(state, { type, payload }) {
         showRoomList: payload,
       };
 
+    case "SET_REPLY":
+      return {
+        ...state,
+        reply: {
+          commentId: payload.commentId,
+          text: payload.text,
+          authorName: payload.authorName,
+        },
+      };
     case "UPDATE_VIDEO_CHAT_REQUEST":
       return {
         ...state,

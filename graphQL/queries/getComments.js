@@ -11,7 +11,11 @@ module.exports = {
           path: "author",
           populate: [{ path: "pictures", model: "Picture" }],
         })
-        .populate("room");
+        .populate("room")
+        .populate({
+          path: "replyTo",
+          populate: { path: "author", model: "User" }, // Populate the author of the replyTo comment
+        });
 
       return comments;
     } catch (err) {

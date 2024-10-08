@@ -24,6 +24,13 @@ export const GET_COMMENTS_QUERY = gql`
       _id
       createdAt
       text
+      replyTo {
+        author {
+          _id
+          username
+        }
+        text
+      }
       author {
         _id
         username

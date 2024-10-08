@@ -11,37 +11,45 @@ const openai = new OpenAI({
 
 module.exports = {
   createCommentResolver: async (root, args, ctx) => {
-    const { text, userId, roomId } = args;
+    const { text, userId, roomId, replyToCommentId } = args;
     try {
-      const comment = await new Comment({ text }).save();
+      // Create a new comment, including the author, room, and optional replyTo field
+      const comment = await new Comment({
+        text,
+        author: userId,
+        room: roomId,
+        replyTo: replyToCommentId || null, // Set replyTo if provided
+      }).save();
 
+      // Update the room by adding the new comment to its comments array
       const room = await Room.findByIdAndUpdate(
-        { _id: roomId },
-        { $push: { comments: comment } },
+        roomId,
+        { $push: { comments: comment._id } },
         { new: true }
       )
         .populate("users")
         .populate("comments");
 
+      // Update the user by adding the new comment to their comments array
       const author = await User.findByIdAndUpdate(
-        { _id: userId },
-        { $push: { comments: comment } },
+        userId,
+        { $push: { comments: comment._id } },
         { new: true }
       ).populate("pictures");
 
-      const newComment = await Comment.findByIdAndUpdate(
-        {
-          _id: comment._id,
-        },
-        { author, room },
-        { new: true }
-      )
+      // Populate the comment's author, room, and replyTo fields for the response
+      const newComment = await Comment.findById(comment._id)
         .populate({
           path: "author",
-          populate: [{ path: "pictures", model: "Picture" }],
+          populate: { path: "pictures", model: "Picture" },
         })
-        .populate("room");
+        .populate("room")
+        .populate({
+          path: "replyTo",
+          populate: { path: "author", model: "User" }, // Populate the author of the replyTo comment
+        });
 
+      // Publish the new comment to subscribers
       publishCreateComment(newComment);
 
       if (room.users.length < 3) {
@@ -79,7 +87,7 @@ module.exports = {
 
         const createPrompt = async () => {
           try {
-            const humanLastThree = await humanComments.slice(-4); // Get the last three human comments
+            const humanLastThree = humanComments.slice(-4); // Get the last three human comments
             const AILastThree = AIcomments.slice(
               -(humanLastThree.length > 2 ? humanLastThree.length - 1 : 1)
             );

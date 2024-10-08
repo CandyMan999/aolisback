@@ -14,6 +14,7 @@ const CommentSchema = new mongoose.Schema({
   },
   author: { type: mongoose.Schema.ObjectId, ref: "User" },
   room: { type: mongoose.Schema.ObjectId, ref: "Room" },
+  replyTo: { type: mongoose.Schema.ObjectId, ref: "Comment" },
 });
 
 module.exports = mongoose.model("Comment", CommentSchema);

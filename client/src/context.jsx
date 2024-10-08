@@ -10,6 +10,7 @@ const Context = createContext({
   rooms: ["Main"],
   isProfile: false,
   showLogin: false,
+  reply: { commentId: null, text: null, authorName: null },
   showSignup: false,
   showVideo: false,
   showRoomList: false,

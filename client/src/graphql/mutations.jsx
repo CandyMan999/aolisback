@@ -209,11 +209,23 @@ export const CHANGE_ROOM_MUTATION = gql`
 `;
 
 export const CREATE_COMMENT_MUTATION = gql`
-  mutation ($text: String!, $userId: ID!, $roomId: ID!) {
-    createComment(text: $text, userId: $userId, roomId: $roomId) {
+  mutation ($text: String!, $userId: ID!, $roomId: ID!, $replyToCommentId: ID) {
+    createComment(
+      text: $text
+      userId: $userId
+      roomId: $roomId
+      replyToCommentId: $replyToCommentId
+    ) {
       createdAt
       _id
       text
+      replyTo {
+        author {
+          _id
+          username
+        }
+        text
+      }
       author {
         username
         pictures {
