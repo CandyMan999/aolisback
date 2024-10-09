@@ -100,7 +100,7 @@ class MessageList extends Component {
                 : null;
             const replyToText =
               isReply && message.replyTo.text ? message.replyTo.text : null;
-            console.log("message: ", message);
+
             return (
               <Message
                 usernameClick={this.props.usernameClick}

@@ -72,7 +72,7 @@ const Message = ({
   replyToText,
 }) => {
   const [loading, setLoading] = useState(false);
-  const { state, dispatch } = useContext(Context);
+  const { dispatch } = useContext(Context);
 
   const handleSpeech = async (text, gender) => {
     try {
@@ -205,10 +205,6 @@ const Message = ({
                 borderLeft: `4px solid ${
                   isCurrentUser ? COLORS.white : COLORS.pink
                 }`,
-                // backgroundColor: COLORS.white,
-                // marginBottom: "10px",
-                // borderRadius: "10px",
-                // boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
               }}
             >
               <Box flex={1} overflow="hidden" column>

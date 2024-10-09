@@ -18,8 +18,6 @@ const SendMessageForm = ({
   const [dropdownPosition, setDropdownPosition] = useState({ left: 0 });
   const inputRef = useRef(null);
 
-  console.log("state: ", state.reply, !!state.reply.commentId);
-
   // Focus the input when state.reply.commentId is true
   useEffect(() => {
     if (state.reply.commentId && inputRef.current) {
@@ -131,6 +129,7 @@ const SendMessageForm = ({
         height={"100%"}
         display="flex"
         alignItems="center"
+        paddingBottom={6}
       >
         <Box
           flex={1}

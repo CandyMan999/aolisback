@@ -170,7 +170,7 @@ const ChatBox = () => {
       roomId: state.roomId,
       replyToCommentId: state.reply.commentId,
     };
-    console.log("variables: ", variables);
+
     try {
       await client.request(CREATE_COMMENT_MUTATION, variables);
     } catch (err) {

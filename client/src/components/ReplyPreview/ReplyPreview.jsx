@@ -22,7 +22,7 @@ const ReplyPreview = ({ state, dispatch }) => {
       padding="8px"
       position="absolute"
       width={isMobile ? "95vw" : "98vw"}
-      bottom={50}
+      bottom={40}
       zIndex={200}
       style={{
         borderLeft: `4px solid ${COLORS.vividBlue}`,
