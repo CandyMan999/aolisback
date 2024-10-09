@@ -211,7 +211,7 @@ const Message = ({
                 {/* Author name */}
                 <Text
                   bold
-                  fontSize={FONT_SIZES.MEDIUM}
+                  fontSize={FONT_SIZES.SMALL}
                   color={COLORS.darkGrey}
                   margin={0}
                   padding={0}

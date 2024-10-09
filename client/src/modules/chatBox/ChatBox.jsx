@@ -186,7 +186,7 @@ const ChatBox = () => {
   };
 
   return (
-    <Wrapper style={{ width: "100vw", height: "94vh" }}>
+    <Wrapper style={{ width: "100vw", height: `calc(100vh - 60px)` }}>
       <MessageList
         usernameClick={usernameClick}
         roomId={state.roomId}
