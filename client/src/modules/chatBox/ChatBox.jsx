@@ -36,6 +36,7 @@ const ChatBox = () => {
   const [usernames, setUsernames] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [changeStyle, setChangeStyle] = useState(false);
 
   const roomMobile = useMediaQuery("(max-width: 950px)");
   const { currentUser } = state;
@@ -172,7 +173,18 @@ const ChatBox = () => {
     };
 
     try {
-      await client.request(CREATE_COMMENT_MUTATION, variables);
+      setChangeStyle(true);
+      const { createComment } = await client.request(
+        CREATE_COMMENT_MUTATION,
+        variables
+      );
+
+      console.log("create comment: ", createComment);
+      if (createComment) {
+        console.log("CHANGING");
+
+        setTimeout(() => setChangeStyle(false), 100);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -183,7 +195,7 @@ const ChatBox = () => {
   };
 
   return (
-    <Wrapper style={{ width: "100vw" }}>
+    <Wrapper style={{ width: "100vw", height: changeStyle ? "94vh" : "100%" }}>
       <MessageList
         usernameClick={usernameClick}
         roomId={state.roomId}

@@ -129,7 +129,6 @@ const SendMessageForm = ({
         height={"100%"}
         display="flex"
         alignItems="center"
-        paddingBottom={6}
       >
         <Box
           flex={1}
