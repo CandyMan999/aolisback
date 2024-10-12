@@ -73,6 +73,7 @@ const Message = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const { dispatch } = useContext(Context);
+  const [expandReply, setExpandReply] = useState(false);
 
   const handleSpeech = async (text, gender) => {
     try {
@@ -128,6 +129,14 @@ const Message = ({
       dispatch({ type: "SET_REPLY", payload: { commentId, text, authorName } });
     } catch (err) {
       console.log("error setting reply to state");
+    }
+  };
+
+  const handleExpandReply = () => {
+    try {
+      setExpandReply(!expandReply);
+    } catch (err) {
+      console.log("err expanding reply: ", err);
     }
   };
 
@@ -201,10 +210,12 @@ const Message = ({
               paddingTop="6px"
               paddingLeft="8px"
               width={"100%"}
+              onClick={handleExpandReply}
               style={{
                 borderLeft: `4px solid ${
                   isCurrentUser ? COLORS.white : COLORS.pink
                 }`,
+                borderRadius: "2px 0px 0px 0px",
               }}
             >
               <Box flex={1} overflow="hidden" column>
@@ -225,11 +236,11 @@ const Message = ({
                   padding={0}
                   margin={0}
                   style={{
-                    maxWidth: "65vw", // Ensuring full width is used
+                    maxWidth: "70vw", // I ned this to be better, maybe the max width should be somewhere else
                     display: "block",
                     textOverflow: "ellipsis",
                     overflow: "hidden",
-                    whiteSpace: "nowrap",
+                    whiteSpace: !expandReply ? "nowrap" : "wrap",
                   }}
                 >
                   {replyToText}
