@@ -353,6 +353,7 @@ module.exports = gql`
     matchUser(userId: ID!): Queue
     updateMatchStatus(userId: ID!, status: SpeedDateStatus): StatusMessage
     removeFromQueue(userId: ID!, isLoggedIn: Boolean): StatusMessage
+    resetPassword(username: String!, password: String!): Auth
   }
 
   type Subscription {

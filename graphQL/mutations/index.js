@@ -6,7 +6,11 @@ const {
   googleAppLoginResolver,
   googleAppSignupResolver,
 } = require("./google");
-const { signupResolver, appleSignupResolver } = require("./signUp");
+const {
+  signupResolver,
+  appleSignupResolver,
+  resetPasswordResolver,
+} = require("./signUp");
 const { loginResolver, appleLoginResolver } = require("./login");
 const { createCommentResolver } = require("./comment");
 const { createProfileResolver } = require("./createProfile");
@@ -98,4 +102,5 @@ module.exports = {
   updateMatchStatusResolver,
   removeFromQueueResolver,
   sendTwoFactorResolver,
+  resetPasswordResolver,
 };
