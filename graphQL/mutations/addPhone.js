@@ -77,7 +77,7 @@ module.exports = {
 
       if (!existingUser) {
         throw new AuthenticationError(
-          "No Account for this phone number exsists. Just go create a new account if this is the phone number you want to use."
+          "No Account for this phone number exists. Just go create a new account if this is the phone number you want to use."
         );
         return;
       }
@@ -89,7 +89,10 @@ module.exports = {
             to: phoneNumber,
           });
 
-          return { message: "Verification code sent." };
+          return {
+            message: "Verification code sent.",
+            username: existingUser.username,
+          };
         } catch (err) {
           console.error("Error sending text: ", err);
           throw new AuthenticationError(err);
@@ -101,7 +104,7 @@ module.exports = {
             .verificationChecks.create({ to: phoneNumber, code: authCode });
 
           if (verificationCheck.status === "approved") {
-            return { message: "Redirect" };
+            return { message: "Redirect", username: existingUser.username };
           } else {
             throw new AuthenticationError("Invalid verification code.");
           }

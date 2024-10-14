@@ -41,6 +41,42 @@ module.exports = {
     }
   },
 
+  resetPasswordResolver: async (root, args, ctx) => {
+    try {
+      const { username, password } = args;
+
+      const checkIfUserExists = async (email, username) => {
+        const user = await User.findOne({ email });
+        if (user) {
+          throw new AuthenticationError("Email Already Exists");
+        } else {
+          const user = await User.findOne({ username });
+          if (user) {
+            throw new AuthenticationError("Username Already Exists");
+          }
+        }
+      };
+
+      const validate = await checkIfUserExists(email, username);
+      if (validate) {
+        return;
+      }
+
+      const user = await new User({
+        username,
+        password,
+        email,
+        isLoggedIn: true,
+        roomInfo: { subscribedAt: moment() },
+      }).save();
+
+      const token = await createToken(user._id);
+      return { user, token };
+    } catch (err) {
+      throw new AuthenticationError(err.message);
+    }
+  },
+
   appleSignupResolver: async (root, args, ctx) => {
     try {
       const { email, name, appleId, username } = args;

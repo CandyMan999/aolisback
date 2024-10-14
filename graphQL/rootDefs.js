@@ -178,6 +178,10 @@ module.exports = gql`
   type StatusMessage {
     message: String
   }
+  type resetPassword {
+    message: String
+    username: String
+  }
 
   enum SpeedDateStatus {
     Waiting
@@ -326,7 +330,7 @@ module.exports = gql`
     deleteAccount: Account
     termsAgreement(accept: Boolean!): User
     addPhone(_id: ID!, phoneNumber: String!, authCode: Float): User
-    sendTwoFactor(phoneNumber: String!, authCode: Float): StatusMessage
+    sendTwoFactor(phoneNumber: String!, authCode: Float): resetPassword
     sendPhoneNumber(
       expoToken: String!
       username: String!
