@@ -1,6 +1,7 @@
 const { AuthenticationError } = require("apollo-server");
 const { User, Plan } = require("../../models");
-
+const bcrypt = require("bcrypt");
+const SALT_WORK_FACTOR = 10;
 const { createToken } = require("../../utils/middleware");
 moment = require("moment");
 
@@ -50,12 +51,15 @@ module.exports = {
         throw new AuthenticationError("Username Not Found");
       }
 
+      // Hash the new password
+      const hashedPassword = await bcrypt.hash(password, SALT_WORK_FACTOR);
+
       const updatedUser = await User.findOneAndUpdate(
         {
           username,
         },
         {
-          password,
+          password: hashedPassword,
           isLoggedIn: true,
           roomInfo: { subscribedAt: moment() },
         },
