@@ -121,7 +121,7 @@ const SendMessageForm = ({
       onSubmit={handleSubmit}
       className="send-message-form"
       onClick={handleIsLoggedIn}
-      style={{ paddingBottom: "1%" }}
+      // style={{ paddingBottom: "1%" }}
     >
       <Box
         position="relative"

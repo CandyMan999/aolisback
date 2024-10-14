@@ -186,9 +186,9 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
     }
   };
 
-  const handleMapClick = () => {
-    setPopup({ isOpen: false, id: null });
-  };
+  // const handleMapClick = () => {
+  //   setPopup({ isOpen: false, id: null });
+  // };
 
   const handleSetProfile = async (user) => {
     await dispatch({ type: "UPDATE_PROFILE", payload: user });
@@ -285,7 +285,7 @@ const Map = ({ zoom, width, height, currentUser, location }) => {
           onViewportChange={(newViewport) => setViewport(newViewport)}
           onLoad={onMapLoad}
           {...viewport}
-          onClick={handleMapClick}
+          // onClick={handleMapClick}
           scrollZoom={!mobileSize}
           style={{
             overflow: "hidden",
