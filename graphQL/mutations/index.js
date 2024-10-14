@@ -25,7 +25,7 @@ const { viewVideoResolver } = require("./videoView");
 const { getExpoTokenResolver } = require("./pushNotifications");
 const { deleteAccountResolver } = require("./deleteAccount");
 const { termsAgreementResolver } = require("./termsAgreement");
-const { addPhoneResolver } = require("./addPhone");
+const { addPhoneResolver, sendTwoFactorResolver } = require("./addPhone");
 const { sendPhoneNumberResolver } = require("./sendPhoneNumber");
 const { callDurationResolver } = require("./callDuration");
 const { likeResolver, unLikeResolver } = require("./like");
@@ -97,4 +97,5 @@ module.exports = {
   matchUserResolver,
   updateMatchStatusResolver,
   removeFromQueueResolver,
+  sendTwoFactorResolver,
 };

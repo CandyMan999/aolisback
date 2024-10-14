@@ -218,7 +218,12 @@ const Message = ({
                 borderRadius: "2px 0px 0px 0px",
               }}
             >
-              <Box flex={1} overflow="hidden" column>
+              <Box
+                flex={1}
+                overflow="hidden"
+                column
+                style={{ transition: "all 0.3s ease-in-out" }}
+              >
                 {/* Author name */}
                 <Text
                   bold

@@ -68,4 +68,51 @@ module.exports = {
       throw new AuthenticationError(err.message);
     }
   },
+  sendTwoFactorResolver: async (root, args, ctx) => {
+    const { phoneNumber, authCode } = args;
+
+    try {
+      // Check if the phone number is already in use
+      const existingUser = await User.findOne({ phoneNumber });
+
+      if (!existingUser) {
+        throw new AuthenticationError(
+          "No Account for this phone number exsists. Just go create a new account if this is the phone number you want to use."
+        );
+        return;
+      }
+
+      if (!authCode) {
+        try {
+          await client.verify.v2.services(serviceSid).verifications.create({
+            channel: "sms",
+            to: phoneNumber,
+          });
+
+          return { message: "Verification code sent." };
+        } catch (err) {
+          console.error("Error sending text: ", err);
+          throw new AuthenticationError(err);
+        }
+      } else {
+        try {
+          const verificationCheck = await client.verify.v2
+            .services(serviceSid)
+            .verificationChecks.create({ to: phoneNumber, code: authCode });
+
+          if (verificationCheck.status === "approved") {
+            return { message: "Redirect" };
+          } else {
+            throw new AuthenticationError("Invalid verification code.");
+          }
+        } catch (err) {
+          console.error("Error verifying code: ", err);
+          throw new AuthenticationError(err);
+        }
+      }
+    } catch (err) {
+      console.error("General error: ", err);
+      throw new AuthenticationError(err.message);
+    }
+  },
 };

@@ -326,6 +326,7 @@ module.exports = gql`
     deleteAccount: Account
     termsAgreement(accept: Boolean!): User
     addPhone(_id: ID!, phoneNumber: String!, authCode: Float): User
+    sendTwoFactor(phoneNumber: String!, authCode: Float): StatusMessage
     sendPhoneNumber(
       expoToken: String!
       username: String!

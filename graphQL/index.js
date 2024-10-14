@@ -76,6 +76,7 @@ const {
   matchUserResolver,
   updateMatchStatusResolver,
   removeFromQueueResolver,
+  sendTwoFactorResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -156,6 +157,7 @@ const resolvers = {
     matchUser: matchUserResolver,
     updateMatchStatus: updateMatchStatusResolver,
     removeFromQueue: removeFromQueueResolver,
+    sendTwoFactor: sendTwoFactorResolver,
   },
 };
 
