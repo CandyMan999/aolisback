@@ -92,7 +92,7 @@ const VideoPlayer = ({
       {location.pathname === "/message" && (
         <Box
           style={{
-            display: "block",
+            // display: "block",
             backgroundColor: COLORS.black,
             borderRadius: borderRadius,
             width: "100%",
@@ -119,7 +119,14 @@ const VideoPlayer = ({
                 zIndex: 10,
               }}
             >
-              <Text style={{ marginBottom: "16px", textAlign: "center" }}>
+              <Text
+                style={{
+                  marginBottom: "16px",
+                  textAlign: "center",
+                  paddingLeft: "15px",
+                  paddingRight: "15px",
+                }}
+              >
                 {receiverWatching
                   ? "This video has been flagged by our AI or yourself and may include inappropriate content."
                   : "Our AI has flagged this video for Nudity, if so you will be banned!"}
@@ -160,7 +167,7 @@ const VideoPlayer = ({
       {location.pathname === "/grid-search" && (
         <Box
           style={{
-            display: "block",
+            // display: "block",
             backgroundColor: COLORS.black,
             borderRadius: borderRadius,
             height: height || 250,

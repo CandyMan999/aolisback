@@ -82,10 +82,13 @@ const MessageContainer = ({ history, receivedVideos, mobile }) => {
               display="flex"
               justifyContent="space-between"
               width="100%"
-              paddingX={"5%"}
+              paddingX={"2%"}
               paddingY={3}
             >
-              <Box alignItems="center" width={!mobile ? "100%" : undefined}>
+              <Box
+                alignItems="center"
+                style={{ width: "100%", paddingRight: "5px" }}
+              >
                 <Box>
                   <Picture
                     height={84}
