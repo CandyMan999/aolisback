@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { MdVideoChat } from "react-icons/md";
 import {
   Box,
   Text,
@@ -11,8 +11,55 @@ import {
 } from "../../../components";
 import { COLORS } from "../../../constants";
 import { GET_VIDEOS_QUERY } from "../../../graphql/queries";
-
 import { motion } from "framer-motion";
+import { RiUserHeartFill } from "react-icons/ri";
+
+const SendMessageButton = ({ onClick }) => {
+  return (
+    <Box column alignItems="center">
+      <Box
+        onClick={onClick}
+        column
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: `linear-gradient(90deg, ${COLORS.main} 0%, ${COLORS.pink} 100%)`,
+          borderRadius: "50%",
+          marginTop: "10px",
+          cursor: "pointer",
+          width: "122px",
+          height: "122px",
+
+          boxShadow: `0px 4px 6px ${COLORS.grey}`,
+          border: `1px solid ${COLORS.lightGrey}`,
+        }}
+      >
+        <Box
+          style={{
+            // backgroundColor: COLORS.white,
+            borderRadius: "50%",
+            padding: "8px",
+            opacity: 0.8,
+            // boxShadow: `0px 2px 4px ${COLORS.grey}`,
+          }}
+        >
+          <MdVideoChat size={70} color={COLORS.vividBlue} />
+        </Box>
+      </Box>
+      <Text
+        style={{
+          color: COLORS.black,
+          fontWeight: "bold",
+          fontSize: "14px",
+          marginTop: "opx",
+        }}
+      >
+        Send Video Message
+      </Text>
+    </Box>
+  );
+};
 
 const ProfileCardBack = ({
   online,
@@ -38,14 +85,6 @@ const ProfileCardBack = ({
   const handleMessage = async () => {
     try {
       await dispatch({ type: "UPDATE_PROFILE", payload: user });
-      // if (
-      //   currentUser.plan.messages + currentUser.plan.additionalMessages <=
-      //   currentUser.plan.messagesSent
-      // ) {
-      //   window.ReactNativeWebView.postMessage("BUY_MESSAGES");
-
-      //   return;
-      // }
       openModal();
     } catch (err) {
       console.log(err);
@@ -54,9 +93,9 @@ const ProfileCardBack = ({
 
   const setBlocked = () => {
     setIsBlocked(false);
-    user.blockedUsers.find((user) => {
-      if (user._id === currentUser._id) {
-        return setIsBlocked(true);
+    user.blockedUsers.find((blockedUser) => {
+      if (blockedUser._id === currentUser._id) {
+        setIsBlocked(true);
       }
     });
   };
@@ -71,11 +110,10 @@ const ProfileCardBack = ({
 
       const { getVideos } = await client.request(GET_VIDEOS_QUERY, variables);
       if (getVideos) {
-        const lastVideo = await getVideos.pop();
-
+        const lastVideo = getVideos.pop();
         setVideo(lastVideo);
-        setLoading(false);
       }
+      setLoading(false);
     } catch (err) {
       setLoading(false);
       console.log("err getting videos, profile card back: ", err);
@@ -96,6 +134,7 @@ const ProfileCardBack = ({
         minWidth: 150,
         height: 280,
         margin: 4,
+        width: "100%",
         alignItems: "center",
         textAlign: "center",
         marginTop: 12,
@@ -134,38 +173,30 @@ const ProfileCardBack = ({
         zIndex={20}
         onClick={handleSetProfile}
       >
-        <Icon
+        {/* <Icon
           name="user"
           size={ICON_SIZES.X_LARGE}
-          color={video ? COLORS.pink : COLORS.main}
+          color={video ? COLORS.pink : COLORS.vividBlue}
+        /> */}
+        <RiUserHeartFill
+          size={35}
+          color={video ? COLORS.pink : COLORS.vividBlue}
+          style={{ padding: "5px" }}
         />
       </Box>
+
       {!video && !loading && (
         <Box
           height="100%"
           display="flex"
           alignItems="center"
-          justifyContent="space-around"
+          justifyContent="center"
           column
         >
-          <Box
-            height={"fit-content"}
-            card
-            column
-            padding={5}
-            marginX={3}
-            onClick={handleMessage}
-            background={COLORS.main}
-          >
-            <Text color={COLORS.white} bold margin={0}>
-              No Messages...
-            </Text>
-            <Text color={COLORS.white} bold margin={0}>
-              Try sending a Video Message!
-            </Text>
-          </Box>
+          <SendMessageButton onClick={isBlocked ? undefined : handleMessage} />
         </Box>
       )}
+
       {!!user.room && online && user.room.name && video && (
         <RoomLink dispatch={dispatch} user={user} video={video} />
       )}
@@ -181,7 +212,6 @@ const ProfileCardBack = ({
           key={video.publicId}
         >
           <VideoPlayer
-            // publicId={video.publicId}
             videoUrl={video.url}
             width={150}
             height={280}
@@ -205,13 +235,13 @@ const ProfileCardBack = ({
         height={40}
         style={{ display: video ? "none" : undefined }}
         alignItems="center"
-        borederRadius="0px 0px 10px 10px"
+        borderRadius="0px 0px 10px 10px"
         onClick={isBlocked ? undefined : handleMessage}
       >
         {isBlocked && (
           <Icon name="block" color={COLORS.red} size={ICON_SIZES.LARGE} />
         )}
-        <Text> {isBlocked ? "Blocked" : "Send Video Message"}</Text>
+        <Text> {isBlocked ? "Blocked" : "No Messages Yet"}</Text>
       </Box>
     </motion.div>
   );
