@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MdVideoChat } from "react-icons/md";
+import { RiUserHeartFill } from "react-icons/ri";
 import {
   Box,
   Text,
@@ -12,36 +13,34 @@ import {
 import { COLORS } from "../../../constants";
 import { GET_VIDEOS_QUERY } from "../../../graphql/queries";
 import { motion } from "framer-motion";
-import { RiUserHeartFill } from "react-icons/ri";
 
 const SendMessageButton = ({ onClick }) => {
   return (
-    <Box column alignItems="center">
+    <motion.div
+      style={{ alignItems: "center", flexDirection: "column", display: "flex" }}
+      whileTap={{ scale: 0.6 }}
+      onClick={onClick}
+    >
       <Box
-        onClick={onClick}
-        column
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           background: `linear-gradient(90deg, ${COLORS.main} 0%, ${COLORS.pink} 100%)`,
           borderRadius: "50%",
-          marginTop: "10px",
+          marginTop: 15,
           cursor: "pointer",
           width: "122px",
           height: "122px",
-
           boxShadow: `0px 4px 6px ${COLORS.grey}`,
           border: `1px solid ${COLORS.lightGrey}`,
         }}
       >
         <Box
           style={{
-            // backgroundColor: COLORS.white,
             borderRadius: "50%",
             padding: "8px",
             opacity: 0.8,
-            // boxShadow: `0px 2px 4px ${COLORS.grey}`,
           }}
         >
           <MdVideoChat size={70} color={COLORS.vividBlue} />
@@ -52,12 +51,11 @@ const SendMessageButton = ({ onClick }) => {
           color: COLORS.black,
           fontWeight: "bold",
           fontSize: "14px",
-          marginTop: "opx",
         }}
       >
         Send Video Message
       </Text>
-    </Box>
+    </motion.div>
   );
 };
 
@@ -166,24 +164,17 @@ const ProfileCardBack = ({
         />
       </Box>
 
-      <Box
-        position="absolute"
-        top={12}
-        right={5}
-        zIndex={20}
+      <motion.div
+        style={{ position: "absolute", top: 12, right: 5, zIndex: 20 }}
+        whileTap={{ scale: 0.3 }} // Scale down when tapped
         onClick={handleSetProfile}
       >
-        {/* <Icon
-          name="user"
-          size={ICON_SIZES.X_LARGE}
-          color={video ? COLORS.pink : COLORS.vividBlue}
-        /> */}
         <RiUserHeartFill
           size={35}
           color={video ? COLORS.pink : COLORS.vividBlue}
           style={{ padding: "5px" }}
         />
-      </Box>
+      </motion.div>
 
       {!video && !loading && (
         <Box
