@@ -31,24 +31,22 @@ module.exports = {
 
       const deleteAllComments = async () => {
         try {
-          const deleteCommentPromises = currentUser.comments.map(
-            async (comment) => {
-              await Comment.deleteOne({ _id: comment._id });
-            }
-          );
-          await Promise.all(deleteCommentPromises);
+          const userCommentIds = currentUser.comments;
+
+          // Delete the user's comments
+          await Comment.deleteMany({ _id: { $in: userCommentIds } });
 
           // Remove references to the user's comments in any associated rooms
-          const rooms = await Room.find({
-            comments: { $in: currentUser.comments },
-          });
-          const updateRoomPromises = rooms.map(async (room) => {
-            await Room.updateOne(
-              { _id: room._id },
-              { $pull: { comments: { $in: currentUser.comments } } }
-            );
-          });
-          await Promise.all(updateRoomPromises);
+          await Room.updateMany(
+            { comments: { $in: userCommentIds } },
+            { $pull: { comments: { $in: userCommentIds } } }
+          );
+
+          // Set replyTo to null for any comments that reply to the user's comments
+          await Comment.updateMany(
+            { replyTo: { $in: userCommentIds } },
+            { $set: { replyTo: null } }
+          );
         } catch (err) {
           throw new AuthenticationError(err.message);
         }

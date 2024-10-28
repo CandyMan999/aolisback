@@ -48,31 +48,22 @@ module.exports = {
 
       const deleteAllComments = async () => {
         try {
-          if (!currentUser.comments || currentUser.comments.length === 0) {
-            return;
-          }
+          const userCommentIds = currentUser.comments;
 
-          const deleteCommentPromises = currentUser.comments.map(
-            async (comment) => {
-              await Comment.deleteOne({ _id: comment._id });
-            }
+          // Delete the user's comments
+          await Comment.deleteMany({ _id: { $in: userCommentIds } });
+
+          // Remove references to the user's comments in any associated rooms
+          await Room.updateMany(
+            { comments: { $in: userCommentIds } },
+            { $pull: { comments: { $in: userCommentIds } } }
           );
 
-          await Promise.all(deleteCommentPromises);
-
-          const rooms = await Room.find({
-            comments: { $in: currentUser.comments },
-          });
-
-          if (rooms.length > 0) {
-            const updateRoomPromises = rooms.map(async (room) => {
-              await Room.updateOne(
-                { _id: room._id },
-                { $pull: { comments: { $in: currentUser.comments } } }
-              );
-            });
-            await Promise.all(updateRoomPromises);
-          }
+          // Set replyTo to null for any comments that reply to the user's comments
+          await Comment.updateMany(
+            { replyTo: { $in: userCommentIds } },
+            { $set: { replyTo: null } }
+          );
         } catch (err) {
           console.error("Error deleting comments:", err.message);
         }
