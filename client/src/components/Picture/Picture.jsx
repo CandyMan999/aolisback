@@ -1,16 +1,15 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Image, CloudinaryContext } from "cloudinary-react";
 import { Box, Icon, ICON_SIZES } from "..";
 import { COLORS } from "../../constants";
 import BlinkingDot from "../OnlineDot/BlinkingDot";
+
 const Picture = ({
   profilePic,
   name,
   height,
   width,
   marginBottom,
-  border,
   marginLeft,
   withShadow,
   withShadowColor,
@@ -62,80 +61,11 @@ const Picture = ({
     },
   };
 
-  return !!profilePic ? (
-    !!profilePic.publicId ? (
-      <CloudinaryContext cloudName="localmassagepros">
-        <motion.div
-          style={{ position: "relative", display: "inline-block" }}
-          whileTap={{ scale: 0.7 }}
-          onClick={onClick}
-        >
-          {/* First pulsing ring (thin) */}
-          {searching && (
-            <motion.div
-              style={{
-                position: "absolute",
+  // Construct the image URL
+  let imageUrl = profilePic ? profilePic.url : null;
 
-                width: width, // Same size as the image
-                height: height,
-                borderRadius: "50%",
-                zIndex: 0,
-              }}
-              variants={pulsingRingVariants}
-              initial="start"
-              animate="end"
-            />
-          )}
-
-          {/* Second wider pulsing overlay for radar effect */}
-          {searching && (
-            <motion.div
-              style={{
-                position: "absolute",
-
-                width: width, // Same size as the image
-                height: height,
-                borderRadius: "50%",
-                zIndex: 0,
-              }}
-              variants={ringOverlayVariants}
-              initial="start"
-              animate="end"
-            />
-          )}
-
-          {/* Profile Image */}
-          <Image
-            alt={`${name}-profile-pic`}
-            style={{
-              transition: "width 0.3s ease, height 0.3s ease", // Smooth transition for picture size
-              borderRadius: "50%",
-              backgroundColor: COLORS.black,
-              marginLeft: marginLeft ? marginLeft : undefined,
-              marginBottom: marginBottom ? marginBottom : undefined,
-              border: `solid 1px ${COLORS.vividBlue}`,
-              objectFit: "scale-down",
-              boxShadow: withShadow
-                ? `0px 2px 5px 2px ${
-                    withShadowColor ? COLORS.pink : COLORS.darkGrey
-                  }`
-                : null,
-              position: "relative",
-              zIndex: 1, // Above the rings
-            }}
-            quality={100}
-            publicId={profilePic.publicId}
-            width={width}
-            height={height}
-          />
-        </motion.div>
-        {online && (
-          <Box position="absolute" top={0} style={{ zIndex: 3 }}>
-            <BlinkingDot online={online} />
-          </Box>
-        )}
-      </CloudinaryContext>
-    ) : (
+  if (profilePic) {
+    return (
       <motion.div
         style={{ position: "relative", display: "inline-block" }}
         whileTap={{ scale: 0.7 }}
@@ -146,7 +76,6 @@ const Picture = ({
           <motion.div
             style={{
               position: "absolute",
-
               width: width,
               height: height,
               borderRadius: "50%",
@@ -174,40 +103,53 @@ const Picture = ({
           />
         )}
 
-        {/* Fallback Image */}
+        {/* Profile Image */}
         <img
           alt={`${name}-profile-pic`}
           style={{
+            transition: "width 0.3s ease, height 0.3s ease", // Smooth transition for picture size
             borderRadius: "50%",
-            height,
-            width,
-            marginBottom: marginBottom ? marginBottom : undefined,
-            imageRendering: "auto",
-            objectFit: "cover",
-            objectPosition: "center",
-            transition: "width 0.3s ease, height 0.3s ease",
+            backgroundColor: COLORS.black,
+            marginLeft: marginLeft || undefined,
+            marginBottom: marginBottom || undefined,
+            border: `solid 1px ${COLORS.vividBlue}`,
+            objectFit: "scale-down",
+            boxShadow: withShadow
+              ? `0px 2px 5px 2px ${
+                  withShadowColor ? COLORS.pink : COLORS.darkGrey
+                }`
+              : null,
             position: "relative",
             zIndex: 1, // Above the rings
           }}
-          src={profilePic.url}
+          src={imageUrl}
+          width={width}
+          height={height}
         />
+        {online && (
+          <Box position="absolute" top={0} style={{ zIndex: 3 }}>
+            <BlinkingDot online={online} />
+          </Box>
+        )}
       </motion.div>
-    )
-  ) : (
-    <Box>
-      <Box
-        borderRadius="50%"
-        height={height}
-        width={width}
-        center
-        background={COLORS.lightGrey}
-        justifyContent="center"
-        marginBottom={marginBottom ? marginBottom : undefined}
-      >
-        <Icon name="user" size={ICON_SIZES.XX_LARGE} color={COLORS.black} />
+    );
+  } else {
+    return (
+      <Box>
+        <Box
+          borderRadius="50%"
+          height={height}
+          width={width}
+          center
+          background={COLORS.lightGrey}
+          justifyContent="center"
+          marginBottom={marginBottom || undefined}
+        >
+          <Icon name="user" size={ICON_SIZES.XX_LARGE} color={COLORS.black} />
+        </Box>
       </Box>
-    </Box>
-  );
+    );
+  }
 };
 
 export default Picture;

@@ -29,6 +29,7 @@ class Icon extends React.Component {
               : 8
           }
           paddingTop={this.props.padding || ""}
+          paddingLeft={this.props.paddingLeft || ""}
           borderRadius="100%"
           onClick={this.props.onClick}
           background={this.props.active ? COLORS.lightGrey : undefined}

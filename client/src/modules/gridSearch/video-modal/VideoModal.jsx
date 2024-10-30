@@ -9,7 +9,7 @@ import {
 } from "../../../components";
 import { COLORS } from "../../../constants";
 
-const VideoModal = ({ onClose, senderID, receiverID, state }) => {
+const VideoModal = ({ onClose, senderID, receiverID, state, closeModal }) => {
   const [sending, setSending] = useState(false);
 
   const handleSending = (truthy) => {
@@ -37,6 +37,7 @@ const VideoModal = ({ onClose, senderID, receiverID, state }) => {
       ) : (
         <VideoUploader
           senderID={senderID}
+          closeModal={closeModal}
           receiverID={receiverID}
           handleSending={handleSending}
         />

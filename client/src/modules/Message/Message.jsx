@@ -408,6 +408,9 @@ const Message = () => {
         {state.showVideo && location.pathname === "/message" && (
           <VideoModal
             onClose={toggleModal}
+            closeModal={() =>
+              dispatch({ type: "TOGGLE_VIDEO", payload: false })
+            }
             receiverID={senderID}
             senderID={currentUser._id}
             state={state}

@@ -223,7 +223,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       // }
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
       setShowHearts(false);
-      toggleModal();
+      dispatch({ type: "TOGGLE_VIDEO", payload: false });
     } catch (err) {
       console.log(err);
     }
@@ -677,6 +677,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       {state.showVideo && pathname !== "/message" && (
         <VideoModal
           onClose={toggleModal}
+          closeModal={() => dispatch({ type: "TOGGLE_VIDEO", payload: false })}
           receiverID={_id}
           senderID={currentUser._id}
           state={state}

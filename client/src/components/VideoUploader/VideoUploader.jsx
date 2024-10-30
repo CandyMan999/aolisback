@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import iOSLogo from "../../pictures/iOSLogo.png";
 import { Loading, Text, Button, Box, Icon, ICON_SIZES, FONT_SIZES } from "..";
 
@@ -6,7 +6,7 @@ import { COLORS } from "../../constants";
 
 import { useHistory, useLocation } from "react-router-dom";
 
-const VideoUploader = ({ senderID, receiverID, handleSending }) => {
+const VideoUploader = ({ senderID, receiverID, closeModal }) => {
   const [submitting, setSubmitting] = useState(false);
 
   const history = useHistory();
@@ -33,8 +33,10 @@ const VideoUploader = ({ senderID, receiverID, handleSending }) => {
       });
       if (window.ReactNativeWebView) {
         window.ReactNativeWebView.postMessage(JSON.stringify(data));
+        closeModal();
       } else {
         console.warn("ReactNativeWebView is not available.");
+        closeModal();
       }
     } catch (err) {
       console.log("error sending video message");

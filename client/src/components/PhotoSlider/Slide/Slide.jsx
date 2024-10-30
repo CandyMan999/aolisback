@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { AdvancedImage } from "@cloudinary/react";
+
 import { Cloudinary } from "@cloudinary/url-gen";
-import { scale } from "@cloudinary/url-gen/actions/resize";
+
 import { AnimatePresence, motion } from "framer-motion";
 
 import { Box, Button, Loading } from "../..";
@@ -14,10 +14,10 @@ import { useClient } from "../../../client";
 
 const Slide = ({
   countStr,
-  height,
+
   id,
   url,
-  width,
+
   clickDirection,
   onDelete,
   withDelete,
@@ -100,8 +100,9 @@ const Slide = ({
             }}
           >
             {myImage && (
-              <AdvancedImage
-                cldImg={myImage}
+              <img
+                alt={`img-${myImage.publicId}`}
+                src={url}
                 style={{
                   width: "100%",
                   height: "auto",
