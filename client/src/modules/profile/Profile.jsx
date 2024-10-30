@@ -223,7 +223,32 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       // }
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
       setShowHearts(false);
-      dispatch({ type: "TOGGLE_VIDEO", payload: false });
+      if (mobile) {
+        const receiverID = _id;
+        const senderID = currentUser._id;
+        const params = new URLSearchParams(location.search);
+        params.set("senderID", senderID);
+        params.set("receiverID", receiverID);
+        params.set("videoMessage", true);
+
+        const data = {
+          senderID,
+          receiverID,
+          videoMessage: true,
+        };
+        // Navigate to the constructed URL
+        history.replace({
+          pathname: location.pathname,
+          search: params.toString(),
+        });
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(JSON.stringify(data));
+        } else {
+          console.warn("ReactNativeWebView is not available.");
+        }
+      } else {
+        dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
+      }
     } catch (err) {
       console.log(err);
     }
