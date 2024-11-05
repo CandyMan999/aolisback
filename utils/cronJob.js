@@ -134,16 +134,7 @@ const cronJob = async () => {
       "0 0 */2 * * *",
       async () => {
         const users = await User.find({
-          $or: [
-            { intro: { $exists: false } },
-            { sex: { $exists: false } },
-            { occupation: { $exists: false } },
-            { drink: { $exists: false } },
-            { marijuana: { $exists: false } },
-            { kids: { $exists: false } },
-            { drugs: { $exists: false } },
-            { pictures: { $exists: true, $size: 0 } },
-          ],
+          profileComplete: false,
         });
 
         const allTokens = users.map((user) => user.expoToken);
