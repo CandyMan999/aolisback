@@ -19,6 +19,7 @@ module.exports = {
             $maxDistance: 12500 * 1609.34, // Convert miles to meters (1 mile = 1609.34 meters)
           },
         },
+        profileComplete: true,
         age: {
           $gte: ageRange ? ageRange.lowEnd : 18,
           $lte: ageRange ? ageRange.highEnd : 80,

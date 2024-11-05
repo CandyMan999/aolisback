@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Text } from "../../components";
+import { Box } from "../../components";
 import { COLORS } from "../../constants";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 

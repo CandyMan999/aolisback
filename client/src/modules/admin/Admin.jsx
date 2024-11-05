@@ -230,6 +230,15 @@ const AdminPage = () => {
               </Text>
 
               <Text>Banned: {user.isBanned ? "Yes" : "No"}</Text>
+              {user.lookingFor && (
+                <Box width="80%" column>
+                  <Text>
+                    Looking For: age: {user.lookingFor.ageRange.lowEnd}-
+                    {user.lookingFor.ageRange.highEnd}
+                  </Text>
+                  <Text>sex: {user.lookingFor.sex}</Text>
+                </Box>
+              )}
               {spinner ? (
                 <Loading ring />
               ) : (

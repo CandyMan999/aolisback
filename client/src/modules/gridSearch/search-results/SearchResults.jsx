@@ -196,41 +196,39 @@ const SearchResults = ({
             ))
           : handleComponent()}
       </Box>
-      {users.length &&
-        search === "Browse" &&
-        (skip > 50 || users.length === 50) && (
-          <Box width="100%" display="flex" justifyContent="center">
-            <Button
-              onClick={() => fetchData(true)}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                boxShadow: `0px 2px 10px ${COLORS.pink}`,
-                borderRadius: "20px",
-                border: `solid 1px ${COLORS.pink}`,
-                marginTop: 40,
-                height: 60,
-              }}
-              disabled={spinner}
-              width="80%"
-              color={spinner ? COLORS.white : COLORS.black}
-            >
-              {spinner ? (
-                <Loading logo size={50} />
-              ) : (
-                <Text
-                  bold
-                  fontSize={FONT_SIZES.X_LARGE}
-                  margin={5}
-                  color={COLORS.vividBlue}
-                >
-                  Load More
-                </Text>
-              )}
-            </Button>
-          </Box>
-        )}
+      {users.length && search === "Browse" && users.length % 50 === 0 && (
+        <Box width="100%" display="flex" justifyContent="center">
+          <Button
+            onClick={() => fetchData(true)}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              boxShadow: `0px 2px 10px ${COLORS.pink}`,
+              borderRadius: "20px",
+              border: `solid 1px ${COLORS.pink}`,
+              marginTop: 40,
+              height: 60,
+            }}
+            disabled={spinner}
+            width="80%"
+            color={spinner ? COLORS.white : COLORS.black}
+          >
+            {spinner ? (
+              <Loading logo size={50} />
+            ) : (
+              <Text
+                bold
+                fontSize={FONT_SIZES.X_LARGE}
+                margin={5}
+                color={COLORS.vividBlue}
+              >
+                Load More
+              </Text>
+            )}
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };

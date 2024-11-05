@@ -561,6 +561,14 @@ export const GET_REAL_USERS = gql`
       email
       googleId
       appleId
+      lookingFor {
+        ageRange {
+          lowEnd
+          highEnd
+        }
+        sex
+        kids
+      }
       pictures {
         url
       }

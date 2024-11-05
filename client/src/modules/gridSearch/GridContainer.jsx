@@ -178,10 +178,11 @@ const GridContainer = () => {
       <LikeAndMatchButtons
         handleGetLikedUsers={handleGetLikedUsers}
         handleGetUsersWhoLikeMe={handleGetUsersWhoLikeMe}
-        handleGetAllUsers={() => fetchData(false)}
+        handleGetAllUsers={skip > 0 ? null : () => fetchData(false)}
         handleGetMatchedUsers={handleGetMatchedUsers}
         currentUser={currentUser}
         loading={loading}
+        setSkip={setSkip}
         setSearch={setSearch}
         usersWhoLikeMeCount={usersWhoLikeMeCount}
       />

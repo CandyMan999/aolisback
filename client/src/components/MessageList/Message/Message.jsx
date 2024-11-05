@@ -282,7 +282,7 @@ const Message = ({
                 name="reverse"
                 size={ICON_SIZES.LARGE}
                 color={COLORS.pink}
-                paddingLeft={20}
+                marginLeft={20}
                 onClick={() => handleCommentReply(commentId, text, username)}
               />
             )}

@@ -57,6 +57,7 @@ const LikeAndMatchButtons = ({
   currentUser,
   setSearch,
   usersWhoLikeMeCount,
+  setSkip,
 }) => {
   const [selectedButton, setSelectedButton] = useState(null);
   const [changeStyle, setChangeStyle] = useState(false);
@@ -92,6 +93,7 @@ const LikeAndMatchButtons = ({
     if (selectedButton === "My Likes") {
       try {
         handleGetLikedUsers();
+        setSkip(0);
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
       }
@@ -103,6 +105,7 @@ const LikeAndMatchButtons = ({
         // } else {
         //   handleGetUsersWhoLikeMe();
         // }
+        setSkip(0);
         handleGetUsersWhoLikeMe(); //delete this after uncommenting code
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
@@ -111,6 +114,7 @@ const LikeAndMatchButtons = ({
     if (selectedButton === "Matches") {
       try {
         handleGetMatchedUsers();
+        setSkip(0);
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
       }
