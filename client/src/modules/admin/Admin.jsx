@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, Button, Box, Loading } from "../../components";
+import { Text, Button, Box, Loading, PhotoSlider } from "../../components";
 import {
   GET_FLAGGED_PICTURES,
   GET_FLAGGED_VIDEOS,
@@ -213,10 +213,11 @@ const AdminPage = () => {
               background={COLORS.lightPurple}
             >
               {user.pictures.length > 0 && (
-                <img
-                  src={user.pictures[0].url} // Display the first picture
-                  alt={user.username}
-                  style={{ width: "100%", borderRadius: "8px" }}
+                <PhotoSlider
+                  withDelete={true}
+                  images={user.pictures}
+                  height={310}
+                  width={200}
                 />
               )}
               <Text>{user.username}</Text>
@@ -242,9 +243,17 @@ const AdminPage = () => {
               {spinner ? (
                 <Loading ring />
               ) : (
-                <Button onClick={() => handleDeleteUser(user._id)} width="80%">
-                  Delete User
-                </Button>
+                <Box column>
+                  <Button onClick={() => handleBanUser(user._id)} width="80%">
+                    Ban User
+                  </Button>
+                  <Button
+                    onClick={() => handleDeleteUser(user._id)}
+                    width="80%"
+                  >
+                    Delete User
+                  </Button>
+                </Box>
               )}
             </Box>
           ))}
