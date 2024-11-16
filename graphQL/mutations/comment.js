@@ -1,6 +1,7 @@
 const { AuthenticationError } = require("apollo-server");
 const { User, Room, Comment } = require("../../models");
 const { OpenAI } = require("openai");
+const { pushNotificationReplyToComment } = require("../../utils/middleware");
 const { publishCreateComment } = require("../subscription/subscription");
 require("dotenv").config();
 
@@ -48,6 +49,18 @@ module.exports = {
           path: "replyTo",
           populate: { path: "author", model: "User" }, // Populate the author of the replyTo comment
         });
+
+      if (replyToCommentId) {
+        const expoToken = newComment.replyTo.author.expoToken;
+        const whoReplied = author.username;
+        const roomName = room.name;
+
+        try {
+          pushNotificationReplyToComment(expoToken, whoReplied, roomName);
+        } catch (err) {
+          console.log(err);
+        }
+      }
 
       // Publish the new comment to subscribers
       publishCreateComment(newComment);
