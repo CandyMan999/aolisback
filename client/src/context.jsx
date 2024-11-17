@@ -12,6 +12,7 @@ const Context = createContext({
   showLogin: false,
   reply: { commentId: null, text: null, authorName: null },
   showSignup: false,
+  showNavScreen: true,
   showVideo: false,
   showRoomList: false,
   showChatRequest: false,

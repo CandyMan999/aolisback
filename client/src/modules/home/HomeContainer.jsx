@@ -11,7 +11,11 @@ const HomeContainer = ({ queryParams, history }) => {
     // handleLocation();
   }, []);
 
-  return <HomeLayout state={state}>{Children}</HomeLayout>;
+  return (
+    <HomeLayout state={state} dispatch={dispatch}>
+      {Children}
+    </HomeLayout>
+  );
 };
 
 export default withRouter(HomeContainer);

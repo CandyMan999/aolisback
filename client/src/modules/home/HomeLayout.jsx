@@ -1,9 +1,9 @@
 import React from "react";
-import { Box } from "../../components";
+import { Box, NavScreen } from "../../components";
 
 import ChatBox from "../chatBox";
 
-const HomeLayout = ({ state }) => {
+const HomeLayout = ({ state, dispatch }) => {
   const height = window.innerHeight;
 
   return (
@@ -13,6 +13,10 @@ const HomeLayout = ({ state }) => {
       width="100vW"
       display="flex"
     >
+      <NavScreen
+        showScreen={state.currentUser.username && state.showNavScreen}
+        dispatch={dispatch}
+      />
       <ChatBox />
     </Box>
   );

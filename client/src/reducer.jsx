@@ -15,6 +15,11 @@ export default function reducer(state, { type, payload }) {
         ...state,
         isProfile: payload,
       };
+    case "CLOSE_NAV_SCREEN":
+      return {
+        ...state,
+        showNavScreen: payload,
+      };
     case "TOGGLE_LOGIN":
       return {
         ...state,
