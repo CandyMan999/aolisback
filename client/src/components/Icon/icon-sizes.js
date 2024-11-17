@@ -20,6 +20,6 @@ export const iconSizes = {
   [ICON_SIZES.XX_LARGE]: "32px",
   [ICON_SIZES.XXX_LARGE]: "48px",
   [ICON_SIZES.XXXX_LARGE]: "150px",
-  [ICON_SIZES.NAV_SCREEN]: "100px",
+  [ICON_SIZES.NAV_SCREEN]: "70px",
   [ICON_SIZES.MASTER]: "84px",
 };

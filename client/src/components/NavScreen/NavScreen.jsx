@@ -64,6 +64,7 @@ const NavScreen = ({ showScreen, dispatch }) => {
   for (let i = 0; i < navItems.length; i += 2) {
     navItemRows.push(navItems.slice(i, i + 2));
   }
+  console.log("WTF: ", ICON_SIZES.LARGE);
 
   return (
     <motion.div
@@ -95,14 +96,14 @@ const NavScreen = ({ showScreen, dispatch }) => {
         <img
           src={iOSLogo}
           alt="Logo"
-          style={{ width: 120, height: 120, marginBottom: 20 }}
+          style={{ width: 100, height: 100, marginBottom: 0 }}
         />
         <Text
           style={{
             fontSize: "24px",
             color: COLORS.black,
             fontWeight: "bold",
-            marginBottom: "30px",
+            marginBottom: "20px",
           }}
         >
           Where Do You Want to Go?
@@ -113,13 +114,13 @@ const NavScreen = ({ showScreen, dispatch }) => {
             key={rowIndex}
             style={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "space-around",
               width: "100%",
               marginBottom: "20px",
             }}
           >
             {rowItems.map((item) => (
-              <Box key={item.path} column center style={{ margin: "0 20px" }}>
+              <Box key={item.path} column center>
                 <motion.div
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.7 }}
@@ -127,7 +128,11 @@ const NavScreen = ({ showScreen, dispatch }) => {
                   onClick={() => navigateTo(item.path)}
                 >
                   <Icon
-                    size={ICON_SIZES.MASTER}
+                    size={
+                      item.icon === "user"
+                        ? ICON_SIZES.NAV_SCREEN
+                        : ICON_SIZES.MASTER
+                    }
                     color={COLORS.white}
                     name={item.icon}
                   />
@@ -145,8 +150,8 @@ const NavScreen = ({ showScreen, dispatch }) => {
 // Styles for the circle buttons
 const circleButtonStyles = {
   backgroundColor: COLORS.lightPurple,
-  width: "120px",
-  height: "120px",
+  width: "100px",
+  height: "100px",
   borderRadius: "60px",
   display: "flex",
   justifyContent: "center",

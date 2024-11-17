@@ -18,11 +18,12 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
   const [items, setItems] = useState([
     { name: "Login", icon: "login", route: "/" },
     { name: "User Signup", icon: "signup", route: "/" },
+    { name: "Speed Date", icon: "speed", route: "/speed-date" },
     { name: "Message Center", icon: "videoMessage", route: "/message-center" },
     { name: "View Users Locations", icon: "search", route: "/location" },
     { name: "Chat Rooms", icon: "chat", route: "/" },
     { name: "Browse Users", icon: "browseLogo", route: "/grid-search" },
-    { name: "Speed Date", icon: "speed", route: "/speed-date" },
+
     { name: "Logout", icon: "signout", route: "/" },
   ]);
 
@@ -35,6 +36,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
         currentUser.username === "Kev Hick")
     ) {
       setItems([
+        { name: "Speed Date", icon: "speed", route: "/speed-date" },
         { name: "Chat Rooms", icon: "chat", route: "/" },
         { name: "My Profile", icon: "user", route: "/profile" },
         {
@@ -44,7 +46,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
         },
         { name: "View Users Locations", icon: "search", route: "/location" },
         { name: "Browse Users", icon: "browseLogo", route: "/grid-search" },
-        { name: "Speed Date", icon: "speed", route: "/speed-date" },
+
         { name: "Logout", icon: "signout", route: "/" },
         { name: "Admin", icon: "user", route: "/admin" },
       ]);
@@ -58,6 +60,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
       currentUser.username !== "Kev Hick"
     ) {
       setItems([
+        { name: "Speed Date", icon: "speed", route: "/speed-date" },
         { name: "Chat Rooms", icon: "chat", route: "/" },
         { name: "My Profile", icon: "user", route: "/profile" },
         {
@@ -68,7 +71,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
         { name: "View Users Locations", icon: "search", route: "/location" },
 
         { name: "Browse Users", icon: "browseLogo", route: "/grid-search" },
-        { name: "Speed Date", icon: "speed", route: "/speed-date" },
+
         { name: "Logout", icon: "signout", route: "/" },
       ]);
     }

@@ -25,23 +25,25 @@ const variants = {
 };
 
 const greys = [
-  "black",
-  "#737373",
-  "#878787",
-  "#949494",
-  "#a1a1a1",
-  "#adadad",
-  "#bababa",
-].reverse();
+  COLORS.lightPurple,
+  COLORS.lightPurple,
+  COLORS.lightPurple,
+  COLORS.lightPurple,
+  COLORS.lightPurple,
+  COLORS.lightPurple,
+
+  COLORS.black,
+];
 
 const teals = [
-  "#6bccf9",
-  "#88d3f5",
-  "#a5dbf2",
-  "#c2e2ee",
-  "#dff0eb",
-  "#fcf7e7",
-  "#ffffff",
+  COLORS.pink,
+  COLORS.pink,
+  COLORS.pink,
+  COLORS.pink,
+  COLORS.pink,
+  COLORS.pink,
+  COLORS.pink,
+  COLORS.pink,
 ];
 // const reds = [
 //   COLORS.secondary,
@@ -65,7 +67,7 @@ export const MenuItem = ({
   const history = useHistory();
 
   const style = {
-    border: `3px solid ${teals[i === teals.length ? 0 : i]}`,
+    border: `1px solid ${teals[i === teals.length ? 0 : i]}`,
     justifyContent: "center",
     display: "flex",
     background: `${greys[i === greys.length ? 0 : i]}`,
