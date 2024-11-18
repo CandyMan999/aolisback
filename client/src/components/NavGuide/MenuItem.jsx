@@ -60,9 +60,10 @@ export const MenuItem = ({
   item,
   dispatch,
   toggle,
-  props,
+
   state,
   client,
+  isActive,
 }) => {
   const history = useHistory();
 
@@ -144,14 +145,30 @@ export const MenuItem = ({
         className="navLi"
         onClick={() => handleOnclick(item.name)}
       >
-        <div className="icon-placeholder" style={style}>
+        <div
+          className="icon-placeholder"
+          style={{
+            ...style,
+            boxShadow: isActive
+              ? `2px 2px 4px 2px ${COLORS.pink}`
+              : `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+          }}
+        >
           <Icon
             size={ICON_SIZES.XX_LARGE}
             color={COLORS.white}
             name={item.icon}
           />
         </div>
-        <div className="text-placeholder" style={style}>
+        <div
+          className="text-placeholder"
+          style={{
+            ...style,
+            boxShadow: isActive
+              ? `2px 2px 4px 2px ${COLORS.pink}`
+              : `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+          }}
+        >
           <Text color={COLORS.white} bold margin={0}>
             {item.name}
           </Text>

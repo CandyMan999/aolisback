@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { MenuItem } from "./MenuItem";
 import { useClient } from "../../client";
+import { useLocation } from "react-router-dom";
 
 const variants = {
   open: {
@@ -14,7 +15,9 @@ const variants = {
 
 const Navigation = ({ dispatch, props, state, toggle }) => {
   const client = useClient();
+  const location = useLocation();
   const { currentUser } = state;
+
   const [items, setItems] = useState([
     { name: "Login", icon: "login", route: "/" },
     { name: "User Signup", icon: "signup", route: "/" },
@@ -93,6 +96,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
           state={state}
           props={props}
           item={item}
+          isActive={item.route === location.pathname && item.name !== "Logout"}
           key={i}
           i={i}
         />

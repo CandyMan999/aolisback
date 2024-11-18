@@ -64,7 +64,6 @@ const NavScreen = ({ showScreen, dispatch }) => {
   for (let i = 0; i < navItems.length; i += 2) {
     navItemRows.push(navItems.slice(i, i + 2));
   }
-  console.log("WTF: ", ICON_SIZES.LARGE);
 
   return (
     <motion.div

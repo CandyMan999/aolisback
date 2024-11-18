@@ -54,7 +54,7 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
     if (currentIdx === pictures.length - 1) {
       setCurrentIdx(0);
     }
-    console.log("PHOTO ID: ", id);
+
     setPictures([...pictures.filter((picture) => picture._id !== id)]);
   };
 

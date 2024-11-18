@@ -126,7 +126,7 @@ const AdminPage = () => {
   if (loading) {
     return <Text center>Loading...</Text>;
   }
-  console.log("users:", users);
+
   return (
     <Box
       width="100%"
