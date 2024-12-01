@@ -218,7 +218,7 @@ const SwipeableProfileCard = forwardRef(
             >
               <PhotoSlider
                 withDelete={false}
-                images={user.pictures}
+                images={[]}
                 height={310}
                 width={200}
                 onSlideChange={setCurrentSlideIndex}
