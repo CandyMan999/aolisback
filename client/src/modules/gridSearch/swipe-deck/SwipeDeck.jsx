@@ -127,10 +127,6 @@ const SwipeDeck = ({
     updateCurrentIndex(newIndex);
   };
 
-  const handleCardLeftScreen = (user, index) => {
-    console.log(`${user.username} left the screen`);
-  };
-
   const onAccept = () => {
     try {
       if (isOutOfLikes) {
@@ -384,7 +380,7 @@ const SwipeDeck = ({
               dispatch={dispatch}
               rotation={topCard ? 0 : rotation}
               onSwipe={(dir) => handleSwipe(dir, user, index)}
-              onCardLeftScreen={() => handleCardLeftScreen(user, index)}
+              //   onCardLeftScreen={() => handleCardLeftScreen(user, index)}
               onAccept={onAccept}
               onNextUser={onNextUser}
               preventSwipe={
