@@ -294,7 +294,7 @@ const MatchScreen = ({
               </text>
             </svg>
           </MatchTextContainer>
-          <CardsContainer style={{ marginTop: "50%" }}>
+          <CardsContainer style={{ marginTop: "40%" }}>
             <CardWrapper custom="left">
               <UserCard
                 custom="left"
