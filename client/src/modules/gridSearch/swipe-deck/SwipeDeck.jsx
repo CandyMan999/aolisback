@@ -31,6 +31,7 @@ const SwipeDeck = ({
   dispatch,
   endOfUsers,
   setUsers,
+  setEndOfUsers,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const client = useClient();
@@ -276,7 +277,7 @@ const SwipeDeck = ({
     <Box
       width="100%"
       column
-      style={{ overflowX: "hidden", overflowY: "hidden", paddingTop: 20 }}
+      style={{ overflowX: "hidden", overflowY: "hidden", paddingTop: 10 }}
     >
       <Box
         className="cardContainer"
@@ -355,6 +356,7 @@ const SwipeDeck = ({
               transition={{ delay: 0.6, duration: 0.3 }}
               onClick={() => {
                 setUsers([]);
+                setEndOfUsers(false);
                 setCurrentIndex(0);
                 fetchData(false);
               }}
@@ -469,6 +471,11 @@ const SwipeDeck = ({
           setMatchModalVisible(false);
           setMatchedUser(null);
         }}
+        dispatch={dispatch}
+        mobile={mobile}
+        location={location}
+        history={history}
+        state={state}
       />
     </Box>
   );

@@ -197,7 +197,7 @@ const SwipeableProfileCard = forwardRef(
               top: "0",
               transform: `translateX(-50%) rotate(${rotation}deg)`,
               width: "400px",
-              maxWidth: "85vw",
+              maxWidth: "80vw",
               backgroundColor: COLORS.white,
               borderRadius: "20px",
               boxShadow: "0px 2px 20px rgba(0, 0, 0, 0.2)",
@@ -214,7 +214,7 @@ const SwipeableProfileCard = forwardRef(
                 overflow: "hidden",
                 position: "relative",
               }}
-              height={350}
+              height={"fit-content"}
             >
               <PhotoSlider
                 withDelete={false}
@@ -290,7 +290,7 @@ const SwipeableProfileCard = forwardRef(
               )}{" "}
               {currentSlideIndex === 1 && (
                 // Display age and single since below the photo slider
-                <Box width="100%" padding={10} column>
+                <Box width="100%" paddingX={5} column>
                   <Box
                     display="flex"
                     justifyContent="space-between"
@@ -407,11 +407,10 @@ const SwipeableProfileCard = forwardRef(
               )}
               {currentSlideIndex === 2 && (
                 // Display occupation below the photo slider
-                <Box width="100%" padding={10}>
+                <Box width="100%" paddingX={5}>
                   <Box column>
                     <Box
                       style={{
-                        paddingLeft: 10,
                         borderRadius: 10,
                         height: "fit-content",
                         alignItems: "center",
@@ -425,7 +424,6 @@ const SwipeableProfileCard = forwardRef(
 
                     <Box
                       style={{
-                        paddingLeft: 10,
                         borderRadius: 10,
                         height: "fit-content",
                         alignItems: "center",
@@ -445,7 +443,6 @@ const SwipeableProfileCard = forwardRef(
                     </Box>
                     <Box
                       style={{
-                        paddingLeft: 10,
                         borderRadius: 10,
                         height: "fit-content",
                         alignItems: "center",

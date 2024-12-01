@@ -5,7 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import { COLORS } from "../../constants";
-import { Box, Text, FONT_SIZES } from "../../components";
+import { MdVideoChat } from "react-icons/md";
+import { Box, Text, FONT_SIZES, Button } from "../../components";
+import { VIDEO_CHAT_REQUEST } from "../../graphql/subscriptions";
 
 // Styled Components
 const Overlay = styled(motion.div)`
@@ -80,8 +82,8 @@ const CloseIcon = styled(AiOutlineClose)`
 
 // Animation Variants
 const overlayVariants = {
-  hidden: { height: 0 },
-  visible: { height: "60vh", transition: { duration: 0.2 } },
+  hidden: { height: 0, opacity: 0 },
+  visible: { height: "70vh", opacity: 1, transition: { duration: 0.2 } },
 };
 
 const cardVariants = {
@@ -134,7 +136,18 @@ const randomEmoji = () => {
   return EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
 };
 
-const MatchScreen = ({ matchedUser, currentUser, onClose, showScreen }) => {
+const MatchScreen = ({
+  matchedUser,
+  currentUser,
+  onClose,
+  showScreen,
+  dispatch,
+  mobile,
+  location,
+  history,
+  state,
+  client,
+}) => {
   // Ensure image URLs are correct
   const currentUserImage = currentUser.pictures[0]?.url;
   const matchedUserImage = matchedUser?.pictures[0]?.url;
@@ -143,6 +156,94 @@ const MatchScreen = ({ matchedUser, currentUser, onClose, showScreen }) => {
   useEffect(() => {
     setShowHearts(true);
   }, []);
+
+  const handleImBlocked = () => {
+    try {
+      let blocked = false;
+
+      matchedUser?.blockedUsers.find((user) => {
+        if (user._id === currentUser._id) {
+          blocked = true;
+        }
+      });
+      return blocked;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSendVideoMessage = () => {
+    try {
+      // if (
+      //   currentUser.plan.messages + currentUser.plan.additionalMessages <=
+      //   currentUser.plan.messagesSent
+      // ) {
+      //   window.ReactNativeWebView.postMessage("BUY_MESSAGES");
+
+      //   return;
+      // }
+      dispatch({ type: "TOGGLE_PROFILE", payload: false });
+
+      if (mobile) {
+        const receiverID = matchedUser._id;
+        const senderID = currentUser._id;
+        const params = new URLSearchParams(location.search);
+        params.set("senderID", senderID);
+        params.set("receiverID", receiverID);
+        params.set("videoMessage", true);
+
+        const data = {
+          senderID,
+          receiverID,
+          videoMessage: true,
+        };
+
+        // Navigate to the constructed URL
+        history.replace({
+          pathname: location.pathname,
+          search: params.toString(),
+        });
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(JSON.stringify(data));
+        } else {
+          console.warn("ReactNativeWebView is not available.");
+        }
+      } else {
+        dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleVideoChatRequest = async () => {
+    try {
+      // if (
+      //   currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
+      //   currentUser.plan.videoMinutesUsed
+      // ) {
+      //   window.ReactNativeWebView.postMessage("BUY_MINUTES");
+
+      //   return;
+      // }
+
+      const variables = {
+        senderID: state.currentUser._id,
+        receiverID: matchedUser._id,
+        status: "Pending",
+      };
+
+      const { videoChatRequest } = await client.request(
+        VIDEO_CHAT_REQUEST,
+        variables
+      );
+
+      dispatch({ type: "TOGGLE_PROFILE", payload: false });
+      dispatch({ type: "TOGGLE_CHAT", payload: true });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -187,7 +288,7 @@ const MatchScreen = ({ matchedUser, currentUser, onClose, showScreen }) => {
               </text>
             </svg>
           </MatchTextContainer>
-          <CardsContainer style={{ marginTop: 30 }}>
+          <CardsContainer style={{ marginTop: "10%" }}>
             <CardWrapper custom="left">
               <UserCard
                 custom="left"
@@ -220,6 +321,25 @@ const MatchScreen = ({ matchedUser, currentUser, onClose, showScreen }) => {
               <Username custom="right">{matchedUser.username}</Username>
             </CardWrapper>
           </CardsContainer>
+          <Button
+            width={"60px"}
+            height={"60px"}
+            color={handleImBlocked() ? COLORS.lightGrey : COLORS.white}
+            style={{
+              borderRadius: "50%",
+              boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+            }}
+            disabled={handleImBlocked()}
+            onClick={
+              handleImBlocked()
+                ? null
+                : !matchedUser?.isLoggedIn || matchedUser?.inCall
+                ? handleSendVideoMessage
+                : handleVideoChatRequest
+            }
+          >
+            <MdVideoChat size={45} color={COLORS.vividBlue} />
+          </Button>
           {showHearts &&
             Array.from({ length: 20 }, (_, index) => (
               <HeartIcon

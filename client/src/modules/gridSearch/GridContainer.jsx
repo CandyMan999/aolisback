@@ -182,7 +182,7 @@ const GridContainer = () => {
   const usersMemo = useMemo(() => users, [users]);
 
   return (
-    <Box paddingTop={60} width="100vw" height={`calc(100vh - 70px)`} column>
+    <Box paddingTop={60} width="100vw" height={`calc(100vh - 60px)`} column>
       <LikeAndMatchButtons
         handleGetLikedUsers={handleGetLikedUsers}
         handleGetUsersWhoLikeMe={handleGetUsersWhoLikeMe}
@@ -212,6 +212,7 @@ const GridContainer = () => {
           loading={spinner}
           endOfUsers={endOfUsers}
           setUsers={setUsers}
+          setEndOfUsers={setEndOfUsers}
         />
       ) : (
         <GridSearch
