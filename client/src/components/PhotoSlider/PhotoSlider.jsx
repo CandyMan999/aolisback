@@ -5,7 +5,14 @@ import { COLORS } from "../../constants";
 import Slide from "./Slide";
 import NavArrow from "./NavArrow";
 
-const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
+const PhotoSlider = ({
+  height,
+  images,
+  width,
+  withDelete,
+  isUser,
+  onSlideChange,
+}) => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [pictures, setPictures] = useState([]);
   const [clickDirection, setClickDirection] = useState("right");
@@ -38,6 +45,11 @@ const PhotoSlider = ({ height, images, width, withDelete, isUser }) => {
   const changeSlide = (n) => {
     const newIdx = currentIdx + n;
     setCurrentIdx(newIdx >= 0 ? newIdx % pictures.length : pictures.length - 1);
+    if (onSlideChange) {
+      onSlideChange(
+        newIdx >= 0 ? newIdx % pictures.length : pictures.length - 1
+      );
+    }
   };
 
   const nextSlide = () => {

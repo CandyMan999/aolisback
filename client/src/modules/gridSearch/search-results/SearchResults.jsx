@@ -11,6 +11,10 @@ import {
 import { COLORS } from "../../../constants";
 import ProfileCardFront from "../profile-card-front";
 import ProfileCardBack from "../profile-card-back/ProfileCardBack";
+import { GiPuzzle } from "react-icons/gi";
+import { IoIosHeartDislike } from "react-icons/io";
+
+import { motion } from "framer-motion";
 
 import { css } from "@emotion/css";
 
@@ -77,17 +81,49 @@ const SearchResults = ({
           backgroundColor={COLORS.lightPurple}
         >
           <Box centerText padding={"5%"}>
-            <Text
-              center
-              fontSize={FONT_SIZES.X_LARGE}
-              bold
-              color={COLORS.deepPurple}
+            <Box
+              as={motion.div}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.5 }}
+              column
+              alignItems="center"
+              height="90%"
+              justifyContent="center"
+              style={{ padding: "20px" }}
             >
-              No matches yet? Don't worry! Take the initiative and send some
-              likes and video messages. Our community is growing rapidly since
-              our recent launch, so stay active and new matches will come your
-              way soon.
-            </Text>
+              <GiPuzzle size={100} color={COLORS.pink} />
+              <Text
+                as={motion.h2}
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                bold
+                fontSize={FONT_SIZES.LARGE}
+                color={COLORS.black}
+                style={{ marginTop: 20 }}
+              >
+                No matches yet? Don't worry! Take the initiative and send some
+                likes and video messages.
+              </Text>
+              <Text
+                as={motion.p}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                fontSize={FONT_SIZES.MEDIUM}
+                color={COLORS.deepPurple}
+                style={{
+                  marginTop: 10,
+                  textAlign: "center",
+                  maxWidth: "300px",
+                }}
+              >
+                Our community is growing rapidly since our recent launch, so
+                stay active and new matches will come your way soon.
+              </Text>
+            </Box>
           </Box>
         </Box>
       );
@@ -105,16 +141,48 @@ const SearchResults = ({
           backgroundColor={COLORS.lightPurple}
         >
           <Box centerText padding={"5%"}>
-            <Text
-              center
-              fontSize={FONT_SIZES.X_LARGE}
-              bold
-              color={COLORS.deepPurple}
+            <Box
+              as={motion.div}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.5 }}
+              column
+              alignItems="center"
+              height="90%"
+              justifyContent="center"
+              style={{ padding: "20px" }}
             >
-              You haven't liked anyone yet! Get out there and start mingling.
-              With our recent launch, more users are joining every day,
-              increasing your chances of reeling in connections.
-            </Text>
+              <IoIosHeartDislike size={100} color={COLORS.pink} />
+              <Text
+                as={motion.h2}
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                bold
+                fontSize={FONT_SIZES.LARGE}
+                color={COLORS.black}
+                style={{ marginTop: 20 }}
+              >
+                You haven't liked anyone yet. Get out there and start mingling!
+              </Text>
+              <Text
+                as={motion.p}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                fontSize={FONT_SIZES.MEDIUM}
+                color={COLORS.deepPurple}
+                style={{
+                  marginTop: 10,
+                  textAlign: "center",
+                  maxWidth: "300px",
+                }}
+              >
+                With our recent launch, more users are joining every day,
+                increasing your chances of reeling in connections.
+              </Text>
+            </Box>
           </Box>
         </Box>
       );
@@ -132,19 +200,51 @@ const SearchResults = ({
           backgroundColor={COLORS.lightPurple}
         >
           <Box centerText padding={"5%"}>
-            <Text
-              center
-              fontSize={FONT_SIZES.X_LARGE}
-              bold
-              color={COLORS.deepPurple}
+            <Box
+              as={motion.div}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.5 }}
+              column
+              alignItems="center"
+              height="90%"
+              justifyContent="center"
+              style={{ padding: "20px" }}
             >
-              It looks like you haven't received any likes yet. Don't be
-              discouraged! Take the initiative and start sending likes and video
-              messages to connect with others. Remember, Gone Chatting is a new
-              and growing community. More users are joining every day,
-              increasing your chances of reeling in connections. Stay active and
-              keep engaging!
-            </Text>
+              <IoIosHeartDislike size={100} color={COLORS.pink} />
+              <Text
+                as={motion.h2}
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                bold
+                fontSize={FONT_SIZES.LARGE}
+                color={COLORS.black}
+                style={{ marginTop: 20 }}
+              >
+                It looks like you haven't received any likes yet. Don't be
+                discouraged! Take the initiative and start sending likes and
+                video messages to connect with others.
+              </Text>
+              <Text
+                as={motion.p}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                fontSize={FONT_SIZES.MEDIUM}
+                color={COLORS.deepPurple}
+                style={{
+                  marginTop: 10,
+                  textAlign: "center",
+                  maxWidth: "300px",
+                }}
+              >
+                Remember, Gone Chatting is a new and growing community. More
+                users are joining every day, increasing your chances of reeling
+                in connections. Stay active and keep engaging!
+              </Text>
+            </Box>
           </Box>
         </Box>
       );

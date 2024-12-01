@@ -208,6 +208,11 @@ module.exports = gql`
   type NumberSentStatus {
     status: Boolean!
   }
+  type Like {
+    user: User!
+    isMatch: Boolean!
+    matchID: String
+  }
 
   type Query {
     me: User
@@ -338,7 +343,7 @@ module.exports = gql`
       imageUrl: String
     ): NumberSentStatus
     callDuration(userID: ID!, time: Int!): CallDuration
-    like(userID: ID!, likeID: ID!): User
+    like(userID: ID!, likeID: ID!): Like
     unLike(userID: ID!, unLikeID: ID!): User
     unflagVideo(videoId: ID!): Video
     unflagPicture(pictureId: ID!): Picture

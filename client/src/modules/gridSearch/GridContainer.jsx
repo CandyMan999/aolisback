@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
 import GridSearch from "./GridSearch";
+import SwipeDeck from "./swipe-deck";
 import Context from "../../context";
 import {
   GET_ALL_USERS,
@@ -16,11 +17,13 @@ const GridContainer = () => {
   const { state, dispatch } = useContext(Context);
   const { currentUser } = state;
   const [loading, setLoading] = useState(false);
+  const [viewMode, setViewMode] = useState("swipe"); // 'swipe' or 'grid'
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("Browse");
   const [usersWhoLikeMeCount, setUsersWhoLikeMeCount] = useState(0);
   const [skip, setSkip] = useState(0);
   const [spinner, setSpinner] = useState(false);
+  const [endOfUsers, setEndOfUsers] = useState(false);
 
   useEffect(() => {
     if (currentUser.username) {
@@ -43,7 +46,12 @@ const GridContainer = () => {
         limit: 50,
         skip: paginate ? skip : 0,
       };
+
       const { getAllUsers } = await client.request(GET_ALL_USERS, variables);
+
+      if (!getAllUsers.length) {
+        setEndOfUsers(true);
+      }
 
       const filteredUsers = getAllUsers.filter(
         (user) => user.username !== state.currentUser.username
@@ -185,12 +193,26 @@ const GridContainer = () => {
         setSkip={setSkip}
         setSearch={setSearch}
         usersWhoLikeMeCount={usersWhoLikeMeCount}
+        setViewMode={setViewMode}
       />
 
-      {loading ? (
+      {(loading && !users.length && viewMode === "swipe") ||
+      (!users.length && viewMode === "swipe") ||
+      (loading && viewMode === "grid") ? (
         <Box height="50%">
           <Loading fade size={200} />
         </Box>
+      ) : viewMode === "swipe" ? (
+        <SwipeDeck
+          users={users}
+          currentUser={currentUser}
+          state={state}
+          dispatch={dispatch}
+          fetchData={fetchData}
+          loading={spinner}
+          endOfUsers={endOfUsers}
+          setUsers={setUsers}
+        />
       ) : (
         <GridSearch
           state={state}

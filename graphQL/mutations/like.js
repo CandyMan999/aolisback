@@ -102,7 +102,7 @@ module.exports = {
         "likedUsers",
         "matchedUsers",
       ]);
-      return updatedUser;
+      return { user: updatedUser, isMatch: isMutualLike, matchID: likeID };
     } catch (err) {
       throw new AuthenticationError(err.message);
     }

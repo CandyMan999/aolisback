@@ -221,6 +221,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
       //   return;
       // }
+
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
       setShowHearts(false);
       if (mobile) {
@@ -280,9 +281,11 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
         userID: currentUser._id,
         likeID: _id,
       };
-      const { like } = await client.request(LIKE_MUTATION, variables);
+      const {
+        like: { user, isMatch },
+      } = await client.request(LIKE_MUTATION, variables);
 
-      dispatch({ type: "UPDATE_LIKED_USERS", payload: like });
+      dispatch({ type: "UPDATE_LIKED_USERS", payload: user });
       setShowHearts(true);
       setLoading(false);
     } catch (err) {

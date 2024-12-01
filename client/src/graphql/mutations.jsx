@@ -886,25 +886,29 @@ export const ACCEPT_TERMS_MUTATION = gql`
 export const LIKE_MUTATION = gql`
   mutation ($userID: ID!, $likeID: ID!) {
     like(userID: $userID, likeID: $likeID) {
-      username
-      plan {
-        planType
-        messages
-        messagesSent
-        videoMinutes
-        videoMinutesUsed
-        likes
-        likesSent
-        additionalMinutes
-        additionalLikes
-        additionalMessages
+      user {
+        username
+        plan {
+          planType
+          messages
+          messagesSent
+          videoMinutes
+          videoMinutesUsed
+          likes
+          likesSent
+          additionalMinutes
+          additionalLikes
+          additionalMessages
+        }
+        likedUsers {
+          _id
+        }
+        matchedUsers {
+          _id
+        }
       }
-      likedUsers {
-        _id
-      }
-      matchedUsers {
-        _id
-      }
+      isMatch
+      matchID
     }
   }
 `;
