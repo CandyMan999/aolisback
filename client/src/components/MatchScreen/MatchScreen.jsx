@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 import { COLORS } from "../../constants";
 import { MdVideoChat } from "react-icons/md";
-import { Box, Text, FONT_SIZES, Button } from "../../components";
+import { Text, Button } from "../../components";
 import { VIDEO_CHAT_REQUEST } from "../../graphql/subscriptions";
 
 // Styled Components
@@ -261,7 +261,12 @@ const MatchScreen = ({
             animate="visible"
             style={{ position: "absolute", top: 0 }}
           >
-            <svg width="300" height="100">
+            <svg
+              width="100%"
+              height="auto"
+              viewBox="0 0 300 100"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
                 <path
                   id="curve"
@@ -273,7 +278,7 @@ const MatchScreen = ({
                 width="300"
                 style={{
                   fontFamily: "Cursive",
-                  fontSize: "48px",
+                  fontSize: "40px",
                   fill: COLORS.pink,
                   fontWeight: "bolder",
                 }}
@@ -283,12 +288,13 @@ const MatchScreen = ({
                   startOffset="50%"
                   textAnchor="middle"
                 >
-                  It's a Match!
+                  {" "}
+                  It's a Match!{" "}
                 </textPath>
               </text>
             </svg>
           </MatchTextContainer>
-          <CardsContainer style={{ marginTop: "10%" }}>
+          <CardsContainer style={{ marginTop: "50%" }}>
             <CardWrapper custom="left">
               <UserCard
                 custom="left"
@@ -327,7 +333,7 @@ const MatchScreen = ({
             color={handleImBlocked() ? COLORS.lightGrey : COLORS.white}
             style={{
               borderRadius: "50%",
-              boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+              boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
             }}
             disabled={handleImBlocked()}
             onClick={
@@ -340,6 +346,7 @@ const MatchScreen = ({
           >
             <MdVideoChat size={45} color={COLORS.vividBlue} />
           </Button>
+          <Text>Send A Message</Text>
           {showHearts &&
             Array.from({ length: 20 }, (_, index) => (
               <HeartIcon
