@@ -270,7 +270,7 @@ const SwipeableProfileCard = forwardRef(
             >
               {(currentSlideIndex === 0 || currentSlideIndex >= 3) && (
                 // Display the intro
-                <Box wodth="100%" padding={10} column>
+                <Box wodth="100%" padding={5} column>
                   <Box width="100%">
                     🎙
                     <Text
@@ -484,7 +484,7 @@ const SwipeableProfileCard = forwardRef(
               }
               style={{
                 position: "absolute",
-                bottom: 10,
+                bottom: 0,
                 boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
                 borderRadius: 10,
                 zIndex: 1000,
@@ -500,7 +500,7 @@ const SwipeableProfileCard = forwardRef(
               <Icon
                 name={user.location.showOnMap ? "search" : "distance"}
                 color={COLORS.white}
-                size={ICON_SIZES.X_LARGE}
+                size={ICON_SIZES.LARGE}
               />
               <Text color={COLORS.white} margin={0} bold>
                 {user.location.showOnMap ? `View Location` : null} - {distance}

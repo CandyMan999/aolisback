@@ -400,14 +400,14 @@ const SwipeDeck = ({
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
-          bottom: 5,
+          bottom: -5,
         }}
       >
         <Button
           as={motion.button} // Enable motion capabilities
           animate={nextUserButtonControls}
-          width={"80px"}
-          height={"80px"}
+          width={"60px"}
+          height={"60px"}
           color={COLORS.red}
           style={{
             borderRadius: "50%",
@@ -415,12 +415,12 @@ const SwipeDeck = ({
           }}
           onClick={onNextUser}
         >
-          <Icon name="close" color={COLORS.white} size={ICON_SIZES.XXX_LARGE} />
+          <Icon name="close" color={COLORS.white} size={ICON_SIZES.XX_LARGE} />
         </Button>
 
         <Button
-          width={"80px"}
-          height={"80px"}
+          width={"60px"}
+          height={"60px"}
           color={handleImBlocked() ? COLORS.lightGrey : COLORS.white}
           style={{
             borderRadius: "50%",
@@ -435,14 +435,14 @@ const SwipeDeck = ({
               : handleVideoChatRequest
           }
         >
-          <MdVideoChat size={60} color={COLORS.vividBlue} />
+          <MdVideoChat size={45} color={COLORS.vividBlue} />
         </Button>
 
         <Button
           as={motion.button} // Enable motion capabilities
           animate={acceptButtonControls}
-          width={"80px"}
-          height={"80px"}
+          width={"60px"}
+          height={"60px"}
           color={COLORS.green}
           style={{
             borderRadius: "50%",
@@ -454,7 +454,7 @@ const SwipeDeck = ({
             color={COLORS.black}
             margin={0}
             bold
-            fontSize={FONT_SIZES.XXX_LARGE}
+            fontSize={FONT_SIZES.XX_LARGE}
           >
             ❤️
           </Text>
