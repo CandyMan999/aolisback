@@ -400,7 +400,7 @@ const SwipeDeck = ({
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
-          bottom: 20,
+          bottom: 5,
         }}
       >
         <Button

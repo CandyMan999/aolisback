@@ -19,21 +19,45 @@ const PhotoSlider = ({
   const [loading, setLoading] = useState(true); // New loading state
 
   useEffect(() => {
-    if (images && images.length > 0) {
-      const loadImages = async () => {
-        const promises = images.map((image) => {
-          return new Promise((resolve) => {
+    const loadImages = async () => {
+      try {
+        const validImages = images.filter((image) => !!image.url);
+        if (!validImages.length) {
+          console.warn("No valid images found");
+          setLoading(false);
+          return;
+        }
+
+        const promises = validImages.map((image) => {
+          return new Promise((resolve, reject) => {
             const img = new Image();
             img.src = image.url;
-            img.onload = resolve;
+            img.onload = () => resolve(image);
+            img.onerror = () => {
+              console.error(`Failed to load image: ${image.url}`);
+              reject(new Error(`Failed to load image: ${image.url}`));
+            };
           });
         });
 
-        await Promise.all(promises);
-        setPictures([...images]);
-        setLoading(false);
-      };
+        const loadedImages = await Promise.allSettled(promises);
+        const successfullyLoaded = loadedImages
+          .filter((result) => result.status === "fulfilled")
+          .map((result) => result.value);
 
+        setPictures(successfullyLoaded);
+        setLoading(false);
+
+        if (successfullyLoaded.length === 0) {
+          console.warn("No images loaded successfully");
+        }
+      } catch (err) {
+        console.error("Error loading images: ", err);
+        setLoading(false);
+      }
+    };
+
+    if (images && images.length > 0) {
       loadImages();
     } else {
       setLoading(false);

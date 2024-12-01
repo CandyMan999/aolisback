@@ -190,7 +190,7 @@ const SwipeableProfileCard = forwardRef(
             display="flex"
             column
             center
-            height="70vh"
+            height="75vh"
             style={{
               position: "absolute",
               left: "50%",
@@ -218,7 +218,7 @@ const SwipeableProfileCard = forwardRef(
             >
               <PhotoSlider
                 withDelete={false}
-                images={[]}
+                images={user?.pictures}
                 height={310}
                 width={200}
                 onSlideChange={setCurrentSlideIndex}
@@ -284,7 +284,7 @@ const SwipeableProfileCard = forwardRef(
                   </Box>{" "}
                   <Text style={{ marginTop: 0, paddingLeft: 5 }}>
                     {/* Use the truncateText function here */}
-                    {truncateText(user.intro, 80)}
+                    {truncateText(user.intro, 60)}
                   </Text>
                 </Box>
               )}{" "}
