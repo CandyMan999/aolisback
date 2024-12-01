@@ -43,7 +43,7 @@ const GridContainer = () => {
       const variables = {
         latitude: currentUser.location.coordinates[1],
         longitude: currentUser.location.coordinates[0],
-        limit: 50,
+        limit: 10,
         skip: paginate ? skip : 0,
       };
 
@@ -64,11 +64,11 @@ const GridContainer = () => {
           fetchData(false);
         } else {
           setUsers((prevUsers) => [...prevUsers, ...filteredAndSorted]);
-          setSkip((prevSkip) => prevSkip + 50);
+          setSkip((prevSkip) => prevSkip + 10);
         }
       } else {
         setUsers(filteredAndSorted);
-        setSkip(50);
+        setSkip(10);
       }
 
       setLoading(false);
