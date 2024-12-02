@@ -1,5 +1,3 @@
-// SwipeDeck.js
-
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import SwipeableProfileCard from "./swipeable-profile-card";
 import {
@@ -38,6 +36,7 @@ const SwipeDeck = ({
   let history = useHistory();
   const [matchModalVisible, setMatchModalVisible] = useState(false);
   const [matchedUser, setMatchedUser] = useState(null);
+  const [justRanOutOfLikes, setJustRanOutOfLikes] = useState(false);
   const acceptButtonControls = useAnimation();
   const nextUserButtonControls = useAnimation();
 
@@ -89,43 +88,55 @@ const SwipeDeck = ({
   }, [currentIndex]);
 
   const handleSwipe = (direction, user, index) => {
-    if (direction === "right") {
-      handleLikeUser(user._id);
+    try {
+      if (direction === "right") {
+        if (isOutOfLikes) {
+          try {
+            setJustRanOutOfLikes(true);
+            window.ReactNativeWebView.postMessage("BUY_LIKES");
+          } catch (err) {
+            console.log("err: ", err);
+          }
 
-      // Trigger scale animation for onAccept button
-      acceptButtonControls
-        .start({
-          scale: 1.3,
-          transition: { duration: 0.2 },
-        })
-        .then(() => {
-          // Return to original scale
-          acceptButtonControls.start({
-            scale: 1,
-            transition: { duration: 0.2 },
-          });
-        });
-    } else if (direction === "left") {
-      // Trigger scale animation for onNextUser button
-      nextUserButtonControls
-        .start({
-          scale: 1.3,
-          transition: { duration: 0.2 },
-        })
-        .then(() => {
-          // Return to original scale
-          nextUserButtonControls.start({
-            scale: 1,
-            transition: { duration: 0.2 },
-          });
-        });
-    }
+          return;
+        }
 
-    if (direction === "right") {
-      handleLikeUser(user._id);
+        handleLikeUser(user._id);
+
+        // Trigger scale animation for onAccept button
+        acceptButtonControls
+          .start({
+            scale: 1.3,
+            transition: { duration: 0.2 },
+          })
+          .then(() => {
+            // Return to original scale
+            acceptButtonControls.start({
+              scale: 1,
+              transition: { duration: 0.2 },
+            });
+          });
+      } else if (direction === "left") {
+        // Trigger scale animation for onNextUser button
+        nextUserButtonControls
+          .start({
+            scale: 1.3,
+            transition: { duration: 0.2 },
+          })
+          .then(() => {
+            // Return to original scale
+            nextUserButtonControls.start({
+              scale: 1,
+              transition: { duration: 0.2 },
+            });
+          });
+      }
+
+      const newIndex = currentIndex + 1;
+      updateCurrentIndex(newIndex);
+    } catch (err) {
+      console.log("err swiping: ", err);
     }
-    const newIndex = currentIndex + 1;
-    updateCurrentIndex(newIndex);
   };
 
   const onAccept = () => {
@@ -271,6 +282,33 @@ const SwipeDeck = ({
     }
   };
 
+  const handleCardLeftScreen = (direction, user, index) => {
+    // You can add any logic here if needed when the card leaves the screen
+
+    console.log("direction: ", direction);
+    if (isOutOfLikes && direction === "right") {
+      childRefs[currentIndex].current.restoreCard();
+    }
+  };
+
+  const handleLocation = (_id, location) => {
+    try {
+      dispatch({
+        type: "VIEW_LOCATION",
+        payload: {
+          _id,
+          lat: location.coordinates[1],
+          lng: location.coordinates[0],
+        },
+      });
+      dispatch({ type: "TOGGLE_PROFILE", payload: false });
+
+      history.push("/location");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const USERS = users.map((user, index) => ({ ...user, index })).reverse();
 
   return (
@@ -369,9 +407,8 @@ const SwipeDeck = ({
         )}
 
         {USERS.map((user, index) => {
-          const topCard = users[currentIndex]?.username === user?.username;
-
-          const rotation = getRotation();
+          const isTopCard = users[currentIndex]?.username === user?.username; // The first card in the reversed array is the top card
+          const rotation = isTopCard ? 0 : getRotation();
           return (
             <SwipeableProfileCard
               key={user._id}
@@ -380,13 +417,17 @@ const SwipeDeck = ({
               currentUser={currentUser}
               state={state}
               dispatch={dispatch}
-              rotation={topCard ? 0 : rotation}
+              rotation={rotation}
               onSwipe={(dir) => handleSwipe(dir, user, index)}
-              //   onCardLeftScreen={() => handleCardLeftScreen(user, index)}
+              onCardLeftScreen={(dir) => handleCardLeftScreen(dir, user, index)}
               onAccept={onAccept}
               onNextUser={onNextUser}
               preventSwipe={
-                isOutOfLikes ? ["right", "up", "down"] : ["up", "down"]
+                isTopCard && justRanOutOfLikes
+                  ? ["right", "up", "down"]
+                  : isTopCard
+                  ? ["up", "down"]
+                  : ["right", "left", "up", "down"]
               }
             />
           );
@@ -417,7 +458,7 @@ const SwipeDeck = ({
           }}
           onClick={onNextUser}
         >
-          <Icon name="close" color={COLORS.white} size={ICON_SIZES.XX_LARGE} />
+          <Icon name="close" color={COLORS.white} size={ICON_SIZES.X_LARGE} />
         </Button>
 
         <Button
@@ -437,8 +478,28 @@ const SwipeDeck = ({
               : handleVideoChatRequest
           }
         >
-          <MdVideoChat size={45} color={COLORS.vividBlue} />
+          <MdVideoChat size={40} color={COLORS.vividBlue} />
         </Button>
+        {currentUserOnTop?.location.showOnMap && (
+          <Button
+            width={"60px"}
+            height={"60px"}
+            color={COLORS.white}
+            style={{
+              borderRadius: "50%",
+              boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+            }}
+            onClick={() =>
+              handleLocation(currentUserOnTop._id, currentUserOnTop.location)
+            }
+          >
+            <Icon
+              name={"search"}
+              color={COLORS.pink}
+              size={ICON_SIZES.XX_LARGE}
+            />
+          </Button>
+        )}
 
         <Button
           as={motion.button} // Enable motion capabilities
@@ -476,6 +537,7 @@ const SwipeDeck = ({
         location={location}
         history={history}
         state={state}
+        client={client}
       />
     </Box>
   );

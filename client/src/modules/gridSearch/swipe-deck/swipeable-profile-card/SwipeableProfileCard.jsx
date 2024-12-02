@@ -185,6 +185,8 @@ const SwipeableProfileCard = forwardRef(
           onCardLeftScreen={onCardLeftScreen}
           className="pressable"
           preventSwipe={preventSwipe}
+          swipeRequirementType="position"
+          swipeThreshold={20}
         >
           <Box
             display="flex"
@@ -197,7 +199,7 @@ const SwipeableProfileCard = forwardRef(
               top: "0",
               transform: `translateX(-50%) rotate(${rotation}deg)`,
               width: "400px",
-              maxWidth: "80vw",
+              maxWidth: "85vw",
               backgroundColor: COLORS.white,
               borderRadius: "20px",
               boxShadow: "0px 2px 20px rgba(0, 0, 0, 0.2)",
@@ -270,8 +272,8 @@ const SwipeableProfileCard = forwardRef(
             >
               {(currentSlideIndex === 0 || currentSlideIndex >= 3) && (
                 // Display the intro
-                <Box wodth="100%" padding={5} column>
-                  <Box width="100%">
+                <Box width="100%" padding={5} column>
+                  <Box width="100%" height="fit-content">
                     🎙
                     <Text
                       marginBottom={0}
@@ -286,8 +288,24 @@ const SwipeableProfileCard = forwardRef(
                     {/* Use the truncateText function here */}
                     {truncateText(user.intro, 60)}
                   </Text>
+                  <Box
+                    width="100%"
+                    justifyContent="center"
+                    alignItems="center"
+                    position="fixed"
+                    bottom={0}
+                  >
+                    <Icon
+                      name={"distance"}
+                      color={COLORS.pink}
+                      size={ICON_SIZES.LARGE}
+                    />
+                    <Text margin={0} bold>
+                      - {distance}
+                    </Text>
+                  </Box>
                 </Box>
-              )}{" "}
+              )}
               {currentSlideIndex === 1 && (
                 // Display age and single since below the photo slider
                 <Box width="100%" paddingX={5} column>
@@ -468,12 +486,28 @@ const SwipeableProfileCard = forwardRef(
                       </Text>
                     </Box>
                   </Box>
+                  <Box
+                    alignItems="center"
+                    position="fixed"
+                    justifyContent="center"
+                    bottom={0}
+                    width="100%"
+                  >
+                    <Icon
+                      name={"distance"}
+                      color={COLORS.pink}
+                      size={ICON_SIZES.LARGE}
+                    />
+                    <Text margin={0} bold>
+                      - {distance}
+                    </Text>
+                  </Box>
                 </Box>
               )}
             </Box>
 
             {/* View Location Button */}
-            <Button
+            {/* <Button
               color={
                 user.location && user.location.showOnMap
                   ? COLORS.pink
@@ -502,7 +536,7 @@ const SwipeableProfileCard = forwardRef(
               <Text color={COLORS.white} margin={0} bold>
                 {user.location.showOnMap ? `View Location` : null} - {distance}
               </Text>
-            </Button>
+            </Button> */}
           </Box>
         </TinderCard>
       </Fragment>
