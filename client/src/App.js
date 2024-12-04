@@ -27,7 +27,7 @@ class App extends React.PureComponent {
           <ProtectedRoute props={this.props} path="/location" component={Map} />
           <Route path="/message-center" component={MessageCenter} />
           <Route path="/message" component={Message} />
-          <Route path="/grid-search" component={GridSearch} />
+          <ProtectedRoute path="/grid-search" component={GridSearch} />
           <Route path="/speed-date" component={SpeedDatePage} />
           <ProtectedRoute exact path="/admin" component={AdminPage} />
         </Switch>

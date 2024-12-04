@@ -196,9 +196,9 @@ const GridContainer = () => {
         setViewMode={setViewMode}
       />
 
-      {(loading && !users.length && viewMode === "swipe") ||
-      (!users.length && viewMode === "swipe") ||
-      (loading && viewMode === "grid") ? (
+      {(loading && !users.length) ||
+      (loading && skip === 0) ||
+      (!users.length && viewMode === "swipe") ? (
         <Box height="50%">
           <Loading fade size={200} />
         </Box>

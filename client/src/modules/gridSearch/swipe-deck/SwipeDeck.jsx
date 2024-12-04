@@ -93,6 +93,7 @@ const SwipeDeck = ({
         if (isOutOfLikes) {
           try {
             setJustRanOutOfLikes(true);
+
             window.ReactNativeWebView.postMessage("BUY_LIKES");
           } catch (err) {
             console.log("err: ", err);
@@ -285,7 +286,6 @@ const SwipeDeck = ({
   const handleCardLeftScreen = (direction, user, index) => {
     // You can add any logic here if needed when the card leaves the screen
 
-    console.log("direction: ", direction);
     if (isOutOfLikes && direction === "right") {
       childRefs[currentIndex].current.restoreCard();
     }

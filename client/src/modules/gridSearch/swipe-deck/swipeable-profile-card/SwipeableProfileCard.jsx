@@ -149,24 +149,6 @@ const SwipeableProfileCard = forwardRef(
       }
     };
 
-    const handleLocation = (_id, location) => {
-      try {
-        dispatch({
-          type: "VIEW_LOCATION",
-          payload: {
-            _id,
-            lat: location.coordinates[1],
-            lng: location.coordinates[0],
-          },
-        });
-        dispatch({ type: "TOGGLE_PROFILE", payload: false });
-
-        history.push("/location");
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
     // Helper function to truncate text after a certain number of words
     const truncateText = (text, wordLimit) => {
       const words = text.split(" ");
@@ -186,7 +168,7 @@ const SwipeableProfileCard = forwardRef(
           className="pressable"
           preventSwipe={preventSwipe}
           swipeRequirementType="position"
-          swipeThreshold={20}
+          swipeThreshold={100}
         >
           <Box
             display="flex"
@@ -199,7 +181,7 @@ const SwipeableProfileCard = forwardRef(
               top: "0",
               transform: `translateX(-50%) rotate(${rotation}deg)`,
               width: "400px",
-              maxWidth: "85vw",
+              maxWidth: "90vw",
               backgroundColor: COLORS.white,
               borderRadius: "20px",
               boxShadow: "0px 2px 20px rgba(0, 0, 0, 0.2)",
@@ -505,38 +487,6 @@ const SwipeableProfileCard = forwardRef(
                 </Box>
               )}
             </Box>
-
-            {/* View Location Button */}
-            {/* <Button
-              color={
-                user.location && user.location.showOnMap
-                  ? COLORS.pink
-                  : COLORS.grey
-              }
-              style={{
-                position: "absolute",
-                bottom: 0,
-                boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
-                borderRadius: 10,
-                zIndex: 1000,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "90%",
-              }}
-              className="pressable"
-              disabled={!(user.location && user.location.showOnMap)}
-              onClick={() => handleLocation(user._id, user.location)}
-            >
-              <Icon
-                name={user.location.showOnMap ? "search" : "distance"}
-                color={COLORS.white}
-                size={ICON_SIZES.LARGE}
-              />
-              <Text color={COLORS.white} margin={0} bold>
-                {user.location.showOnMap ? `View Location` : null} - {distance}
-              </Text>
-            </Button> */}
           </Box>
         </TinderCard>
       </Fragment>
