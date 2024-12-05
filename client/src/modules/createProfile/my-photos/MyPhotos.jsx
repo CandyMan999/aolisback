@@ -252,7 +252,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
           flexDirection="row"
           flexWrap="wrap"
           justifyContent="space-between"
-          style={{ maxWidth: "600px", margin: "0 auto" }}
+          // style={{ maxWidth: "600px", margin: "0 auto" }}
         >
           {photos.map((photo, index) => (
             <Box
@@ -311,10 +311,9 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
           {photos.length < 6 && (
             <Box
               width="45%"
-              maxWidth="150px"
+              maxWidth="250px"
               height="auto"
-              minHeight={150}
-              maxHeight={150}
+              minHeight="150px"
               justifyContent="center"
               alignItems="center"
               marginVertical={8}
