@@ -22,7 +22,7 @@ const Overlay = styled(motion.div)`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: ${(props) => (props.showScreen === true ? "60vh" : "0vh")};
+  height: ${(props) => (props.showScreen === true ? "70vh" : "0vh")};
   border-top-left-radius: 20px; /* Rounded top-left corner */
   border-top-right-radius: 20px; /* Rounded top-right corner */
   overflow: hidden; /* Prevent overflow during animation */
@@ -82,8 +82,18 @@ const CloseIcon = styled(AiOutlineClose)`
 
 // Animation Variants
 const overlayVariants = {
-  hidden: { height: 0, opacity: 0 },
-  visible: { height: "70vh", opacity: 1, transition: { duration: 0.2 } },
+  hidden: { height: "0vh", opacity: 0 },
+  visible: (custom) => ({
+    height: getHeight(custom.mobile, custom.showScreen),
+    opacity: 1,
+    transition: { duration: 0.2 },
+  }),
+};
+
+const getHeight = (mobile, showScreen) => {
+  if (mobile && showScreen) return "70vh";
+  if (showScreen) return "100vh";
+  return "0vh";
 };
 
 const cardVariants = {
@@ -253,6 +263,7 @@ const MatchScreen = ({
           initial="hidden"
           animate="visible"
           exit="hidden"
+          custom={{ mobile, showScreen }}
         >
           <CloseIcon onClick={onClose} />
           <MatchTextContainer
@@ -294,7 +305,7 @@ const MatchScreen = ({
               </text>
             </svg>
           </MatchTextContainer>
-          <CardsContainer style={{ marginTop: "40%" }}>
+          <CardsContainer style={{ marginTop: mobile ? "40%" : "10%" }}>
             <CardWrapper custom="left">
               <UserCard
                 custom="left"

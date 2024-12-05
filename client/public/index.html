@@ -2,53 +2,121 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <!-- Viewport: Combine into a single viewport meta tag -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no"
+    />
+
+    <!-- Basic Identifiers -->
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
-    />
+    <title>Gone Chatting - Video Dating, Chatrooms, & Real Connections</title>
+    <link rel="canonical" href="https://www.gonechatting.com" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Meta Descriptions -->
     <meta
       name="description"
-      content="Live Chatrooms. Dating app to meet singles around the world. Here you can create profiles, video chat, share location, and video message others looking for love."
+      content="Gone Chatting is the ultimate video-first dating platform designed to connect singles near and far. Engage in sober dating communities, interest-based chatrooms, and international matchups. Enjoy live video calls, global location-based searches, and video messages that foster authentic connections beyond just swiping. Whether you're exploring local singles or looking for meaningful relationships worldwide, Gone Chatting brings you closer to genuine love and friendship."
+    />
+    <meta
+      name="keywords"
+      content="dating app, video dating, sober dating, global dating platform, online dating, meet singles, interest-based matchmaking, video messaging, live chatrooms, international dating, real connections, singles near me, find love online, virtual speed dating, video-first dating platform, social discovery, niche dating communities"
+    />
+    <meta name="author" content="Gone Chatting" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta
+      property="og:title"
+      content="Gone Chatting - Video Dating & Real Connections"
+    />
+    <meta
+      property="og:description"
+      content="Gone Chatting connects you with local and global singles through live video chatrooms, video messaging, and interest-based dating groups. Explore sober dating, meet people worldwide, and form authentic relationships without endless swiping."
+    />
+    <meta property="og:image" content="%PUBLIC_URL%/social-preview.png" />
+    <meta property="og:url" content="https://www.gonechatting.com" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Gone Chatting - Video Dating & Chatrooms"
+    />
+    <meta
+      name="twitter:description"
+      content="Join Gone Chatting for a truly modern dating experience. Connect via live video chat, explore sober dating communities, and discover meaningful connections locally or globally."
+    />
+    <meta name="twitter:image" content="%PUBLIC_URL%/social-preview.png" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Gone Chatting",
+        "url": "https://www.gonechatting.com",
+        "description": "Gone Chatting is a video-first dating web application where singles connect via live video chatrooms, global matchmaking, interest-based groups, and sober dating communities. Engage in authentic encounters beyond traditional swiping.",
+        "image": "%PUBLIC_URL%/social-preview.png",
+        "operatingSystem": "iOS, Android, Web",
+        "applicationCategory": "Dating",
+        "author": {
+          "@type": "Organization",
+          "name": "Gone Chatting",
+          "url": "https://www.gonechatting.com",
+          "logo": "%PUBLIC_URL%/social-preview.png"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "category": "Free App"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.5",
+          "ratingCount": "1200"
+        },
+        "audience": {
+          "@type": "Audience",
+          "audienceType": "Adults seeking romantic relationships or friendships"
+        },
+        "potentialAction": [
+          {
+            "@type": "SearchAction",
+            "target": "https://www.gonechatting.com/search?query={search_term_string}",
+            "query-input": "required name=search_term_string"
+          },
+          {
+            "@type": "CommunicateAction",
+            "name": "Video Chat",
+            "target": "https://www.gonechatting.com/video-chat"
+          }
+        ]
+      }
+    </script>
+
+    <!-- Fonts and Styles -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Rancho&effect=fire-animation|shadow-multiple"
+      rel="stylesheet"
     />
     <link
       href="https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css"
       rel="stylesheet"
     />
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Rancho&effect=fire-animation|shadow-multiple"
-    />
-
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link
       href="https://unpkg.com/cloudinary-video-player@1.9.5/dist/cld-video-player.min.css"
       rel="stylesheet"
     />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Gone Chatting</title>
+    <!-- Apple & PWA Integration -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- Scripts -->
     <script
       src="https://upload-widget.cloudinary.com/global/all.js"
       type="text/javascript"
@@ -61,17 +129,6 @@
       type="text/javascript"
     ></script>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-      
-    -->
     <script src="https://meet.jit.si/external_api.js"></script>
   </body>
 </html>
