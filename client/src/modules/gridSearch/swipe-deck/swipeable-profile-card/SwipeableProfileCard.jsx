@@ -168,7 +168,7 @@ const SwipeableProfileCard = forwardRef(
           className="pressable"
           preventSwipe={preventSwipe}
           swipeRequirementType="position"
-          swipeThreshold={100}
+          swipeThreshold={50}
         >
           <Box
             display="flex"

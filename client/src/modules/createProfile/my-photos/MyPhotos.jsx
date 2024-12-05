@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import {
   CollapsableHeader,
   Box,
@@ -19,6 +19,10 @@ import { AiOutlinePlus } from "react-icons/ai";
 import axios from "axios";
 import Context from "../../../context";
 
+// Import react-easy-crop
+import Cropper from "react-easy-crop";
+import "react-easy-crop/react-easy-crop.css";
+
 const MyPhotos = ({ currentUser, total, completed, onClose }) => {
   const client = useClient();
   const { dispatch } = useContext(Context);
@@ -28,14 +32,24 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
   const [success, setSuccess] = useState(null);
   const [photos, setPhotos] = useState(currentUser.pictures || []);
 
-  const handleImageUpload = async (file) => {
+  // State variables for cropping
+  const [imageSrc, setImageSrc] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [showCropper, setShowCropper] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // New state for media size
+  const [mediaSize, setMediaSize] = useState({ width: 0, height: 0 });
+
+  const handleImageUpload = async (fileBlob) => {
     const data = new FormData();
-    data.append("file", file);
+    data.append("file", fileBlob, "croppedImage.jpeg");
     data.append("upload_preset", "northShoreExpress");
     data.append("cloud_name", "aolisback");
     data.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
     data.append("api_secret", process.env.REACT_APP_CLOUDINARY_API_SECRET);
-
     try {
       const response = await axios.post(
         process.env.REACT_APP_CLOUDINARY_IMAGE,
@@ -47,6 +61,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
       }
       return { url: secureUrl, publicId: response.data.public_id };
     } catch (err) {
+      console.error("Error uploading image:", err);
       return { url: null, publicId: null };
     }
   };
@@ -65,38 +80,130 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
     }
   };
 
-  const handleUploadImage = async (event) => {
+  // Updated handleUploadImage function
+  const handleUploadImage = (event) => {
     const file = event.target.files[0];
     if (!file) return;
-    setLoadingIndex(photos.length);
+
+    // Reset previous cropping data
+    setImageSrc(null);
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setCroppedAreaPixels(null);
+
+    // Read the image file as a data URL
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      setImageSrc(reader.result); // Set the image source for the cropper
+      setShowCropper(true); // Show the cropper modal
+    });
+    reader.readAsDataURL(file);
+
+    // Reset the input value to allow selecting the same file again
+    event.target.value = null;
+  };
+
+  // Function to handle crop completion
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  // Function to generate the cropped image
+  const getCroppedImage = useCallback(async () => {
+    if (!imageSrc || !croppedAreaPixels) {
+      return null;
+    }
 
     try {
-      const { url, publicId } = await handleImageUpload(file);
-      if (url && publicId) {
-        const variables = { _id: currentUser._id, url, publicId };
-        const { addPhoto } = await client.request(
-          ADD_PHOTO_MUTATION,
-          variables
+      const image = await createImage(imageSrc);
+      const canvas = document.createElement("canvas");
+      canvas.width = croppedAreaPixels.width;
+      canvas.height = croppedAreaPixels.height;
+      const ctx = canvas.getContext("2d");
+
+      ctx.drawImage(
+        image,
+        croppedAreaPixels.x,
+        croppedAreaPixels.y,
+        croppedAreaPixels.width,
+        croppedAreaPixels.height,
+        0,
+        0,
+        croppedAreaPixels.width,
+        croppedAreaPixels.height
+      );
+
+      return new Promise((resolve, reject) => {
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              reject(new Error("Canvas is empty"));
+              return;
+            }
+            blob.name = "croppedImage.jpeg";
+            resolve(blob);
+          },
+          "image/jpeg",
+          1
         );
-        dispatch({ type: "UPDATE_USER_PHOTOS", payload: addPhoto.pictures });
-        setPhotos(addPhoto.pictures);
-        setSuccess("Photo uploaded successfully!");
-        setTimeout(() => {
-          setSuccess("");
-        }, 1000);
+      });
+    } catch (e) {
+      console.error("Failed to crop image:", e);
+      return null;
+    }
+  }, [imageSrc, croppedAreaPixels]);
+
+  // Utility function to create an Image object
+  const createImage = (url) =>
+    new Promise((resolve, reject) => {
+      const img = new Image();
+      img.addEventListener("load", () => resolve(img));
+      img.addEventListener("error", (error) => reject(error));
+      img.src = url;
+    });
+
+  // Handle saving the cropped image
+  const handleCropSave = async () => {
+    setIsProcessing(true);
+    try {
+      const croppedImageBlob = await getCroppedImage();
+      if (croppedImageBlob) {
+        setLoadingIndex(photos.length);
+
+        const { url, publicId } = await handleImageUpload(croppedImageBlob);
+        if (url && publicId) {
+          const variables = { _id: currentUser._id, url, publicId };
+          const { addPhoto } = await client.request(
+            ADD_PHOTO_MUTATION,
+            variables
+          );
+          dispatch({ type: "UPDATE_USER_PHOTOS", payload: addPhoto.pictures });
+          setPhotos(addPhoto.pictures);
+          setSuccess("Photo uploaded successfully!");
+          setTimeout(() => {
+            setSuccess("");
+          }, 1000);
+        } else {
+          setError("Error uploading photo");
+          setTimeout(() => {
+            setError("");
+          }, 1000);
+        }
+        setLoadingIndex(null);
+        setShowCropper(false);
+        setImageSrc(null); // Reset imageSrc after closing the cropper
       } else {
-        setError("Error uploading photo");
-        setTimeout(() => {
-          setError("");
-        }, 1000);
+        setError("Error cropping image");
       }
-      setLoadingIndex(null);
     } catch (err) {
+      console.error(err);
       setLoadingIndex(null);
-      setError("Error uploading photo");
+      setError("Error processing the cropped image");
       setTimeout(() => {
         setError("");
       }, 1000);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -106,6 +213,24 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
       setClose(false);
     }, [1000]);
   };
+
+  // Handle crop change to allow movement
+  const onCropChange = (newCrop) => {
+    setCrop(newCrop);
+  };
+
+  // Adjust zoom to fit the entire image
+  const onMediaLoaded = useCallback((mediaSize) => {
+    setMediaSize(mediaSize);
+
+    // Calculate the zoom to fit the image within the cropper
+    const { width, height } = mediaSize;
+    const cropAreaSize = 300; // The size of the crop area (square)
+
+    const zoomLevel = Math.min(cropAreaSize / width, cropAreaSize / height);
+
+    setZoom(zoomLevel);
+  }, []);
 
   return (
     <CollapsableHeader
@@ -123,12 +248,19 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
           candid moment, your favorite hobby, or a place you love, share your
           story with the world.
         </Text>
-        <Box flexDirection="row" flexWrap="wrap" justifyContent="space-between">
+        <Box
+          flexDirection="row"
+          flexWrap="wrap"
+          justifyContent="space-between"
+          style={{ maxWidth: "600px", margin: "0 auto" }}
+        >
           {photos.map((photo, index) => (
             <Box
               key={index}
-              width="48%"
-              height={"auto"}
+              width="45%"
+              maxWidth="250px"
+              height="auto"
+              minHeight="150px"
               justifyContent="center"
               alignItems="center"
               marginVertical={8}
@@ -138,6 +270,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
               borderColor={COLORS.pink}
               borderWidth={1}
               marginTop={10}
+              margin={5}
             >
               <img
                 src={photo.url}
@@ -158,8 +291,6 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
                   borderRadius: "50%",
                   height: 34,
                   width: 34,
-                  // alignItems: "center",
-                  // justifyContent: "center",
                 }}
                 onClick={() => handleDeletePhoto(photo._id)}
               >
@@ -179,8 +310,11 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
           ))}
           {photos.length < 6 && (
             <Box
-              width="48%"
-              height="150px"
+              width="45%"
+              maxWidth="150px"
+              height="auto"
+              minHeight={150}
+              maxHeight={150}
               justifyContent="center"
               alignItems="center"
               marginVertical={8}
@@ -189,7 +323,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
               borderRadius="10px"
               style={{
                 border: `solid 1px ${COLORS.pink}`,
-                cursor: "pointer",
+                cursor: isProcessing || showCropper ? "not-allowed" : "pointer",
                 minWidth: 150,
               }}
               as="label"
@@ -207,6 +341,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
                 style={{ display: "none" }}
                 accept="image/*"
                 onChange={handleUploadImage}
+                disabled={isProcessing || showCropper}
               />
             </Box>
           )}
@@ -243,6 +378,114 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
             </Text>
           </Box>
         </Button>
+
+        {/* Cropper Modal */}
+        {showCropper && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.8)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1000,
+              overflow: "auto",
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: 10,
+                borderRadius: 10,
+                maxWidth: "90%",
+                maxHeight: "90%",
+                overflow: "auto",
+              }}
+            >
+              <div
+                style={{
+                  position: "relative",
+                  width: "80vw",
+                  height: "60vh",
+                  backgroundColor: "#333",
+                  overflow: "hidden",
+                  margin: "0 auto",
+                }}
+              >
+                <Cropper
+                  image={imageSrc}
+                  crop={crop}
+                  zoom={zoom}
+                  aspect={1}
+                  cropShape="rect"
+                  onCropChange={onCropChange}
+                  onCropComplete={onCropComplete}
+                  onZoomChange={setZoom}
+                  zoomWithScroll={true}
+                  restrictPosition={false}
+                  objectFit="contain"
+                  showGrid={true}
+                  onMediaLoaded={onMediaLoaded}
+                />
+              </div>
+              <Box
+                width="100%"
+                flexDirection="row"
+                justifyContent="space-between"
+                marginTop={20}
+              >
+                <Button
+                  onClick={() => {
+                    setShowCropper(false);
+                    setImageSrc(null); // Reset imageSrc when canceling
+                  }}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    boxShadow: `0px 2px 10px ${COLORS.lightGrey}`,
+                    borderRadius: "20px",
+                    height: "60px",
+                    border: `solid 1px ${COLORS.pink}`,
+                  }}
+                  width={"50%"}
+                  disabled={isProcessing}
+                  color={COLORS.red}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleCropSave}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    boxShadow: `0px 2px 10px ${COLORS.pink}`,
+                    borderRadius: "20px",
+                    height: "60px",
+                    border: `solid 1px ${COLORS.pink}`,
+                  }}
+                  width={"50%"}
+                  disabled={isProcessing}
+                  color={COLORS.white}
+                >
+                  {isProcessing ? (
+                    <Loading pulse size={5} />
+                  ) : (
+                    <Text bold color={COLORS.black}>
+                      Save Crop
+                    </Text>
+                  )}
+                </Button>
+              </Box>
+            </div>
+          </div>
+        )}
       </Box>
     </CollapsableHeader>
   );
