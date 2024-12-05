@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext, useCallback, useRef } from "react";
 import {
   CollapsableHeader,
   Box,
@@ -43,6 +43,9 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
   // New state for media size
   const [mediaSize, setMediaSize] = useState({ width: 0, height: 0 });
 
+  // UseRef to track if media has been loaded
+  const mediaLoadedRef = useRef(false);
+
   const handleImageUpload = async (fileBlob) => {
     const data = new FormData();
     data.append("file", fileBlob, "croppedImage.jpeg");
@@ -80,7 +83,6 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
     }
   };
 
-  // Updated handleUploadImage function
   const handleUploadImage = (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -90,6 +92,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
     setCrop({ x: 0, y: 0 });
     setZoom(1);
     setCroppedAreaPixels(null);
+    mediaLoadedRef.current = false; // Reset media loaded status
 
     // Read the image file as a data URL
     const reader = new FileReader();
@@ -103,12 +106,10 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
     event.target.value = null;
   };
 
-  // Function to handle crop completion
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  // Function to generate the cropped image
   const getCroppedImage = useCallback(async () => {
     if (!imageSrc || !croppedAreaPixels) {
       return null;
@@ -162,7 +163,6 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
       img.src = url;
     });
 
-  // Handle saving the cropped image
   const handleCropSave = async () => {
     setIsProcessing(true);
     try {
@@ -192,6 +192,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
         setLoadingIndex(null);
         setShowCropper(false);
         setImageSrc(null); // Reset imageSrc after closing the cropper
+        mediaLoadedRef.current = false; // Reset media loaded status
       } else {
         setError("Error cropping image");
       }
@@ -207,6 +208,12 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
     }
   };
 
+  const handleCancelCropper = () => {
+    setShowCropper(false);
+    setImageSrc(null); // Reset imageSrc when canceling
+    mediaLoadedRef.current = false; // Reset media loaded status
+  };
+
   const handleClose = () => {
     setClose(true);
     setTimeout(() => {
@@ -214,22 +221,24 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
     }, [1000]);
   };
 
-  // Handle crop change to allow movement
   const onCropChange = (newCrop) => {
     setCrop(newCrop);
   };
 
-  // Adjust zoom to fit the entire image
   const onMediaLoaded = useCallback((mediaSize) => {
-    setMediaSize(mediaSize);
+    if (!mediaLoadedRef.current) {
+      mediaLoadedRef.current = true;
 
-    // Calculate the zoom to fit the image within the cropper
-    const { width, height } = mediaSize;
-    const cropAreaSize = 300; // The size of the crop area (square)
+      setMediaSize(mediaSize);
 
-    const zoomLevel = Math.min(cropAreaSize / width, cropAreaSize / height);
+      // Calculate the zoom to fit the image within the cropper
+      const { width, height } = mediaSize;
+      const cropAreaSize = 300; // The size of the crop area (square)
 
-    setZoom(zoomLevel);
+      const zoomLevel = Math.min(cropAreaSize / width, cropAreaSize / height);
+
+      setZoom(zoomLevel);
+    }
   }, []);
 
   return (
@@ -439,10 +448,7 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
                 marginTop={20}
               >
                 <Button
-                  onClick={() => {
-                    setShowCropper(false);
-                    setImageSrc(null); // Reset imageSrc when canceling
-                  }}
+                  onClick={handleCancelCropper}
                   style={{
                     display: "flex",
                     justifyContent: "center",
