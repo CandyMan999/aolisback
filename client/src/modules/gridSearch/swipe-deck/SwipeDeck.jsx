@@ -9,6 +9,7 @@ import {
   FONT_SIZES,
   Picture,
   MatchScreen,
+  VideoUploader,
 } from "../../../components";
 import { MdVideoChat } from "react-icons/md";
 import { COLORS } from "../../../constants";
@@ -37,6 +38,7 @@ const SwipeDeck = ({
   const [matchModalVisible, setMatchModalVisible] = useState(false);
   const [matchedUser, setMatchedUser] = useState(null);
   const [justRanOutOfLikes, setJustRanOutOfLikes] = useState(false);
+  const [showVideoUploader, setShowVideoUploader] = useState(false);
   const acceptButtonControls = useAnimation();
   const nextUserButtonControls = useAnimation();
 
@@ -523,6 +525,12 @@ const SwipeDeck = ({
           </Text>
         </Button>
       </Box>
+      {state.showVideo && state.viewMode === "grid" && (
+        <VideoUploader
+          senderID={currentUser._id}
+          receiverID={currentUserOnTop._id}
+        />
+      )}
 
       <MatchScreen
         matchedUser={matchedUser}

@@ -17,7 +17,7 @@ const GridContainer = () => {
   const { state, dispatch } = useContext(Context);
   const { currentUser } = state;
   const [loading, setLoading] = useState(false);
-  const [viewMode, setViewMode] = useState("swipe"); // 'swipe' or 'grid'
+  // const [viewMode, setViewMode] = useState("swipe"); // 'swipe' or 'grid'
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("Browse");
   const [usersWhoLikeMeCount, setUsersWhoLikeMeCount] = useState(0);
@@ -193,16 +193,17 @@ const GridContainer = () => {
         setSkip={setSkip}
         setSearch={setSearch}
         usersWhoLikeMeCount={usersWhoLikeMeCount}
-        setViewMode={setViewMode}
+        dispatch={dispatch}
+        // setViewMode={setViewMode}
       />
 
       {(loading && !users.length) ||
       (loading && skip === 0) ||
-      (!users.length && viewMode === "swipe") ? (
+      (!users.length && state.viewMode === "swipe") ? (
         <Box height="50%">
           <Loading fade size={200} />
         </Box>
-      ) : viewMode === "swipe" ? (
+      ) : state.viewMode === "swipe" ? (
         <SwipeDeck
           users={users}
           currentUser={currentUser}

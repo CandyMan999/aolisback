@@ -18,6 +18,7 @@ const Context = createContext({
   showChatRequest: false,
   userChannel: null,
   videoChatRequest: {},
+  viewMode: "swipe",
   userLocation: {
     _id: null,
     lat: null,

@@ -280,7 +280,7 @@ const getDistanceFromCoords = (lat1, lng1, lat2, lng2) => {
       Math.sin(dLng / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c; // Distance in km
-  return d * 0.621371 * 5280; //returning distance in feet
+  return d * 0.621371 * 5280;
 };
 
 const deg2rad = (deg) => deg * (Math.PI / 180);

@@ -58,7 +58,8 @@ const LikeAndMatchButtons = ({
   setSearch,
   usersWhoLikeMeCount,
   setSkip,
-  setViewMode,
+
+  dispatch,
 }) => {
   const [selectedButton, setSelectedButton] = useState(null);
   const [changeStyle, setChangeStyle] = useState(false);
@@ -83,7 +84,8 @@ const LikeAndMatchButtons = ({
     if (!selectedButton) {
       try {
         setSearch("Browse");
-        setViewMode("swipe");
+        // setViewMode("swipe");
+        dispatch({ type: "CHANGE_VIEW_MODE", payload: "swipe" });
         handleGetAllUsers();
       } catch (err) {
         console.log(
@@ -95,7 +97,8 @@ const LikeAndMatchButtons = ({
     if (selectedButton === "My Likes") {
       try {
         handleGetLikedUsers();
-        setViewMode("grid");
+        // setViewMode("grid");
+        dispatch({ type: "CHANGE_VIEW_MODE", payload: "grid" });
         setSkip(0);
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
@@ -109,7 +112,8 @@ const LikeAndMatchButtons = ({
         //   handleGetUsersWhoLikeMe();
         // }
         setSkip(0);
-        setViewMode("grid");
+        // setViewMode("grid");
+        dispatch({ type: "CHANGE_VIEW_MODE", payload: "grid" });
         handleGetUsersWhoLikeMe(); //delete this after uncommenting code
       } catch (err) {
         console.log("error getting liked users inside button component: ", err);
@@ -117,7 +121,8 @@ const LikeAndMatchButtons = ({
     }
     if (selectedButton === "Matches") {
       try {
-        setViewMode("grid");
+        // setViewMode("grid");
+        dispatch({ type: "CHANGE_VIEW_MODE", payload: "grid" });
         handleGetMatchedUsers();
 
         setSkip(0);

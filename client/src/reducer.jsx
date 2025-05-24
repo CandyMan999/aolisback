@@ -138,6 +138,11 @@ export default function reducer(state, { type, payload }) {
         ...state,
         roomId: payload,
       };
+    case "CHANGE_VIEW_MODE":
+      return {
+        ...state,
+        viewMode: payload,
+      };
     case "SHOW_TERMS":
       return {
         ...state,
