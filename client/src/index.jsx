@@ -36,7 +36,7 @@ import {
 
 export const WS_URL =
   process.env.NODE_ENV === "production"
-    ? `wss://aolisback.herokuapp.com/graphql`
+    ? `wss://gone-chatting-03f3321e7ebb.herokuapp.com"`
     : `ws://localhost:4000/graphql`;
 
 // Inject Vercel Analytics as early as possible
