@@ -48,7 +48,6 @@ const SpeedModal = ({
   const playSound = () => {
     try {
       const audio = new Audio(notification);
-
       audio.play();
     } catch (err) {
       console.log("err plyaing sound:", err);

@@ -457,6 +457,7 @@ const VideoChatScreen = ({
                 );
                 externalApi.addListener("toolbarButtonClicked", (event) => {
                   if (event.key === "settings") {
+                    api.executeCommand("toggleSettings");
                     setShowSendNumberButton(false);
                     setTimeout(() => {
                       setShowSendNumberButton(true);
