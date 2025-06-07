@@ -499,6 +499,12 @@ const SwipeDeck = ({
               name={"search"}
               color={COLORS.pink}
               size={ICON_SIZES.XX_LARGE}
+              style={{
+                lineHeight: "36px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             />
           </Button>
         )}
@@ -520,6 +526,12 @@ const SwipeDeck = ({
             margin={0}
             bold
             fontSize={FONT_SIZES.XX_LARGE}
+            style={{
+              lineHeight: "36px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
             ❤️
           </Text>
