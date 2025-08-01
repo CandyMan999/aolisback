@@ -446,8 +446,6 @@ const SwipeDeck = ({
           justifyContent: "space-around",
           alignItems: "center",
           bottom: -5,
-          willChange: "transform",
-          transformOrigin: "center center",
         }}
       >
         <Button
@@ -459,7 +457,9 @@ const SwipeDeck = ({
           style={{
             borderRadius: "50%",
             boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
-            WebkitBoxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+            WebkitBoxShadow: "2px 2px 4px 2px rgba(0,0,0,0.3)",
+            willChange: "transform",
+            transformOrigin: "center center",
           }}
           onClick={onNextUser}
         >
@@ -493,6 +493,9 @@ const SwipeDeck = ({
             style={{
               borderRadius: "50%",
               boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+              WebkitBoxShadow: "2px 2px 4px 2px rgba(0,0,0,0.3)",
+              willChange: "transform",
+              transformOrigin: "center center",
             }}
             onClick={() =>
               handleLocation(currentUserOnTop._id, currentUserOnTop.location)
@@ -515,6 +518,9 @@ const SwipeDeck = ({
           style={{
             borderRadius: "50%",
             boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+            WebkitBoxShadow: "2px 2px 4px 2px rgba(0,0,0,0.3)",
+            willChange: "transform",
+            transformOrigin: "center center",
           }}
           onClick={onAccept}
         >
