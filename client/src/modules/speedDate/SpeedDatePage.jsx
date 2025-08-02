@@ -133,9 +133,9 @@ export const SpeedDatePage = ({}) => {
 
   const returnUserToQueue = () => {
     try {
-      //   if (outOfTime) {
-      //     return window.ReactNativeWebView.postMessage("BUY_MINUTES");
-      //   }
+      if (outOfTime) {
+        return window.ReactNativeWebView.postMessage("BUY_MINUTES");
+      }
       setUserWantsInQueue(true);
       handleAddUserToQueue();
     } catch (err) {

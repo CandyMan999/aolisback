@@ -16,14 +16,14 @@ const AnimatedCamera = ({ _id }) => {
 
   const handleVideoChatRequest = async () => {
     try {
-      //   if (
-      //     currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
-      //     currentUser.plan.videoMinutesUsed
-      //   ) {
-      //     window.ReactNativeWebView.postMessage("BUY_MINUTES");
+      if (
+        currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
+        currentUser.plan.videoMinutesUsed
+      ) {
+        window.ReactNativeWebView.postMessage("BUY_MINUTES");
 
-      //     return;
-      //   }
+        return;
+      }
 
       track("Video_Call", {
         sender: state.currentUser.username,

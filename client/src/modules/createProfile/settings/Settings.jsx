@@ -56,9 +56,7 @@ const Settings = ({ state, client, dispatch }) => {
 
   const handleGetMoreMinutes = () => {
     try {
-      alert("Everything is unlimited for beta launch, Enjoy!");
-
-      // window.ReactNativeWebView.postMessage("BUY_MINUTES");
+      window.ReactNativeWebView.postMessage("BUY_MINUTES");
     } catch (err) {
       console.log(err);
     }
@@ -66,8 +64,7 @@ const Settings = ({ state, client, dispatch }) => {
 
   const handleGetMoreMessages = () => {
     try {
-      alert("Everything is unlimited for beta launch, Enjoy!");
-      // window.ReactNativeWebView.postMessage("BUY_MESSAGES");
+      window.ReactNativeWebView.postMessage("BUY_MESSAGES");
     } catch (err) {
       console.log(err);
     }
@@ -82,16 +79,14 @@ const Settings = ({ state, client, dispatch }) => {
   };
   const handleChangeToPremium = () => {
     try {
-      alert("Everything is unlimited for beta launch, Enjoy!");
-      // window.ReactNativeWebView.postMessage("GO_PREMIUM");
+      window.ReactNativeWebView.postMessage("GO_PREMIUM");
     } catch (err) {
       console.log(err);
     }
   };
   const handleChangeToUnlimited = () => {
     try {
-      alert("Everything is unlimited for beta launch, Enjoy!");
-      // window.ReactNativeWebView.postMessage("GO_UNLIMITED");
+      window.ReactNativeWebView.postMessage("GO_UNLIMITED");
     } catch (err) {
       console.log(err);
     }

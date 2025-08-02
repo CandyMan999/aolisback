@@ -184,14 +184,14 @@ const MatchScreen = ({
 
   const handleSendVideoMessage = () => {
     try {
-      // if (
-      //   currentUser.plan.messages + currentUser.plan.additionalMessages <=
-      //   currentUser.plan.messagesSent
-      // ) {
-      //   window.ReactNativeWebView.postMessage("BUY_MESSAGES");
+      if (
+        currentUser.plan.messages + currentUser.plan.additionalMessages <=
+        currentUser.plan.messagesSent
+      ) {
+        window.ReactNativeWebView.postMessage("BUY_MESSAGES");
 
-      //   return;
-      // }
+        return;
+      }
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
 
       if (mobile) {
@@ -228,14 +228,14 @@ const MatchScreen = ({
 
   const handleVideoChatRequest = async () => {
     try {
-      // if (
-      //   currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
-      //   currentUser.plan.videoMinutesUsed
-      // ) {
-      //   window.ReactNativeWebView.postMessage("BUY_MINUTES");
+      if (
+        currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
+        currentUser.plan.videoMinutesUsed
+      ) {
+        window.ReactNativeWebView.postMessage("BUY_MINUTES");
 
-      //   return;
-      // }
+        return;
+      }
 
       const variables = {
         senderID: state.currentUser._id,

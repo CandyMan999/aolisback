@@ -197,16 +197,16 @@ const VideoChatScreen = ({
           type: "UPDATE_USER_PLAN",
           payload: callDuration.user.plan,
         });
-        // if (callDuration.outOfTime) {
-        //   if (intervalIdRef.current) {
-        //     clearInterval(intervalIdRef.current);
-        //     intervalIdRef.current = null;
-        //   }
-        //   handleHangup();
-        //   handleRemoveFromQueue();
-        //   setUserWantsInQueue(false);
-        //   window.ReactNativeWebView.postMessage("BUY_MINUTES");
-        // }
+        if (callDuration.outOfTime) {
+          if (intervalIdRef.current) {
+            clearInterval(intervalIdRef.current);
+            intervalIdRef.current = null;
+          }
+          handleHangup();
+          handleRemoveFromQueue();
+          setUserWantsInQueue(false);
+          window.ReactNativeWebView.postMessage("BUY_MINUTES");
+        }
       } catch (err) {
         console.log(err);
       }

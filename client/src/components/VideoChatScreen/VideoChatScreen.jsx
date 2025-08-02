@@ -179,17 +179,17 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           type: "UPDATE_USER_PLAN",
           payload: callDuration.user.plan,
         });
-        // if (
-        //   callDuration.outOfTime &&
-        //   callDuration.user._id === videoChatRequest.sender._id
-        // ) {
-        //   if (intervalIdRef.current) {
-        //     clearInterval(intervalIdRef.current);
-        //     intervalIdRef.current = null;
-        //   }
-        //   handleHangup();
-        //   window.ReactNativeWebView.postMessage("OUT_OF_TIME");
-        // }
+        if (
+          callDuration.outOfTime &&
+          callDuration.user._id === videoChatRequest.sender._id
+        ) {
+          if (intervalIdRef.current) {
+            clearInterval(intervalIdRef.current);
+            intervalIdRef.current = null;
+          }
+          handleHangup();
+          window.ReactNativeWebView.postMessage("OUT_OF_TIME");
+        }
       } catch (err) {
         console.log(err);
       }
