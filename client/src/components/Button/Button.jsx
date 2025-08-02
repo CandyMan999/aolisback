@@ -23,7 +23,7 @@ const StyledButton = styled(motion.button)(
     width,
     size,
     fontSize,
-    // coolStyle,
+    coolStyle,
     padding,
   }) => ({
     border: "none",
@@ -34,9 +34,9 @@ const StyledButton = styled(motion.button)(
     width: width || "86px",
     cursor: disabled ? "not-allowed" : "pointer",
     color: !minimal ? COLORS.white : undefined,
-    // boxShadow: coolStyle
-    //   ? `2px 2px 4px 2px ${COLORS.pink}`
-    //   : `2px 2px 4px 2px ${COLORS.lightGrey}`,
+    boxShadow: coolStyle
+      ? `2px 2px 4px 2px ${COLORS.pink}`
+      : `2px 2px 4px 2px ${COLORS.lightGrey}`,
     transition: "color 0.4s, background-color 0.4s",
 
     backgroundColor: color

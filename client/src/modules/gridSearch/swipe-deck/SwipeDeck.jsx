@@ -455,11 +455,10 @@ const SwipeDeck = ({
           animate={nextUserButtonControls}
           width={"60px"}
           height={"60px"}
+          coolStyle={false}
           color={COLORS.red}
           style={{
             borderRadius: "50%",
-            // boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
-            // WebkitBoxShadow: "2px 2px 4px 2px rgba(0,0,0,0.3)",
           }}
           onClick={onNextUser}
         >
@@ -487,15 +486,12 @@ const SwipeDeck = ({
         </Button>
         {currentUserOnTop?.location.showOnMap && (
           <Button
+            coolStyle={false}
             width={"60px"}
             height={"60px"}
             color={COLORS.white}
             style={{
               borderRadius: "50%",
-              boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
-              WebkitBoxShadow: "2px 2px 4px 2px rgba(0,0,0,0.3)",
-              willChange: "transform",
-              transformOrigin: "center center",
             }}
             onClick={() =>
               handleLocation(currentUserOnTop._id, currentUserOnTop.location)
@@ -515,12 +511,9 @@ const SwipeDeck = ({
           width={"60px"}
           height={"60px"}
           color={COLORS.green}
+          coolStyle={false}
           style={{
             borderRadius: "50%",
-            boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
-            WebkitBoxShadow: "2px 2px 4px 2px rgba(0,0,0,0.3)",
-            willChange: "transform",
-            transformOrigin: "center center",
           }}
           onClick={onAccept}
         >
