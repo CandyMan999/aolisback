@@ -334,8 +334,8 @@ module.exports = gql`
     getExpoToken(token: String!, userId: ID!): User
     deleteAccount: Account
     termsAgreement(accept: Boolean!): User
-    addPhone(_id: ID!, phoneNumber: String!, authCode: Float): User
-    sendTwoFactor(phoneNumber: String!, authCode: Float): resetPassword
+    addPhone(_id: ID!, phoneNumber: String!, authCode: String): User
+    sendTwoFactor(phoneNumber: String!, authCode: String): resetPassword
     sendPhoneNumber(
       expoToken: String!
       username: String!
