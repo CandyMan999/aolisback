@@ -80,10 +80,45 @@ const ProfileCardBack = ({
     setBlocked();
   }, [currentUser.sentVideos]);
 
-  const handleMessage = async () => {
+  // const handleMessage = async () => {
+  //   try {
+  //     console.log("firing!!!");
+  //     // await dispatch({ type: "UPDATE_PROFILE", payload: user });
+  //     // openModal();
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  const handleSendVideoMessage = () => {
     try {
-      await dispatch({ type: "UPDATE_PROFILE", payload: user });
-      openModal();
+      if (
+        currentUser.plan.messages + currentUser.plan.additionalMessages <=
+        currentUser.plan.messagesSent
+      ) {
+        window.ReactNativeWebView.postMessage("BUY_MESSAGES");
+
+        return;
+      }
+
+      if (mobile) {
+        const receiverID = activeID;
+        const senderID = currentUser._id;
+
+        const data = {
+          senderID,
+          receiverID,
+          videoMessage: true,
+        };
+
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(JSON.stringify(data));
+        } else {
+          console.warn("ReactNativeWebView is not available.");
+        }
+      } else {
+        dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -184,7 +219,9 @@ const ProfileCardBack = ({
           justifyContent="center"
           column
         >
-          <SendMessageButton onClick={isBlocked ? undefined : handleMessage} />
+          <SendMessageButton
+            onClick={isBlocked ? undefined : handleSendVideoMessage}
+          />
         </Box>
       )}
 
@@ -227,7 +264,7 @@ const ProfileCardBack = ({
         style={{ display: video ? "none" : undefined }}
         alignItems="center"
         borderRadius="0px 0px 10px 10px"
-        onClick={isBlocked ? undefined : handleMessage}
+        onClick={isBlocked ? undefined : handleSendVideoMessage}
       >
         {isBlocked && (
           <Icon name="block" color={COLORS.red} size={ICON_SIZES.LARGE} />
