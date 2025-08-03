@@ -12,6 +12,8 @@ import {
   VideoUploader,
 } from "../../../components";
 import { MdVideoChat } from "react-icons/md";
+import { IoCloseSharp } from "react-icons/io5";
+import { BiSolidHeart } from "react-icons/bi";
 import { COLORS } from "../../../constants";
 import { motion, useAnimation } from "framer-motion";
 
@@ -39,6 +41,7 @@ const SwipeDeck = ({
   const [matchedUser, setMatchedUser] = useState(null);
   const [justRanOutOfLikes, setJustRanOutOfLikes] = useState(false);
   const [showVideoUploader, setShowVideoUploader] = useState(false);
+
   const acceptButtonControls = useAnimation();
   const nextUserButtonControls = useAnimation();
 
@@ -462,7 +465,8 @@ const SwipeDeck = ({
           }}
           onClick={onNextUser}
         >
-          <Icon name="close" color={COLORS.white} size={ICON_SIZES.X_LARGE} />
+          <IoCloseSharp size={40} color={COLORS.white} />
+          {/* <Icon name="close" color={COLORS.white} size={ICON_SIZES.X_LARGE} /> */}
         </Button>
 
         <Button
@@ -517,14 +521,15 @@ const SwipeDeck = ({
           }}
           onClick={onAccept}
         >
-          <Text
+          {/* <Text
             color={COLORS.black}
             margin={0}
             bold
             fontSize={FONT_SIZES.XX_LARGE}
           >
             ❤️
-          </Text>
+          </Text> */}
+          <BiSolidHeart color={COLORS.red} size={40} />
         </Button>
       </Box>
       {state.showVideo && state.viewMode === "grid" && (
