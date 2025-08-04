@@ -10,6 +10,7 @@ import {
   Icon,
   ICON_SIZES,
 } from "../../../components";
+import VideoModal from "../video-modal/VideoModal";
 import { COLORS } from "../../../constants";
 import { GET_VIDEOS_QUERY } from "../../../graphql/queries";
 import { motion } from "framer-motion";
@@ -79,16 +80,6 @@ const ProfileCardBack = ({
     handleGetVideos();
     setBlocked();
   }, [currentUser.sentVideos]);
-
-  // const handleMessage = async () => {
-  //   try {
-  //     console.log("firing!!!");
-  //     // await dispatch({ type: "UPDATE_PROFILE", payload: user });
-  //     // openModal();
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   const handleSendVideoMessage = () => {
     try {

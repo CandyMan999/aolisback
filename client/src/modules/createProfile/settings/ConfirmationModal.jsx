@@ -64,7 +64,6 @@ const ConfirmationModal = ({ state, client, dispatch, onClose }) => {
         </Box>
         <Box width="100%" justifyContent="space-between">
           <Button
-            coolStyle
             color={COLORS.red}
             style={{
               borderRadius: 12,
@@ -78,7 +77,6 @@ const ConfirmationModal = ({ state, client, dispatch, onClose }) => {
           </Button>
           <Button
             onClick={onClose}
-            coolStyle
             color={COLORS.lightGrey}
             style={{
               borderRadius: 12,

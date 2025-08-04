@@ -461,7 +461,12 @@ const SwipeDeck = ({
           coolStyle={false}
           color={COLORS.red}
           style={{
-            borderRadius: "50%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: `0px 2px 10px ${COLORS.pink}`,
+            borderRadius: "50px",
+            border: `solid 1px ${COLORS.pink}`,
           }}
           onClick={onNextUser}
         >
@@ -491,11 +496,16 @@ const SwipeDeck = ({
         {currentUserOnTop?.location.showOnMap && (
           <Button
             coolStyle={false}
-            width={"60px"}
+            width={"auto"}
             height={"60px"}
             color={COLORS.white}
             style={{
-              borderRadius: "50%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              boxShadow: `0px 2px 10px ${COLORS.pink}`,
+              borderRadius: "50px",
+              border: `solid 1px ${COLORS.pink}`,
             }}
             onClick={() =>
               handleLocation(currentUserOnTop._id, currentUserOnTop.location)
@@ -517,19 +527,24 @@ const SwipeDeck = ({
           color={COLORS.green}
           coolStyle={false}
           style={{
-            borderRadius: "50%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: `0px 2px 10px ${COLORS.pink}`,
+            borderRadius: "50px",
+            border: `solid 1px ${COLORS.pink}`,
           }}
           onClick={onAccept}
         >
-          {/* <Text
+          <Text
             color={COLORS.black}
             margin={0}
             bold
             fontSize={FONT_SIZES.XX_LARGE}
           >
             ❤️
-          </Text> */}
-          <BiSolidHeart color={COLORS.red} size={40} />
+          </Text>
+          {/* <BiSolidHeart color={COLORS.red} size={40} /> */}
         </Button>
       </Box>
       {state.showVideo && state.viewMode === "grid" && (

@@ -624,7 +624,6 @@ const Settings = ({ state, client, dispatch }) => {
         </Box>
 
         <Button
-          coolStyle
           color={COLORS.red}
           style={{
             borderRadius: 12,

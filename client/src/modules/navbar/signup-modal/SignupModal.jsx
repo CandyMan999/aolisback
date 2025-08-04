@@ -151,7 +151,7 @@ const SignupModal = ({ onClose }) => {
                 />
 
                 <Button
-                  coolStyle
+                  coolStyle={false}
                   type="submit"
                   disabled={!props.isValid || !props.dirty}
                   style={{ zIndex: 100 }}

@@ -130,7 +130,7 @@ const RequestModal = ({
               </Text>
               <Loading logo />
               <Button
-                coolStyle
+                coolStyle={false}
                 width={"100%"}
                 color={COLORS.red}
                 onClick={() => handleUpdate("Cancel")}
