@@ -16,7 +16,7 @@ const StyledButton = styled(motion.button)`
   align-items: center;
   justify-content: center;
   background-color: ${(props) =>
-    props.isSelected ? COLORS.black : COLORS.grey};
+    props.isSelected ? COLORS.black : COLORS.white};
   border: ${(props) =>
     props.isSelected ? `1px solid ${COLORS.pink}` : `1px solid ${COLORS.grey}`};
   border-radius: 25px;

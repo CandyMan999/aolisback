@@ -343,8 +343,8 @@ const MatchScreen = ({
             height={"60px"}
             color={handleImBlocked() ? COLORS.lightGrey : COLORS.white}
             style={{
-              borderRadius: "50%",
-              boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
+              borderRadius: "50px",
+              boxShadow: `2px 2px 4px 2px ${COLORS.grey}`,
             }}
             disabled={handleImBlocked()}
             onClick={
