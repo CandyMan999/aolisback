@@ -478,9 +478,12 @@ const SwipeDeck = ({
           height={"60px"}
           color={handleImBlocked() ? COLORS.lightGrey : COLORS.white}
           style={{
-            borderRadius: "50%",
+            borderRadius: "50px",
             boxShadow: `2px 2px 4px 2px ${COLORS.grey})`,
             border: `solid 1px ${COLORS.vividBlue}`,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
           disabled={handleImBlocked()}
           onClick={
