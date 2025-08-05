@@ -13,7 +13,7 @@ import {
 } from "../../../components";
 import { MdVideoChat } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
-import { BiSolidHeart } from "react-icons/bi";
+
 import { COLORS } from "../../../constants";
 import { motion, useAnimation } from "framer-motion";
 
@@ -464,14 +464,13 @@ const SwipeDeck = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            boxShadow: `0px 2px 10px ${COLORS.pink}`,
+            boxShadow: `0px 2px 10px ${COLORS.grey}`,
             borderRadius: "50px",
-            border: `solid 1px ${COLORS.pink}`,
+            border: `solid 1px ${COLORS.white}`,
           }}
           onClick={onNextUser}
         >
           <IoCloseSharp size={40} color={COLORS.white} />
-          {/* <Icon name="close" color={COLORS.white} size={ICON_SIZES.X_LARGE} /> */}
         </Button>
 
         <Button
@@ -480,7 +479,8 @@ const SwipeDeck = ({
           color={handleImBlocked() ? COLORS.lightGrey : COLORS.white}
           style={{
             borderRadius: "50%",
-            boxShadow: `2px 2px 4px 2px rgba(0, 0, 0, 0.3)`,
+            boxShadow: `2px 2px 4px 2px ${COLORS.grey})`,
+            border: `solid 1px ${COLORS.vividBlue}`,
           }}
           disabled={handleImBlocked()}
           onClick={
@@ -496,16 +496,17 @@ const SwipeDeck = ({
         {currentUserOnTop?.location.showOnMap && (
           <Button
             coolStyle={false}
-            width={"auto"}
+            width={"60px"}
             height={"60px"}
             color={COLORS.white}
             style={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              boxShadow: `0px 2px 10px ${COLORS.pink}`,
+              boxShadow: `0px 2px 10px ${COLORS.grey}`,
               borderRadius: "50px",
               border: `solid 1px ${COLORS.pink}`,
+              padding: "5px",
             }}
             onClick={() =>
               handleLocation(currentUserOnTop._id, currentUserOnTop.location)
@@ -530,9 +531,9 @@ const SwipeDeck = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            boxShadow: `0px 2px 10px ${COLORS.pink}`,
+            boxShadow: `0px 2px 10px ${COLORS.grey}`,
             borderRadius: "50px",
-            border: `solid 1px ${COLORS.pink}`,
+            border: `solid 1px ${COLORS.red}`,
           }}
           onClick={onAccept}
         >
