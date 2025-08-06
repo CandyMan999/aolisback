@@ -35,7 +35,7 @@ const Message = () => {
   const [loading, setLoading] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false); // State to control visibility of the scroll button
   const mobile = useMediaQuery("(max-width: 650px)");
-  const senderID = useMemo(
+  const recieverID = useMemo(
     () => new URLSearchParams(location.search).get("sender"),
     [location.search]
   );
@@ -49,10 +49,10 @@ const Message = () => {
   const bottomRef = useRef(null);
 
   useEffect(() => {
-    if (receivedVideos?.length && senderID) {
+    if (receivedVideos?.length && recieverID) {
       groupVideosBySender(receivedVideos, sentVideos);
     }
-  }, [senderID, receivedVideos, sentVideos]);
+  }, [recieverID, receivedVideos, sentVideos]);
 
   useEffect(() => {
     // Function to check scroll position
@@ -77,7 +77,7 @@ const Message = () => {
 
   const setBlocked = async (data) => {
     setIsBlocked(false);
-    const user = data.find((video) => video.sender._id === senderID);
+    const user = data.find((video) => video.sender._id === recieverID);
 
     if (
       user?.sender.blockedUsers.some((user) => user._id === currentUser._id)
@@ -90,8 +90,8 @@ const Message = () => {
     setLoading(true);
     try {
       const array = [
-        ...receivedVids.filter((video) => video.sender._id === senderID),
-        ...sentVids.filter((video) => video.receiver._id === senderID),
+        ...receivedVids.filter((video) => video.sender._id === recieverID),
+        ...sentVids.filter((video) => video.receiver._id === recieverID),
       ];
 
       const data = orderByCreatedAt(array);
@@ -116,7 +116,9 @@ const Message = () => {
   };
 
   const handleProfileClick = async () => {
-    const user = groupedReceived.find((video) => video.sender._id === senderID);
+    const user = groupedReceived.find(
+      (video) => video.sender._id === recieverID
+    );
     if (user) {
       dispatch({ type: "UPDATE_PROFILE", payload: user.sender });
       dispatch({ type: "TOGGLE_PROFILE", payload: !state.isProfile });
@@ -133,7 +135,24 @@ const Message = () => {
 
         return;
       }
-      dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
+      if (mobile) {
+        const senderID = currentUser._id;
+
+        const data = {
+          senderID,
+          receiverID: recieverID, // not fixing this fucking typo in the graphQL call
+          videoMessage: true,
+        };
+
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(JSON.stringify(data));
+        } else {
+          console.warn("ReactNativeWebView is not available.");
+        }
+      } else {
+        dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
+      }
+      // dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
     } catch (err) {
       console.log(err);
     }
@@ -411,7 +430,7 @@ const Message = () => {
             closeModal={() =>
               dispatch({ type: "TOGGLE_VIDEO", payload: false })
             }
-            receiverID={senderID}
+            receiverID={recieverID}
             senderID={currentUser._id}
             state={state}
             mobile={mobile}
@@ -423,10 +442,10 @@ const Message = () => {
             const { createVideo } = subscriptionData.data;
 
             if (
-              (createVideo.sender._id === senderID &&
+              (createVideo.sender._id === recieverID &&
                 createVideo.receiver._id === currentUser._id) ||
               (createVideo.sender._id === currentUser._id &&
-                createVideo.receiver._id === senderID)
+                createVideo.receiver._id === recieverID)
             ) {
               const existingVideo = groupedReceived.find(
                 (video) => video._id === createVideo._id
@@ -466,7 +485,7 @@ const Message = () => {
           dispatch={dispatch}
           video={video}
           currentUser={currentUser}
-          blockID={senderID}
+          blockID={recieverID}
           blockedUsers={currentUser.blockedUsers}
         />
 
