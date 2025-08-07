@@ -40,7 +40,6 @@ const SwipeDeck = ({
   const [matchModalVisible, setMatchModalVisible] = useState(false);
   const [matchedUser, setMatchedUser] = useState(null);
   const [justRanOutOfLikes, setJustRanOutOfLikes] = useState(false);
-  const [showVideoUploader, setShowVideoUploader] = useState(false);
 
   const acceptButtonControls = useAnimation();
   const nextUserButtonControls = useAnimation();
@@ -73,6 +72,18 @@ const SwipeDeck = ({
       alert("To find nearby users please enable your location via settings!");
     }
   }, []);
+
+  useEffect(() => {
+    // If justRanOutOfLikes was true, but the user now has more likes, reset it.
+    if (justRanOutOfLikes && !isOutOfLikes) {
+      setJustRanOutOfLikes(false);
+    }
+    // If the user ran out again, this will be handled by your swipe logic.
+  }, [
+    currentUser.plan.likes,
+    currentUser.plan.additionalLikes,
+    currentUser.plan.likesSent,
+  ]);
 
   const noLocation = (array) => {
     if (
