@@ -188,7 +188,7 @@ const MatchScreen = ({
         currentUser.plan.messages + currentUser.plan.additionalMessages <=
         currentUser.plan.messagesSent
       ) {
-        window.ReactNativeWebView.postMessage("BUY_MESSAGES");
+        window.ReactNativeWebView.postMessage("BUY_MESSAGES"); // or SHOW_REWARDS
 
         return;
       }

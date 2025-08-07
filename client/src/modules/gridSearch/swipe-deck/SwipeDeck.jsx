@@ -99,7 +99,7 @@ const SwipeDeck = ({
           try {
             setJustRanOutOfLikes(true);
 
-            window.ReactNativeWebView.postMessage("BUY_LIKES");
+            window.ReactNativeWebView.postMessage("BUY_LIKES"); // or "SHOW_REWARDS"
           } catch (err) {
             console.log("err: ", err);
           }
@@ -172,7 +172,9 @@ const SwipeDeck = ({
         currentUser.plan.likes + currentUser.plan.additionalLikes <=
         currentUser.plan.likesSent
       ) {
-        window.ReactNativeWebView.postMessage("BUY_LIKES");
+        window.ReactNativeWebView.postMessage(
+          true ? "SHOW_REWARDS" : "BUY_LIKES"
+        );
 
         return;
       }

@@ -191,6 +191,12 @@ module.exports = gql`
     Accept
   }
 
+  enum RewardType {
+    Messages
+    Likes
+    Minutes
+  }
+
   type AuthSignup {
     user: User
     token: String!
@@ -359,6 +365,7 @@ module.exports = gql`
     updateMatchStatus(userId: ID!, status: SpeedDateStatus): StatusMessage
     removeFromQueue(userId: ID!, isLoggedIn: Boolean): StatusMessage
     resetPassword(username: String!, password: String!): Auth
+    earnReward(rewardType: RewardType, userId: ID!): User
   }
 
   type Subscription {

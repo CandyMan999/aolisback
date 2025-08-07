@@ -939,6 +939,26 @@ export const UNLIKE_MUTATION = gql`
   }
 `;
 
+export const EARN_REWARD_MUTATION = gql`
+  mutation earnReward($userId: ID!, $rewardType: RewardType!) {
+    earnReward(userId: $userId, rewardType: $rewardType) {
+      _id
+      username
+      plan {
+        planType
+        messages
+        messagesSent
+        videoMinutes
+        videoMinutesUsed
+        likes
+        likesSent
+        additionalMinutes
+        additionalLikes
+        additionalMessages
+      }
+    }
+  }
+`;
 export const FLAG_PHOTO_MUTATION = gql`
   mutation ($url: String!, $publicId: String!, $flaggedUserID: ID!) {
     flagPhoto(url: $url, publicId: $publicId, flaggedUserID: $flaggedUserID) {
