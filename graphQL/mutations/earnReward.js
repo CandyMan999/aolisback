@@ -15,7 +15,7 @@ module.exports = {
     // Decide which field to increment and which pubsub event to publish
     switch (rewardType) {
       case "Minutes":
-        update = { $inc: { "plan.additionalMinutes": 3 } };
+        update = { $inc: { "plan.additionalMinutes": 180 } };
         publishFn = publishBuyMinutes;
         break;
       case "Messages":
