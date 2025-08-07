@@ -52,6 +52,7 @@ const {
   updateMatchStatusResolver,
   removeFromQueueResolver,
 } = require("./speedDate");
+const { earnRewardResolver } = require("./earnReward");
 
 module.exports = {
   createRoomResolver,
@@ -103,4 +104,5 @@ module.exports = {
   removeFromQueueResolver,
   sendTwoFactorResolver,
   resetPasswordResolver,
+  earnRewardResolver,
 };

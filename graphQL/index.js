@@ -78,6 +78,7 @@ const {
   removeFromQueueResolver,
   sendTwoFactorResolver,
   resetPasswordResolver,
+  earnRewardResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -160,6 +161,7 @@ const resolvers = {
     removeFromQueue: removeFromQueueResolver,
     sendTwoFactor: sendTwoFactorResolver,
     resetPassword: resetPasswordResolver,
+    earnReward: earnRewardResolver,
   },
 };
 

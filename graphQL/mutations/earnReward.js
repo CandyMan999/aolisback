@@ -7,7 +7,7 @@ const {
 } = require("../subscription/subscription");
 
 module.exports = {
-  earnReward: async (root, args, ctx) => {
+  earnRewardResolver: async (root, args, ctx) => {
     const { userId, rewardType } = args;
     let update = {};
     let publishFn = null;
