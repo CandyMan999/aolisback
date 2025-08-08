@@ -65,6 +65,7 @@
     "now-build": "CI='' yarn build",
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
+    "postbuild": "cp public/app-ads.txt build/app-ads.txt",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
