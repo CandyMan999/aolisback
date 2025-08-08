@@ -1,9 +1,18 @@
 {
-    "version": 2,
     "routes": [
-      { "src": "/app-ads.txt", "dest": "/app-ads.txt", "headers": { "Content-Type": "text/plain; charset=utf-8" } },
-      { "src": "/robots.txt", "dest": "/robots.txt" },
+      { "handle": "filesystem" },
+  
+      { "src": "/app-ads.txt", "dest": "/app-ads.txt" },
+  
       { "src": "/(.*)", "dest": "/index.html" }
+    ],
+    "headers": [
+      {
+        "source": "/app-ads.txt",
+        "headers": [
+          { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+        ]
+      }
     ]
   }
   
