@@ -34,21 +34,43 @@ const PhotoUploader = () => {
     }
   };
 
-  const handleImageUpload = async () => {
+  const handleImageUpload = async (image) => {
     try {
-      const data = new FormData();
-      data.append("file", image);
-      data.append("upload_preset", "northShoreExpress");
-      data.append("cloud_name", "aolisback");
+      const form = new FormData();
+      // if `image` is a URI string in RN/web, wrap it properly:
+      const filePart =
+        typeof image === "string"
+          ? { uri: image, name: "upload.jpg", type: "image/jpeg" }
+          : image;
+
+      form.append("file", filePart);
 
       const res = await axios.post(
-        process.env.REACT_APP_CLOUDINARY_IMAGE,
-        data
+        `https://api.cloudflare.com/client/v4/accounts/${process.env.REACT_APP_CF_ACCOUNT_ID}/images/v1`,
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_CF_API_TOKEN}`,
+            ...(form.getHeaders ? form.getHeaders() : {}),
+          },
+          maxContentLength: Infinity,
+          maxBodyLength: Infinity,
+        }
       );
 
-      return { url: res.data.url, publicId: res.data.public_id };
+      const { id, variants } = res.data.result;
+
+      // Cloudflare already gives you ready-to-use URLs in `variants`
+      // Use the first variant or pick the one you want
+      const deliveryUrl = variants[0];
+
+      return { url: deliveryUrl, publicId: id };
     } catch (err) {
-      console.log(err);
+      console.error(
+        "Cloudflare upload failed:",
+        err.response?.data || err.message
+      );
+      return { url: null, publicId: null };
     }
   };
 

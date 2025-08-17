@@ -9,7 +9,8 @@
     "start:client": "cd client && yarn start",
     "dev:server": "NODE_ENV=development nodemon --exec babel-node server.js",
     "dev": "concurrently \"yarn start:client\" \"yarn dev:server\" ",
-    "seed-users": "node ./seeders/seed-users"
+    "seed-users": "node ./seeders/seed-users",
+    "migrate-images": "node ./seeders/migrateImages"
   },
   "dependencies": {
     "@apollo/react-hooks": "^4.0.0",

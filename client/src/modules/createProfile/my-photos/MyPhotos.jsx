@@ -12,6 +12,7 @@ import { useClient } from "../../../client";
 import {
   ADD_PHOTO_MUTATION,
   DELETE_PHOTO_MUTATION,
+  DIRECT_UPLOAD_MUTATION,
 } from "../../../graphql/mutations";
 import { FaTimesCircle } from "react-icons/fa";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -46,25 +47,62 @@ const MyPhotos = ({ currentUser, total, completed, onClose }) => {
   // UseRef to track if media has been loaded
   const mediaLoadedRef = useRef(false);
 
+  // const handleImageUpload = async (fileBlob) => {
+  //   const data = new FormData();
+  //   data.append("file", fileBlob, "croppedImage.jpeg");
+  //   data.append("upload_preset", "northShoreExpress");
+  //   data.append("cloud_name", "aolisback");
+  //   data.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
+  //   data.append("api_secret", process.env.REACT_APP_CLOUDINARY_API_SECRET);
+  //   try {
+  //     const response = await axios.post(
+  //       process.env.REACT_APP_CLOUDINARY_IMAGE,
+  //       data
+  //     );
+  //     let secureUrl = response.data.secure_url;
+  //     if (secureUrl) {
+  //       secureUrl = response.data.url.replace("http://", "https://");
+  //     }
+  //     return { url: secureUrl, publicId: response.data.public_id };
+  //   } catch (err) {
+  //     console.error("Error uploading image:", err);
+  //     return { url: null, publicId: null };
+  //   }
+  // };
+
   const handleImageUpload = async (fileBlob) => {
-    const data = new FormData();
-    data.append("file", fileBlob, "croppedImage.jpeg");
-    data.append("upload_preset", "northShoreExpress");
-    data.append("cloud_name", "aolisback");
-    data.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
-    data.append("api_secret", process.env.REACT_APP_CLOUDINARY_API_SECRET);
     try {
-      const response = await axios.post(
-        process.env.REACT_APP_CLOUDINARY_IMAGE,
-        data
-      );
-      let secureUrl = response.data.secure_url;
-      if (secureUrl) {
-        secureUrl = response.data.url.replace("http://", "https://");
+      // 1) Get one-time direct upload URL + Cloudflare image id
+      const { directUpload } = await client.request(DIRECT_UPLOAD_MUTATION);
+      const { uploadURL, id } = directUpload;
+
+      // 2) Build form data with a proper File
+      const form = new FormData();
+      const file =
+        fileBlob instanceof Blob
+          ? new File([fileBlob], "upload.jpg", {
+              type: fileBlob.type || "image/jpeg",
+            })
+          : fileBlob; // already a File
+      form.append("file", file);
+
+      // 3) POST to the direct upload URL (NO Authorization header, NO manual Content-Type)
+      const res = await fetch(uploadURL, {
+        method: "POST",
+        body: form,
+      });
+      if (!res.ok) {
+        throw new Error(`Direct upload failed: ${res.status}`);
       }
-      return { url: secureUrl, publicId: response.data.public_id };
+
+      // 4) Build delivery URL (or you can read CF's response if you want)
+      const hash = process.env.REACT_APP_CF_ACCOUNT_HASH;
+      const variant = process.env.REACT_APP_CF_VARIANT || "public";
+      const deliveryUrl = `https://imagedelivery.net/${hash}/${id}/${variant}`;
+
+      return { url: deliveryUrl, publicId: id };
     } catch (err) {
-      console.error("Error uploading image:", err);
+      console.error("Cloudflare upload failed:", err?.message || err);
       return { url: null, publicId: null };
     }
   };

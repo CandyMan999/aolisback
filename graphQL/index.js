@@ -79,6 +79,7 @@ const {
   sendTwoFactorResolver,
   resetPasswordResolver,
   earnRewardResolver,
+  directUploadResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -162,6 +163,7 @@ const resolvers = {
     sendTwoFactor: sendTwoFactorResolver,
     resetPassword: resetPasswordResolver,
     earnReward: earnRewardResolver,
+    directUpload: directUploadResolver,
   },
 };
 

@@ -394,6 +394,15 @@ export const SEND_VIDEO_MUTATION = gql`
   }
 `;
 
+export const DIRECT_UPLOAD_MUTATION = gql`
+  mutation {
+    directUpload {
+      uploadURL
+      id
+    }
+  }
+`;
+
 export const DELETE_PHOTO_MUTATION = gql`
   mutation ($userId: ID!, $photoId: ID!) {
     deletePhoto(userId: $userId, photoId: $photoId) {

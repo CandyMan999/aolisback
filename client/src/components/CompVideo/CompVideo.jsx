@@ -138,6 +138,8 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
         receiverID,
       };
 
+      console.log("Variables: ", variables);
+
       const { sendVideo } = await client.request(
         SEND_VIDEO_MUTATION,
         variables

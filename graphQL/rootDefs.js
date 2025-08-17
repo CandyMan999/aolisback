@@ -219,6 +219,22 @@ module.exports = gql`
     isMatch: Boolean!
     matchID: String
   }
+  enum MediaProvider {
+    Cloudinary
+    Cloudflare
+  }
+
+  extend type Picture {
+    provider: MediaProvider
+    oldUrl: String
+    oldPublicId: String
+    migratedFrom: MediaProvider
+    migratedAt: String
+  }
+  type DirectUpload {
+    uploadURL: String!
+    id: String!
+  }
 
   type Query {
     me: User
@@ -366,6 +382,7 @@ module.exports = gql`
     removeFromQueue(userId: ID!, isLoggedIn: Boolean): StatusMessage
     resetPassword(username: String!, password: String!): Auth
     earnReward(rewardType: RewardType, userId: ID!): User
+    directUpload: DirectUpload!
   }
 
   type Subscription {

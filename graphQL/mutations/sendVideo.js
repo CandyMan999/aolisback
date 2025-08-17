@@ -113,55 +113,16 @@ const processQueue = async () => {
   isProcessing = true;
   const { videoId, url } = processingQueue.shift();
 
-  await customNudityAPIBackup(videoId, url);
+  await customNudityAPI(videoId, url);
 
   // Continue processing the next video in the queue
   processQueue();
 };
 
-// Function to detect nudity asynchronously
-// const detectNudityInBackground = async (videoId, url) => {
-//   const options = {
-//     method: "POST",
-//     url: "https://nsfw-video-detector.p.rapidapi.com/nsfw",
-//     headers: {
-//       "x-rapidapi-key": process.env.RAPID_API_KEY,
-//       "x-rapidapi-host": "nsfw-video-detector.p.rapidapi.com",
-//       "Content-Type": "application/json",
-//     },
-//     data: {
-//       url,
-//       seek: 10,
-//     },
-//   };
-
-//   try {
-//     // Send POST request to detect nudity
-//     const response = await axios.request(options);
-//     console.log("response: ", response.data);
-
-//     if (response && response.data.nsfw >= 0.5) {
-//       // If nudity is detected, update the video entry
-//       await Video.findByIdAndUpdate(videoId, { flagged: true });
-
-//       pushNotificationUserFlagged("ExponentPushToken[PtoiwgLjWKaXTzEaTY0jbT]"); //Smokey
-//     }
-//     if (response && response.data.status === "error") {
-//       console.log("running backup");
-//       customNudityAPIBackup(videoId, url);
-//     }
-//   } catch (error) {
-//     console.error(
-//       "Error detecting nudity asynchronously with piece of shit api:",
-//       error
-//     );
-//     console.log("running backup");
-//     customNudityAPIBackup(videoId, url);
-//   }
-// };
-
-const customNudityAPIBackup = async (videoId, url) => {
-  const apiUrl = process.env.NUDE_DETECTOR_URL;
+const customNudityAPI = async (videoId, url) => {
+  const apiUrl = true
+    ? "https://auto-detect-1fcde9e6d000.herokuapp.com/nudity/detect"
+    : process.env.NUDE_DETECTOR_URL;
   const videoData = {
     video_url: url,
   };

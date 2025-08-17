@@ -15,7 +15,11 @@ const { loginResolver, appleLoginResolver } = require("./login");
 const { createCommentResolver } = require("./comment");
 const { createProfileResolver } = require("./createProfile");
 const { updateLocationResolver } = require("./updateLocation");
-const { addPhotoResolver, flagPhotoResolver } = require("./addPhoto");
+const {
+  addPhotoResolver,
+  flagPhotoResolver,
+  directUploadResolver,
+} = require("./addPhoto");
 const { sendVideoResolver } = require("./sendVideo");
 const { createRoomResolver } = require("./createRoom");
 const { deletePhotoResolver } = require("./deletePhoto");
@@ -105,4 +109,5 @@ module.exports = {
   sendTwoFactorResolver,
   resetPasswordResolver,
   earnRewardResolver,
+  directUploadResolver,
 };
