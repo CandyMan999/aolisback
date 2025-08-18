@@ -64,6 +64,7 @@ const CloudflareVideo = ({
     attemptRef.current += 1;
     if (attemptRef.current > MAX_RETRIES) {
       setIsRetrying(false);
+      setIsLoading(false);
       return;
     }
     setIsRetrying(true);
@@ -163,6 +164,7 @@ const CloudflareVideo = ({
 
     setIsLoading(!!uid);
     setIsRetrying(false);
+    setIsLoading(false);
 
     let detachListeners = null;
     if (uid) {
