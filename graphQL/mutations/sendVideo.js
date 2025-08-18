@@ -173,25 +173,89 @@ const processQueue = async () => {
   processQueue();
 };
 
-const customNudityAPI = async (videoId, url) => {
-  const apiUrl = true
-    ? "https://auto-detect-1fcde9e6d000.herokuapp.com/nudity/detect"
-    : process.env.NUDE_DETECTOR_URL;
-  const videoData = {
-    video_url: url,
+// const customNudityAPI = async (videoId, url) => {
+//   const apiUrl = true
+//     ? "https://auto-detect-1fcde9e6d000.herokuapp.com/nudity/detect"
+//     : process.env.NUDE_DETECTOR_URL;
+//   const videoData = {
+//     video_url: url,
+//   };
+
+//   try {
+//     // Send POST request to detect nudity
+//     const response = await axios.post(apiUrl, videoData);
+//     console.log("response: ", response.data);
+
+//     if (response && response.data.nudity_detected) {
+//       // If nudity is detected, update the video entry
+//       await Video.findByIdAndUpdate(videoId, { flagged: true });
+//       pushNotificationUserFlagged("ExponentPushToken[PtoiwgLjWKaXTzEaTY0jbT]");
+//     }
+//   } catch (error) {
+//     console.error("Error detecting nudity asynchronously:", error);
+//   }
+// };
+
+const customNudityAPI = async (videoId, urlOrUid) => {
+  const apiUrl =
+    process.env.NUDE_DETECTOR_URL ||
+    "https://auto-detect-1fcde9e6d000.herokuapp.com/nudity/detect";
+
+  // Use your existing env name exactly as provided
+  const CF_STREAM_TOKEN = process.env.CF_STREAM_TOKEN || "";
+
+  // Minimal helper (inline) to convert CF URLs/UID to MP4 download URL
+  const toCfMp4 = (input) => {
+    try {
+      // If they passed a full URL
+      const u = new URL(input);
+      if (!/videodelivery\.net|cloudflarestream\.com/i.test(u.hostname))
+        return input;
+
+      // UID is first path segment
+      const parts = u.pathname.split("/").filter(Boolean);
+      const uid = parts[0];
+      if (!uid) return input;
+
+      // Rewrite to downloads MP4
+      u.pathname = `/${uid}/downloads/default.mp4`;
+
+      // Add token if you have one and it’s not already present
+      if (CF_STREAM_TOKEN && !u.searchParams.has("token")) {
+        u.searchParams.set("token", CF_STREAM_TOKEN);
+      }
+      return u.toString();
+    } catch (e) {
+      // If they passed just the UID, build a downloads URL
+      if (/^[a-f0-9]{32}$/i.test(input)) {
+        return `https://videodelivery.net/${input}/downloads/default.mp4${
+          CF_STREAM_TOKEN ? `?token=${encodeURIComponent(CF_STREAM_TOKEN)}` : ""
+        }`;
+      }
+      return input; // not CF, leave unchanged
+    }
   };
 
   try {
-    // Send POST request to detect nudity
-    const response = await axios.post(apiUrl, videoData);
+    const src = toCfMp4(urlOrUid); // <-- only change
+    // Optional: log without leaking token
+    // console.log("[nudity] src:", src.replace(/token=[^&]+/, "token=*****"));
+
+    const response = await axios.post(
+      apiUrl,
+      { video_url: src },
+      { timeout: 60000 }
+    );
     console.log("response: ", response.data);
 
     if (response && response.data.nudity_detected) {
-      // If nudity is detected, update the video entry
       await Video.findByIdAndUpdate(videoId, { flagged: true });
       pushNotificationUserFlagged("ExponentPushToken[PtoiwgLjWKaXTzEaTY0jbT]");
     }
   } catch (error) {
-    console.error("Error detecting nudity asynchronously:", error);
+    console.error(
+      "Error detecting nudity asynchronously:",
+      (error && error.response && error.response.data) || error.message
+    );
   }
 };

@@ -182,6 +182,7 @@ const VideoPlayer = ({
               height: height || 250,
               opacity: showOverlay ? 0.5 : 1,
             }}
+            fullScreen={fullScreen}
             className="clickable-video"
             // You can keep fullscreen handler by wrapping in a div or using onClick here:
             onClick={handleFullScreen}
@@ -262,6 +263,7 @@ const VideoPlayer = ({
 
               opacity: showOverlay ? 0.5 : 1,
             }}
+            fullScreen={fullScreen}
             className="clickable-video"
             // You can keep fullscreen handler by wrapping in a div or using onClick here:
             onClick={handleFullScreen}
