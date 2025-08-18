@@ -80,6 +80,7 @@ const {
   resetPasswordResolver,
   earnRewardResolver,
   directUploadResolver,
+  directVideoUploadResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -164,6 +165,7 @@ const resolvers = {
     resetPassword: resetPasswordResolver,
     earnReward: earnRewardResolver,
     directUpload: directUploadResolver,
+    directVideoUpload: directVideoUploadResolver,
   },
 };
 

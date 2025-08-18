@@ -20,7 +20,7 @@ const {
   flagPhotoResolver,
   directUploadResolver,
 } = require("./addPhoto");
-const { sendVideoResolver } = require("./sendVideo");
+const { sendVideoResolver, directVideoUploadResolver } = require("./sendVideo");
 const { createRoomResolver } = require("./createRoom");
 const { deletePhotoResolver } = require("./deletePhoto");
 const { videoChatRequestResolver } = require("./videoChatRequest");
@@ -110,4 +110,5 @@ module.exports = {
   resetPasswordResolver,
   earnRewardResolver,
   directUploadResolver,
+  directVideoUploadResolver,
 };

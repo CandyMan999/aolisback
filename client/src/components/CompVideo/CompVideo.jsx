@@ -10,7 +10,10 @@ import { Loading, Text, Button, Box, Icon, ICON_SIZES } from "..";
 import Context from "../../context";
 import { COLORS } from "../../constants";
 import { useClient } from "../../client";
-import { SEND_VIDEO_MUTATION } from "../../graphql/mutations";
+import {
+  SEND_VIDEO_MUTATION,
+  DIRECT_VIDEO_UPLOAD_MUTATION,
+} from "../../graphql/mutations";
 
 function CompVideoUploader({ senderID, receiverID, handleSending }) {
   const { dispatch } = useContext(Context);
@@ -94,36 +97,48 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
       setSubmitting(true);
       handleSending(true);
 
-      const { width, height } = await getVideoResolution(file);
-
-      const formData = new FormData();
-      formData.append("file", file, "recorded-video.webm");
-      formData.append("upload_preset", "dlxzn2uj");
-      formData.append("resource_type", "video");
-      formData.append("max_duration", 60);
-      formData.append("quality", "auto:best");
-      formData.append("width", width);
-      formData.append("height", height);
-      formData.append("crop", "limit");
-      formData.append("video_codec", "auto");
-
-      const res = await axios.post(
-        `https://api.cloudinary.com/v1_1/localmassagepros/video/upload`,
-        formData
+      // 1) get Cloudflare Stream direct-upload URL + uid
+      const { directVideoUpload } = await client.request(
+        DIRECT_VIDEO_UPLOAD_MUTATION
       );
 
-      let url = res.data.url;
-      let publicId = res.data.public_id;
+      const { uploadURL, uid } = directVideoUpload;
 
-      // Ensure the URL uses HTTPS and has a .mov extension
-      url = url.replace(/^http:\/\//i, "https://").replace(/\.mkv$/i, ".mov");
+      // 2) build FormData and post to the direct upload URL
+      const fd = new FormData();
+
+      // Use a clean MIME (strip codecs= if present)
+      const cleanType =
+        (file && typeof file.type === "string" && file.type.split(";")[0]) ||
+        "video/webm";
+
+      // Ensure a filename
+      const name = cleanType.includes("mp4")
+        ? "recorded-video.mp4"
+        : "recorded-video.webm";
+
+      fd.append(
+        "file",
+        file instanceof Blob
+          ? new File([file], name, { type: cleanType })
+          : file
+      );
+
+      const up = await fetch(uploadURL, { method: "POST", body: fd });
+      if (!up.ok) {
+        throw new Error(`Direct upload failed: ${up.status}`);
+      }
+
+      // 3) Build a playback URL (HLS)
+      const url = `https://videodelivery.net/${uid}/manifest/video.m3u8`;
+      const publicId = uid;
 
       handleSending(false);
       return { url, publicId };
     } catch (err) {
       setSubmitting(false);
       console.log(err);
-      setError(err.message);
+      setError(err.message || "Upload failed");
     }
   };
 
@@ -137,8 +152,6 @@ function CompVideoUploader({ senderID, receiverID, handleSending }) {
         senderID,
         receiverID,
       };
-
-      console.log("Variables: ", variables);
 
       const { sendVideo } = await client.request(
         SEND_VIDEO_MUTATION,

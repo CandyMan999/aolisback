@@ -6,12 +6,66 @@ const {
 } = require("../../utils/middleware");
 const { publishCreateVideo } = require("../subscription/subscription");
 const axios = require("axios");
+
 require("dotenv").config();
 
 let processingQueue = [];
 let isProcessing = false;
 
+const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID; // required
+const CF_API_TOKEN = process.env.CF_STREAM_TOKEN;
+
 module.exports = {
+  directVideoUploadResolver: async (root, args, ctx) => {
+    try {
+      if (!CF_ACCOUNT_ID || !CF_API_TOKEN) {
+        throw new Error(
+          "Missing Cloudflare credentials (CF_ACCOUNT_ID / CF_STREAM_TOKEN or CF_API_TOKEN)"
+        );
+      }
+
+      var body = {
+        maxDurationSeconds: 60,
+        allowedOrigins: ["gonechatting.com", "localhost:3000"],
+        // creator: ctx && ctx.user ? ctx.user._id : null
+      };
+
+      var resp = await axios.post(
+        "https://api.cloudflare.com/client/v4/accounts/" +
+          CF_ACCOUNT_ID +
+          "/stream/direct_upload",
+        body,
+        {
+          headers: {
+            Authorization: "Bearer " + CF_API_TOKEN,
+            "Content-Type": "application/json",
+          },
+          timeout: 30000,
+        }
+      );
+
+      var data = resp && resp.data ? resp.data : null;
+      var ok = data && data.success === true;
+      var result = ok && data.result ? data.result : null;
+      var uploadURL = result && result.uploadURL ? result.uploadURL : null;
+      var uid = result && result.uid ? result.uid : null;
+
+      if (!ok || !uploadURL || !uid) {
+        throw new Error(
+          "Cloudflare Stream direct upload failed: " + JSON.stringify(data)
+        );
+      }
+
+      return { uploadURL: uploadURL, uid: uid, id: uid };
+    } catch (err) {
+      var payload =
+        err.response && err.response.data
+          ? JSON.stringify(err.response.data)
+          : err.message;
+      throw new AuthenticationError(payload);
+    }
+  },
+
   sendVideoResolver: async (root, args, ctx) => {
     const { url, publicId, receiverID, senderID } = args;
 

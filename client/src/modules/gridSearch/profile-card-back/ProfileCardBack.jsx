@@ -232,10 +232,11 @@ const ProfileCardBack = ({
         >
           <VideoPlayer
             videoUrl={video.url}
+            publicId={video.publicId}
             width={150}
             height={280}
             controls={true}
-            fullScreen={false}
+            fullScreen={true}
             borderRadius="8px 8px 8px 8px"
           />
           <Box position="absolute" bottom={2} zIndex={20}>

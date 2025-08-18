@@ -235,6 +235,10 @@ module.exports = gql`
     uploadURL: String!
     id: String!
   }
+  type DirectVideoUpload {
+    uploadURL: String!
+    uid: String!
+  }
 
   type Query {
     me: User
@@ -383,6 +387,7 @@ module.exports = gql`
     resetPassword(username: String!, password: String!): Auth
     earnReward(rewardType: RewardType, userId: ID!): User
     directUpload: DirectUpload!
+    directVideoUpload: DirectVideoUpload!
   }
 
   type Subscription {

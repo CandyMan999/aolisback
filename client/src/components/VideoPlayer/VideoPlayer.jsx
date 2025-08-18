@@ -13,6 +13,7 @@ import { Box, Text, Button } from "../../components";
 import { COLORS } from "../../constants";
 import { thumbnail } from "@cloudinary/url-gen/actions/resize";
 import { quality, format } from "@cloudinary/url-gen/actions/delivery";
+import CloudflareVideo from "./cloudflareVideo";
 
 const VideoPlayer = ({
   videoUrl,
@@ -78,13 +79,20 @@ const VideoPlayer = ({
     };
   }, []);
 
+  // const thumbnailUrl = useMemo(() => {
+  //   return cloudinaryRef.current
+  //     .video(publicId)
+  //     .resize(thumbnail().height(90)) // Adjust to desired width and height
+  //     .delivery(format("jpg"))
+  //     .delivery(quality("auto"))
+  //     .toURL();
+  // }, [publicId]);
+
   const thumbnailUrl = useMemo(() => {
-    return cloudinaryRef.current
-      .video(publicId)
-      .resize(thumbnail().height(90)) // Adjust to desired width and height
-      .delivery(format("jpg"))
-      .delivery(quality("auto"))
-      .toURL();
+    if (!publicId) return undefined;
+    return `https://videodelivery.net/${publicId}/thumbnails/thumbnail.jpg?time=0s`;
+    // Example with sizing:
+    // return `https://videodelivery.net/${publicId}/thumbnails/thumbnail.jpg?time=0s&height=90&fit=cover`;
   }, [publicId]);
 
   return (
@@ -148,7 +156,7 @@ const VideoPlayer = ({
             </Box>
           )}
 
-          <video
+          {/* <video
             ref={videoRef}
             src={videoUrl}
             onPlay={receiverWatching ? handleViewVideo : undefined}
@@ -161,6 +169,22 @@ const VideoPlayer = ({
               width: "100%",
               opacity: showOverlay ? 0.5 : 1, // Dim the video if overlay is shown
             }}
+          /> */}
+          <CloudflareVideo
+            uid={publicId} // assuming videoUrl in DB is the CF UID like "7cc10d33e7ca43139cbcde1818a39aa7"
+            controls={controls}
+            onPlay={receiverWatching ? handleViewVideo : undefined}
+            loop
+            style={{
+              borderRadius: borderRadius || undefined,
+              maxWidth: isFullScreen ? undefined : 300,
+              width: "100%",
+              height: height || 250,
+              opacity: showOverlay ? 0.5 : 1,
+            }}
+            className="clickable-video"
+            // You can keep fullscreen handler by wrapping in a div or using onClick here:
+            onClick={handleFullScreen}
           />
         </Box>
       )}
@@ -210,7 +234,7 @@ const VideoPlayer = ({
             </Box>
           )}
 
-          <video
+          {/* <video
             ref={videoRef}
             src={videoUrl}
             onPlay={receiverWatching ? handleViewVideo : undefined}
@@ -225,6 +249,22 @@ const VideoPlayer = ({
               width: "100%",
               opacity: showOverlay ? 0.5 : 1, // Dim the video if overlay is shown
             }}
+          /> */}
+          <CloudflareVideo
+            uid={publicId} // assuming videoUrl in DB is the CF UID like "7cc10d33e7ca43139cbcde1818a39aa7"
+            controls={controls}
+            onPlay={receiverWatching ? handleViewVideo : undefined}
+            loop
+            style={{
+              borderRadius: borderRadius || undefined,
+              maxWidth: isFullScreen ? undefined : 300,
+              width: "100%",
+
+              opacity: showOverlay ? 0.5 : 1,
+            }}
+            className="clickable-video"
+            // You can keep fullscreen handler by wrapping in a div or using onClick here:
+            onClick={handleFullScreen}
           />
         </Box>
       )}

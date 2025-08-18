@@ -403,6 +403,15 @@ export const DIRECT_UPLOAD_MUTATION = gql`
   }
 `;
 
+export const DIRECT_VIDEO_UPLOAD_MUTATION = gql`
+  mutation {
+    directVideoUpload {
+      uploadURL
+      uid
+    }
+  }
+`;
+
 export const DELETE_PHOTO_MUTATION = gql`
   mutation ($userId: ID!, $photoId: ID!) {
     deletePhoto(userId: $userId, photoId: $photoId) {
