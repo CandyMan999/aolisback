@@ -90,7 +90,7 @@ const VideoPlayer = ({
 
   const thumbnailUrl = useMemo(() => {
     if (!publicId) return undefined;
-    return `https://videodelivery.net/${publicId}/thumbnails/thumbnail.jpg?time=0s`;
+    return `https://videodelivery.net/${publicId}/thumbnails/thumbnail.jpg?time=0s&height=90`;
     // Example with sizing:
     // return `https://videodelivery.net/${publicId}/thumbnails/thumbnail.jpg?time=0s&height=90&fit=cover`;
   }, [publicId]);
@@ -103,7 +103,7 @@ const VideoPlayer = ({
             // display: "block",
             backgroundColor: COLORS.black,
             borderRadius: borderRadius,
-            width: "100%",
+            // width: "100%",
             height: "fit-content",
             boxShadow: `2px 2px 4px 2px ${COLORS.pink}`,
             position: "relative", // To position overlay on top
