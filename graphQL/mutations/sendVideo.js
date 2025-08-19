@@ -24,12 +24,16 @@ module.exports = {
         );
       }
 
+      // Set any constraints or metadata you like:
       var body = {
         maxDurationSeconds: 60,
+        // IMPORTANT: no protocol in allowedOrigins
         allowedOrigins: ["gonechatting.com", "localhost:3000"],
-        // creator: ctx && ctx.user ? ctx.user._id : null
+        // requireSignedURLs: false, // optional, if you don't use signed playback
+        // creator: ctx && ctx.user ? String(ctx.user._id) : undefined
       };
 
+      // 1) Create a direct upload URL
       var resp = await axios.post(
         "https://api.cloudflare.com/client/v4/accounts/" +
           CF_ACCOUNT_ID +
@@ -56,95 +60,49 @@ module.exports = {
         );
       }
 
+      // 2) Fire-and-forget: ask Cloudflare to prepare MP4 downloads for this asset.
+      //    This can be called immediately; Cloudflare will progress it as the video processes.
+      (async function kickoffMp4() {
+        try {
+          await axios.post(
+            "https://api.cloudflare.com/client/v4/accounts/" +
+              CF_ACCOUNT_ID +
+              "/stream/" +
+              uid +
+              "/downloads",
+            {},
+            {
+              headers: {
+                Authorization: "Bearer " + CF_API_TOKEN,
+                "Content-Type": "application/json",
+              },
+              timeout: 15000,
+            }
+          );
+        } catch (e) {
+          // Do not fail the resolver if this background step errors.
+          // You can log it for observability.
+          console.warn(
+            "[stream] downloads kickoff failed for uid " + uid + ":",
+            e && e.response && e.response.data
+              ? e.response.data
+              : e && e.message
+              ? e.message
+              : e
+          );
+        }
+      })();
+
+      // Return the URL the client should POST the file to + the uid you’ll store
       return { uploadURL: uploadURL, uid: uid, id: uid };
     } catch (err) {
       var payload =
-        err.response && err.response.data
+        err && err.response && err.response.data
           ? JSON.stringify(err.response.data)
-          : err.message;
+          : err && err.message
+          ? err.message
+          : String(err);
       throw new AuthenticationError(payload);
-    }
-  },
-
-  sendVideoResolver: async (root, args, ctx) => {
-    const { url, publicId, receiverID, senderID } = args;
-
-    try {
-      // Create the video entry first
-      const video = await Video.create({
-        url,
-        publicId,
-        sender: senderID,
-        receiver: receiverID,
-        flagged: false, // Default to false, update later if nudity is detected
-      });
-
-      // Add the video to the processing queue
-      addToQueue(video._id, url);
-
-      // Update the sender and receiver with the new video
-      const sender = await User.findByIdAndUpdate(
-        { _id: senderID },
-        { $push: { sentVideos: video } },
-        { new: true }
-      ).populate("sentVideos");
-
-      const receiver = await User.findByIdAndUpdate(
-        { _id: receiverID },
-        { $push: { receivedVideos: video } },
-        { new: true }
-      ).populate("receivedVideos");
-
-      // Handle message allowance
-      const user = await User.findById(senderID);
-      if (user.plan.messagesSent < user.plan.messages) {
-        await User.findByIdAndUpdate(
-          { _id: senderID },
-          { $inc: { "plan.messagesSent": 1 } },
-          { new: true }
-        );
-      } else if (
-        user.plan.messagesSent >= user.plan.messages &&
-        user.plan.additionalMessages > 0
-      ) {
-        await User.findByIdAndUpdate(
-          { _id: senderID },
-          { $inc: { "plan.additionalMessages": -1 } },
-          { new: true }
-        );
-      }
-
-      // Populate the new video with sender and receiver details
-      const newVideo = await Video.findOne({ _id: video._id }).populate([
-        {
-          path: "sender",
-          model: "User",
-          populate: {
-            path: "pictures",
-            model: "Picture",
-          },
-        },
-        {
-          path: "receiver",
-          model: "User",
-          populate: {
-            path: "pictures",
-            model: "Picture",
-          },
-        },
-      ]);
-
-      // Send a push notification to the receiver
-      if (receiver && receiver.expoToken) {
-        sendPushNotification(receiver.expoToken, sender.username);
-      }
-
-      // Publish the new video for subscriptions
-      publishCreateVideo(newVideo);
-
-      return newVideo;
-    } catch (err) {
-      throw new AuthenticationError(err.message);
     }
   },
 };
