@@ -2,15 +2,16 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Hls from "hls.js";
 import { Box, Loading } from "../../components";
-
 import { COLORS } from "../../constants";
 
+// Build Cloudflare Stream URLs
 export const cfUrls = (uid, bust) => {
   const q = bust ? `?cb=${bust}` : "";
   return {
     hls: `https://videodelivery.net/${uid}/manifest/video.m3u8${q}`,
     poster: `https://videodelivery.net/${uid}/thumbnails/thumbnail.jpg?time=0s`,
-    mp4: `https://videodelivery.net/${uid}/downloads/default.mp4${q}`, // only if downloads enabled
+    // NOTE: MP4 works only if downloads are enabled on the asset/account.
+    mp4: `https://videodelivery.net/${uid}/downloads/default.mp4${q}`,
   };
 };
 
@@ -33,10 +34,10 @@ const CloudflareVideo = ({
 
   const [isLoading, setIsLoading] = useState(!!uid);
   const [isRetrying, setIsRetrying] = useState(false);
-  const [failed, setFailed] = useState(false);
 
-  const MAX_RETRIES = 2;
-  const INITIAL_DELAY_MS = 600;
+  // HLS retry backoff
+  const BASE_DELAY_MS = 800;
+  const MAX_DELAY_MS = 8000;
 
   const clearRetryTimer = () => {
     if (retryTimerRef.current) {
@@ -57,41 +58,41 @@ const CloudflareVideo = ({
   const markLoaded = useCallback(() => {
     setIsLoading(false);
     setIsRetrying(false);
-    setFailed(false);
   }, []);
 
-  const scheduleRetry = useCallback(() => {
+  const scheduleHlsRetry = useCallback(() => {
+    // Only HLS retries (MP4 is a single try)
     destroyHls();
     clearRetryTimer();
+
     attemptRef.current += 1;
-    if (attemptRef.current > MAX_RETRIES) {
-      setIsRetrying(false);
-      setIsLoading(false);
-      setFailed(true); // <-- mark as failed so tap-to-retry can kick in
-      return;
-    }
     setIsRetrying(true);
-    const delay = INITIAL_DELAY_MS * Math.pow(2, attemptRef.current - 1);
+
+    const delay = Math.min(
+      BASE_DELAY_MS * Math.pow(2, attemptRef.current - 1),
+      MAX_DELAY_MS
+    );
+
     retryTimerRef.current = setTimeout(() => {
-      cacheBustRef.current = Date.now();
-      startLoad();
+      cacheBustRef.current = Date.now(); // refresh manifest
+      startHls(); // keep falling back to HLS until it's ready
     }, delay);
   }, []);
 
-  const attachMediaEventListeners = useCallback(
+  const attachReadyListeners = useCallback(
     (video) => {
       if (!video) return () => {};
       const onLoadedData = () => markLoaded();
       const onCanPlay = () => markLoaded();
+      const onCanPlayThrough = () => markLoaded();
       const onPlaying = () => markLoaded();
-      const onError = () => scheduleRetry();
 
       video.addEventListener("loadeddata", onLoadedData);
       video.addEventListener("canplay", onCanPlay);
+      video.addEventListener("canplaythrough", onCanPlayThrough);
       video.addEventListener("playing", onPlaying);
-      video.addEventListener("error", onError);
 
-      // Already ready?
+      // If already playable (warm cache), don’t show loader
       if (video.readyState >= 3 /* HAVE_FUTURE_DATA */) {
         markLoaded();
       }
@@ -99,86 +100,96 @@ const CloudflareVideo = ({
       return () => {
         video.removeEventListener("loadeddata", onLoadedData);
         video.removeEventListener("canplay", onCanPlay);
+        video.removeEventListener("canplaythrough", onCanPlayThrough);
         video.removeEventListener("playing", onPlaying);
-        video.removeEventListener("error", onError);
       };
     },
-    [markLoaded, scheduleRetry]
+    [markLoaded]
   );
 
-  const loadNative = useCallback(
-    (url) => {
-      const v = videoRef.current;
-      if (!v) return () => {};
-      const detach = attachMediaEventListeners(v);
-      v.src = url;
+  // 1) Try MP4 first (fastest if enabled). On error, fall back to HLS.
+  const tryMp4First = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return () => {};
+
+    setIsLoading(true);
+    setIsRetrying(false);
+
+    const urls = cfUrls(uid); // mp4 doesn't need cache-busting
+    const detach = attachReadyListeners(v);
+
+    // If MP4 fails (e.g., downloads not enabled), go HLS
+    const onError = () => {
+      v.removeEventListener("error", onError);
+      detach();
+      startHls();
+    };
+
+    v.addEventListener("error", onError);
+    v.src = urls.mp4;
+    v.load?.();
+    if (autoPlay) v.play?.().catch(() => {});
+
+    return () => {
+      v.removeEventListener("error", onError);
+      detach();
+    };
+  }, [uid, attachReadyListeners, autoPlay]);
+
+  // 2) HLS fallback (native on Safari/iOS or hls.js elsewhere) with retries
+  const startHls = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return () => {};
+
+    setIsLoading(true);
+    const hlsUrl = cfUrls(uid, cacheBustRef.current).hls;
+
+    // Native HLS (Safari/iOS)
+    if (v.canPlayType && v.canPlayType("application/vnd.apple.mpegurl")) {
+      const detach = attachReadyListeners(v);
+
+      const onError = () => scheduleHlsRetry();
+      v.addEventListener("error", onError);
+
+      v.src = hlsUrl;
       v.load?.();
       if (autoPlay) v.play?.().catch(() => {});
-      return detach;
-    },
-    [attachMediaEventListeners, autoPlay]
-  );
+      return () => {
+        v.removeEventListener("error", onError);
+        detach();
+      };
+    }
 
-  const loadHlsJs = useCallback(
-    (url) => {
-      const v = videoRef.current;
-      if (!v) return () => {};
+    // hls.js for other modern browsers
+    if (Hls.isSupported()) {
       destroyHls();
       const hls = new Hls({ autoStartLoad: true });
       hlsRef.current = hls;
 
+      // fatal errors → retry later (processing may still be underway)
       hls.on(Hls.Events.ERROR, (_evt, data) => {
-        if (data && data.fatal) scheduleRetry();
+        if (data && data.fatal) scheduleHlsRetry();
       });
 
-      hls.loadSource(url);
+      hls.loadSource(hlsUrl);
       hls.attachMedia(v);
 
-      const detach = attachMediaEventListeners(v);
+      const detach = attachReadyListeners(v);
       return () => {
         detach();
         destroyHls();
       };
-    },
-    [attachMediaEventListeners, scheduleRetry]
-  );
-
-  const startLoad = useCallback(() => {
-    const v = videoRef.current;
-    if (!uid || !v) return;
-
-    setFailed(false);
-    setIsLoading(true);
-
-    const urls = cfUrls(uid, cacheBustRef.current);
-    const hlsUrl = urls.hls;
-
-    if (v.canPlayType && v.canPlayType("application/vnd.apple.mpegurl")) {
-      return loadNative(hlsUrl);
-    }
-    if (Hls.isSupported()) {
-      return loadHlsJs(hlsUrl);
     }
 
-    const detach = attachMediaEventListeners(v);
-    v.src = urls.mp4;
+    // (Very old browsers) last resort: MP4 again (will likely fail the same way)
+    const detach = attachReadyListeners(v);
+    v.src = cfUrls(uid).mp4;
+    v.load?.();
+    if (autoPlay) v.play?.().catch(() => {});
     return detach;
-  }, [uid, loadNative, loadHlsJs, attachMediaEventListeners]);
+  }, [uid, attachReadyListeners, scheduleHlsRetry, autoPlay]);
 
-  // Tap/click to retry if failed or not playable yet
-  const handleTap = useCallback(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    const notPlayableYet = v.readyState < 3; // < HAVE_FUTURE_DATA
-    if (failed || (!isLoading && notPlayableYet)) {
-      attemptRef.current = 0;
-      cacheBustRef.current = Date.now();
-      const detach = startLoad();
-      // If previous listeners exist they’ll be cleaned by effect/loader cleaners.
-      return detach;
-    }
-  }, [failed, isLoading, startLoad]);
-
+  // Lifecycle
   useEffect(() => {
     attemptRef.current = 0;
     cacheBustRef.current = Date.now();
@@ -187,28 +198,24 @@ const CloudflareVideo = ({
 
     setIsLoading(!!uid);
     setIsRetrying(false);
-    setFailed(false);
-    setIsLoading(false);
 
-    let detachListeners = null;
+    let cleanup = null;
     if (uid) {
-      detachListeners = startLoad();
+      // MP4 first; if it errors, code falls back to HLS automatically.
+      cleanup = tryMp4First();
     }
 
     return () => {
-      if (typeof detachListeners === "function") detachListeners();
+      if (typeof cleanup === "function") cleanup();
       clearRetryTimer();
       destroyHls();
     };
-  }, [uid, startLoad]);
+  }, [uid, tryMp4First]);
 
   const posterUrl = poster || (uid ? cfUrls(uid).poster : undefined);
 
   return (
-    <div
-      style={{ position: "relative", width: "100%" }}
-      onClick={handleTap} // <-- tap anywhere on the video area to retry
-    >
+    <div style={{ position: "relative", width: "100%" }}>
       <video
         ref={videoRef}
         controls={controls}
