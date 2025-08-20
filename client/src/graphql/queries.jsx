@@ -571,6 +571,10 @@ export const GET_REAL_USERS = gql`
       }
       pictures {
         url
+        _id
+        publicId
+        provider
+        flagged
       }
     }
   }

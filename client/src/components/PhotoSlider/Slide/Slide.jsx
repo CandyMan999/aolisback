@@ -44,6 +44,7 @@ const Slide = ({
 
   const handleDeletePhoto = async (id) => {
     const variables = { photoId: id, userId: currentUser._id };
+
     setLoading(true);
     try {
       const { deletePhoto } = await client.request(

@@ -16,13 +16,32 @@ module.exports = {
     try {
       const deleteAllPhotos = async () => {
         try {
+          const axios = require("axios");
+          const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID;
+          const CF_API_TOKEN = process.env.CF_API_TOKEN;
+
           const deletePhotoPromises = currentUser.pictures.map(async (pic) => {
-            const { publicId } = await Picture.findById(pic._id);
+            const { publicId, provider } = await Picture.findById(pic._id);
             if (publicId) {
-              await cloudinary.uploader.destroy(publicId);
+              try {
+                if (provider === "Cloudflare") {
+                  await axios.delete(
+                    `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/images/v1/${publicId}`,
+                    { headers: { Authorization: `Bearer ${CF_API_TOKEN}` } }
+                  );
+                } else {
+                  await cloudinary.uploader.destroy(publicId);
+                }
+              } catch (extErr) {
+                console.warn(
+                  "Remote photo delete failed:",
+                  extErr.response || extErr.message
+                );
+              }
             }
             await Picture.deleteOne({ _id: pic._id });
           });
+
           await Promise.all(deletePhotoPromises);
         } catch (err) {
           throw new AuthenticationError(err.message);
@@ -85,9 +104,28 @@ module.exports = {
           ]);
 
           if (publicIDs.length) {
-            await cloudinary.api.delete_resources(publicIDs, {
-              resource_type: "video",
-            });
+            const axios = require("axios");
+            const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID;
+            const CF_STREAM_TOKEN = process.env.CF_STREAM_TOKEN;
+
+            const results = await Promise.allSettled(
+              publicIDs.filter(Boolean).map((uid) =>
+                axios.delete(
+                  `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/stream/${uid}`,
+                  {
+                    headers: { Authorization: `Bearer ${CF_STREAM_TOKEN}` },
+                    timeout: 20000,
+                  }
+                )
+              )
+            );
+
+            const failed = results.filter((r) => r.status === "rejected");
+            if (failed.length)
+              console.warn(
+                "Some Cloudflare Stream deletions failed:",
+                failed.length
+              );
           }
         } catch (err) {
           throw new AuthenticationError(err.message);

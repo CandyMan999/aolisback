@@ -32,10 +32,32 @@ module.exports = {
             return;
           }
 
+          // local require to avoid changing imports at top
+          const axios = require("axios");
+          const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID;
+          const CF_API_TOKEN = process.env.CF_API_TOKEN;
+
           const deletePhotoPromises = currentUser.pictures.map(async (pic) => {
             const picture = await Picture.findById(pic._id);
             if (picture && picture.publicId) {
-              await cloudinary.uploader.destroy(picture.publicId);
+              try {
+                if (picture.provider === "Cloudflare") {
+                  // Cloudflare Images delete
+                  await axios.delete(
+                    `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/images/v1/${picture.publicId}`,
+                    { headers: { Authorization: `Bearer ${CF_API_TOKEN}` } }
+                  );
+                } else {
+                  // Default: Cloudinary (preserves existing behavior for older pics)
+                  await cloudinary.uploader.destroy(picture.publicId);
+                }
+              } catch (extErr) {
+                console.warn(
+                  "Remote photo delete failed:",
+                  extErr.response || extErr.message
+                );
+              }
+
               await Picture.deleteOne({ _id: picture._id });
             }
           });
@@ -111,9 +133,29 @@ module.exports = {
           }
 
           if (publicIDs.length > 0) {
-            await cloudinary.api.delete_resources(publicIDs, {
-              resource_type: "video",
-            });
+            const axios = require("axios");
+            const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID;
+            const CF_STREAM_TOKEN = process.env.CF_STREAM_TOKEN;
+
+            const results = await Promise.allSettled(
+              publicIDs.filter(Boolean).map((uid) =>
+                axios.delete(
+                  `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/stream/${uid}`,
+                  {
+                    headers: { Authorization: `Bearer ${CF_STREAM_TOKEN}` },
+                    timeout: 20000,
+                  }
+                )
+              )
+            );
+
+            const failed = results.filter((r) => r.status === "rejected");
+            if (failed.length) {
+              console.warn(
+                "Some Cloudflare Stream deletions failed:",
+                failed.length
+              );
+            }
           }
         } catch (err) {
           console.error("Error deleting videos:", err.message);

@@ -15,7 +15,7 @@ const CF_API_TOKEN = process.env.CF_API_TOKEN;
 
 module.exports = {
   deletePhotoResolver: async (root, args, ctx) => {
-    const { photoId, userId } = args;
+    const { photoId } = args;
 
     try {
       // Get full picture doc to check provider + publicId
@@ -24,6 +24,7 @@ module.exports = {
 
       const provider = pic.provider; // "Cloudflare" | "Cloudinary" | undefined
       const publicId = pic.publicId;
+      const userId = pic.user._id;
 
       // Best-effort remote delete (don't block DB cleanup if this fails)
       if (publicId) {

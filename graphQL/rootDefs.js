@@ -327,7 +327,7 @@ module.exports = gql`
       receiverID: ID!
       senderID: ID!
     ): Video
-    deletePhoto(photoId: ID!, userId: ID!): User
+    deletePhoto(photoId: ID!): User
     videoChatRequest(
       senderID: ID!
       receiverID: ID!

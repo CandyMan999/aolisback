@@ -74,7 +74,7 @@ const resetMessagesSent = async () => {
 const deleteOldVideos = async () => {
   try {
     // Do the age filtering in Mongo, not in JS
-    const twoDaysAgo = moment().subtract(1, "days").toDate();
+    const twoDaysAgo = moment().subtract(3, "days").toDate();
     const sevenDaysAgo = moment().subtract(7, "days").toDate();
 
     const videos = await Video.find({

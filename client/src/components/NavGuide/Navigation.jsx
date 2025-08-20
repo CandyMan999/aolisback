@@ -36,7 +36,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
       (currentUser.username === "CandyMan🍭" ||
         currentUser.username === "AsianAngel" ||
         currentUser.username === "Smokey💨" ||
-        currentUser.username === "Kev Hick")
+        currentUser.username === "Brandy")
     ) {
       setItems([
         { name: "Speed Date", icon: "speed", route: "/speed-date" },
@@ -60,7 +60,7 @@ const Navigation = ({ dispatch, props, state, toggle }) => {
       currentUser.username !== "CandyMan🍭" &&
       currentUser.username !== "AsianAngel" &&
       currentUser.username !== "Smokey💨" &&
-      currentUser.username !== "Kev Hick"
+      currentUser.username !== "Brandy"
     ) {
       setItems([
         { name: "Speed Date", icon: "speed", route: "/speed-date" },

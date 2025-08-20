@@ -67,7 +67,6 @@ const waitUntilReadyToStream = async (uid) => {
   for (let i = 0; i < MAX_ATTEMPTS; i++) {
     const data = await cfGetAsset(uid);
     if (data && data.success && data.result && data.result.readyToStream) {
-      console.log("[cf] readyToStream:", data.result);
       return data.result;
     }
     const delayMs = 1000 * Math.pow(2, i);
@@ -77,7 +76,6 @@ const waitUntilReadyToStream = async (uid) => {
 };
 
 const headOk = async (url) => {
-  console.log("[http] HEAD", url);
   try {
     const resp = await axios.head(url, { timeout: 15000 });
     console.log("[http] HEAD status:", resp.status);
