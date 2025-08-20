@@ -132,6 +132,20 @@ export const VIDEO_CHAT_REQUEST = gql`
         username
         phoneNumber
         expoToken
+        intro
+        sex
+        age
+        occupation
+        singleTime
+        drink
+        smoke
+        marijuana
+        drugs
+        kids
+        location {
+          coordinates
+          showOnMap
+        }
         pictures {
           _id
           url

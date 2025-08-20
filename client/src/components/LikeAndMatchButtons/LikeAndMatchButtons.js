@@ -38,14 +38,30 @@ const StyledButton = styled(motion.button)`
 
 const CountBox = styled.div`
   position: absolute;
-  top: -10px;
-  left: -5px;
+  top: -8px;
+  left: -8px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   background-color: ${COLORS.pink};
-  border-radius: 50%;
-  padding: 5px 10px;
   color: ${COLORS.white};
-  font-weight: bold;
-  border: solid 1px ${COLORS.lighterGrey};
+  border: 1px solid ${COLORS.lighterGrey};
+  border-radius: 9999px; /* always a circle */
+  box-sizing: border-box;
+  line-height: 1;
+  font-weight: 700;
+
+  /* keep width === height; grow for more digits */
+  width: ${({ $digits }) =>
+    $digits >= 4 ? 36 : $digits === 3 ? 32 : $digits === 2 ? 26 : 26}px;
+  height: ${({ $digits }) =>
+    $digits >= 4 ? 36 : $digits === 3 ? 32 : $digits === 2 ? 26 : 26}px;
+
+  /* nudge font size for crowded cases */
+  font-size: ${({ $digits }) =>
+    $digits >= 4 ? 11 : $digits === 3 ? 12 : 14}px;
 `;
 
 const LikeAndMatchButtons = ({
@@ -184,7 +200,14 @@ const LikeAndMatchButtons = ({
             </Text>
           )}
           {button === "Likes Me" && usersWhoLikeMeCount > 0 && (
-            <CountBox>{usersWhoLikeMeCount}</CountBox>
+            <CountBox
+              $digits={
+                `${usersWhoLikeMeCount > 999 ? "999+" : usersWhoLikeMeCount}`
+                  .length
+              }
+            >
+              {usersWhoLikeMeCount > 999 ? "999+" : usersWhoLikeMeCount}
+            </CountBox>
           )}
         </StyledButton>
       ))}
