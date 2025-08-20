@@ -11,6 +11,7 @@ import {
   SEND_PHONE_NUMBER,
   CALL_DURATION_MUTATION,
   FLAG_PHOTO_MUTATION,
+  DIRECT_UPLOAD_MUTATION,
 } from "../../graphql/mutations";
 import { Loading, Button, Text, FONT_SIZES, Box } from "../../components";
 import { JitsiMeeting } from "@jitsi/react-sdk";
@@ -202,19 +203,33 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
   const handleImageUpload = async (image) => {
     try {
-      const data = new FormData();
-      data.append("file", image);
-      data.append("upload_preset", "northShoreExpress");
-      data.append("cloud_name", "aolisback");
+      // 1) Get one-time direct upload URL + Cloudflare image id
+      const { directUpload } = await client.request(DIRECT_UPLOAD_MUTATION);
+      const { uploadURL, id } = directUpload;
 
-      const res = await axios.post(
-        process.env.REACT_APP_CLOUDINARY_IMAGE,
-        data
-      );
+      // 2) Build form data (must be a File for CF direct upload)
+      const form = new FormData();
+      const file =
+        image instanceof Blob
+          ? new File([image], "screencap.jpg", {
+              type: image.type || "image/jpeg",
+            })
+          : image; // already a File
+      form.append("file", file);
 
-      return { url: res.data.url, publicId: res.data.public_id };
+      // 3) POST to the direct upload URL (no auth header, no manual content-type)
+      const res = await fetch(uploadURL, { method: "POST", body: form });
+      if (!res.ok) throw new Error(`Direct upload failed: ${res.status}`);
+
+      // 4) Build delivery URL
+      const hash = process.env.REACT_APP_CF_ACCOUNT_HASH;
+      const variant = process.env.REACT_APP_CF_VARIANT || "public";
+      const deliveryUrl = `https://imagedelivery.net/${hash}/${id}/${variant}`;
+
+      return { url: deliveryUrl, publicId: id };
     } catch (err) {
-      console.log(err);
+      console.log("Cloudflare upload failed:", err?.message || err);
+      return { url: null, publicId: null };
     }
   };
 
