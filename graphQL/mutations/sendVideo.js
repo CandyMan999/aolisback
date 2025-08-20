@@ -131,7 +131,7 @@ const waitUntilMp4Ready = async (uid) => {
 
   // 3) Poll downloads endpoint + HEAD the MP4 until usable
   const mp4Url = toCfMp4(uid);
-  const MAX_POLLS = 12; // up to ~60s (5s * 12)
+  const MAX_POLLS = 24; // up to ~120s (5s * 12)
   for (let i = 0; i < MAX_POLLS; i++) {
     try {
       const stat = await cfGetDownloadsStatus(uid);

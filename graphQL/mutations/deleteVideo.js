@@ -50,7 +50,7 @@ module.exports = {
         }
 
         // Remove the Video doc and pull references from both users
-        const receiverId = video.reciever._id;
+        const receiverId = video.receiver._id;
 
         const senderId = video.sender._id;
 

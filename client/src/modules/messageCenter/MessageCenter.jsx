@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { FETCH_ME } from "../../graphql/queries";
-import { DELETE_VIDEO_MUTATION } from "../../graphql/mutations";
+
 import { Box, Loading } from "../../components";
 import { useHistory } from "react-router-dom";
 import MessageContainer from "./MessageContainer.jsx";
