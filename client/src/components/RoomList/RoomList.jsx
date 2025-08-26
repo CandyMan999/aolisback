@@ -97,8 +97,23 @@ const RoomList = ({
         {rooms &&
           rooms.map((room) => {
             const active = roomId === room._id ? "active" : "";
-            const numberOfUsers =
-              room.users && room.users.length ? room.users.length : 0;
+            const numberOfUsers = room.users?.length || 0;
+
+            // cap at 99+
+            const displayCount =
+              numberOfUsers > 99 ? "99+" : String(numberOfUsers);
+
+            // keep a perfect circle; tweak sizes if you like
+            const badgeSize = mobile ? 22 : 28;
+            const fontForBadge =
+              displayCount.length > 2
+                ? mobile
+                  ? FONT_SIZES.X_SMALL
+                  : FONT_SIZES.SMALL
+                : mobile
+                ? FONT_SIZES.SMALL
+                : FONT_SIZES.MEDIUM;
+
             return (
               <Button
                 borderTop={active && `solid 2px ${COLORS.vividBlue}`}
@@ -149,27 +164,27 @@ const RoomList = ({
                   position="absolute"
                   top={-11}
                   right={-7}
-                  style={{ transition: "background-color 0.4s" }}
                   border={`solid 1px ${active ? COLORS.pink : COLORS.darkGrey}`}
                   backgroundColor={
                     active ? COLORS.lightPurple : COLORS.lightGrey
                   }
                   borderRadius={"50%"}
-                  minWidth={20}
-                  minHeight={20}
-                  alignItems="center"
-                  padding={3}
-                  justifyContent="center"
+                  style={{
+                    width: badgeSize,
+                    height: badgeSize,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    lineHeight: 1, // keep text vertically centered
+                  }}
                 >
                   <Text
                     margin={0}
                     color={active ? COLORS.white : COLORS.darkGrey}
-                    className="userNumber"
-                    fontSize={mobile ? FONT_SIZES.SMALL : FONT_SIZES.X_LARGE}
-                    width={"100%"}
                     bold
+                    fontSize={fontForBadge}
                   >
-                    {numberOfUsers}
+                    {displayCount}
                   </Text>
                 </Box>
               </Button>

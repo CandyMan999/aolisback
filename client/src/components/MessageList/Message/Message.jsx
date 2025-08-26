@@ -212,7 +212,7 @@ const Message = ({
                 <Box display="flex" alignItems="flex-end" marginLeft={20}>
                   <Icon
                     name="out"
-                    size={ICON_SIZES.X_LARGE}
+                    size={ICON_SIZES.LARGE}
                     color={COLORS.pink}
                     onClick={() => voteToKick(authorId)}
                   />
