@@ -307,18 +307,18 @@ const ChatBox = () => {
             if (!stillInRoom) {
               dispatch({ type: "CHANGE_ROOM", payload: null });
               setMessages([]);
+              try {
+                window.ReactNativeWebView?.postMessage(
+                  JSON.stringify({
+                    type: "KICKED_FROM_ROOM",
+                    message: `You were removed from ${
+                      currentRoom?.name || "this room"
+                    }.`,
+                    roomName: currentRoom?.name || null,
+                  })
+                );
+              } catch (e) {}
             }
-            try {
-              window.ReactNativeWebView?.postMessage(
-                JSON.stringify({
-                  type: "KICKED_FROM_ROOM",
-                  message: `You were removed from ${
-                    currentRoom?.name || "this room"
-                  }.`,
-                  roomName: currentRoom?.name || null,
-                })
-              );
-            } catch (e) {}
           }
         }}
       />
