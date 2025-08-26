@@ -13,6 +13,7 @@ import {
   CREATE_ROOM_MUTATION,
   CHANGE_ROOM_MUTATION,
   CREATE_COMMENT_MUTATION,
+  VOTE_TO_KICK_MUTATION,
 } from "../../graphql/mutations";
 import {
   GET_ROOMS_QUERY,
@@ -72,6 +73,32 @@ const ChatBox = () => {
     }
   };
 
+  const voteToKick = async (targetUserId) => {
+    const variables = {
+      roomId: state.roomId,
+      userId: currentUser._id,
+      targetUserId,
+    };
+
+    try {
+      const { voteToKick } = await client.request(
+        VOTE_TO_KICK_MUTATION,
+        variables
+      );
+
+      // Optimistically update local state with the mutation result
+      setRooms((prevRooms) =>
+        prevRooms.map((r) => (r._id === voteToKick._id ? voteToKick : r))
+      );
+
+      // Also refresh from the server to prevent stale data requiring a
+      // second click to appear
+      await getRooms();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const getComments = async () => {
     const variables = {
       roomId: state.roomId,
@@ -110,6 +137,23 @@ const ChatBox = () => {
     return Array.from(usernameSet);
   };
 
+  // --- helpers to extract a clean error message & room name ---
+  const extractGraphQLError = (err) => {
+    // graphql-request / Apollo-style errors
+    const raw =
+      err?.response?.errors?.[0]?.message ||
+      err?.message ||
+      "You were removed from the room.";
+    // strip duplicate "AuthenticationError:" prefixes
+    return raw.replace(/^AuthenticationError:\s*/i, "").trim();
+  };
+
+  const parseRoomName = (msg) => {
+    // e.g. "User banned from room Team Money"
+    const m = msg.match(/User banned from room\s(.+)$/i);
+    return m?.[1] || null;
+  };
+
   const subscribeToRoom = async (roomId) => {
     setLoading(true);
     const variables = {
@@ -130,7 +174,26 @@ const ChatBox = () => {
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      console.error(err.message);
+
+      const message = extractGraphQLError(err);
+      const roomName = parseRoomName(message);
+
+      // Send structured payload to RN app (if we're inside WebView)
+      try {
+        window.ReactNativeWebView?.postMessage(
+          JSON.stringify({
+            type: "ROOM_BANNED",
+            message, // "User banned from room Team Money"
+            roomName, // "Team Money"
+            code:
+              err?.response?.errors?.[0]?.extensions?.code || "UNAUTHENTICATED",
+          })
+        );
+      } catch (e) {
+        // no-op in desktop browsers
+      }
+
+      console.error(message);
     }
   };
 
@@ -199,6 +262,7 @@ const ChatBox = () => {
         currentUser={currentUser}
         showRoomList={state.showRoomList}
         state={state}
+        voteToKick={voteToKick}
       />
 
       <CreateRoom
@@ -228,6 +292,34 @@ const ChatBox = () => {
           const { roomCreatedOrUpdated } = subscriptionData.data;
 
           setRooms([...roomCreatedOrUpdated]);
+
+          // If the current user was removed from the room (kicked or logout),
+          // reset their active room in real time
+          if (state.roomId && currentUser) {
+            const currentRoom = roomCreatedOrUpdated.find(
+              (r) => r._id === state.roomId
+            );
+
+            const stillInRoom =
+              currentRoom &&
+              currentRoom.users.find((u) => u._id === currentUser._id);
+
+            if (!stillInRoom) {
+              dispatch({ type: "CHANGE_ROOM", payload: null });
+              setMessages([]);
+            }
+            try {
+              window.ReactNativeWebView?.postMessage(
+                JSON.stringify({
+                  type: "KICKED_FROM_ROOM",
+                  message: `You were removed from ${
+                    currentRoom?.name || "this room"
+                  }.`,
+                  roomName: currentRoom?.name || null,
+                })
+              );
+            } catch (e) {}
+          }
         }}
       />
 

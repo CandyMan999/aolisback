@@ -81,6 +81,7 @@ const {
   earnRewardResolver,
   directUploadResolver,
   directVideoUploadResolver,
+  voteToKickResolver,
 } = require("./mutations");
 
 const typeDefs = [rootDefs];
@@ -166,6 +167,7 @@ const resolvers = {
     earnReward: earnRewardResolver,
     directUpload: directUploadResolver,
     directVideoUpload: directVideoUploadResolver,
+    voteToKick: voteToKickResolver,
   },
 };
 

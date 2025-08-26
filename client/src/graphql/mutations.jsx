@@ -204,6 +204,34 @@ export const CHANGE_ROOM_MUTATION = gql`
         _id
         username
       }
+      kickVotes {
+        target {
+          _id
+        }
+        voters {
+          _id
+        }
+      }
+    }
+  }
+`;
+
+export const VOTE_TO_KICK_MUTATION = gql`
+  mutation ($roomId: ID!, $userId: ID!, $targetUserId: ID!) {
+    voteToKick(roomId: $roomId, userId: $userId, targetUserId: $targetUserId) {
+      _id
+      kickVotes {
+        target {
+          _id
+        }
+        voters {
+          _id
+        }
+      }
+      users {
+        _id
+        username
+      }
     }
   }
 `;

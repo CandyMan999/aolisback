@@ -46,9 +46,15 @@ module.exports = {
         },
         { $push: { users: user } },
         { new: true }
-      ).populate("users");
+      )
+        .populate("users")
+        .populate("kickVotes.target")
+        .populate("kickVotes.voters");
 
-      const rooms = await Room.find({}).populate("users");
+      const rooms = await Room.find({})
+        .populate("users")
+        .populate("kickVotes.target")
+        .populate("kickVotes.voters");
 
       await Promise.all(
         rooms.map(async (room) => {
@@ -122,7 +128,10 @@ module.exports = {
         publishCreateComment(newCommentAI);
       }
 
-      const getAllRooms = await Room.find({}).populate("users");
+      const getAllRooms = await Room.find({})
+        .populate("users")
+        .populate("kickVotes.target")
+        .populate("kickVotes.voters");
 
       publishRoomCreatedOrUpdated(getAllRooms);
       return currentRoom;

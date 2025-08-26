@@ -48,7 +48,7 @@ const AvatarContainer = styled.div`
   cursor: pointer;
 `;
 
-const Username = styled(Text)`
+const Username = styled(Box)`
   font-size: 15px;
   color: ${COLORS.vividBlue};
   margin-bottom: 2px;
@@ -70,6 +70,8 @@ const Message = ({
   createdAt,
   replyToAuthor,
   replyToText,
+  voteCount,
+  voteToKick,
 }) => {
   const [loading, setLoading] = useState(false);
   const { dispatch } = useContext(Context);
@@ -170,6 +172,8 @@ const Message = ({
             marginLeft: !isCurrentUser ? "8px" : undefined,
             textShadow: `-0.5px -0.5px 0 ${COLORS.vividBlue}, 1px -0.5px 0 ${COLORS.vividBlue}, -0.5px 0.5px 0 ${COLORS.vividBlue}, 0.5px 0.5px 0 ${COLORS.vividBlue}`,
             color: COLORS.black,
+            textWrapMode: "nowrap",
+            alignItems: "center",
           }}
         >
           {isCurrentUser && (
@@ -187,17 +191,39 @@ const Message = ({
           )}
           {username}
           {!isCurrentUser && (
-            <Icon
-              name="speaker"
-              size={ICON_SIZES.LARGE}
-              color={loading ? COLORS.lightGrey : COLORS.pink}
-              marginLeft={4}
-              onClick={() =>
-                loading
-                  ? undefined
-                  : handleSpeech(text, !isCurrentUser ? "male" : "female")
-              }
-            />
+            <Box
+              display="flex"
+              alignItems="center"
+              width={"100%"}
+              justifyContent="space-between"
+            >
+              <Icon
+                name="speaker"
+                size={ICON_SIZES.LARGE}
+                color={loading ? COLORS.lightGrey : COLORS.pink}
+                marginLeft={4}
+                onClick={() =>
+                  loading
+                    ? undefined
+                    : handleSpeech(text, !isCurrentUser ? "male" : "female")
+                }
+              />
+              {username !== "CandyMan🍭" && (
+                <Box display="flex" alignItems="flex-end" marginLeft={20}>
+                  <Icon
+                    name="out"
+                    size={ICON_SIZES.X_LARGE}
+                    color={COLORS.pink}
+                    onClick={() => voteToKick(authorId)}
+                  />
+                  <Span
+                    style={{ marginLeft: 2, fontSize: 12, color: COLORS.pink }}
+                  >
+                    {voteCount}
+                  </Span>
+                </Box>
+              )}
+            </Box>
           )}
         </Username>
 

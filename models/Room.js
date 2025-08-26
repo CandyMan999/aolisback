@@ -17,6 +17,13 @@ const RoomSchema = new mongoose.Schema({
     },
   ],
   comments: [{ type: mongoose.Schema.ObjectId, ref: "Comment" }],
+  kickVotes: [
+    {
+      target: { type: mongoose.Schema.ObjectId, ref: "User" },
+      voters: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+    },
+  ],
+  bannedUsers: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
 });
 
 module.exports = mongoose.model("Room", RoomSchema);

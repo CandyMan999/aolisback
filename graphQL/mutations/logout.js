@@ -20,7 +20,10 @@ module.exports = {
         { $set: { comments: [], isLoggedIn: false } }
       );
 
-      const getAllRooms = await Room.find({}).populate("users");
+      const getAllRooms = await Room.find({})
+        .populate("users")
+        .populate("kickVotes.target")
+        .populate("kickVotes.voters");
 
       publishRoomCreatedOrUpdated(getAllRooms);
 

@@ -5,7 +5,11 @@ const moment = require("moment");
 module.exports = {
   getRoomsResolver: async (root, args, ctx) => {
     try {
-      let rooms = await Room.find({}).populate("users").populate("comments");
+      let rooms = await Room.find({})
+        .populate("users")
+        .populate("comments")
+        .populate("kickVotes.target")
+        .populate("kickVotes.voters");
 
       await Promise.all(
         rooms.map(async (room) => {
@@ -43,7 +47,11 @@ module.exports = {
         })
       );
 
-      rooms = await Room.find({}).populate("users").populate("comments");
+      rooms = await Room.find({})
+        .populate("users")
+        .populate("comments")
+        .populate("kickVotes.target")
+        .populate("kickVotes.voters");
 
       return rooms;
     } catch (err) {

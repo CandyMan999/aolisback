@@ -57,6 +57,7 @@ const {
   removeFromQueueResolver,
 } = require("./speedDate");
 const { earnRewardResolver } = require("./earnReward");
+const { voteToKickResolver } = require("./voteToKick");
 
 module.exports = {
   createRoomResolver,
@@ -111,4 +112,5 @@ module.exports = {
   earnRewardResolver,
   directUploadResolver,
   directVideoUploadResolver,
+  voteToKickResolver,
 };

@@ -14,6 +14,14 @@ module.exports = {
   createCommentResolver: async (root, args, ctx) => {
     const { text, userId, roomId, replyToCommentId } = args;
     try {
+      const roomCheck = await Room.findById(roomId);
+      if (
+        roomCheck.bannedUsers &&
+        roomCheck.bannedUsers.find((u) => u.toString() === userId)
+      ) {
+        throw new AuthenticationError("User banned from this room");
+      }
+
       // Create a new comment, including the author, room, and optional replyTo field
       const comment = await new Comment({
         text,

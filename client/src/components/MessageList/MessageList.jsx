@@ -101,6 +101,17 @@ class MessageList extends Component {
             const replyToText =
               isReply && message.replyTo.text ? message.replyTo.text : null;
 
+            const currentRoom =
+              this.props.rooms &&
+              this.props.rooms.find((r) => r._id === this.props.roomId);
+            const voteEntry =
+              currentRoom && currentRoom.kickVotes
+                ? currentRoom.kickVotes.find(
+                    (v) => v.target._id === message.author._id
+                  )
+                : null;
+            const voteCount = voteEntry ? voteEntry.voters.length : 0;
+
             return (
               <Message
                 usernameClick={this.props.usernameClick}
@@ -121,6 +132,8 @@ class MessageList extends Component {
                 commentId={message._id}
                 replyToAuthor={replyToAuthor} // Pass replyTo author
                 replyToText={replyToText} // Pass replyT
+                voteCount={voteCount}
+                voteToKick={this.props.voteToKick}
               />
             );
           })

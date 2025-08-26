@@ -9,6 +9,14 @@ export const ROOM_CREATED_OR_UPDATED_SUBSCRIPTION = gql`
         _id
         username
       }
+      kickVotes {
+        target {
+          _id
+        }
+        voters {
+          _id
+        }
+      }
     }
   }
 `;

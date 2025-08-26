@@ -14,6 +14,14 @@ export const GET_ROOMS_QUERY = gql`
         createdAt
         text
       }
+      kickVotes {
+        target {
+          _id
+        }
+        voters {
+          _id
+        }
+      }
     }
   }
 `;

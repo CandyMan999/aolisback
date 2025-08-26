@@ -140,6 +140,11 @@ module.exports = gql`
     replyTo: Comment
   }
 
+  type KickVote {
+    target: User
+    voters: [User]
+  }
+
   type Picture {
     _id: ID
     url: String
@@ -153,6 +158,8 @@ module.exports = gql`
     name: String
     users: [User]
     comments: [Comment]
+    kickVotes: [KickVote]
+    bannedUsers: [User]
   }
 
   type ChatRequest {
@@ -294,6 +301,7 @@ module.exports = gql`
     ): GoogleAuth
     createRoom(name: String!, _id: ID): Room
     changeRoom(roomId: ID!, userId: ID!): Room
+    voteToKick(roomId: ID!, userId: ID!, targetUserId: ID!): Room
     createComment(
       text: String!
       userId: ID!

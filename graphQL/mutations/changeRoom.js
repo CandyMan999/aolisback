@@ -20,6 +20,13 @@ module.exports = {
     try {
       const room = await Room.findById({ _id: roomId });
 
+      if (
+        room.bannedUsers &&
+        room.bannedUsers.find((u) => u.toString() === userId)
+      ) {
+        throw new AuthenticationError(`User banned from room ${room.name}`);
+      }
+
       const user = await User.findByIdAndUpdate(
         { _id: userId },
         {
@@ -47,9 +54,15 @@ module.exports = {
         },
         { $addToSet: { users: user } },
         { new: true }
-      ).populate("users");
+      )
+        .populate("users")
+        .populate("kickVotes.target")
+        .populate("kickVotes.voters");
 
-      const rooms = await Room.find({}).populate("users");
+      const rooms = await Room.find({})
+        .populate("users")
+        .populate("kickVotes.target")
+        .populate("kickVotes.voters");
 
       await Promise.all(
         rooms.map(async (room) => {
@@ -125,7 +138,10 @@ module.exports = {
         }
       }
 
-      const getAllRooms = await Room.find({}).populate("users");
+      const getAllRooms = await Room.find({})
+        .populate("users")
+        .populate("kickVotes.target")
+        .populate("kickVotes.voters");
 
       publishRoomCreatedOrUpdated(getAllRooms);
 
