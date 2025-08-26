@@ -94,7 +94,7 @@ module.exports = {
       }
 
       // Kick threshold: keep these numbers in sync with your product spec.
-      const KICK_THRESHOLD = 2; // was 2 in your code
+      const KICK_THRESHOLD = 5;
       const currentEntry = updatedRoom.kickVotes.find(
         (v) => v.target._id.toString() === targetUserId
       );
