@@ -120,7 +120,8 @@ module.exports = {
       const allRooms = await Room.find({})
         .populate("users")
         .populate("kickVotes.target")
-        .populate("kickVotes.voters");
+        .populate("kickVotes.voters")
+        .populate("bannedUsers");
       publishRoomCreatedOrUpdated(allRooms);
 
       return updatedRoom;

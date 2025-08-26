@@ -304,9 +304,15 @@ const ChatBox = () => {
               currentRoom &&
               currentRoom.users.find((u) => u._id === currentUser._id);
 
+            const bannedFromRoom =
+              currentRoom &&
+              currentRoom.bannedUsers.find((u) => u._id === currentUser._id);
+
             if (!stillInRoom) {
               dispatch({ type: "CHANGE_ROOM", payload: null });
               setMessages([]);
+            }
+            if (!!bannedFromRoom) {
               try {
                 window.ReactNativeWebView?.postMessage(
                   JSON.stringify({
