@@ -8,6 +8,15 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
+const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID;
+const CF_API_TOKEN = process.env.CF_API_TOKEN;
+
+if (!CF_ACCOUNT_ID || !CF_API_TOKEN) {
+  console.warn(
+    "[adminControls] Missing CF_ACCOUNT_ID and/or CF_API_TOKEN in env"
+  );
+}
+
 module.exports = {
   unflagVideoResolver: async (root, { videoId }) => {
     try {
@@ -30,7 +39,14 @@ module.exports = {
       );
 
       if (picture.publicId) {
-        await cloudinary.uploader.destroy(picture.publicId);
+        try {
+          await axios.delete(
+            `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/images/v1/${picture.publicId}`,
+            { headers: { Authorization: `Bearer ${CF_API_TOKEN}` } }
+          );
+        } catch (e) {
+          console.error("Failed to delete image from Cloudflare", e.message);
+        }
       }
 
       // Remove the picture reference from the associated user
