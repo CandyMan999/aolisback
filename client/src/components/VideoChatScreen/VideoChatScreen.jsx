@@ -188,6 +188,9 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           type: "UPDATE_USER_PLAN",
           payload: callDuration.user.plan,
         });
+        if (callDuration.outOfTime) {
+          outOfTimeRef.current = true; // mark immediately
+        }
         if (
           callDuration.outOfTime &&
           callDuration.user._id === videoChatRequest.sender._id
@@ -197,7 +200,8 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
             intervalIdRef.current = null;
           }
           handleHangup();
-          outOfTimeRef.current = true; // mark it immediately
+
+          console.log("out of ti");
           handleHangup("outOfTime"); // RN message now lives in handleHangup
           return;
           // window.ReactNativeWebView.postMessage("OUT_OF_TIME");
