@@ -185,6 +185,24 @@ module.exports = {
         }
       };
 
+      const removeUserFromRooms = async (userId) => {
+        // Remove any kickVote entries where they were the target
+        await Room.updateMany({}, { $pull: { kickVotes: { target: userId } } });
+
+        // Remove them from voters arrays in remaining kickVotes
+        await Room.updateMany(
+          { "kickVotes.voters": userId },
+          { $pull: { "kickVotes.$[].voters": userId } }
+        );
+
+        // Also ensure they're not lingering in users/bannedUsers lists
+        await Room.updateMany({ users: userId }, { $pull: { users: userId } });
+        await Room.updateMany(
+          { bannedUsers: userId },
+          { $pull: { bannedUsers: userId } }
+        );
+      };
+
       const deleteUser = async () => {
         try {
           await User.deleteOne({ _id: currentUser._id });
@@ -194,6 +212,7 @@ module.exports = {
       };
 
       await deleteAllPhotos();
+      await removeUserFromRooms(_id);
       await deleteAllComments();
       await deleteAllVideos();
       await removeUserReferences();

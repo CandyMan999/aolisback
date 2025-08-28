@@ -105,11 +105,15 @@ class MessageList extends Component {
               this.props.rooms &&
               this.props.rooms.find((r) => r._id === this.props.roomId);
             const voteEntry =
-              currentRoom && currentRoom.kickVotes
+              message?.author?._id && currentRoom?.kickVotes?.length
                 ? currentRoom.kickVotes.find(
-                    (v) => v.target._id === message.author._id
+                    (v) =>
+                      (typeof v?.target === "string"
+                        ? v.target
+                        : v?.target?._id) === message.author._id
                   )
                 : null;
+
             const voteCount = voteEntry ? voteEntry.voters.length : 0;
 
             return (
