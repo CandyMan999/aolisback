@@ -30,10 +30,10 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [disableSendNumber, setDisableSendNumber] = useState(false);
   const [videoPermissions, setVideoPermissions] = useState(false);
   const [audioPermissions, setAudioPermissions] = useState(false);
+  const outOfTimeRef = useRef(false);
   const [api, setApi] = useState(null);
   const [flash, setFlash] = useState(false);
   const intervalIdRef = useRef(null);
-  const outOfTimeRef = useRef(false);
 
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
@@ -77,13 +77,23 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
         clearInterval(intervalIdRef.current);
         intervalIdRef.current = null;
       }
+
+      console.log("PARTICIPANT LEFT!!!!!!!!!!!!!!");
+      if (outOfTimeRef.current) {
+        try {
+          console.log("OUT OF TIME IS FIRING!!!!!!!!!!!!");
+          window.ReactNativeWebView.postMessage("OUT_OF_TIME");
+        } catch (err) {
+          console.log(err);
+        }
+      }
       handleShutScreen();
     } catch (err) {
       console.log("error ending video call: ", err);
     }
   };
 
-  const handleHangup = async (reason) => {
+  const handleHangup = async () => {
     try {
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
@@ -99,13 +109,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
       };
 
       await client.request(UPDATE_VIDEO_CHAT_REQUEST, variables);
-
-      // only ping RN when minutes actually ran out
-      if (reason === "outOfTime" || outOfTimeRef.current) {
-        try {
-          window.ReactNativeWebView.postMessage("OUT_OF_TIME");
-        } catch {}
-      }
     } catch (err) {
       console.log("error ending video call: ", err);
     }
@@ -188,9 +191,11 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           type: "UPDATE_USER_PLAN",
           payload: callDuration.user.plan,
         });
+
         if (callDuration.outOfTime) {
-          outOfTimeRef.current = true; // mark immediately
+          outOfTimeRef.current = true;
         }
+
         if (
           callDuration.outOfTime &&
           callDuration.user._id === videoChatRequest.sender._id
@@ -200,11 +205,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
             intervalIdRef.current = null;
           }
           handleHangup();
-
-          console.log("out of ti");
-          handleHangup("outOfTime"); // RN message now lives in handleHangup
-          return;
-          // window.ReactNativeWebView.postMessage("OUT_OF_TIME");
+          window.ReactNativeWebView.postMessage("OUT_OF_TIME");
         }
       } catch (err) {
         console.log(err);
@@ -463,9 +464,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
               }}
               onApiReady={(externalApi) => {
                 setApi(externalApi);
-                externalApi.addListener("videoConferenceLeft", () =>
-                  handleHangup()
-                );
+                externalApi.addListener("videoConferenceLeft", handleHangup);
                 externalApi.addListener(
                   "participantJoined",
                   handleParticipantJoined
