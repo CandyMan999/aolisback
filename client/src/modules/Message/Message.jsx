@@ -316,7 +316,7 @@ const Message = () => {
 
             return (
               <Box
-                key={`${video.publicId}-${i}`}
+                key={`${video._id}-${video.flagged ? 1 : 0}-${video.url}`}
                 width={mobile ? "95%" : "98%"}
                 display="flex"
                 justifyContent={isSender ? "flex-end" : "flex-start"}
