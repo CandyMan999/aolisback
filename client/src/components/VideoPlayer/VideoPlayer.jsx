@@ -156,12 +156,13 @@ const VideoPlayer = ({
             </Box>
           )}
 
-          {/* <video
+          <CloudflareVideo
             ref={videoRef}
-            src={videoUrl}
+            uid={publicId}
+            videoUrl={videoUrl}
             onPlay={receiverWatching ? handleViewVideo : undefined}
             controls={controls}
-            onClick={handleFullScreen}
+            handleFullScreen={handleFullScreen}
             loop
             style={{
               borderRadius: borderRadius || undefined,
@@ -169,8 +170,8 @@ const VideoPlayer = ({
               width: "100%",
               opacity: showOverlay ? 0.5 : 1, // Dim the video if overlay is shown
             }}
-          /> */}
-          <CloudflareVideo
+          />
+          {/* <CloudflareVideo
             uid={publicId} // assuming videoUrl in DB is the CF UID like "7cc10d33e7ca43139cbcde1818a39aa7"
             controls={controls}
             onPlay={receiverWatching ? handleViewVideo : undefined}
@@ -186,7 +187,7 @@ const VideoPlayer = ({
             className="clickable-video"
             // You can keep fullscreen handler by wrapping in a div or using onClick here:
             onClick={handleFullScreen}
-          />
+          /> */}
         </Box>
       )}
       {location.pathname === "/grid-search" && (
@@ -251,7 +252,7 @@ const VideoPlayer = ({
               opacity: showOverlay ? 0.5 : 1, // Dim the video if overlay is shown
             }}
           /> */}
-          <CloudflareVideo
+          {/* <CloudflareVideo
             uid={publicId} // assuming videoUrl in DB is the CF UID like "7cc10d33e7ca43139cbcde1818a39aa7"
             controls={controls}
             onPlay={receiverWatching ? handleViewVideo : undefined}
@@ -267,6 +268,23 @@ const VideoPlayer = ({
             className="clickable-video"
             // You can keep fullscreen handler by wrapping in a div or using onClick here:
             onClick={handleFullScreen}
+          /> */}
+
+          <CloudflareVideo
+            ref={videoRef}
+            uid={publicId}
+            videoUrl={videoUrl}
+            onPlay={receiverWatching ? handleViewVideo : undefined}
+            controls={controls}
+            handleFullScreen={handleFullScreen}
+            loop
+            style={{
+              borderRadius: borderRadius || undefined,
+              maxWidth: isFullScreen ? undefined : 300,
+              width: "100%",
+              height: height || 250,
+              opacity: showOverlay ? 0.5 : 1, // Dim the video if overlay is shown
+            }}
           />
         </Box>
       )}

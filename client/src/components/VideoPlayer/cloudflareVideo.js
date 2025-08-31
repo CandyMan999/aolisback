@@ -16,10 +16,14 @@ export const cfUrls = (uid, bust) => {
 };
 
 const CloudflareVideo = ({
+  videoUrl,
   uid,
   controls = true,
-  loop = false,
+  loop,
   poster,
+  receiverWatching,
+  handleViewVideo,
+  handleFullScreen,
   onPlay,
   style,
   className,
@@ -216,7 +220,7 @@ const CloudflareVideo = ({
 
   return (
     <div style={{ position: "relative", width: "100%" }}>
-      <video
+      {/* <video
         ref={videoRef}
         controls={controls}
         loop={loop}
@@ -230,6 +234,19 @@ const CloudflareVideo = ({
           width: "100%",
           height: "auto",
           display: "block",
+          ...style,
+        }}
+      /> */}
+
+      <video
+        ref={videoRef}
+        src={videoUrl}
+        onPlay={onPlay}
+        controls={controls}
+        poster={posterUrl}
+        onClick={handleFullScreen}
+        loop
+        style={{
           ...style,
         }}
       />

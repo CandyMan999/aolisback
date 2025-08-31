@@ -217,21 +217,43 @@ const processQueue = async () => {
 
 const customNudityAPI = async (videoId, uid) => {
   try {
-    // 1) Wait for MP4 to truly exist (kickoff + poll + HEAD)
     const mp4Url = await waitUntilMp4Ready(uid);
     console.log("[nudity] mp4 ready:", mp4Url);
 
-    // 2) Hit detector with MP4 URL
+    // hit detector with MP$ url
     const resp = await axios.post(
       NUDE_DETECTOR_URL,
       { video_url: mp4Url },
       { timeout: 90000 }
     );
-    console.log("[nudity] detector resp:", JSON.stringify(resp.data));
 
-    if (resp && resp.data && resp.data.nudity_detected) {
-      await Video.findByIdAndUpdate(videoId, { flagged: true });
+    console.log("[nudity] detector resp:", JSON.stringify(resp.data));
+    const flagged = !!resp && resp.data && resp.data.nudity_detected;
+    if (flagged) {
       pushNotificationUserFlagged("ExponentPushToken[PtoiwgLjWKaXTzEaTY0jbT]");
+    }
+
+    // MINIMAL change: replace url with MP4
+    const updated = await Video.findByIdAndUpdate(
+      videoId,
+      { url: mp4Url, flagged }, // <— swap to MP4 in the SAME url field
+      { new: true }
+    ).populate([
+      {
+        path: "sender",
+        model: "User",
+        populate: { path: "pictures", model: "Picture" },
+      },
+      {
+        path: "receiver",
+        model: "User",
+        populate: { path: "pictures", model: "Picture" },
+      },
+    ]);
+
+    // optional but recommended: tell clients the item changed
+    if (updated) {
+      publishCreateVideo(updated); // reuse your existing publish function
     }
   } catch (error) {
     const log =
@@ -304,12 +326,14 @@ module.exports = {
   sendVideoResolver: async (root, args) => {
     const { url, publicId, receiverID, senderID } = args;
     try {
+      console.log("do we have a url? ", url);
       // Build/override URL you store: MP4 on customer domain (request)
-      const mp4UrlToStore = toCfMp4(publicId);
+
+      const hslUrlToStore = toCfHls(publicId);
 
       // Save video first (store MP4 URL in DB as requested)
       const video = await Video.create({
-        url: mp4UrlToStore, // store MP4
+        url: hslUrlToStore, // store HLS first
         publicId, // CF Stream UID
         sender: senderID,
         receiver: receiverID,
