@@ -63,14 +63,23 @@ const cfGetDownloadsStatus = async (uid) => {
 };
 
 const waitUntilReadyToStream = async (uid) => {
-  const MAX_ATTEMPTS = 6; // ~63s
+  const MAX_ATTEMPTS = 7; // ~127s total backoff, not 63s
   for (let i = 0; i < MAX_ATTEMPTS; i++) {
-    const data = await cfGetAsset(uid);
-    if (data && data.success && data.result && data.result.readyToStream) {
-      return data.result;
+    try {
+      const data = await cfGetAsset(uid);
+      if (data && data.success && data.result && data.result.readyToStream) {
+        return data.result;
+      }
+      const delayMs = Math.min(1000 * Math.pow(2, i), 5000); // cap per-try delay at 5s
+      await new Promise((r) => setTimeout(r, delayMs));
+    } catch (e) {
+      const status = e && e.response && e.response.status;
+      if (status !== 404 && status !== 403) throw e; // keep your real errors
+
+      // NEW: brief backoff on 404/403 so we don't tight-loop
+      const delayMs = Math.min(1000 * Math.pow(2, i), 5000);
+      await new Promise((r) => setTimeout(r, delayMs));
     }
-    const delayMs = 1000 * Math.pow(2, i);
-    await new Promise((r) => setTimeout(r, delayMs));
   }
   throw new Error(`Stream asset ${uid} not ready in time`);
 };
