@@ -497,7 +497,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
               ref={containerRef}
               style={{ position: "relative", width: "100%", height: "100%" }}
             >
-              {isApiReady && showSendNumberButton && (
+              {isApiReady && showSendNumberButton && showScreen && (
                 <motion.div
                   drag
                   dragConstraints={containerRef}
@@ -507,14 +507,13 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                     position: "absolute",
                     bottom: 80,
                     right: 16,
-                    width: "auto",
                     height: "25vh",
+                    aspectRatio: "9 / 16", // <-- forces portrait box
                     borderRadius: 12,
                     overflow: "hidden",
                     boxShadow: "0 6px 16px rgba(0,0,0,.35)",
                     zIndex: 40000,
                     background: "#000",
-                    transform: "scaleX(-1)", // mirror like FaceTime
                   }}
                 >
                   <video
