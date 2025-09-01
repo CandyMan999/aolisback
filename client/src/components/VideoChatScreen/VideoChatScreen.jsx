@@ -34,6 +34,10 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [api, setApi] = useState(null);
   const [flash, setFlash] = useState(false);
   const intervalIdRef = useRef(null);
+  const localPiPRef = useRef(null);
+  const localStreamRef = useRef(null);
+
+  const containerRef = useRef(null); // bounds for PIP drag
 
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
@@ -71,6 +75,56 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
     }
   }, [roomName, isMeetingStarted]);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    const startLocalPreview = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false, // Jitsi already owns audio
+        });
+        if (!cancelled) {
+          localStreamRef.current = stream;
+          if (localPiPRef.current) localPiPRef.current.srcObject = stream;
+        }
+      } catch (e) {
+        console.log("Local PiP getUserMedia failed:", e);
+      }
+    };
+
+    if (isApiReady) startLocalPreview();
+
+    return () => {
+      cancelled = true;
+      localStreamRef.current?.getTracks?.().forEach((t) => t.stop());
+      localStreamRef.current = null;
+    };
+  }, [isApiReady]);
+
+  const stopMediaAndCall = () => {
+    // stop the local PiP preview
+    try {
+      localStreamRef.current?.getTracks?.().forEach((t) => t.stop());
+      localStreamRef.current = null;
+    } catch {}
+
+    // stop Jitsi’s capture + tear down the iframe
+    try {
+      if (api) {
+        api.executeCommand?.("hangup");
+        // dispose the iframe api instance after hangup
+        setTimeout(() => api.dispose?.(), 0);
+      }
+    } catch {}
+
+    // clear polling
+    if (intervalIdRef.current) {
+      clearInterval(intervalIdRef.current);
+      intervalIdRef.current = null;
+    }
+  };
+
   const handleParticipantLeft = async () => {
     try {
       if (intervalIdRef.current) {
@@ -94,11 +148,13 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   };
 
   const handleHangup = async () => {
+    stopMediaAndCall();
     try {
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
         intervalIdRef.current = null;
       }
+
       handleShutScreen();
       const variables = {
         _id: videoChatRequest._id,
@@ -340,9 +396,13 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
             column
             style={{
               position: "absolute",
-              top: 0,
-              left: 0,
+              top: 8,
+              left: 8,
               alignItems: "center",
+              zIndex: 50000,
+              pointerEvents: "none", // ← doesn’t block Jitsi clicks
+              borderRadius: 12,
+              padding: 6,
             }}
           >
             <img height={100} width={100} src={iOSLogo} alt="Watermark-logo" />
@@ -433,84 +493,147 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           <Loading ring color={COLORS.pink} size={250} />
         ) : (
           isMeetingStarted && (
-            <JitsiMeeting
-              domain="jitsi.gonechatting.com"
-              roomName={roomName}
-              configOverwrite={{
-                prejoinPageEnabled: false,
-                startWithAudioMuted: false,
-                startWithVideoMuted: false,
-                disableModeratorIndicator: true,
-                startScreenSharing: false,
-                enableEmailInStats: false,
-                disableDeepLinking: true,
+            <div
+              ref={containerRef}
+              style={{ position: "relative", width: "100%", height: "100%" }}
+            >
+              {isApiReady && showSendNumberButton && (
+                <motion.div
+                  drag
+                  dragConstraints={containerRef}
+                  dragMomentum={false}
+                  dragElastic={0}
+                  style={{
+                    position: "absolute",
+                    bottom: 80,
+                    right: 16,
+                    width: "auto",
+                    height: "25vh",
+                    borderRadius: 12,
+                    overflow: "hidden",
+                    boxShadow: "0 6px 16px rgba(0,0,0,.35)",
+                    zIndex: 40000,
+                    background: "#000",
+                    transform: "scaleX(-1)", // mirror like FaceTime
+                  }}
+                >
+                  <video
+                    ref={localPiPRef}
+                    autoPlay
+                    muted
+                    playsInline
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      transform: "scaleX(-1)", // mirror like FaceTime
+                    }}
+                  />
+                </motion.div>
+              )}
+              <JitsiMeeting
+                domain="jitsi.gonechatting.com"
+                roomName={roomName}
+                configOverwrite={{
+                  prejoinPageEnabled: false,
+                  startWithAudioMuted: false,
+                  startWithVideoMuted: false,
+                  disableModeratorIndicator: true,
+                  startScreenSharing: false,
+                  enableEmailInStats: false,
+                  disableDeepLinking: true,
 
-                disableEndConference: true,
-                enableFeaturesBasedOnToken: false,
-                disableThirdPartyRequests: true,
-              }}
-              interfaceConfigOverwrite={{
-                TOOLBAR_BUTTONS: [
-                  "microphone",
-                  "camera",
-                  "hangup",
-                  "tileview",
-                  "toggle-camera",
-                  "settings",
-                ],
-              }}
-              userInfo={{
-                displayName: state.currentUser.username,
-              }}
-              onApiReady={(externalApi) => {
-                setApi(externalApi);
-                externalApi.addListener("videoConferenceLeft", handleHangup);
-                externalApi.addListener(
-                  "participantJoined",
-                  handleParticipantJoined
-                );
-                externalApi.addListener(
-                  "participantLeft",
-                  handleParticipantLeft
-                );
-                externalApi.addListener("toolbarButtonClicked", (event) => {
-                  if (event.key === "settings") {
-                    setShowSendNumberButton(false);
-                    setTimeout(() => {
+                  disableEndConference: true,
+                  enableFeaturesBasedOnToken: false,
+                  disableThirdPartyRequests: true,
+                }}
+                interfaceConfigOverwrite={{
+                  TOOLBAR_BUTTONS: [
+                    "microphone",
+                    "camera",
+                    "hangup",
+                    // "tileview",
+                    "toggle-camera",
+                    "settings",
+                  ],
+                }}
+                userInfo={{
+                  displayName: state.currentUser.username,
+                }}
+                onApiReady={(externalApi) => {
+                  setApi(externalApi);
+                  const pinFirstRemote = () => {
+                    const list = externalApi.getParticipantsInfo?.() || [];
+                    const remote = list.find((p) => !p.isLocal);
+                    if (remote?.participantId) {
+                      externalApi.executeCommand(
+                        "pinParticipant",
+                        remote.participantId
+                      );
+                    }
+                  };
+
+                  externalApi.addListener(
+                    "videoConferenceJoined",
+                    pinFirstRemote
+                  );
+                  externalApi.addListener("participantJoined", pinFirstRemote);
+
+                  externalApi.addListener("videoConferenceLeft", handleHangup);
+                  externalApi.addListener(
+                    "participantJoined",
+                    handleParticipantJoined
+                  );
+
+                  externalApi.addListener(
+                    "participantLeft",
+                    handleParticipantLeft
+                  );
+                  externalApi.addListener("toolbarButtonClicked", (event) => {
+                    if (event.key === "settings") {
+                      setShowSendNumberButton(false);
+                      setTimeout(() => {
+                        setShowSendNumberButton(true);
+                      }, 30000);
+                    } else {
                       setShowSendNumberButton(true);
-                    }, 30000);
-                  } else {
-                    setShowSendNumberButton(true);
-                  }
-                });
+                    }
+                  });
 
-                externalApi.addListener("p2pStatusChanged", (event) => {
-                  console.log("PEER 2 PEER: ", event);
-                });
+                  externalApi.addListener("p2pStatusChanged", (event) => {
+                    console.log("PEER 2 PEER: ", event);
+                  });
 
-                externalApi.addListener("videoAvailabilityChanged", (event) => {
-                  if (event.available) {
-                    setVideoPermissions(true);
-                  }
-                });
+                  externalApi.addListener(
+                    "videoAvailabilityChanged",
+                    (event) => {
+                      if (event.available) {
+                        setVideoPermissions(true);
+                      }
+                    }
+                  );
 
-                externalApi.addListener("audioAvailabilityChanged", (event) => {
-                  if (event.available) {
-                    setAudioPermissions(true);
-                  }
-                });
-                externalApi.executeCommand(
-                  "pinParticipant",
-                  videoChatRequest.receiver.username ===
-                    state.currentUser.username
-                    ? videoChatRequest.sender.username
-                    : videoChatRequest.receiver.username
-                );
-              }}
-              getIFrameRef={(iframeRef) => {
-                iframeRef.style.height = "100%";
-              }}
-            />
+                  externalApi.addListener(
+                    "audioAvailabilityChanged",
+                    (event) => {
+                      if (event.available) {
+                        setAudioPermissions(true);
+                      }
+                    }
+                  );
+                  externalApi.executeCommand(
+                    "pinParticipant",
+                    videoChatRequest.receiver.username ===
+                      state.currentUser.username
+                      ? videoChatRequest.sender.username
+                      : videoChatRequest.receiver.username
+                  );
+                }}
+                getIFrameRef={(iframeRef) => {
+                  iframeRef.style.height = "100%";
+                }}
+              />
+            </div>
           )
         )}
       </motion.div>
