@@ -21,7 +21,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const { state, dispatch } = useContext(Context);
   const client = useClient();
   const { videoChatRequest, currentUser } = state;
-
   const [isMeetingStarted, setIsMeetingStarted] = useState(false);
   const [isApiReady, setIsApiReady] = useState(false);
   const [roomName, setRoomName] = useState("");
@@ -35,53 +34,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   const [api, setApi] = useState(null);
   const [flash, setFlash] = useState(false);
   const intervalIdRef = useRef(null);
-  const localPiPRef = useRef(null);
-  const localStreamRef = useRef(null);
-  const containerRef = useRef(null); // bounds for PIP drag
-
-  // NEW: Track the remote participant to ensure correct pinning
-  const remoteIdRef = useRef(null);
-
-  // NEW: Track PiP facing and helpers to keep PiP alive across flips/mutes
-  const [pipFacing, setPipFacing] = useState("user"); // "user" | "environment"
-
-  const replacePiPStream = (stream) => {
-    try {
-      localStreamRef.current?.getTracks?.().forEach((t) => t.stop());
-    } catch {}
-    localStreamRef.current = stream;
-    if (localPiPRef.current) {
-      localPiPRef.current.srcObject = stream;
-    }
-  };
-
-  const startLocalPreview = async (facing = pipFacing) => {
-    try {
-      let stream;
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { exact: facing } },
-          audio: false,
-        });
-      } catch {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: facing },
-          audio: false,
-        });
-      }
-      replacePiPStream(stream);
-    } catch (e) {
-      console.log("Local PiP getUserMedia failed:", e);
-    }
-  };
-
-  const flipLocalPiP = async () => {
-    const next = pipFacing === "user" ? "environment" : "user";
-    setPipFacing(next);
-    await startLocalPreview(next);
-  };
-
-  // --- Existing effects ---
 
   useEffect(() => {
     if (videoChatRequest && videoChatRequest.status === "Accept") {
@@ -102,14 +54,14 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   }, [videoPermissions, audioPermissions]);
 
   useEffect(() => {
-    if (videoChatRequest?.participantLeft) {
+    if (videoChatRequest.participantLeft) {
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
         intervalIdRef.current = null;
       }
       handleShutScreen();
     }
-  }, [videoChatRequest?.participantLeft, handleShutScreen]);
+  }, [videoChatRequest.participantLeft]);
 
   useEffect(() => {
     if (roomName && isMeetingStarted) {
@@ -118,46 +70,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
       }, 1000);
     }
   }, [roomName, isMeetingStarted]);
-
-  // CHANGED: Start/Restart local PiP preview when API is ready or facing changes
-  useEffect(() => {
-    let cancelled = false;
-    const run = async () => {
-      if (!isApiReady) return;
-      await startLocalPreview(pipFacing);
-    };
-    run();
-
-    return () => {
-      cancelled = true;
-      try {
-        localStreamRef.current?.getTracks?.().forEach((t) => t.stop());
-      } catch {}
-      localStreamRef.current = null;
-    };
-  }, [isApiReady, pipFacing]);
-
-  const stopMediaAndCall = () => {
-    // stop the local PiP preview
-    try {
-      localStreamRef.current?.getTracks?.().forEach((t) => t.stop());
-      localStreamRef.current = null;
-    } catch {}
-
-    // stop Jitsi’s capture + tear down the iframe
-    try {
-      if (api) {
-        api.executeCommand?.("hangup");
-        setTimeout(() => api.dispose?.(), 0);
-      }
-    } catch {}
-
-    // clear polling
-    if (intervalIdRef.current) {
-      clearInterval(intervalIdRef.current);
-      intervalIdRef.current = null;
-    }
-  };
 
   const handleParticipantLeft = async () => {
     try {
@@ -182,7 +94,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
   };
 
   const handleHangup = async () => {
-    stopMediaAndCall();
     try {
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
@@ -231,7 +142,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
       if (!!status) {
         setShowThumbsUp(true);
-        setTimeout(() => setShowThumbsUp(false), 2000);
+        setTimeout(() => setShowThumbsUp(false), 2000); // Show thumbs up for 2 seconds
       }
 
       setLoading(false);
@@ -248,6 +159,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
       const remainingSeconds = totalVideoSecondsAvailable - videoSecondsUsed;
 
+      // If remainingSeconds is less than or equal to zero, return 0 min 0 secs
       if (remainingSeconds <= 0) {
         return "0 min 0 secs";
       }
@@ -303,26 +215,30 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
 
     intervalIdRef.current = setInterval(() => {
       sendApiCall();
-    }, 10000);
+    }, 10000); // 10 seconds interval
   };
 
   const handleImageUpload = async (image) => {
     try {
+      // 1) Get one-time direct upload URL + Cloudflare image id
       const { directUpload } = await client.request(DIRECT_UPLOAD_MUTATION);
       const { uploadURL, id } = directUpload;
 
+      // 2) Build form data (must be a File for CF direct upload)
       const form = new FormData();
       const file =
         image instanceof Blob
           ? new File([image], "screencap.jpg", {
               type: image.type || "image/jpeg",
             })
-          : image;
+          : image; // already a File
       form.append("file", file);
 
+      // 3) POST to the direct upload URL (no auth header, no manual content-type)
       const res = await fetch(uploadURL, { method: "POST", body: form });
       if (!res.ok) throw new Error(`Direct upload failed: ${res.status}`);
 
+      // 4) Build delivery URL
       const hash = process.env.REACT_APP_CF_ACCOUNT_HASH;
       const variant = process.env.REACT_APP_CF_VARIANT || "public";
       const deliveryUrl = `https://imagedelivery.net/${hash}/${id}/${variant}`;
@@ -379,21 +295,6 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
     }
   };
 
-  // helper to get current remote and pin (participantId required by Jitsi)
-  const getRemoteParticipant = (extApi) => {
-    const list = extApi.getParticipantsInfo?.() || [];
-    return list.find((p) => !p.isLocal);
-  };
-
-  const pinRemote = (extApi, { force } = {}) => {
-    const remote = getRemoteParticipant(extApi);
-    if (!remote) return;
-    if (force || remoteIdRef.current !== remote.participantId) {
-      remoteIdRef.current = remote.participantId;
-      extApi.executeCommand("pinParticipant", remote.participantId);
-    }
-  };
-
   // Clear interval when component unmounts
   useEffect(() => {
     return () => {
@@ -440,13 +341,9 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
             column
             style={{
               position: "absolute",
-              top: 8,
-              left: 8,
+              top: 0,
+              left: 0,
               alignItems: "center",
-              zIndex: 50000,
-              pointerEvents: "none",
-              borderRadius: 12,
-              padding: 6,
             }}
           >
             <img height={100} width={100} src={iOSLogo} alt="Watermark-logo" />
@@ -500,7 +397,7 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
                 top: 20,
                 right: "6%",
                 zIndex: 30001,
-                width: "30%",
+                width: "30%", // fixed width
               }}
             >
               <Button
@@ -537,183 +434,84 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
           <Loading ring color={COLORS.pink} size={250} />
         ) : (
           isMeetingStarted && (
-            <div
-              ref={containerRef}
-              style={{ position: "relative", width: "100%", height: "100%" }}
-            >
-              {isApiReady && showSendNumberButton && showScreen && (
-                <motion.div
-                  drag
-                  dragConstraints={containerRef}
-                  dragMomentum={false}
-                  dragElastic={0}
-                  style={{
-                    position: "absolute",
-                    bottom: 80,
-                    right: 16,
-                    height: "25vh",
-                    aspectRatio: "9 / 16", // keep portrait
-                    borderRadius: 12,
-                    overflow: "hidden",
-                    boxShadow: "0 6px 16px rgba(0,0,0,.35)",
-                    zIndex: 40000,
-                    background: "#000",
-                  }}
-                >
-                  <video
-                    ref={localPiPRef}
-                    autoPlay
-                    muted
-                    playsInline
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      transform: "scaleX(-1)",
-                    }}
-                  />
-                </motion.div>
-              )}
-              <JitsiMeeting
-                domain="jitsi.gonechatting.com"
-                roomName={roomName}
-                configOverwrite={{
-                  prejoinPageEnabled: false,
-                  startWithAudioMuted: false,
-                  startWithVideoMuted: false,
-                  disableModeratorIndicator: true,
-                  startScreenSharing: false,
-                  enableEmailInStats: false,
-                  disableDeepLinking: true,
-                  disableEndConference: true,
-                  enableFeaturesBasedOnToken: false,
-                  disableThirdPartyRequests: true,
-                }}
-                interfaceConfigOverwrite={{
-                  TOOLBAR_BUTTONS: [
-                    "microphone",
-                    "camera",
-                    "hangup",
-                    "toggle-camera",
-                    "settings",
-                  ],
-                }}
-                userInfo={{
-                  displayName: state.currentUser.username,
-                }}
-                onApiReady={(externalApi) => {
-                  setApi(externalApi);
+            <JitsiMeeting
+              domain="jitsi.gonechatting.com"
+              roomName={roomName}
+              configOverwrite={{
+                prejoinPageEnabled: false,
+                startWithAudioMuted: false,
+                startWithVideoMuted: false,
+                disableModeratorIndicator: true,
+                startScreenSharing: false,
+                enableEmailInStats: false,
+                disableDeepLinking: true,
 
-                  const repin = () => pinRemote(externalApi, { force: true });
+                disableEndConference: true,
+                enableFeaturesBasedOnToken: false,
+                disableThirdPartyRequests: true,
+              }}
+              interfaceConfigOverwrite={{
+                TOOLBAR_BUTTONS: [
+                  "microphone",
+                  "camera",
+                  "hangup",
+                  "tileview",
+                  "toggle-camera",
+                  "settings",
+                ],
+              }}
+              userInfo={{
+                displayName: state.currentUser.username,
+              }}
+              onApiReady={(externalApi) => {
+                setApi(externalApi);
+                externalApi.addListener("videoConferenceLeft", handleHangup);
+                externalApi.addListener(
+                  "participantJoined",
+                  handleParticipantJoined
+                );
+                externalApi.addListener(
+                  "participantLeft",
+                  handleParticipantLeft
+                );
+                externalApi.addListener("toolbarButtonClicked", (event) => {
+                  if (event.key === "settings") {
+                    setShowSendNumberButton(false);
+                    setTimeout(() => {
+                      setShowSendNumberButton(true);
+                    }, 30000);
+                  } else {
+                    setShowSendNumberButton(true);
+                  }
+                });
 
-                  // Ensure the remote is always pinned in large video
-                  externalApi.addListener("videoConferenceJoined", repin);
-                  externalApi.addListener("participantJoined", repin);
-                  externalApi.addListener("participantLeft", repin);
-                  externalApi.addListener("largeVideoChanged", (payload) => {
-                    // payload can be undefined or missing id on first fires
-                    const id = payload && (payload.id ?? payload.participantId);
-                    const self = externalApi
-                      .getParticipantsInfo?.()
-                      .find((p) => p.isLocal);
+                externalApi.addListener("p2pStatusChanged", (event) => {
+                  console.log("PEER 2 PEER: ", event);
+                });
 
-                    if (self && id === self.participantId) {
-                      // force re-pin the remote if large video switched to local
-                      const remote = externalApi
-                        .getParticipantsInfo?.()
-                        .find((p) => !p.isLocal);
-                      if (remote?.participantId) {
-                        remoteIdRef.current = remote.participantId;
-                        externalApi.executeCommand(
-                          "pinParticipant",
-                          remote.participantId
-                        );
-                      }
-                    }
-                  });
+                externalApi.addListener("videoAvailabilityChanged", (event) => {
+                  if (event.available) {
+                    setVideoPermissions(true);
+                  }
+                });
 
-                  externalApi.addListener("videoConferenceLeft", handleHangup);
-                  externalApi.addListener(
-                    "participantJoined",
-                    handleParticipantJoined
-                  );
-                  externalApi.addListener("p2pStatusChanged", (event) => {
-                    console.log("PEER 2 PEER: ", event);
-                  });
-
-                  externalApi.addListener(
-                    "videoAvailabilityChanged",
-                    (event) => {
-                      if (event.available) {
-                        setVideoPermissions(true);
-                      }
-                    }
-                  );
-
-                  externalApi.addListener(
-                    "audioAvailabilityChanged",
-                    (event) => {
-                      if (event.available) {
-                        setAudioPermissions(true);
-                      }
-                    }
-                  );
-
-                  // Preserve your existing settings toggle behavior
-                  externalApi.addListener(
-                    "toolbarButtonClicked",
-                    async (event) => {
-                      if (event.key === "settings") {
-                        setShowSendNumberButton(false);
-                        setTimeout(() => {
-                          setShowSendNumberButton(true);
-                        }, 30000);
-                      } else {
-                        setShowSendNumberButton(true);
-                      }
-
-                      // NEW: keep local PiP in sync when flipping camera
-                      if (event.key === "toggle-camera") {
-                        await flipLocalPiP();
-                      }
-                    }
-                  );
-
-                  // NEW: pause/resume PiP on local video mute/unmute; restart if track ended
-                  externalApi.addListener(
-                    "videoMuteStatusChanged",
-                    async ({ muted }) => {
-                      if (!localPiPRef.current) return;
-                      if (muted) {
-                        try {
-                          localPiPRef.current.pause();
-                        } catch {}
-                      } else {
-                        const alive =
-                          localStreamRef.current &&
-                          localStreamRef.current
-                            .getVideoTracks()
-                            .some((t) => t.readyState === "live");
-                        if (!alive) await startLocalPreview(pipFacing);
-                        try {
-                          await localPiPRef.current.play();
-                        } catch {}
-                      }
-                    }
-                  );
-
-                  // NEW: if Jitsi reports a camera error (e.g., device switch), rebuild PiP
-                  externalApi.addListener("cameraError", async () => {
-                    await startLocalPreview(pipFacing);
-                  });
-
-                  // IMPORTANT: removed the previous username-based pinParticipant call.
-                }}
-                getIFrameRef={(iframeRef) => {
-                  iframeRef.style.height = "100%";
-                }}
-              />
-            </div>
+                externalApi.addListener("audioAvailabilityChanged", (event) => {
+                  if (event.available) {
+                    setAudioPermissions(true);
+                  }
+                });
+                externalApi.executeCommand(
+                  "pinParticipant",
+                  videoChatRequest.receiver.username ===
+                    state.currentUser.username
+                    ? videoChatRequest.sender.username
+                    : videoChatRequest.receiver.username
+                );
+              }}
+              getIFrameRef={(iframeRef) => {
+                iframeRef.style.height = "100%";
+              }}
+            />
           )
         )}
       </motion.div>
