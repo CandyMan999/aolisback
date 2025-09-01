@@ -95,87 +95,49 @@ const LikeAndMatchButtons = ({
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  useEffect(() => {
-    if (!selectedButton) {
-      try {
-        setSearch("Browse");
-        // setViewMode("swipe");
-        dispatch({ type: "CHANGE_VIEW_MODE", payload: "swipe" });
-        handleGetAllUsers();
-      } catch (err) {
-        console.log(
-          "error getting all browsable users inside button component: ",
-          err
-        );
-      }
-    }
-    if (selectedButton === "My Likes") {
-      try {
-        handleGetLikedUsers();
-
-        dispatch({ type: "CHANGE_VIEW_MODE", payload: "grid" });
-        setSkip(0);
-      } catch (err) {
-        console.log("error getting liked users inside button component: ", err);
-      }
-    }
-    if (selectedButton === "Likes Me") {
-      try {
-        // if (currentUser && currentUser.plan.planType === "Free") {
-        //   window.ReactNativeWebView.postMessage("GO_PREMIUM");
-        // } else {
-        //   handleGetUsersWhoLikeMe();
-        // }
-        setSkip(0);
-
-        dispatch({ type: "CHANGE_VIEW_MODE", payload: "grid" });
-        handleGetUsersWhoLikeMe(); //delete this after uncommenting code
-      } catch (err) {
-        console.log("error getting liked users inside button component: ", err);
-      }
-    }
-    if (selectedButton === "Matches") {
-      try {
-        dispatch({ type: "CHANGE_VIEW_MODE", payload: "grid" });
-        handleGetMatchedUsers();
-
-        setSkip(0);
-      } catch (err) {
-        console.log("error getting liked users inside button component: ", err);
-      }
-    }
-  }, [selectedButton, currentUser.matchedUsers, currentUser.likedUsers]);
-
   const handleClick = async (button) => {
-    setSelectedButton(selectedButton === button ? null : button);
+    const isSelected = selectedButton === button;
+    const newSelection = isSelected ? null : button;
+    setSelectedButton(newSelection);
 
-    if (button === "My Likes") {
-      try {
-        setSearch("My Likes");
-      } catch (err) {
-        console.log("error getting liked users inside button component: ", err);
+    try {
+      setSkip(0);
+      if (!newSelection) {
+        setSearch("Browse");
+        dispatch({ type: "CHANGE_VIEW_MODE", payload: "swipe" });
+        if (handleGetAllUsers) {
+          await handleGetAllUsers();
+        }
+        return;
       }
-    }
-    if (button === "Likes Me") {
-      try {
-        // if (currentUser && currentUser.plan.planType === "Free") {
-        //   setSelectedButton(null);
-        //   window.ReactNativeWebView.postMessage("GO_PREMIUM");
-        // } else {
-        //   setSearch("Likes Me");
-        // }
-        setSearch("Likes Me"); // delete this line after uncommenting code
-      } catch (err) {
-        console.log("error getting liked users inside button component: ", err);
+
+      switch (newSelection) {
+        case "My Likes":
+          setSearch("My Likes");
+          dispatch({ type: "CHANGE_VIEW_MODE", payload: "grid" });
+          await handleGetLikedUsers();
+          break;
+        case "Likes Me":
+          // if (currentUser && currentUser.plan.planType === "Free") {
+          //   setSelectedButton(null);
+          //   window.ReactNativeWebView.postMessage("GO_PREMIUM");
+          // } else {
+          //   setSearch("Likes Me");
+          // }
+          setSearch("Likes Me"); // delete this line after uncommenting code
+          dispatch({ type: "CHANGE_VIEW_MODE", payload: "grid" });
+          await handleGetUsersWhoLikeMe();
+          break;
+        case "Matches":
+          setSearch("Matches");
+          dispatch({ type: "CHANGE_VIEW_MODE", payload: "grid" });
+          await handleGetMatchedUsers();
+          break;
+        default:
+          break;
       }
-    }
-    if (button === "Matches") {
-      try {
-        setSearch("Matches");
-      } catch (err) {
-        console.log("error getting liked users inside button component: ", err);
-      }
+    } catch (err) {
+      console.log("error getting users inside button component: ", err);
     }
   };
 

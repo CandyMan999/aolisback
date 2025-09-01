@@ -78,10 +78,8 @@ const VideoChatScreen = ({ showScreen, handleShutScreen }) => {
         intervalIdRef.current = null;
       }
 
-      console.log("PARTICIPANT LEFT!!!!!!!!!!!!!!");
       if (outOfTimeRef.current) {
         try {
-          console.log("OUT OF TIME IS FIRING!!!!!!!!!!!!");
           window.ReactNativeWebView.postMessage("OUT_OF_TIME");
         } catch (err) {
           console.log(err);
