@@ -17,6 +17,7 @@ export const GET_ROOMS_QUERY = gql`
       kickVotes {
         target {
           _id
+          username
         }
         voters {
           _id

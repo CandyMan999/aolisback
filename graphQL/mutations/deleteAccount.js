@@ -157,16 +157,35 @@ module.exports = {
       };
 
       const removeUserFromRooms = async (userId) => {
-        // Remove any kickVote entries where they were the target
+        // 1) Remove any kickVotes where they were the target
         await Room.updateMany({}, { $pull: { kickVotes: { target: userId } } });
 
-        // Remove them from voters arrays in remaining kickVotes
+        // 2) Remove them from any voters arrays
         await Room.updateMany(
           { "kickVotes.voters": userId },
           { $pull: { "kickVotes.$[].voters": userId } }
         );
 
-        // Also ensure they're not lingering in users/bannedUsers lists
+        // 3) Remove empty or malformed kickVotes entries in general
+        //   - target missing/null
+        await Room.updateMany(
+          {},
+          {
+            $pull: {
+              kickVotes: {
+                $or: [{ target: { $exists: false } }, { target: null }],
+              },
+            },
+          }
+        );
+
+        //   - voters exists but is empty (supported by MongoDB for $pull with $size)
+        await Room.updateMany(
+          { "kickVotes.voters": { $size: 0 } },
+          { $pull: { kickVotes: { voters: { $size: 0 } } } }
+        );
+
+        // 4) Ensure they're not lingering in users/bannedUsers lists
         await Room.updateMany({ users: userId }, { $pull: { users: userId } });
         await Room.updateMany(
           { bannedUsers: userId },
