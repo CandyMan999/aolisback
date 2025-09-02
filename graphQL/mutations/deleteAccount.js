@@ -1,5 +1,6 @@
 const { AuthenticationError } = require("apollo-server");
 const { User, Picture, Room, Comment, Video } = require("../../models");
+const { publishRoomCreatedOrUpdated } = require("../subscription/subscription");
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
 
@@ -77,13 +78,13 @@ module.exports = {
           const deleteSentVideoPromises = currentUser.sentVideos.map(
             async (videoId) => {
               const video = await Video.findById(videoId);
-              if (video && video.publicId) {
-                publicIDs.push(video.publicId);
+              if (!video) return;
+              if (video.publicId) publicIDs.push(video.publicId);
+              if (video.receiver && video.receiver._id) {
+                await User.findByIdAndUpdate(video.receiver._id, {
+                  $pull: { receivedVideos: video._id },
+                });
               }
-              await User.findByIdAndUpdate(
-                { _id: video.receiver._id },
-                { $pull: { receivedVideos: video._id } }
-              );
               await Video.deleteOne({ _id: video._id });
             }
           );
@@ -91,9 +92,8 @@ module.exports = {
           const deleteReceivedVideoPromises = currentUser.receivedVideos.map(
             async (videoId) => {
               const video = await Video.findById(videoId);
-              if (video && video.publicId) {
-                publicIDs.push(video.publicId);
-              }
+              if (!video) return;
+              if (video.publicId) publicIDs.push(video.publicId);
               await Video.deleteOne({ _id: video._id });
             }
           );
@@ -192,6 +192,29 @@ module.exports = {
           { $pull: { bannedUsers: userId } }
         );
       };
+      const sanitizeRooms = async () => {
+        // Remove entries with null/missing target
+        await Room.updateMany(
+          {},
+          {
+            $pull: {
+              kickVotes: {
+                $or: [{ target: { $exists: false } }, { target: null }],
+              },
+            },
+          }
+        );
+
+        // Optional: remove entries with empty voters (skip if your MongoDB doesn’t allow $size in $pull)
+        try {
+          await Room.updateMany(
+            { "kickVotes.voters": { $size: 0 } },
+            { $pull: { kickVotes: { voters: { $size: 0 } } } }
+          );
+        } catch (e) {
+          // ok to ignore if unsupported
+        }
+      };
 
       const deleteUser = async () => {
         try {
@@ -207,6 +230,15 @@ module.exports = {
       await deleteAllVideos();
       await removeUserReferences();
       await deleteUser();
+      await sanitizeRooms();
+
+      const allRooms = await Room.find({})
+        .populate("users")
+        .populate("kickVotes.target")
+        .populate("kickVotes.voters")
+        .populate("bannedUsers");
+
+      publishRoomCreatedOrUpdated(allRooms);
 
       return { status: true };
     } catch (err) {

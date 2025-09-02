@@ -73,52 +73,75 @@ const resetMessagesSent = async () => {
 
 const deleteOldVideos = async () => {
   try {
-    // Do the age filtering in Mongo, not in JS
-    const twoDaysAgo = moment().subtract(3, "days").toDate();
+    // Pick one: 2 or 3 days; your code says "twoDaysAgo" but subtracted 3.
+    const twoDaysAgo = moment().subtract(2, "days").toDate();
     const sevenDaysAgo = moment().subtract(7, "days").toDate();
 
     const videos = await Video.find({
       $or: [
-        // viewed AND older than 2 days AND not flagged
         {
           createdAt: { $lt: twoDaysAgo },
           viewed: true,
           flagged: { $ne: true },
         },
-        // anything older than 7 days
         { createdAt: { $lt: sevenDaysAgo } },
       ],
-    }).select("_id publicId receiver sender");
-
-    console.log("videos: ", videos);
+    })
+      .select("_id publicId receiver sender")
+      .lean(); // lean so receiver/sender are ObjectIds (or null), not docs
 
     if (!videos.length) return;
 
-    // Clean up DB first
+    // 1) Clean up DB
     await Promise.all(
       videos.map(async (video) => {
-        const receiverId = video.receiver._id;
-        const senderId = video.sender._id;
+        // receiver/sender may be ObjectIds OR populated docs (in case you change code later)
+        const receiverId =
+          video && video.receiver
+            ? video.receiver._id
+              ? video.receiver._id
+              : video.receiver
+            : null;
+        const senderId =
+          video && video.sender
+            ? video.sender._id
+              ? video.sender._id
+              : video.sender
+            : null;
 
+        // Remove the Video doc first
         await Video.deleteOne({ _id: video._id });
 
-        await Promise.all([
-          receiverId
-            ? User.findByIdAndUpdate(receiverId, {
-                $pull: { receivedVideos: video._id },
-              })
-            : null,
-          senderId
-            ? User.findByIdAndUpdate(senderId, {
-                $pull: { sentVideos: video._id },
-              })
-            : null,
-        ]);
+        // Pull from user arrays (only if we have ids)
+        const ops = [];
+        if (receiverId) {
+          ops.push(
+            User.findByIdAndUpdate(receiverId, {
+              $pull: { receivedVideos: video._id },
+            })
+          );
+        }
+        if (senderId) {
+          ops.push(
+            User.findByIdAndUpdate(senderId, {
+              $pull: { sentVideos: video._id },
+            })
+          );
+        }
+        if (ops.length) await Promise.all(ops);
       })
     );
 
-    // Then delete the assets from Cloudflare Stream
-    const uids = videos.map((v) => v.publicId).filter(Boolean);
+    // 2) Delete from Cloudflare Stream (publicId holds the Stream UID)
+    const uids = Array.from(
+      new Set(
+        videos
+          .map((v) => v.publicId)
+          .filter(Boolean)
+          .map(String)
+      )
+    );
+
     if (!uids.length) return;
 
     const results = await Promise.allSettled(
@@ -143,8 +166,8 @@ const deleteOldVideos = async () => {
         failed.map((f) => ({
           uid: f.uid,
           reason:
-            f.r.reason.response.data ||
-            f.r.reason.message ||
+            (f.r.reason && f.r.reason.response && f.r.reason.response.data) ||
+            (f.r.reason && f.r.reason.message) ||
             String(f.r.reason),
         }))
       );

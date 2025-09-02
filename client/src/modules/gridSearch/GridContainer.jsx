@@ -179,6 +179,17 @@ const GridContainer = () => {
     return newArray;
   };
 
+  // const returnToSwiping = async () =>{
+  //   try{
+  //     setUsers([]);
+  //     setEndOfUsers(false);
+
+  //     fetchData(false);
+  //   }catch(err){
+  //     console.log("error reseting swipedeck: ", err)
+  //   }
+  // }
+
   const usersMemo = useMemo(() => users, [users]);
 
   return (

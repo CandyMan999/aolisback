@@ -105,6 +105,7 @@ const LikeAndMatchButtons = ({
       if (!newSelection) {
         setSearch("Browse");
         dispatch({ type: "CHANGE_VIEW_MODE", payload: "swipe" });
+
         if (handleGetAllUsers) {
           await handleGetAllUsers();
         }

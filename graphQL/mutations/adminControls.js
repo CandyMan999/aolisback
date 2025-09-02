@@ -1,5 +1,6 @@
 const { AuthenticationError } = require("apollo-server");
 const { Video, Picture, User, Room, Comment } = require("../../models");
+const { publishRoomCreatedOrUpdated } = require("../subscription/subscription");
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
@@ -9,12 +10,16 @@ cloudinary.config({
 });
 
 const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID;
-const CF_API_TOKEN = process.env.CF_API_TOKEN;
+const CF_API_TOKEN = process.env.CF_API_TOKEN; // Cloudflare Images
+const CF_STREAM_TOKEN = process.env.CF_STREAM_TOKEN; // Cloudflare Stream
 
 if (!CF_ACCOUNT_ID || !CF_API_TOKEN) {
   console.warn(
-    "[adminControls] Missing CF_ACCOUNT_ID and/or CF_API_TOKEN in env"
+    "[adminControls] Missing CF_ACCOUNT_ID and/or CF_API_TOKEN in env (Images)"
   );
+}
+if (!CF_ACCOUNT_ID || !CF_STREAM_TOKEN) {
+  console.warn("[adminControls] Missing CF_STREAM_TOKEN in env (Stream)");
 }
 
 module.exports = {
@@ -60,62 +65,175 @@ module.exports = {
       throw new AuthenticationError(err.message);
     }
   },
+
+  // --------------------- UPDATED: banUserResolver ---------------------
   banUserResolver: async (root, { userId }) => {
     try {
-      // Ban the user
+      // 1) Mark user as banned
       const user = await User.findByIdAndUpdate(
         userId,
         { isBanned: true },
         { new: true }
       );
-
       if (!user) {
-        throw new Error("User not found");
+        throw new AuthenticationError("User not found");
       }
 
-      // Fetch all videos and pictures associated with the user
-      const videos = await Video.find({ sender: userId });
+      // Local import so other resolvers remain unchanged
+      const axios = require("axios");
+
+      // 2) Remove user from rooms & ban them there, and scrub kickVotes
+      //    - remove from users
+      //    - add to bannedUsers (only in rooms where they were present)
+      await Room.updateMany(
+        { users: userId },
+        { $pull: { users: userId }, $addToSet: { bannedUsers: userId } }
+      );
+
+      //    - remove any votes where they are target
+      await Room.updateMany({}, { $pull: { kickVotes: { target: userId } } });
+
+      //    - remove them from any voters arrays
+      await Room.updateMany(
+        { "kickVotes.voters": userId },
+        { $pull: { "kickVotes.$[].voters": userId } }
+      );
+
+      //    - sanitize malformed/null kickVotes entries
+      await Room.updateMany(
+        {},
+        {
+          $pull: {
+            kickVotes: {
+              $or: [{ target: { $exists: false } }, { target: null }],
+            },
+          },
+        }
+      );
+
+      //    - remove null voters if any (ignore if server doesn't support $[])
+      try {
+        await Room.updateMany({}, { $pull: { "kickVotes.$[].voters": null } });
+      } catch (e) {}
+
+      //    - optionally remove empty voter entries (ignore if unsupported)
+      try {
+        await Room.updateMany(
+          { "kickVotes.voters": { $size: 0 } },
+          { $pull: { kickVotes: { voters: { $size: 0 } } } }
+        );
+      } catch (e) {}
+
+      // 3) Remove their comments & references to them
+      const authoredComments = await Comment.find(
+        { author: userId },
+        { _id: 1 }
+      );
+      const authoredIds = authoredComments.map((c) => c._id);
+
+      if (authoredIds.length > 0) {
+        // delete the user's comments
+        await Comment.deleteMany({ _id: { $in: authoredIds } });
+
+        // pull comment ids from rooms
+        await Room.updateMany(
+          { comments: { $in: authoredIds } },
+          { $pull: { comments: { $in: authoredIds } } }
+        );
+
+        // null out replyTo on comments that replied to theirs
+        await Comment.updateMany(
+          { replyTo: { $in: authoredIds } },
+          { $set: { replyTo: null } }
+        );
+      }
+
+      // 4) Delete all pictures they own (Cloudflare Images or Cloudinary)
       const pictures = await Picture.find({ user: userId });
+      if (pictures && pictures.length) {
+        for (let i = 0; i < pictures.length; i++) {
+          const picture = pictures[i];
+          if (picture.publicId) {
+            try {
+              if (picture.provider === "Cloudflare") {
+                await axios.delete(
+                  `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/images/v1/${picture.publicId}`,
+                  { headers: { Authorization: `Bearer ${CF_API_TOKEN}` } }
+                );
+              } else {
+                await cloudinary.uploader.destroy(picture.publicId);
+              }
+            } catch (e) {
+              console.warn("Failed remote picture delete:", e && e.message);
+            }
+          }
+          await Picture.deleteOne({ _id: picture._id });
+        }
 
-      // Delete all videos from Cloudinary and the database
-      const deleteVideoPromises = videos.map(async (video) => {
-        if (video.publicId) {
-          await cloudinary.api.delete_resources([video.publicId], {
-            resource_type: "video",
+        // remove picture references from user doc (defense-in-depth)
+        await User.updateMany(
+          { pictures: { $in: pictures.map((p) => p._id) } },
+          { $pull: { pictures: { $in: pictures.map((p) => p._id) } } }
+        );
+      }
+
+      // 5) Delete videos sent/received by this user from DB and Cloudflare Stream
+      const sentVideos = await Video.find({ sender: userId }); // user's outgoing
+      const receivedVideos = await Video.find({ receiver: userId }); // user's inbox
+
+      const streamIds = []; // Cloudflare Stream UIDs from publicId
+
+      // Sent videos: remove from receivers' inboxes, delete docs, collect UIDs
+      for (let i = 0; i < sentVideos.length; i++) {
+        const v = sentVideos[i];
+        if (v.publicId) streamIds.push(String(v.publicId));
+
+        if (v.receiver) {
+          await User.findByIdAndUpdate(v.receiver, {
+            $pull: { receivedVideos: v._id },
           });
         }
-        await Video.findByIdAndDelete(video._id);
-      });
+        await Video.deleteOne({ _id: v._id });
+      }
 
-      // Delete all pictures from Cloudinary and the database
-      const deletePicturePromises = pictures.map(async (picture) => {
-        if (picture.publicId) {
-          await cloudinary.api.delete_resources([picture.publicId], {
-            resource_type: "image",
+      // Received videos: remove from senders' sent arrays if tracked, delete docs, collect UIDs
+      for (let j = 0; j < receivedVideos.length; j++) {
+        const rv = receivedVideos[j];
+        if (rv.publicId) streamIds.push(String(rv.publicId));
+
+        if (rv.sender) {
+          await User.findByIdAndUpdate(rv.sender, {
+            $pull: { sentVideos: rv._id },
           });
         }
-        await Picture.findByIdAndDelete(picture._id);
-      });
+        await Video.deleteOne({ _id: rv._id });
+      }
 
-      // Clean up references to the user's videos and pictures in other collections
+      // Remote delete from Cloudflare Stream (uses publicId as the UID)
+      if (streamIds.length && CF_STREAM_TOKEN && CF_ACCOUNT_ID) {
+        const toDelete = Array.from(new Set(streamIds.filter(Boolean)));
+        const results = await Promise.allSettled(
+          toDelete.map((uid) =>
+            axios.delete(
+              `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/stream/${uid}`,
+              {
+                headers: { Authorization: `Bearer ${CF_STREAM_TOKEN}` },
+                timeout: 20000,
+              }
+            )
+          )
+        );
+        const failed = results.filter((r) => r.status === "rejected");
+        if (failed.length) {
+          console.warn(
+            "[banUser] Some Cloudflare Stream deletions failed:",
+            failed.length
+          );
+        }
+      }
+
+      // 6) Remove references to this user from other users
       await Promise.all([
-        ...deleteVideoPromises,
-        ...deletePicturePromises,
-        // Remove references to videos in other users' receivedVideos arrays
-        User.updateMany(
-          { receivedVideos: { $in: videos.map((v) => v._id) } },
-          { $pull: { receivedVideos: { $in: videos.map((v) => v._id) } } }
-        ),
-        // Remove references to pictures in comments and rooms
-        Comment.updateMany(
-          { picture: { $in: pictures.map((p) => p._id) } },
-          { $unset: { picture: "" } }
-        ),
-        Room.updateMany(
-          { comments: { $in: user.comments } },
-          { $pull: { comments: { $in: user.comments } } }
-        ),
-        // Remove references to the user in other users' matchedUsers, likedUsers, etc.
         User.updateMany(
           { matchedUsers: userId },
           { $pull: { matchedUsers: userId } }
@@ -132,14 +250,24 @@ module.exports = {
           { blockedUsers: userId },
           { $pull: { blockedUsers: userId } }
         ),
-        // Optionally remove the user from any other custom fields where they might be referenced
       ]);
+
+      // 7) Publish updated rooms so UIs refresh live
+      const allRooms = await Room.find({})
+        .populate("users")
+        .populate("kickVotes.target")
+        .populate("kickVotes.voters")
+        .populate("bannedUsers");
+
+      publishRoomCreatedOrUpdated(allRooms);
 
       return user;
     } catch (err) {
       throw new Error(`Failed to ban user and clean up: ${err.message}`);
     }
   },
+  // --------------------------------------------------------------------
+
   deleteSeedersResolver: async (root, args, ctx) => {
     try {
       const SEEDERS = await User.find({ seeder: true }).populate([
