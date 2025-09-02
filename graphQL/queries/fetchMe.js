@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server");
-const { User } = require("../../models");
+const { User, Match } = require("../../models");
 const { verifyToken } = require("../../utils/middleware");
 const moment = require("moment");
 const { pushNotificationMatchOnline } = require("../../utils/middleware");
@@ -80,9 +80,14 @@ module.exports = {
       const now = moment();
       const notificationInterval = 4; // 4 hours
 
-      for (const match of user.matchedUsers) {
+      const matches = await Match.find({ users: user._id }).select("users");
+      for (const match of matches) {
+        const otherId = match.users.find(
+          (id) => id.toString() !== user._id.toString()
+        );
+        if (!otherId) continue;
         try {
-          const myMatch = await User.findById(match);
+          const myMatch = await User.findById(otherId);
           const beenLongerThan4 =
             !user.lastMatchNotification ||
             now.diff(moment(user.lastMatchNotification), "hours") >=
@@ -92,14 +97,14 @@ module.exports = {
             pushNotificationMatchOnline(user.username, myMatch.expoToken);
 
             // Update the user's lastMatchNotification
-            const me = await User.findByIdAndUpdate(
+            await User.findByIdAndUpdate(
               user._id,
               { lastMatchNotification: now.toDate() },
               { new: true }
             );
           }
         } catch (error) {
-          console.error(`Error processing match ${match}:`, error);
+          console.error(`Error processing match ${match._id}:`, error);
         }
       }
 
