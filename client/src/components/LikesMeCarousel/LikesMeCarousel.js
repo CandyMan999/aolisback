@@ -13,33 +13,43 @@ const LikesMeCarousel = ({ viewLikes }) => {
 
   const [likedUsers, setLikedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [skip, setSkip] = useState(0);
+  const [fetching, setFetching] = useState(false);
 
   // Fetch liked users using GraphQL
-  useEffect(() => {
-    const fetchLikedUsers = async () => {
-      try {
-        setLoading(true);
-        const variables = { userID: currentUser._id };
+  const fetchLikedUsers = async (append = false) => {
+    try {
+      append ? setFetching(true) : setLoading(true);
+      const variables = { userID: currentUser._id, skip: append ? skip : 0, limit: 10 };
+      const { getUsersWhoLikedMe } = await client.request(
+        GET_USERS_WHO_LIKE_ME_QUERY,
+        variables
+      );
+      const usersWithPictures = getUsersWhoLikedMe.filter(
+        (user) => user.pictures && user.pictures.length > 0
+      );
+      setLikedUsers((prev) => (append ? [...prev, ...usersWithPictures] : usersWithPictures));
+      setSkip((prev) => (append ? prev + usersWithPictures.length : usersWithPictures.length));
+      append ? setFetching(false) : setLoading(false);
+    } catch (err) {
+      console.error("Error fetching liked users:", err);
+      append ? setFetching(false) : setLoading(false);
+    }
+  };
 
-        const { getUsersWhoLikedMe } = await client.request(
-          GET_USERS_WHO_LIKE_ME_QUERY,
-          variables
-        );
-        // Filter users with pictures to avoid errors
-        const usersWithPictures = getUsersWhoLikedMe.filter(
-          (user) => user.pictures && user.pictures.length > 0
-        );
-        setLikedUsers(usersWithPictures);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching liked users:", err);
-        setLoading(false);
-      }
-    };
+  useEffect(() => {
     if (currentUser._id) {
       fetchLikedUsers();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser._id]);
+
+  const handleScroll = (e) => {
+    const { scrollLeft, clientWidth, scrollWidth } = e.target;
+    if (scrollLeft + clientWidth >= scrollWidth - 50 && !fetching) {
+      fetchLikedUsers(true);
+    }
+  };
 
   const handleOpenProfile = async (user) => {
     dispatch({ type: "UPDATE_PROFILE", payload: user });
@@ -107,6 +117,7 @@ const LikesMeCarousel = ({ viewLikes }) => {
       <Box
         display="flex"
         overflowX="auto"
+        onScroll={handleScroll}
         width="100%"
         height="150px"
         padding="0 10px" // Fix padding inside the scroll container
@@ -162,6 +173,11 @@ const LikesMeCarousel = ({ viewLikes }) => {
           </motion.div>
         ))}
       </Box>
+      {fetching && (
+        <Box width="100%" display="flex" justifyContent="center" alignItems="center">
+          <Loading size={30} bar />
+        </Box>
+      )}
     </Box>
   );
 };

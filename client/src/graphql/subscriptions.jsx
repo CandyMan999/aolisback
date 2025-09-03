@@ -361,17 +361,7 @@ export const CHANGE_PLAN_SUBSCRIPTION = gql`
       }
       blockedUsers {
         _id
-      }
-      likedUsers {
-        _id
-      }
-      matchedUsers {
-        _id
-      }
-      usersLikedMe {
-        _id
-      }
-      email
+      }      email
       intro
       sex
       age

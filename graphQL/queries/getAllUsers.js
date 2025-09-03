@@ -1,27 +1,29 @@
-const { AuthenticationError, gql } = require("apollo-server");
-const { User, Room } = require("../../models");
+const { AuthenticationError } = require("apollo-server");
+const { User, Room, Like } = require("../../models");
 const { publishRoomCreatedOrUpdated } = require("../subscription/subscription");
 const moment = require("moment");
 
 module.exports = {
   getAllUsersResolver: async (root, args, ctx) => {
-    const { latitude, longitude, limit, skip } = args; // Default limit to 50 and skip to 0
+    const { latitude, longitude, limit, skip } = args;
     const { ageRange, kids, sex } = ctx.currentUser.lookingFor;
 
     try {
+      const likedIds = await Like.find({ user: ctx.currentUser._id }).distinct(
+        "liked"
+      );
+
       const users = await User.find({
         location: {
           $near: {
             $geometry: {
               type: "Point",
-              coordinates: [longitude, latitude], // The order is [longitude, latitude]
+              coordinates: [longitude, latitude],
             },
-            $maxDistance: 12500 * 1609.34, // Convert miles to meters (1 mile = 1609.34 meters)
+            $maxDistance: 12500 * 1609.34,
           },
         },
-        _id: {
-          $nin: [...ctx.currentUser.likedUsers], //exclude previously liked users
-        },
+        _id: { $nin: likedIds },
         profileComplete: true,
         age: {
           $gte: ageRange ? ageRange.lowEnd : 18,
@@ -48,8 +50,8 @@ module.exports = {
           $gte: !!ctx.currentUser.age ? ctx.currentUser.age : 18,
         },
       })
-        .skip(skip) // Skip the number of users specified
-        .limit(limit) // Limit the number of users returned
+        .skip(skip)
+        .limit(limit)
         .populate([
           "room",
           "blockedUsers",

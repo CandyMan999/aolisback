@@ -6,4 +6,6 @@ module.exports = {
   Video: require("./Video"),
   ChatRequest: require("./ChatRequest"),
   Queue: require("./Queue"),
+  Like: require("./Like"),
+  Match: require("./Match"),
 };

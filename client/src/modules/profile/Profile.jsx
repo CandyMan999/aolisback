@@ -30,6 +30,7 @@ import {
   LIKE_MUTATION,
   UNLIKE_MUTATION,
 } from "../../graphql/mutations";
+import { IS_LIKED_QUERY } from "../../graphql/queries";
 
 const Profile = ({ userClicked, mobile, currentUser }) => {
   const client = useClient();
@@ -40,6 +41,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const [userBlocked, setUserBlocked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showHearts, setShowHearts] = useState(false);
+  const [match, setMatch] = useState(false);
 
   let user = userClicked ? userClicked : currentUser;
   const itsMe = userClicked._id === currentUser._id;
@@ -74,15 +76,13 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
   const handleShowHearts = () => {
     try {
-      if (currentUser.likedUsers.length) {
-        const isLiked = currentUser.likedUsers.some((user) => user._id === _id);
-
-        if (isLiked) {
-          setShowHearts(true);
-        } else {
-          setShowHearts(false);
-        }
-      }
+      client
+        .request(IS_LIKED_QUERY, {
+          userID: currentUser._id,
+          otherID: _id,
+        })
+        .then(({ isLiked }) => setShowHearts(isLiked))
+        .catch((err) => console.log("error filtering likes: ", err));
     } catch (err) {
       console.log("error filtering likes: ", err);
     }
@@ -287,6 +287,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
       dispatch({ type: "UPDATE_LIKED_USERS", payload: user });
       setShowHearts(true);
+      setMatch(isMatch);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -304,6 +305,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
       dispatch({ type: "UPDATE_LIKED_USERS", payload: unLike });
       setShowHearts(false);
+      setMatch(false);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -344,8 +346,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           {showHearts && (
             <FloatingHeart
               activate={showHearts}
-              currentUser={currentUser}
-              profileID={_id}
+              isMatch={match}
             />
           )}
         </Box>

@@ -286,17 +286,7 @@ export const FETCH_ME = gql`
       }
       blockedUsers {
         _id
-      }
-      likedUsers {
-        _id
-      }
-      matchedUsers {
-        _id
-      }
-      usersLikedMe {
-        _id
-      }
-      email
+      }      email
       intro
       sex
       age
@@ -431,6 +421,12 @@ export const GET_LIKED_USERS_QUERY = gql`
       drugs
       kids
     }
+  }
+`;
+
+export const IS_LIKED_QUERY = gql`
+  query ($userID: ID!, $otherID: ID!) {
+    isLiked(userID: $userID, otherID: $otherID)
   }
 `;
 
