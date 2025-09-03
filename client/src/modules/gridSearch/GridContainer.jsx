@@ -63,16 +63,13 @@ const GridContainer = () => {
       const filteredAndSorted = sortByDistance(filteredUsers);
 
       if (paginate) {
-        if (getAllUsers.length === 0) {
-          setSkip(0);
-          fetchData(false);
-        } else {
+        if (getAllUsers.length) {
           setUsers((prevUsers) => [...prevUsers, ...filteredAndSorted]);
-          setSkip((prevSkip) => prevSkip + 10);
+          setSkip((prevSkip) => prevSkip + getAllUsers.length);
         }
       } else {
         setUsers(filteredAndSorted);
-        setSkip(10);
+        setSkip(getAllUsers.length);
       }
 
       setLoading(false);

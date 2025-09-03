@@ -15,6 +15,7 @@ const LikesMeCarousel = ({ viewLikes }) => {
   const [loading, setLoading] = useState(true);
   const [skip, setSkip] = useState(0);
   const [fetching, setFetching] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   // Fetch liked users using GraphQL
   const fetchLikedUsers = async (append = false) => {
@@ -30,6 +31,7 @@ const LikesMeCarousel = ({ viewLikes }) => {
       );
       setLikedUsers((prev) => (append ? [...prev, ...usersWithPictures] : usersWithPictures));
       setSkip((prev) => (append ? prev + usersWithPictures.length : usersWithPictures.length));
+      setHasMore(usersWithPictures.length === 10);
       append ? setFetching(false) : setLoading(false);
     } catch (err) {
       console.error("Error fetching liked users:", err);
@@ -46,7 +48,7 @@ const LikesMeCarousel = ({ viewLikes }) => {
 
   const handleScroll = (e) => {
     const { scrollLeft, clientWidth, scrollWidth } = e.target;
-    if (scrollLeft + clientWidth >= scrollWidth - 50 && !fetching) {
+    if (scrollLeft + clientWidth >= scrollWidth - 50 && !fetching && hasMore) {
       fetchLikedUsers(true);
     }
   };
