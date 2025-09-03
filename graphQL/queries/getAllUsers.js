@@ -12,6 +12,10 @@ module.exports = {
       const likedIds = await Like.find({ user: ctx.currentUser._id }).distinct(
         "liked"
       );
+      const legacyIds = await Like.find({ user: ctx.currentUser._id }).distinct(
+        "target"
+      );
+      const excludeIds = [...likedIds, ...legacyIds];
 
       const users = await User.find({
         location: {
@@ -23,7 +27,7 @@ module.exports = {
             $maxDistance: 12500 * 1609.34,
           },
         },
-        _id: { $nin: likedIds },
+        _id: { $nin: excludeIds },
         profileComplete: true,
         age: {
           $gte: ageRange ? ageRange.lowEnd : 18,

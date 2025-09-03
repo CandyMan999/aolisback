@@ -16,8 +16,20 @@ module.exports = {
       const user = await User.findById(likerId);
       if (!user) throw new Error("User not found");
 
-      const already = await Like.findOne({ user: likerId, liked: likedId });
+      const already = await Like.findOne({
+        user: likerId,
+        $or: [{ liked: likedId }, { target: likedId }],
+      });
+
       if (already) {
+        // Migrate legacy documents using `target` field
+        if (already.target && !already.liked) {
+          await Like.updateOne(
+            { _id: already._id },
+            { $set: { liked: already.target }, $unset: { target: "" } }
+          );
+        }
+
         const populated = await User.findById(likerId).populate([
           "pictures",
           "blockedUsers",
@@ -39,8 +51,15 @@ module.exports = {
 
       const reciprocal = await Like.findOne({
         user: likedId,
-        liked: likerId,
+        $or: [{ liked: likerId }, { target: likerId }],
       });
+
+      if (reciprocal && reciprocal.target && !reciprocal.liked) {
+        await Like.updateOne(
+          { _id: reciprocal._id },
+          { $set: { liked: reciprocal.target }, $unset: { target: "" } }
+        );
+      }
       let isMatch = false;
       if (reciprocal) {
         isMatch = true;
@@ -66,8 +85,14 @@ module.exports = {
       const likedId = new mongoose.Types.ObjectId(unLikeID);
       const likerId = new mongoose.Types.ObjectId(userID);
 
-      await Like.deleteOne({ user: likerId, liked: likedId });
-      await Like.deleteOne({ user: likedId, liked: likerId });
+      await Like.deleteOne({
+        user: likerId,
+        $or: [{ liked: likedId }, { target: likedId }],
+      });
+      await Like.deleteOne({
+        user: likedId,
+        $or: [{ liked: likerId }, { target: likerId }],
+      });
       await Match.deleteOne({ users: { $all: [likerId, likedId] } });
 
       const user = await User.findById(likerId).populate([

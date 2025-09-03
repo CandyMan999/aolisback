@@ -10,19 +10,34 @@ module.exports = {
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
-        .populate({
-          path: "liked",
-          match: { isBanned: false },
-          populate: [
-            "room",
-            "blockedUsers",
-            "pictures",
-            "sentVideos",
-            "receivedVideos",
-          ],
-        });
+        .populate([
+          {
+            path: "liked",
+            match: { isBanned: false },
+            populate: [
+              "room",
+              "blockedUsers",
+              "pictures",
+              "sentVideos",
+              "receivedVideos",
+            ],
+          },
+          {
+            path: "target",
+            match: { isBanned: false },
+            populate: [
+              "room",
+              "blockedUsers",
+              "pictures",
+              "sentVideos",
+              "receivedVideos",
+            ],
+          },
+        ]);
 
-      return likes.map((like) => like.liked).filter(Boolean);
+      return likes
+        .map((like) => like.liked || like.target)
+        .filter(Boolean);
     } catch (err) {
       throw new AuthenticationError(err.message);
     }

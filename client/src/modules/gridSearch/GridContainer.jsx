@@ -35,6 +35,10 @@ const GridContainer = () => {
   }, []);
 
   const fetchData = async (paginate) => {
+    if (!paginate) {
+      setEndOfUsers(false);
+    }
+
     if (skip === 0 || search !== "Browse") {
       setLoading(true);
     }
@@ -236,7 +240,7 @@ const GridContainer = () => {
       <LikeAndMatchButtons
         handleGetLikedUsers={handleGetLikedUsers}
         handleGetUsersWhoLikeMe={handleGetUsersWhoLikeMe}
-        handleGetAllUsers={skip > 0 ? null : () => fetchData(false)}
+        handleGetAllUsers={() => fetchData(false)}
         handleGetMatchedUsers={handleGetMatchedUsers}
         currentUser={currentUser}
         loading={loading}
