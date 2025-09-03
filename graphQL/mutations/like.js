@@ -10,7 +10,7 @@ module.exports = {
       const user = await User.findById(userID);
       if (!user) throw new Error("User not found");
 
-      const already = await Like.findOne({ user: userID, liked: likeID });
+      const already = await Like.findOne({ user: userID, target: likeID });
       if (already) {
         const populated = await User.findById(userID).populate(["pictures", "blockedUsers"]);
         return { user: populated, isMatch: false, matchID: likeID };
@@ -24,9 +24,9 @@ module.exports = {
         throw new AuthenticationError("No likes remaining");
       }
 
-      await Like.create({ user: userID, liked: likeID });
+      await Like.create({ user: userID, target: likeID });
 
-      const reciprocal = await Like.findOne({ user: likeID, liked: userID });
+      const reciprocal = await Like.findOne({ user: likeID, target: userID });
       let isMatch = false;
       if (reciprocal) {
         isMatch = true;
@@ -49,8 +49,8 @@ module.exports = {
   unLikeResolver: async (root, args) => {
     const { userID, unLikeID } = args;
     try {
-      await Like.deleteOne({ user: userID, liked: unLikeID });
-      await Like.deleteOne({ user: unLikeID, liked: userID });
+      await Like.deleteOne({ user: userID, target: unLikeID });
+      await Like.deleteOne({ user: unLikeID, target: userID });
       await Match.deleteOne({ users: { $all: [userID, unLikeID] } });
 
       const user = await User.findById(userID).populate([

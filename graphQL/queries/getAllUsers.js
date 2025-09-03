@@ -10,7 +10,7 @@ module.exports = {
 
     try {
       const likedIds = await Like.find({ user: ctx.currentUser._id }).distinct(
-        "liked"
+        "target"
       );
 
       const users = await User.find({

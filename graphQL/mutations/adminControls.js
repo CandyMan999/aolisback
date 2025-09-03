@@ -234,7 +234,7 @@ module.exports = {
 
       // 6) Remove references to this user from other users and relationship collections
       await Promise.all([
-        Like.deleteMany({ $or: [{ user: userId }, { liked: userId }] }),
+        Like.deleteMany({ $or: [{ user: userId }, { target: userId }] }),
         Match.deleteMany({ users: userId }),
         User.updateMany(
           { blockedUsers: userId },
