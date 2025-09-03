@@ -287,15 +287,6 @@ export const FETCH_ME = gql`
       blockedUsers {
         _id
       }
-      likedUsers {
-        _id
-      }
-      matchedUsers {
-        _id
-      }
-      usersLikedMe {
-        _id
-      }
       email
       intro
       sex
@@ -387,8 +378,8 @@ export const GET_VIDEOS_QUERY = gql`
 `;
 
 export const GET_LIKED_USERS_QUERY = gql`
-  query ($userID: ID!) {
-    getLikedUsers(userID: $userID) {
+  query ($userID: ID!, $skip: Int, $limit: Int) {
+    getLikedUsers(userID: $userID, skip: $skip, limit: $limit) {
       _id
       name
       isBanned
@@ -435,8 +426,8 @@ export const GET_LIKED_USERS_QUERY = gql`
 `;
 
 export const GET_USERS_WHO_LIKE_ME_QUERY = gql`
-  query ($userID: ID!) {
-    getUsersWhoLikedMe(userID: $userID) {
+  query ($userID: ID!, $skip: Int, $limit: Int) {
+    getUsersWhoLikedMe(userID: $userID, skip: $skip, limit: $limit) {
       _id
       name
       isBanned
@@ -483,8 +474,8 @@ export const GET_USERS_WHO_LIKE_ME_QUERY = gql`
 `;
 
 export const GET_MATCHED_USERS_QUERY = gql`
-  query ($userID: ID!) {
-    getMatchedUsers(userID: $userID) {
+  query ($userID: ID!, $skip: Int, $limit: Int) {
+    getMatchedUsers(userID: $userID, skip: $skip, limit: $limit) {
       _id
       name
       isBanned

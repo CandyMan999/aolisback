@@ -83,6 +83,8 @@ const GridContainer = () => {
     try {
       const variables = {
         userID: currentUser._id,
+        skip: 0,
+        limit: 50,
       };
       const { getUsersWhoLikedMe } = await client.request(
         GET_USERS_WHO_LIKE_ME_QUERY,
@@ -100,6 +102,8 @@ const GridContainer = () => {
       setLoading(true);
       const variables = {
         userID: currentUser._id,
+        skip: 0,
+        limit: 50,
       };
       const { getLikedUsers } = await client.request(
         GET_LIKED_USERS_QUERY,
@@ -120,6 +124,8 @@ const GridContainer = () => {
       setLoading(true);
       const variables = {
         userID: currentUser._id,
+        skip: 0,
+        limit: 50,
       };
       const { getUsersWhoLikedMe } = await client.request(
         GET_USERS_WHO_LIKE_ME_QUERY,
@@ -140,6 +146,8 @@ const GridContainer = () => {
       setLoading(true);
       const variables = {
         userID: currentUser._id,
+        skip: 0,
+        limit: 50,
       };
       const { getMatchedUsers } = await client.request(
         GET_MATCHED_USERS_QUERY,

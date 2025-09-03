@@ -19,7 +19,7 @@ const LikesMeCarousel = ({ viewLikes }) => {
     const fetchLikedUsers = async () => {
       try {
         setLoading(true);
-        const variables = { userID: currentUser._id };
+        const variables = { userID: currentUser._id, skip: 0, limit: 50 };
 
         const { getUsersWhoLikedMe } = await client.request(
           GET_USERS_WHO_LIKE_ME_QUERY,

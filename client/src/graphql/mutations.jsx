@@ -941,16 +941,10 @@ export const LIKE_MUTATION = gql`
           videoMinutes
           videoMinutesUsed
           likes
-          likesSent
-          additionalMinutes
-          additionalLikes
-          additionalMessages
-        }
-        likedUsers {
-          _id
-        }
-        matchedUsers {
-          _id
+        likesSent
+        additionalMinutes
+        additionalLikes
+        additionalMessages
         }
       }
       isMatch
@@ -974,12 +968,6 @@ export const UNLIKE_MUTATION = gql`
         additionalMinutes
         additionalLikes
         additionalMessages
-      }
-      likedUsers {
-        _id
-      }
-      matchedUsers {
-        _id
       }
     }
   }
