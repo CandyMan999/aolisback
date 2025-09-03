@@ -135,7 +135,7 @@ module.exports = {
       const removeUserReferences = async () => {
         try {
           await Like.deleteMany({
-            $or: [{ user: currentUser._id }, { target: currentUser._id }],
+            $or: [{ user: currentUser._id }, { liked: currentUser._id }],
           });
           await Match.deleteMany({ users: currentUser._id });
           await User.updateMany(

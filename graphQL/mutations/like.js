@@ -10,13 +10,13 @@ module.exports = {
     try {
       if (!likeID) throw new Error("Invalid target user");
 
-      const targetId = new mongoose.Types.ObjectId(likeID);
+      const likedId = new mongoose.Types.ObjectId(likeID);
       const likerId = new mongoose.Types.ObjectId(userID);
 
       const user = await User.findById(likerId);
       if (!user) throw new Error("User not found");
 
-      const already = await Like.findOne({ user: likerId, target: targetId });
+      const already = await Like.findOne({ user: likerId, liked: likedId });
       if (already) {
         const populated = await User.findById(likerId).populate([
           "pictures",
@@ -35,18 +35,18 @@ module.exports = {
         throw new AuthenticationError("No likes remaining");
       }
 
-      await Like.create({ user: likerId, target: targetId });
+      await Like.create({ user: likerId, liked: likedId });
 
       const reciprocal = await Like.findOne({
-        user: targetId,
-        target: likerId,
+        user: likedId,
+        liked: likerId,
       });
       let isMatch = false;
       if (reciprocal) {
         isMatch = true;
-        const users = [likerId, targetId].sort();
+        const users = [likerId, likedId].sort();
         await Match.create({ users });
-        const likedUser = await User.findById(targetId);
+        const likedUser = await User.findById(likedId);
         pushNotificationNewMatch(user.username, likedUser.expoToken);
       }
 
@@ -63,12 +63,12 @@ module.exports = {
   unLikeResolver: async (root, args) => {
     const { userID, unLikeID } = args;
     try {
-      const targetId = new mongoose.Types.ObjectId(unLikeID);
+      const likedId = new mongoose.Types.ObjectId(unLikeID);
       const likerId = new mongoose.Types.ObjectId(userID);
 
-      await Like.deleteOne({ user: likerId, target: targetId });
-      await Like.deleteOne({ user: targetId, target: likerId });
-      await Match.deleteOne({ users: { $all: [likerId, targetId] } });
+      await Like.deleteOne({ user: likerId, liked: likedId });
+      await Like.deleteOne({ user: likedId, liked: likerId });
+      await Match.deleteOne({ users: { $all: [likerId, likedId] } });
 
       const user = await User.findById(likerId).populate([
         "pictures",

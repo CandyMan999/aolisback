@@ -11,7 +11,7 @@ module.exports = {
         .skip(skip)
         .limit(limit)
         .populate({
-          path: "target",
+          path: "liked",
           match: { isBanned: false },
           populate: [
             "room",
@@ -22,7 +22,7 @@ module.exports = {
           ],
         });
 
-      return likes.map((like) => like.target).filter(Boolean);
+      return likes.map((like) => like.liked).filter(Boolean);
     } catch (err) {
       throw new AuthenticationError(err.message);
     }

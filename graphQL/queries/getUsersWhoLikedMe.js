@@ -6,7 +6,7 @@ module.exports = {
     const { userID, skip = 0, limit = 10 } = args;
 
     try {
-      const likes = await Like.find({ target: userID })
+      const likes = await Like.find({ liked: userID })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
