@@ -183,6 +183,8 @@ export default function reducer(state, { type, payload }) {
         ...state,
         currentUser: {
           ...state.currentUser,
+          likedUsers: payload.likedUsers,
+          matchedUsers: payload.matchedUsers,
           plan: payload.plan,
         },
       };

@@ -296,7 +296,9 @@ const SearchResults = ({
             ))
           : handleComponent()}
       </Box>
-      {users.length && search === "Browse" && users.length % 50 === 0 && (
+      {users.length &&
+        ["Browse", "My Likes", "Likes Me", "Matches"].includes(search) &&
+        users.length % 10 === 0 && (
         <Box width="100%" display="flex" justifyContent="center">
           <Button
             onClick={() => fetchData(true)}

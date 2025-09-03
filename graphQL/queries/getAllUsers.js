@@ -1,5 +1,5 @@
 const { AuthenticationError, gql } = require("apollo-server");
-const { User, Room, Like } = require("../../models");
+const { User, Room } = require("../../models");
 const { publishRoomCreatedOrUpdated } = require("../subscription/subscription");
 const moment = require("moment");
 
@@ -9,11 +9,6 @@ module.exports = {
     const { ageRange, kids, sex } = ctx.currentUser.lookingFor;
 
     try {
-      const likedDocs = await Like.find({ user: ctx.currentUser._id }).select(
-        "target"
-      );
-      const likedIds = likedDocs.map((l) => l.target);
-
       const users = await User.find({
         location: {
           $near: {
@@ -25,7 +20,7 @@ module.exports = {
           },
         },
         _id: {
-          $nin: likedIds, //exclude previously liked users
+          $nin: [...ctx.currentUser.likedUsers], //exclude previously liked users
         },
         profileComplete: true,
         age: {

@@ -287,6 +287,15 @@ export const FETCH_ME = gql`
       blockedUsers {
         _id
       }
+      likedUsers {
+        _id
+      }
+      matchedUsers {
+        _id
+      }
+      usersLikedMe {
+        _id
+      }
       email
       intro
       sex

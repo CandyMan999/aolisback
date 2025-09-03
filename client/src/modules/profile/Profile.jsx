@@ -30,7 +30,6 @@ import {
   LIKE_MUTATION,
   UNLIKE_MUTATION,
 } from "../../graphql/mutations";
-import { GET_LIKED_USERS_QUERY } from "../../graphql/queries";
 
 const Profile = ({ userClicked, mobile, currentUser }) => {
   const client = useClient();
@@ -41,7 +40,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const [userBlocked, setUserBlocked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showHearts, setShowHearts] = useState(false);
-  const [isMatch, setIsMatch] = useState(false);
 
   let user = userClicked ? userClicked : currentUser;
   const itsMe = userClicked._id === currentUser._id;
@@ -74,15 +72,17 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     }
   }, [state.isProfile]);
 
-  const handleShowHearts = async () => {
+  const handleShowHearts = () => {
     try {
-      const variables = { userID: currentUser._id, skip: 0, limit: 300 };
-      const { getLikedUsers } = await client.request(
-        GET_LIKED_USERS_QUERY,
-        variables
-      );
-      const isLiked = getLikedUsers.some((user) => user._id === _id);
-      setShowHearts(isLiked);
+      if (currentUser.likedUsers.length) {
+        const isLiked = currentUser.likedUsers.some((user) => user._id === _id);
+
+        if (isLiked) {
+          setShowHearts(true);
+        } else {
+          setShowHearts(false);
+        }
+      }
     } catch (err) {
       console.log("error filtering likes: ", err);
     }
@@ -287,7 +287,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
       dispatch({ type: "UPDATE_LIKED_USERS", payload: user });
       setShowHearts(true);
-      setIsMatch(isMatch);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -305,7 +304,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
       dispatch({ type: "UPDATE_LIKED_USERS", payload: unLike });
       setShowHearts(false);
-      setIsMatch(false);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -344,7 +342,11 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               />
             ))}
           {showHearts && (
-            <FloatingHeart activate={showHearts} isMatch={isMatch} />
+            <FloatingHeart
+              activate={showHearts}
+              currentUser={currentUser}
+              profileID={_id}
+            />
           )}
         </Box>
         <Box

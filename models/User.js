@@ -149,6 +149,24 @@ const UserSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  likedUsers: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
+  ],
+  usersLikedMe: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
+  ],
+  matchedUsers: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
+  ],
   comments: [{ type: mongoose.Schema.ObjectId, ref: "Comment" }],
   room: {
     type: mongoose.Schema.ObjectId,

@@ -83,8 +83,6 @@ const GridContainer = () => {
     try {
       const variables = {
         userID: currentUser._id,
-        skip: 0,
-        limit: 50,
       };
       const { getUsersWhoLikedMe } = await client.request(
         GET_USERS_WHO_LIKE_ME_QUERY,
@@ -97,13 +95,13 @@ const GridContainer = () => {
     }
   };
 
-  const handleGetLikedUsers = async () => {
+  const handleGetLikedUsers = async (paginate) => {
     try {
       setLoading(true);
       const variables = {
         userID: currentUser._id,
-        skip: 0,
-        limit: 50,
+        limit: 10,
+        skip: paginate ? skip : 0,
       };
       const { getLikedUsers } = await client.request(
         GET_LIKED_USERS_QUERY,
@@ -112,20 +110,27 @@ const GridContainer = () => {
 
       const sortedUsers = sortByDistance(getLikedUsers);
 
-      setUsers(sortedUsers);
+      if (paginate) {
+        setUsers((prev) => [...prev, ...sortedUsers]);
+        setSkip((prev) => prev + 10);
+      } else {
+        setUsers(sortedUsers);
+        setSkip(10);
+      }
       setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log("error getting liked users: ", err);
     }
   };
 
-  const handleGetUsersWhoLikeMe = async () => {
+  const handleGetUsersWhoLikeMe = async (paginate) => {
     try {
       setLoading(true);
       const variables = {
         userID: currentUser._id,
-        skip: 0,
-        limit: 50,
+        limit: 10,
+        skip: paginate ? skip : 0,
       };
       const { getUsersWhoLikedMe } = await client.request(
         GET_USERS_WHO_LIKE_ME_QUERY,
@@ -134,20 +139,27 @@ const GridContainer = () => {
 
       const sortedUsers = sortByDistance(getUsersWhoLikedMe);
 
-      setUsers(sortedUsers);
+      if (paginate) {
+        setUsers((prev) => [...prev, ...sortedUsers]);
+        setSkip((prev) => prev + 10);
+      } else {
+        setUsers(sortedUsers);
+        setSkip(10);
+      }
       setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log("error getting liked users: ", err);
     }
   };
 
-  const handleGetMatchedUsers = async () => {
+  const handleGetMatchedUsers = async (paginate) => {
     try {
       setLoading(true);
       const variables = {
         userID: currentUser._id,
-        skip: 0,
-        limit: 50,
+        limit: 10,
+        skip: paginate ? skip : 0,
       };
       const { getMatchedUsers } = await client.request(
         GET_MATCHED_USERS_QUERY,
@@ -156,9 +168,16 @@ const GridContainer = () => {
 
       const sortedUsers = sortByDistance(getMatchedUsers);
 
-      setUsers(sortedUsers);
+      if (paginate) {
+        setUsers((prev) => [...prev, ...sortedUsers]);
+        setSkip((prev) => prev + 10);
+      } else {
+        setUsers(sortedUsers);
+        setSkip(10);
+      }
       setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log("error getting matched users: ", err);
     }
   };
@@ -198,6 +217,18 @@ const GridContainer = () => {
   //   }
   // }
 
+  const fetchMore = async () => {
+    if (search === "Browse") {
+      await fetchData(true);
+    } else if (search === "My Likes") {
+      await handleGetLikedUsers(true);
+    } else if (search === "Likes Me") {
+      await handleGetUsersWhoLikeMe(true);
+    } else if (search === "Matches") {
+      await handleGetMatchedUsers(true);
+    }
+  };
+
   const usersMemo = useMemo(() => users, [users]);
 
   return (
@@ -228,7 +259,7 @@ const GridContainer = () => {
           currentUser={currentUser}
           state={state}
           dispatch={dispatch}
-          fetchData={fetchData}
+          fetchData={fetchMore}
           loading={spinner}
           endOfUsers={endOfUsers}
           setUsers={setUsers}
@@ -242,7 +273,7 @@ const GridContainer = () => {
           currentUser={currentUser}
           users={usersMemo}
           search={search}
-          fetchData={fetchData}
+          fetchData={fetchMore}
           skip={skip}
           spinner={spinner}
         />

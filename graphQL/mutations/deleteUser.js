@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server");
-const { User, Picture, Room, Comment, Video, Like, Match } = require("../../models");
+const { User, Picture, Room, Comment, Video } = require("../../models");
 const { publishRoomCreatedOrUpdated } = require("../subscription/subscription");
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
@@ -175,10 +175,18 @@ module.exports = {
 
       const removeUserReferences = async () => {
         try {
-          await Like.deleteMany({
-            $or: [{ user: currentUser._id }, { target: currentUser._id }],
-          });
-          await Match.deleteMany({ users: currentUser._id });
+          await User.updateMany(
+            { matchedUsers: currentUser._id },
+            { $pull: { matchedUsers: currentUser._id } }
+          );
+          await User.updateMany(
+            { likedUsers: currentUser._id },
+            { $pull: { likedUsers: currentUser._id } }
+          );
+          await User.updateMany(
+            { usersLikedMe: currentUser._id },
+            { $pull: { usersLikedMe: currentUser._id } }
+          );
           await User.updateMany(
             { blockedUsers: currentUser._id },
             { $pull: { blockedUsers: currentUser._id } }

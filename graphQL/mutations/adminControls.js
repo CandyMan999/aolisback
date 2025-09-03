@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server");
-const { Video, Picture, User, Room, Comment, Like, Match } = require("../../models");
+const { Video, Picture, User, Room, Comment } = require("../../models");
 const { publishRoomCreatedOrUpdated } = require("../subscription/subscription");
 const cloudinary = require("cloudinary").v2;
 
@@ -234,8 +234,18 @@ module.exports = {
 
       // 6) Remove references to this user from other users
       await Promise.all([
-        Like.deleteMany({ $or: [{ user: userId }, { target: userId }] }),
-        Match.deleteMany({ users: userId }),
+        User.updateMany(
+          { matchedUsers: userId },
+          { $pull: { matchedUsers: userId } }
+        ),
+        User.updateMany(
+          { likedUsers: userId },
+          { $pull: { likedUsers: userId } }
+        ),
+        User.updateMany(
+          { usersLikedMe: userId },
+          { $pull: { usersLikedMe: userId } }
+        ),
         User.updateMany(
           { blockedUsers: userId },
           { $pull: { blockedUsers: userId } }

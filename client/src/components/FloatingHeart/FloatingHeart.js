@@ -43,8 +43,9 @@ const randomEmoji = () => {
   return EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
 };
 
-const FloatingHeart = ({ activate, isMatch }) => {
+const FloatingHeart = ({ activate, currentUser, profileID }) => {
   const [show, setShow] = useState(false);
+  const [isMatch, setIsMatch] = useState(false);
 
   useEffect(() => {
     if (activate) {
@@ -58,6 +59,15 @@ const FloatingHeart = ({ activate, isMatch }) => {
       setShow(false);
     }, 6000);
   };
+
+  useEffect(() => {
+    if (currentUser.matchedUsers.length) {
+      const isMatch = currentUser.matchedUsers.some(
+        (user) => user._id === profileID
+      );
+      setIsMatch(isMatch);
+    }
+  }, [currentUser.matchedUsers]);
 
   return (
     <>

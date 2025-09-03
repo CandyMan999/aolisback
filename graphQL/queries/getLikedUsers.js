@@ -1,29 +1,39 @@
 const { AuthenticationError } = require("apollo-server");
-const { Like } = require("../../models");
+const { User } = require("../../models");
 
 module.exports = {
   getLikedUsersResolver: async (root, args, ctx) => {
-    const { userID, skip = 0, limit = 50 } = args;
+    const { userID, skip = 0, limit = 10 } = args;
+
     try {
-      const likes = await Like.find({ user: userID })
-        .sort({ createdAt: -1 })
+      // Find the user by userId to get the list of likedUsers
+      const currentUser = await User.findById(userID).select("likedUsers");
+
+      if (!currentUser) {
+        throw new Error("User not found");
+      }
+
+      if (currentUser.likedUsers && !currentUser.likedUsers.length) {
+        return [];
+      }
+      const likedUserIds = currentUser.likedUsers.map((user) => user._id);
+
+      // Fetch the liked users from the User model
+      const likedUsers = await User.find({
+        _id: { $in: likedUserIds },
+        isBanned: false,
+      })
         .skip(skip)
         .limit(limit)
-        .populate({
-          path: "target",
-          match: { isBanned: false },
-          populate: [
-            "room",
-            "blockedUsers",
-            "pictures",
-            "sentVideos",
-            "receivedVideos",
-          ],
-        });
+        .populate([
+        "room",
+        "blockedUsers",
+        "pictures",
+        "sentVideos",
+        "receivedVideos",
+      ]);
 
-      return likes
-        .filter((l) => l.target)
-        .map((l) => l.target);
+      return likedUsers;
     } catch (err) {
       throw new AuthenticationError(err.message);
     }
