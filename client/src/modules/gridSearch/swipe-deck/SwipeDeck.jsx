@@ -98,13 +98,10 @@ const SwipeDeck = ({
   };
 
   useEffect(() => {
-    if (currentIndex === users.length && users.length > 0) {
-      setUsers([]);
-      setEndOfUsers(false);
-      updateCurrentIndex(0);
+    if (currentIndex === users.length) {
       fetchData(true);
     }
-  }, [currentIndex, users.length]);
+  }, [currentIndex]);
 
   const handleSwipe = (direction, user, index) => {
     try {
