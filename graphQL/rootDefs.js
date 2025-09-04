@@ -27,9 +27,6 @@ module.exports = gql`
     sentVideos: [Video]
     receivedVideos: [Video]
     blockedUsers: [User]
-    likedUsers: [User]
-    matchedUsers: [User]
-    usersLikedMe: [User]
     chatRequest: ChatRequest
     lookingFor: LookingFor
     expoToken: String
@@ -261,9 +258,10 @@ module.exports = gql`
       skip: Int
     ): [User]
     getVideos(senderID: ID!, receiverID: ID!): [Video]
-    getLikedUsers(userID: ID!): [User]
-    getUsersWhoLikedMe(userID: ID!): [User]
-    getMatchedUsers(userID: ID!): [User]
+    getLikedUsers(userID: ID!, skip: Int, limit: Int): [User]
+    getUsersWhoLikedMe(userID: ID!, skip: Int, limit: Int): [User]
+    getMatchedUsers(userID: ID!, skip: Int, limit: Int): [User]
+    isLiked(userID: ID!, otherID: ID!): Boolean
     getFlaggedVideos: [Video]
     getFlaggedPictures: [Picture]
     getRealUsers: [User]

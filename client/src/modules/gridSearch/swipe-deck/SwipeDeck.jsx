@@ -98,7 +98,7 @@ const SwipeDeck = ({
   };
 
   useEffect(() => {
-    if (currentIndex === users?.length) {
+    if (currentIndex === users.length) {
       fetchData(true);
     }
   }, [currentIndex]);

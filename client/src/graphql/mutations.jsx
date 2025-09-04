@@ -945,14 +945,7 @@ export const LIKE_MUTATION = gql`
           additionalMinutes
           additionalLikes
           additionalMessages
-        }
-        likedUsers {
-          _id
-        }
-        matchedUsers {
-          _id
-        }
-      }
+        }      }
       isMatch
       matchID
     }
@@ -974,12 +967,6 @@ export const UNLIKE_MUTATION = gql`
         additionalMinutes
         additionalLikes
         additionalMessages
-      }
-      likedUsers {
-        _id
-      }
-      matchedUsers {
-        _id
       }
     }
   }

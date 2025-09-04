@@ -35,6 +35,10 @@ const GridContainer = () => {
   }, []);
 
   const fetchData = async (paginate) => {
+    if (!paginate) {
+      setEndOfUsers(false);
+    }
+
     if (skip === 0 || search !== "Browse") {
       setLoading(true);
     }
@@ -59,16 +63,13 @@ const GridContainer = () => {
       const filteredAndSorted = sortByDistance(filteredUsers);
 
       if (paginate) {
-        if (getAllUsers.length === 0) {
-          setSkip(0);
-          fetchData(false);
-        } else {
+        if (getAllUsers.length) {
           setUsers((prevUsers) => [...prevUsers, ...filteredAndSorted]);
-          setSkip((prevSkip) => prevSkip + 10);
+          setSkip((prevSkip) => prevSkip + getAllUsers.length);
         }
       } else {
         setUsers(filteredAndSorted);
-        setSkip(10);
+        setSkip(getAllUsers.length);
       }
 
       setLoading(false);
@@ -95,11 +96,13 @@ const GridContainer = () => {
     }
   };
 
-  const handleGetLikedUsers = async () => {
+  const handleGetLikedUsers = async (paginate) => {
     try {
       setLoading(true);
       const variables = {
         userID: currentUser._id,
+        limit: 10,
+        skip: paginate ? skip : 0,
       };
       const { getLikedUsers } = await client.request(
         GET_LIKED_USERS_QUERY,
@@ -108,18 +111,27 @@ const GridContainer = () => {
 
       const sortedUsers = sortByDistance(getLikedUsers);
 
-      setUsers(sortedUsers);
+      if (paginate) {
+        setUsers((prev) => [...prev, ...sortedUsers]);
+        setSkip((prev) => prev + 10);
+      } else {
+        setUsers(sortedUsers);
+        setSkip(10);
+      }
       setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log("error getting liked users: ", err);
     }
   };
 
-  const handleGetUsersWhoLikeMe = async () => {
+  const handleGetUsersWhoLikeMe = async (paginate) => {
     try {
       setLoading(true);
       const variables = {
         userID: currentUser._id,
+        limit: 10,
+        skip: paginate ? skip : 0,
       };
       const { getUsersWhoLikedMe } = await client.request(
         GET_USERS_WHO_LIKE_ME_QUERY,
@@ -128,18 +140,27 @@ const GridContainer = () => {
 
       const sortedUsers = sortByDistance(getUsersWhoLikedMe);
 
-      setUsers(sortedUsers);
+      if (paginate) {
+        setUsers((prev) => [...prev, ...sortedUsers]);
+        setSkip((prev) => prev + 10);
+      } else {
+        setUsers(sortedUsers);
+        setSkip(10);
+      }
       setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log("error getting liked users: ", err);
     }
   };
 
-  const handleGetMatchedUsers = async () => {
+  const handleGetMatchedUsers = async (paginate) => {
     try {
       setLoading(true);
       const variables = {
         userID: currentUser._id,
+        limit: 10,
+        skip: paginate ? skip : 0,
       };
       const { getMatchedUsers } = await client.request(
         GET_MATCHED_USERS_QUERY,
@@ -148,9 +169,16 @@ const GridContainer = () => {
 
       const sortedUsers = sortByDistance(getMatchedUsers);
 
-      setUsers(sortedUsers);
+      if (paginate) {
+        setUsers((prev) => [...prev, ...sortedUsers]);
+        setSkip((prev) => prev + 10);
+      } else {
+        setUsers(sortedUsers);
+        setSkip(10);
+      }
       setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log("error getting matched users: ", err);
     }
   };
@@ -190,6 +218,18 @@ const GridContainer = () => {
   //   }
   // }
 
+  const fetchMore = async (paginate = true) => {
+    if (search === "Browse") {
+      await fetchData(paginate);
+    } else if (search === "My Likes") {
+      await handleGetLikedUsers(paginate);
+    } else if (search === "Likes Me") {
+      await handleGetUsersWhoLikeMe(paginate);
+    } else if (search === "Matches") {
+      await handleGetMatchedUsers(paginate);
+    }
+  };
+
   const usersMemo = useMemo(() => users, [users]);
 
   return (
@@ -197,7 +237,7 @@ const GridContainer = () => {
       <LikeAndMatchButtons
         handleGetLikedUsers={handleGetLikedUsers}
         handleGetUsersWhoLikeMe={handleGetUsersWhoLikeMe}
-        handleGetAllUsers={skip > 0 ? null : () => fetchData(false)}
+        handleGetAllUsers={() => fetchData(false)}
         handleGetMatchedUsers={handleGetMatchedUsers}
         currentUser={currentUser}
         loading={loading}
@@ -220,7 +260,7 @@ const GridContainer = () => {
           currentUser={currentUser}
           state={state}
           dispatch={dispatch}
-          fetchData={fetchData}
+          fetchData={fetchMore}
           loading={spinner}
           endOfUsers={endOfUsers}
           setUsers={setUsers}
@@ -234,7 +274,7 @@ const GridContainer = () => {
           currentUser={currentUser}
           users={usersMemo}
           search={search}
-          fetchData={fetchData}
+          fetchData={fetchMore}
           skip={skip}
           spinner={spinner}
         />

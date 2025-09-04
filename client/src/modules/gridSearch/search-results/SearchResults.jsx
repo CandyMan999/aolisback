@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import {
   Box,
@@ -31,6 +31,7 @@ const SearchResults = ({
   spinner,
 }) => {
   const [activeID, setActiveID] = useState(null);
+  const sentinelRef = useRef(null);
 
   const onUserCardClick = (id) => {
     setActiveID(id);
@@ -251,6 +252,20 @@ const SearchResults = ({
     }
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      const first = entries[0];
+      if (first.isIntersecting && users.length % 10 === 0 && !spinner) {
+        fetchData(true);
+      }
+    });
+    const current = sentinelRef.current;
+    if (current) observer.observe(current);
+    return () => {
+      if (current) observer.unobserve(current);
+    };
+  }, [users, spinner]);
+
   return (
     <Box width="100%" height={"100%"} column>
       <Box
@@ -296,39 +311,17 @@ const SearchResults = ({
             ))
           : handleComponent()}
       </Box>
-      {users.length && search === "Browse" && users.length % 50 === 0 && (
-        <Box width="100%" display="flex" justifyContent="center">
-          <Button
-            onClick={() => fetchData(true)}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              boxShadow: `0px 2px 10px ${COLORS.pink}`,
-              borderRadius: "20px",
-              border: `solid 1px ${COLORS.pink}`,
-              marginTop: 40,
-              height: 60,
-            }}
-            disabled={spinner}
-            width="80%"
-            color={spinner ? COLORS.white : COLORS.black}
-          >
-            {spinner ? (
-              <Loading logo size={50} />
-            ) : (
-              <Text
-                bold
-                fontSize={FONT_SIZES.X_LARGE}
-                margin={5}
-                color={COLORS.vividBlue}
-              >
-                Load More
-              </Text>
-            )}
-          </Button>
-        </Box>
-      )}
+
+      {/* sentinel for infinite scroll */}
+      {users.length ? <div ref={sentinelRef} /> : null}
+
+      {/* bottom spinner gate */}
+      {["Browse", "My Likes", "Likes Me", "Matches"].includes(search) &&
+        users.length % 10 === 0 && (
+          <Box width="100%" display="flex" justifyContent="center">
+            {spinner ? <Loading logo size={50} /> : null}
+          </Box>
+        )}
     </Box>
   );
 };

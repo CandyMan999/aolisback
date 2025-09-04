@@ -27,6 +27,7 @@ const {
   getFlaggedPicturesResolver,
   getFlaggedVideosResolver,
   getRealUsersResolver,
+  isLikedResolver,
 } = require("./queries");
 const {
   createRoomResolver,
@@ -113,6 +114,7 @@ const resolvers = {
     getFlaggedPictures: getFlaggedPicturesResolver,
     getFlaggedVideos: getFlaggedVideosResolver,
     getRealUsers: getRealUsersResolver,
+    isLiked: isLikedResolver,
   },
   Mutation: {
     createRoom: createRoomResolver,
