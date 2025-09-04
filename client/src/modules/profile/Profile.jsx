@@ -11,6 +11,7 @@ import {
   Loading,
   OnlineDot,
   FloatingHeart,
+  MatchScreen,
   LikeButton,
   UnlikeButton,
 } from "../../components";
@@ -35,13 +36,15 @@ import { IS_LIKED_QUERY } from "../../graphql/queries";
 const Profile = ({ userClicked, mobile, currentUser }) => {
   const client = useClient();
   let history = useHistory();
-  const { pathname } = useLocation();
+  const routerLocation = useLocation();
+  const { pathname } = routerLocation;
   const { state, dispatch } = useContext(Context);
   const [imBlocked, setImBlocked] = useState(false);
   const [userBlocked, setUserBlocked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showHearts, setShowHearts] = useState(false);
   const [match, setMatch] = useState(false);
+  const [matchModalVisible, setMatchModalVisible] = useState(false);
 
   let user = userClicked ? userClicked : currentUser;
   const itsMe = userClicked._id === currentUser._id;
@@ -288,6 +291,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       dispatch({ type: "UPDATE_LIKED_USERS", payload: user });
       setShowHearts(true);
       setMatch(isMatch);
+      if (isMatch) {
+        setMatchModalVisible(true);
+      }
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -703,6 +709,18 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           </Box>
         </Box>
       </Drawer>
+      <MatchScreen
+      matchedUser={user}
+      currentUser={currentUser}
+      showScreen={matchModalVisible}
+      onClose={() => setMatchModalVisible(false)}
+      dispatch={dispatch}
+      mobile={mobile}
+        location={routerLocation}
+      history={history}
+      state={state}
+      client={client}
+      />
       {state.showVideo && pathname !== "/message" && (
         <VideoModal
           onClose={toggleModal}
