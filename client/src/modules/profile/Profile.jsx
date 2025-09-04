@@ -11,7 +11,6 @@ import {
   Loading,
   OnlineDot,
   FloatingHeart,
-  MatchScreen,
   LikeButton,
   UnlikeButton,
 } from "../../components";
@@ -44,7 +43,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const [loading, setLoading] = useState(false);
   const [showHearts, setShowHearts] = useState(false);
   const [match, setMatch] = useState(false);
-  const [matchModalVisible, setMatchModalVisible] = useState(false);
 
   let user = userClicked ? userClicked : currentUser;
   const itsMe = userClicked._id === currentUser._id;
@@ -291,9 +289,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       dispatch({ type: "UPDATE_LIKED_USERS", payload: user });
       setShowHearts(true);
       setMatch(isMatch);
-      if (isMatch) {
-        setMatchModalVisible(true);
-      }
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -709,18 +704,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           </Box>
         </Box>
       </Drawer>
-      <MatchScreen
-      matchedUser={user}
-      currentUser={currentUser}
-      showScreen={matchModalVisible}
-      onClose={() => setMatchModalVisible(false)}
-      dispatch={dispatch}
-      mobile={mobile}
-        location={routerLocation}
-      history={history}
-      state={state}
-      client={client}
-      />
       {state.showVideo && pathname !== "/message" && (
         <VideoModal
           onClose={toggleModal}
