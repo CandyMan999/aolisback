@@ -218,15 +218,15 @@ const GridContainer = () => {
   //   }
   // }
 
-  const fetchMore = async () => {
+  const fetchMore = async (paginate = true) => {
     if (search === "Browse") {
-      await fetchData(true);
+      await fetchData(paginate);
     } else if (search === "My Likes") {
-      await handleGetLikedUsers(true);
+      await handleGetLikedUsers(paginate);
     } else if (search === "Likes Me") {
-      await handleGetUsersWhoLikeMe(true);
+      await handleGetUsersWhoLikeMe(paginate);
     } else if (search === "Matches") {
-      await handleGetMatchedUsers(true);
+      await handleGetMatchedUsers(paginate);
     }
   };
 
