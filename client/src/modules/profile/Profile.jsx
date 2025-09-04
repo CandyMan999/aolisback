@@ -345,10 +345,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               />
             ))}
           {showHearts && (
-            <FloatingHeart
-              activate={showHearts}
-              isMatch={match}
-            />
+            <FloatingHeart activate={showHearts} isMatch={match} />
           )}
         </Box>
         <Box

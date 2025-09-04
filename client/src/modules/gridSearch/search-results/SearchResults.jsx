@@ -311,12 +311,15 @@ const SearchResults = ({
             ))
           : handleComponent()}
       </Box>
-      {users.length &&
-      <div ref={sentinelRef} />
+
+      {/* sentinel for infinite scroll */}
+      {users.length ? <div ref={sentinelRef} /> : null}
+
+      {/* bottom spinner gate */}
       {["Browse", "My Likes", "Likes Me", "Matches"].includes(search) &&
         users.length % 10 === 0 && (
           <Box width="100%" display="flex" justifyContent="center">
-            {spinner && <Loading logo size={50} />}
+            {spinner ? <Loading logo size={50} /> : null}
           </Box>
         )}
     </Box>
