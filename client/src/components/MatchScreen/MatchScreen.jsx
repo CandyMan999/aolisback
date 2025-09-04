@@ -7,7 +7,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { COLORS } from "../../constants";
 import { MdVideoChat } from "react-icons/md";
 import { Text, Button } from "../../components";
-import { VIDEO_CHAT_REQUEST } from "../../graphql/subscriptions";
+import { VIDEO_CHAT_REQUEST } from "../../graphql/mutations";
 
 // Styled Components
 const Overlay = styled(motion.div)`
@@ -23,9 +23,9 @@ const Overlay = styled(motion.div)`
   justify-content: center;
   flex-direction: column;
   height: ${(props) => (props.showScreen === true ? "70vh" : "0vh")};
-  border-top-left-radius: 20px; /* Rounded top-left corner */
-  border-top-right-radius: 20px; /* Rounded top-right corner */
-  overflow: hidden; /* Prevent overflow during animation */
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  overflow: hidden;
 `;
 
 const CardsContainer = styled.div`
@@ -80,7 +80,6 @@ const CloseIcon = styled(AiOutlineClose)`
   cursor: pointer;
 `;
 
-// Animation Variants
 const overlayVariants = {
   hidden: { height: "0vh", opacity: 0 },
   visible: (custom) => ({
@@ -115,16 +114,17 @@ const textVariants = {
     transition: { delay: 0.5, duration: 0.5 },
   },
 };
+
 const HeartIcon = styled(motion.div)`
   position: absolute;
   bottom: 0;
   left: 0;
-  font-size: 2rem; /* Default font size */
+  font-size: 2rem;
 `;
 
 const moveX = () => Math.random() * window.innerWidth;
 const moveY = () => Math.random() * window.innerHeight;
-const randomScale = () => Math.random() * 1.5 + 0.5; // Random scale between 0.5 and 2
+const randomScale = () => Math.random() * 1.5 + 0.5;
 const randomEmoji = () => {
   const EMOJIS = [
     "❤️",
@@ -158,10 +158,13 @@ const MatchScreen = ({
   state,
   client,
 }) => {
-  // Ensure image URLs are correct
   const currentUserImage = currentUser.pictures[0]?.url;
   const matchedUserImage = matchedUser?.pictures[0]?.url;
   const [showHearts, setShowHearts] = useState(false);
+
+  // NEW: busy state to prevent double taps + show progress copy
+  const [busy, setBusy] = useState(false);
+  const isOtherOnline = !!(matchedUser?.isLoggedIn && !matchedUser?.inCall);
 
   useEffect(() => {
     setShowHearts(true);
@@ -170,7 +173,6 @@ const MatchScreen = ({
   const handleImBlocked = () => {
     try {
       let blocked = false;
-
       matchedUser?.blockedUsers.find((user) => {
         if (user._id === currentUser._id) {
           blocked = true;
@@ -179,19 +181,21 @@ const MatchScreen = ({
       return blocked;
     } catch (err) {
       console.log(err);
+      return false;
     }
   };
 
-  const handleSendVideoMessage = () => {
+  const handleSendVideoMessage = async () => {
     try {
       if (
         currentUser.plan.messages + currentUser.plan.additionalMessages <=
         currentUser.plan.messagesSent
       ) {
-        window.ReactNativeWebView.postMessage("BUY_MESSAGES"); // or SHOW_REWARDS
-
+        window.ReactNativeWebView?.postMessage("BUY_MESSAGES"); // or SHOW_REWARDS
         return;
       }
+
+      setBusy(true);
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
 
       if (mobile) {
@@ -202,13 +206,8 @@ const MatchScreen = ({
         params.set("receiverID", receiverID);
         params.set("videoMessage", true);
 
-        const data = {
-          senderID,
-          receiverID,
-          videoMessage: true,
-        };
+        const data = { senderID, receiverID, videoMessage: true };
 
-        // Navigate to the constructed URL
         history.replace({
           pathname: location.pathname,
           search: params.toString(),
@@ -219,10 +218,16 @@ const MatchScreen = ({
           console.warn("ReactNativeWebView is not available.");
         }
       } else {
+        // Desktop/web: open your recorder / toggle video UI
         dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
       }
+
+      // NEW: close the match screen after initiating a video message
+      onClose?.();
     } catch (err) {
       console.log(err);
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -232,10 +237,11 @@ const MatchScreen = ({
         currentUser.plan.videoMinutes + currentUser.plan.additionalMinutes <=
         currentUser.plan.videoMinutesUsed
       ) {
-        window.ReactNativeWebView.postMessage("BUY_MINUTES");
-
+        window.ReactNativeWebView?.postMessage("BUY_MINUTES");
         return;
       }
+
+      setBusy(true);
 
       const variables = {
         senderID: state.currentUser._id,
@@ -247,13 +253,34 @@ const MatchScreen = ({
         VIDEO_CHAT_REQUEST,
         variables
       );
+      console.log("video request: ", videoChatRequest);
 
+      // Transition to chat; we KEEP the overlay open until chat view shows
       dispatch({ type: "TOGGLE_PROFILE", payload: false });
       dispatch({ type: "TOGGLE_CHAT", payload: true });
     } catch (err) {
       console.log(err);
+    } finally {
+      setBusy(false);
     }
   };
+
+  // NEW: Dynamic CTA copy
+  const bottomCopy = handleImBlocked()
+    ? "You can’t contact this user"
+    : isOtherOnline
+    ? busy
+      ? "Calling…"
+      : "Start a live video call"
+    : busy
+    ? "Sending…"
+    : "Send a video message";
+
+  const onCtaPress = handleImBlocked()
+    ? undefined
+    : isOtherOnline
+    ? handleVideoChatRequest
+    : handleSendVideoMessage;
 
   return (
     <AnimatePresence>
@@ -265,7 +292,7 @@ const MatchScreen = ({
           exit="hidden"
           custom={{ mobile, showScreen }}
         >
-          <CloseIcon onClick={onClose} />
+          <CloseIcon onClick={busy ? undefined : onClose} />
           <MatchTextContainer
             variants={textVariants}
             initial="hidden"
@@ -305,6 +332,7 @@ const MatchScreen = ({
               </text>
             </svg>
           </MatchTextContainer>
+
           <CardsContainer style={{ marginTop: mobile ? "40%" : "10%" }}>
             <CardWrapper custom="left">
               <UserCard
@@ -317,15 +345,7 @@ const MatchScreen = ({
               />
               <Username custom="left">{currentUser.username}</Username>
             </CardWrapper>
-            {/* <Box
-              style={{
-                position: "fixed",
-                top: 0,
-                zIndex: -10,
-              }}
-            >
-              <Text style={{ fontSize: "300px" }}>💘</Text>
-            </Box> */}
+
             <CardWrapper custom="right">
               <UserCard
                 custom="right"
@@ -338,6 +358,7 @@ const MatchScreen = ({
               <Username custom="right">{matchedUser.username}</Username>
             </CardWrapper>
           </CardsContainer>
+
           <Button
             width={"60px"}
             height={"60px"}
@@ -345,19 +366,22 @@ const MatchScreen = ({
             style={{
               borderRadius: "50px",
               boxShadow: `2px 2px 4px 2px ${COLORS.grey}`,
+              opacity: busy ? 0.8 : 1,
+              pointerEvents: busy ? "none" : "auto",
             }}
-            disabled={handleImBlocked()}
-            onClick={
-              handleImBlocked()
-                ? null
-                : !matchedUser?.isLoggedIn || matchedUser?.inCall
-                ? handleSendVideoMessage
-                : handleVideoChatRequest
-            }
+            disabled={handleImBlocked() || busy}
+            onClick={onCtaPress}
           >
             <MdVideoChat size={45} color={COLORS.vividBlue} />
           </Button>
-          <Text>Send A Message</Text>
+
+          {/* NEW: dynamic bottom verbiage */}
+          <Text
+            style={{ marginTop: 8, fontWeight: 600, color: COLORS.darkGrey }}
+          >
+            {bottomCopy}
+          </Text>
+
           {showHearts &&
             Array.from({ length: 20 }, (_, index) => (
               <HeartIcon
