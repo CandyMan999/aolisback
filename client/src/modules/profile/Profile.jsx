@@ -60,6 +60,9 @@ const LabeledPill = ({
         border: `3px solid ${COLORS.lighterGrey}`,
         minHeight: 44,
         boxShadow: `0 2px 10px rgba(0,0,0,0.05)`,
+        // prevent vertical stretching inside flex/grid parents
+        flex: "0 0 auto",
+        // alignSelf: "flex-start",
         justifyContent: "center",
         ...style,
       }}
@@ -112,26 +115,23 @@ const SingleSinceBadge = ({ ts }) => {
         backdropFilter: "blur(7px)",
       }}
     >
-      <Text margin={0} style={{ fontSize: 14, opacity: 0.9 }}>
-        💔 Single Since
-      </Text>
-      <Text margin={0} bold style={{ fontSize: 14, lineHeight: 1.2 }}>
-        {date}{" "}
+      <Box column style={{ textAlign: "center" }}>
+        <Text margin={0} style={{ fontSize: 14, opacity: 0.9 }}>
+          💔 Single Since
+        </Text>
+        <Text margin={0} bold style={{ fontSize: 14, lineHeight: 1.2 }}>
+          {date}{" "}
+        </Text>
         <Text as="span" style={{ opacity: 0.9 }}>
           ({rel})
         </Text>
-      </Text>
+      </Box>
     </Box>
   );
 };
 
 /** =========================================================================
  *  Cutting-edge button frames for the two bottom actions
- *  - Animated gradient ring (border)
- *  - Glassy inner surface with high contrast text
- *  - Clear focus-visible indicator (WCAG)
- *  - Subtle motion on hover/press; honors prefers-reduced-motion
- *  - Keyboard accessible (Enter/Space)
  * ========================================================================= */
 const ringGradientPrimary =
   "linear-gradient(135deg, rgba(20,20,20,1) 0%, rgba(90,90,90,1) 50%, rgba(20,20,20,1) 100%)";
@@ -194,7 +194,6 @@ const CuttingEdgeButton = ({
         overflow: "hidden",
         cursor: disabled ? "not-allowed" : "pointer",
         outline: "none",
-        // Animated gradient ring background
         backgroundImage: ringGradient,
         backgroundSize: "200% 200%",
         boxShadow:
@@ -214,7 +213,7 @@ const CuttingEdgeButton = ({
           : { duration: 6, ease: "linear", repeat: Infinity }
       }
     >
-      {/* Focus-visible halo per WCAG — distinct from hover/active */}
+      {/* Focus-visible halo */}
       <div
         style={{
           position: "absolute",
@@ -234,7 +233,6 @@ const CuttingEdgeButton = ({
           borderRadius: 16,
           background:
             "linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.94) 100%)",
-          // strong contrast text over white glass; shadow for “lift”
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.6), 0 2px 10px rgba(0,0,0,0.06)",
           height: BUTTON_H,
@@ -253,7 +251,7 @@ const CuttingEdgeButton = ({
 const Profile = ({ userClicked, mobile, currentUser }) => {
   const client = useClient();
   const history = useHistory();
-  const location = useLocation(); // <-- keep the object (we also use pathname)
+  const location = useLocation();
   const { pathname } = location;
 
   const { state, dispatch } = useContext(Context);
@@ -262,11 +260,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const [userBlocked, setUserBlocked] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // like/unlike UI
   const [showHearts, setShowHearts] = useState(false);
   const [match, setMatch] = useState(false);
 
-  // “It’s a match!” modal
   const [matchModalVisible, setMatchModalVisible] = useState(false);
   const [matchedUser, setMatchedUser] = useState(null);
 
@@ -429,7 +425,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           search: params.toString(),
         });
 
-        console.log("Trying to send vido message");
         window.ReactNativeWebView?.postMessage(JSON.stringify(data));
       } else {
         dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
@@ -440,7 +435,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const noLocation = (arr) =>
     Array.isArray(arr) && arr.length === 2 && arr[0] === 0 && arr[1] === 0;
 
-  /** ---- Like/Unlike logic (your original) + Match animation hook ---- */
+  /** ---- Like/Unlike logic ---- */
   const handleLikeUser = async () => {
     try {
       if (
@@ -463,7 +458,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       setMatch(isMatch);
 
       if (isMatch) {
-        setMatchedUser(user); // show this profile in the match modal
+        setMatchedUser(user);
         setMatchModalVisible(true);
       }
 
@@ -493,7 +488,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     }
   };
 
-  /** Lifestyle list → wider/shorter pills with floating labels (unchanged UI) */
+  /** Lifestyle list */
   const lifestylePills = useMemo(() => {
     const pills = [];
 
@@ -540,7 +535,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
     if (marijuana)
       pills.push(
-        <LabeledPill key="weed" label="Marijuana Tolerance">
+        <LabeledPill key="weed" label="Marijuana">
           <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Icon name="weed" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
             <Text margin={0}>{marijuana}</Text>
@@ -694,6 +689,12 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     gridTemplateColumns: "1fr",
                     gap: 10,
                     padding: "10px 10px 6px",
+                    // ensure rows/area collapse to content; avoid flex stretching
+                    gridAutoRows: "min-content",
+                    alignContent: "start",
+                    alignItems: "start",
+                    justifyItems: "stretch",
+                    flex: "0 0 auto",
                   }}
                 >
                   <LabeledPill
@@ -713,7 +714,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 <Box
                   column
                   style={{
-                    marginTop: 6, // tightened to move details superior toward intro
+                    marginTop: 6,
                     backgroundColor: COLORS.white,
                     borderRadius: 20,
                     margin: 10,
@@ -801,7 +802,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     <Loading bar />
                   ) : (
                     <Box style={{ display: "flex", alignItems: "center" }}>
-                      <MdVideoChat size={24} color={COLORS.vividBlue} />
+                      <MdVideoChat size={30} color={COLORS.vividBlue} />
                       <Text
                         bold
                         marginLeft={10}
