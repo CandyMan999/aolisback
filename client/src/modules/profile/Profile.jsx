@@ -20,7 +20,7 @@ import {
   LikeButton,
   UnlikeButton,
   OnlineDot,
-  RoomLink, // ← added (room pill only; no other UI changes)
+  RoomLink, // only for the room pill
 } from "../../components";
 import { track } from "@vercel/analytics";
 import { COLORS } from "../../constants";
@@ -43,6 +43,7 @@ import { motion, useReducedMotion } from "framer-motion";
 
 const BUTTON_H = 52;
 const MAX_W = 560;
+const LIFESTYLE_PILL_HEIGHT = 48; // unify pill height
 
 /** --- Generic floating-label pill --- */
 const LabeledPill = ({
@@ -62,7 +63,7 @@ const LabeledPill = ({
         minHeight: 44,
         boxShadow: `0 2px 10px rgba(0,0,0,0.05)`,
         justifyContent: "center",
-        ...style, // keep external style (we'll set a fixed height for lifestyle items below)
+        ...style,
       }}
     >
       <Text
@@ -88,7 +89,7 @@ const LabeledPill = ({
   );
 };
 
-/** --- Bottom-right floating “Single Since” badge (replaces the pill) --- */
+/** --- Bottom-right floating “Single Since” badge --- */
 const SingleSinceBadge = ({ ts }) => {
   if (!ts) return null;
   const date = moment(Number(ts)).format("MM-DD-YYYY");
@@ -128,12 +129,9 @@ const SingleSinceBadge = ({ ts }) => {
   );
 };
 
-/** =========================================================================
- *  Cutting-edge button frames for the two bottom actions (unchanged)
- * ========================================================================= */
+/** --- Cutting-edge button frame (unchanged behavior/visual) --- */
 const ringGradientPrimary =
   "linear-gradient(135deg, rgba(20,20,20,1) 0%, rgba(90,90,90,1) 50%, rgba(20,20,20,1) 100%)";
-
 const ringGradientAction =
   "linear-gradient(135deg, rgba(255,0,128,1) 0%, rgba(0,163,255,1) 50%, rgba(255,0,128,1) 100%)";
 
@@ -258,7 +256,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const [showHearts, setShowHearts] = useState(false);
   const [match, setMatch] = useState(false);
 
-  // “It’s a match!” modal (kept)
   const [matchModalVisible, setMatchModalVisible] = useState(false);
   const [matchedUser, setMatchedUser] = useState(null);
 
@@ -283,8 +280,14 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     isLoggedIn,
     lookingFor,
     inCall,
-    room, // ← used for the room pill
+    room,
   } = user;
+
+  // Trim intro to prevent phantom height from trailing newlines/whitespace
+  const introTrimmed =
+    typeof intro === "string"
+      ? intro.replace(/\s+$/g, "").replace(/^\s+/g, "")
+      : intro;
 
   useEffect(() => {
     if (state.isProfile) {
@@ -432,7 +435,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const noLocation = (arr) =>
     Array.isArray(arr) && arr.length === 2 && arr[0] === 0 && arr[1] === 0;
 
-  /** ---- Like/Unlike logic + Match animation hook (unchanged) ---- */
+  /** ---- Like/Unlike logic (unchanged) ---- */
   const handleLikeUser = async () => {
     try {
       if (
@@ -485,23 +488,16 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     }
   };
 
-  /** Lifestyle pills (unchanged content; we only add a Room pill) */
+  /** Lifestyle list (add room pill, keep others intact) */
   const lifestylePills = useMemo(() => {
     const pills = [];
 
     if (occupation)
       pills.push(
         <LabeledPill key="occ" label="Occupation">
-          <Box
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              textAlign: "center",
-            }}
-          >
+          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Icon name="job" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
-            <Text>{occupation}</Text>
+            <Text margin={0}>{occupation}</Text>
           </Box>
         </LabeledPill>
       );
@@ -513,7 +509,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             <Text margin={0} style={{ fontSize: 24, lineHeight: 1 }}>
               🥃
             </Text>
-            <Text>{drink}</Text>
+            <Text margin={0}>{drink}</Text>
           </Box>
         </LabeledPill>
       );
@@ -580,10 +576,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
         </LabeledPill>
       );
 
-    // NEW (only addition): Room pill with hyperlink if user is in a room
     if (room && room.name) {
       pills.push(
-        <LabeledPill key="room" label="Chatroom" labelEmoji="📺">
+        <LabeledPill key="room" label="Chatroom" labelEmoji="💭">
           <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <RoomLink dispatch={dispatch} user={user} />
           </Box>
@@ -665,7 +660,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 <FloatingHeart activate={showHearts} isMatch={match} />
               )}
 
-              {/* Bottom-right floating Single Since */}
               {singleTime ? <SingleSinceBadge ts={singleTime} /> : null}
 
               <Box
@@ -701,14 +695,15 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
             {/* Body */}
             <Box column style={{ padding: "10px 0px 0" }}>
-              {intro && (
+              {!!introTrimmed && (
                 <Box
                   style={{
                     display: "grid",
                     gridTemplateColumns: "1fr",
                     gap: 10,
                     padding: "10px 10px 6px",
-                    alignItems: "start", // ← prevents grid stretch; intro sizes to content
+                    alignItems: "start",
+                    marginBottom: 0, // prevent compounded spacing below
                   }}
                 >
                   <LabeledPill
@@ -720,9 +715,13 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     <Text
                       margin={0}
                       color={COLORS.black}
-                      style={{ lineHeight: 1.4 }}
+                      style={{
+                        lineHeight: 1.4,
+                        whiteSpace: "pre-wrap",
+                        wordBreak: "break-word",
+                      }}
                     >
-                      {intro}
+                      {introTrimmed}
                     </Text>
                   </LabeledPill>
                 </Box>
@@ -732,10 +731,10 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 <Box
                   column
                   style={{
-                    marginTop: 12, // keep original spacing
+                    marginTop: 0, // <— kill the extra vertical gap
+                    margin: "0 10px 10px", // <— keep original side/bottom margin
                     backgroundColor: COLORS.white,
                     borderRadius: 20,
-                    margin: 10,
                     padding: 5,
                   }}
                 >
@@ -749,23 +748,25 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                       display: "grid",
                       gridTemplateColumns: "1fr 1fr",
                       gap: 10,
-                      alignItems: "start", // avoid stretch
+                      alignItems: "start",
                     }}
                   >
                     {lifestylePills.map((p, i) =>
                       React.cloneElement(p, {
                         key: i,
-                        // Force consistent height for lifestyle pills only
-                        style: { height: 48, ...p.props.style },
+                        // normalize heights for all lifestyle pills only
+                        style: {
+                          height: LIFESTYLE_PILL_HEIGHT,
+                          ...p.props.style,
+                        },
                       })
                     )}
                   </Box>
                 </Box>
               ) : null}
 
-              {/* Full width buttons — unchanged */}
+              {/* Buttons (unchanged visuals/logic) */}
               <Box column width="100%" style={{ marginTop: 14, gap: 12 }}>
-                {/* VIEW LOCATION */}
                 <CuttingEdgeButton
                   ring="primary"
                   ariaLabel="View location"
@@ -793,7 +794,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                   </Box>
                 </CuttingEdgeButton>
 
-                {/* VIDEO CALL / MESSAGE / UNBLOCK */}
                 <CuttingEdgeButton
                   ring="action"
                   ariaLabel={
@@ -851,7 +851,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
         </Box>
       </Drawer>
 
-      {/* Video modal (unchanged) */}
       {state.showVideo && pathname !== "/message" && (
         <VideoModal
           onClose={toggleModal}
