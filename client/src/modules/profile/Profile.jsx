@@ -60,8 +60,10 @@ const LabeledPill = ({
         border: `3px solid ${COLORS.lighterGrey}`,
         minHeight: 44,
         boxShadow: `0 2px 10px rgba(0,0,0,0.05)`,
+        // prevent vertical stretching inside flex/grid parents
         flex: "0 0 auto",
-        alignSelf: "flex-start",
+        // alignSelf: "flex-start",
+        justifyContent: "center",
         ...style,
       }}
     >
@@ -188,7 +190,7 @@ const CuttingEdgeButton = ({
       style={{
         position: "relative",
         borderRadius: 18,
-        padding: 2,
+        padding: 2, // space for the animated ring
         overflow: "hidden",
         cursor: disabled ? "not-allowed" : "pointer",
         outline: "none",
@@ -493,19 +495,16 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (occupation)
       pills.push(
         <LabeledPill key="occ" label="Occupation">
-          {/* FIX: normalized padding + text margin/line-height */}
           <Box
             style={{
               display: "flex",
               alignItems: "center",
               gap: 8,
-              padding: "10px 12px",
+              textAlign: "center",
             }}
           >
             <Icon name="job" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
-            <Text margin={0} style={{ lineHeight: 1.2 }}>
-              {occupation}
-            </Text>
+            <Text margin={0}>{occupation}</Text>
           </Box>
         </LabeledPill>
       );
@@ -513,21 +512,11 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (drink)
       pills.push(
         <LabeledPill key="drink" label="Drink">
-          {/* FIX: normalized padding + zero margins on both texts */}
-          <Box
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "10px 12px",
-            }}
-          >
-            <Text margin={0} style={{ fontSize: 24, lineHeight: 1 }}>
+          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Text margin={0} style={{ fontSize: 24 }}>
               🥃
             </Text>
-            <Text margin={0} style={{ lineHeight: 1.2 }}>
-              {drink}
-            </Text>
+            <Text>{drink}</Text>
           </Box>
         </LabeledPill>
       );
@@ -535,39 +524,21 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (smoke)
       pills.push(
         <LabeledPill key="smoke" label="Smoke">
-          <Box
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "10px 12px",
-            }}
-          >
-            <Text margin={0} style={{ fontSize: 24, lineHeight: 1 }}>
+          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Text margin={0} style={{ fontSize: 24 }}>
               🚬
             </Text>
-            <Text margin={0} style={{ lineHeight: 1.2 }}>
-              {smoke}
-            </Text>
+            <Text margin={0}>{smoke}</Text>
           </Box>
         </LabeledPill>
       );
 
     if (marijuana)
       pills.push(
-        <LabeledPill key="weed" label="Marijuana Tolerance">
-          <Box
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "10px 12px",
-            }}
-          >
+        <LabeledPill key="weed" label="Marijuana">
+          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Icon name="weed" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
-            <Text margin={0} style={{ lineHeight: 1.2 }}>
-              {marijuana}
-            </Text>
+            <Text margin={0}>{marijuana}</Text>
           </Box>
         </LabeledPill>
       );
@@ -575,18 +546,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (drugs)
       pills.push(
         <LabeledPill key="drugs" label="Drug Use">
-          <Box
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "10px 12px",
-            }}
-          >
+          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Icon name="drugs" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
-            <Text margin={0} style={{ lineHeight: 1.2 }}>
-              {drugs}
-            </Text>
+            <Text margin={0}>{drugs}</Text>
           </Box>
         </LabeledPill>
       );
@@ -594,18 +556,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (kids)
       pills.push(
         <LabeledPill key="kids" label="Kids">
-          <Box
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "10px 12px",
-            }}
-          >
+          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Icon name="kid" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
-            <Text margin={0} style={{ lineHeight: 1.2 }}>
-              {kids}
-            </Text>
+            <Text margin={0}>{kids}</Text>
           </Box>
         </LabeledPill>
       );
@@ -613,20 +566,13 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (lookingFor?.sex)
       pills.push(
         <LabeledPill key="looking" label="Looking For" labelEmoji="💍">
-          <Box
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "10px 12px",
-            }}
-          >
+          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Icon
               name="curious"
               color={COLORS.pink}
               size={ICON_SIZES.XX_LARGE}
             />
-            <Text margin={0} style={{ lineHeight: 1.2 }}>
+            <Text margin={0}>
               {lookingFor.sex === "Female"
                 ? "Women"
                 : lookingFor.sex === "Male"
@@ -743,6 +689,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     gridTemplateColumns: "1fr",
                     gap: 10,
                     padding: "10px 10px 6px",
+                    // ensure rows/area collapse to content; avoid flex stretching
                     gridAutoRows: "min-content",
                     alignContent: "start",
                     alignItems: "start",
