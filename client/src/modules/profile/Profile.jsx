@@ -1,10 +1,10 @@
+// Profile.jsx
 import React, {
   useContext,
   useState,
   useEffect,
   Fragment,
   useMemo,
-  useRef,
 } from "react";
 import {
   Drawer,
@@ -20,7 +20,7 @@ import {
   LikeButton,
   UnlikeButton,
   OnlineDot,
-  RoomLink,
+  RoomLink, // ← added (room pill only; no other UI changes)
 } from "../../components";
 import { track } from "@vercel/analytics";
 import { COLORS } from "../../constants";
@@ -62,7 +62,7 @@ const LabeledPill = ({
         minHeight: 44,
         boxShadow: `0 2px 10px rgba(0,0,0,0.05)`,
         justifyContent: "center",
-        ...style,
+        ...style, // keep external style (we'll set a fixed height for lifestyle items below)
       }}
     >
       <Text
@@ -129,7 +129,7 @@ const SingleSinceBadge = ({ ts }) => {
 };
 
 /** =========================================================================
- *  Cutting-edge button frames for the two bottom actions
+ *  Cutting-edge button frames for the two bottom actions (unchanged)
  * ========================================================================= */
 const ringGradientPrimary =
   "linear-gradient(135deg, rgba(20,20,20,1) 0%, rgba(90,90,90,1) 50%, rgba(20,20,20,1) 100%)";
@@ -141,7 +141,7 @@ const CuttingEdgeButton = ({
   children,
   onClick,
   disabled,
-  ring = "primary", // 'primary' | 'action'
+  ring = "primary",
   ariaLabel,
 }) => {
   const reduceMotion = useReducedMotion();
@@ -149,7 +149,6 @@ const CuttingEdgeButton = ({
   const ringGradient =
     ring === "action" ? ringGradientAction : ringGradientPrimary;
 
-  // Keyboard support
   const handleKeyDown = (e) => {
     if (disabled) return;
     if (e.key === "Enter" || e.key === " ") {
@@ -188,11 +187,10 @@ const CuttingEdgeButton = ({
       style={{
         position: "relative",
         borderRadius: 18,
-        padding: 2, // space for the animated ring
+        padding: 2,
         overflow: "hidden",
         cursor: disabled ? "not-allowed" : "pointer",
         outline: "none",
-        // Animated gradient ring background
         backgroundImage: ringGradient,
         backgroundSize: "200% 200%",
         boxShadow:
@@ -212,7 +210,6 @@ const CuttingEdgeButton = ({
           : { duration: 6, ease: "linear", repeat: Infinity }
       }
     >
-      {/* Focus-visible halo per WCAG — distinct from hover/active */}
       <div
         style={{
           position: "absolute",
@@ -225,14 +222,11 @@ const CuttingEdgeButton = ({
           transition: "box-shadow 160ms ease-out",
         }}
       />
-
-      {/* Inner glass panel */}
       <div
         style={{
           borderRadius: 16,
           background:
             "linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.94) 100%)",
-          // strong contrast text over white glass; shadow for “lift”
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.6), 0 2px 10px rgba(0,0,0,0.06)",
           height: BUTTON_H,
@@ -251,7 +245,7 @@ const CuttingEdgeButton = ({
 const Profile = ({ userClicked, mobile, currentUser }) => {
   const client = useClient();
   const history = useHistory();
-  const location = useLocation(); // <-- keep the object (we also use pathname)
+  const location = useLocation();
   const { pathname } = location;
 
   const { state, dispatch } = useContext(Context);
@@ -264,7 +258,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const [showHearts, setShowHearts] = useState(false);
   const [match, setMatch] = useState(false);
 
-  // “It’s a match!” modal
+  // “It’s a match!” modal (kept)
   const [matchModalVisible, setMatchModalVisible] = useState(false);
   const [matchedUser, setMatchedUser] = useState(null);
 
@@ -277,19 +271,19 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     intro,
     sex,
     age,
-    kids,
     location: userLocation,
     occupation,
     marijuana,
     drink,
     smoke,
     drugs,
+    kids,
     pictures,
     _id,
     isLoggedIn,
     lookingFor,
     inCall,
-    room, // <--- using existing room info to render Room pill
+    room, // ← used for the room pill
   } = user;
 
   useEffect(() => {
@@ -428,7 +422,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           search: params.toString(),
         });
 
-        console.log("Trying to send vido message");
         window.ReactNativeWebView?.postMessage(JSON.stringify(data));
       } else {
         dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
@@ -439,7 +432,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const noLocation = (arr) =>
     Array.isArray(arr) && arr.length === 2 && arr[0] === 0 && arr[1] === 0;
 
-  /** ---- Like/Unlike logic (your original) + Match animation hook ---- */
+  /** ---- Like/Unlike logic + Match animation hook (unchanged) ---- */
   const handleLikeUser = async () => {
     try {
       if (
@@ -462,7 +455,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       setMatch(isMatch);
 
       if (isMatch) {
-        setMatchedUser(user); // show this profile in the match modal
+        setMatchedUser(user);
         setMatchModalVisible(true);
       }
 
@@ -492,7 +485,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     }
   };
 
-  /** Basics & lifestyle pills (UNCHANGED layout) + Room pill appended if present */
+  /** Lifestyle pills (unchanged content; we only add a Room pill) */
   const lifestylePills = useMemo(() => {
     const pills = [];
 
@@ -517,7 +510,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       pills.push(
         <LabeledPill key="drink" label="Drink">
           <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Text margin={0} style={{ fontSize: 24 }}>
+            <Text margin={0} style={{ fontSize: 24, lineHeight: 1 }}>
               🥃
             </Text>
             <Text>{drink}</Text>
@@ -529,7 +522,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       pills.push(
         <LabeledPill key="smoke" label="Smoke">
           <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Text margin={0} style={{ fontSize: 24 }}>
+            <Text margin={0} style={{ fontSize: 24, lineHeight: 1 }}>
               🚬
             </Text>
             <Text margin={0}>{smoke}</Text>
@@ -587,15 +580,10 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
         </LabeledPill>
       );
 
-    // NEW: Room pill (only addition)
-    if (room && isLoggedIn && room.name) {
+    // NEW (only addition): Room pill with hyperlink if user is in a room
+    if (room && room.name) {
       pills.push(
-        <LabeledPill
-          labelEmoji={"💭"}
-          key="room"
-          label="ChatRoom"
-          accent={COLORS.vividBlue}
-        >
+        <LabeledPill key="room" label="Chatroom" labelEmoji="📺">
           <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <RoomLink dispatch={dispatch} user={user} />
           </Box>
@@ -613,9 +601,8 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     kids,
     lookingFor,
     room,
-    isLoggedIn,
-    user,
     dispatch,
+    user,
   ]);
 
   return (
@@ -721,7 +708,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     gridTemplateColumns: "1fr",
                     gap: 10,
                     padding: "10px 10px 6px",
-                    height: "fit-content",
+                    alignItems: "start", // ← prevents grid stretch; intro sizes to content
                   }}
                 >
                   <LabeledPill
@@ -730,7 +717,11 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     style={{ padding: 14 }}
                     labelEmoji={"🎙️"}
                   >
-                    <Text margin={0} color={COLORS.black}>
+                    <Text
+                      margin={0}
+                      color={COLORS.black}
+                      style={{ lineHeight: 1.4 }}
+                    >
                       {intro}
                     </Text>
                   </LabeledPill>
@@ -741,7 +732,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 <Box
                   column
                   style={{
-                    marginTop: 6, // tightened to move details superior toward intro
+                    marginTop: 12, // keep original spacing
                     backgroundColor: COLORS.white,
                     borderRadius: 20,
                     margin: 10,
@@ -758,19 +749,21 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                       display: "grid",
                       gridTemplateColumns: "1fr 1fr",
                       gap: 10,
+                      alignItems: "start", // avoid stretch
                     }}
                   >
                     {lifestylePills.map((p, i) =>
                       React.cloneElement(p, {
                         key: i,
-                        style: { minHeight: 44 },
+                        // Force consistent height for lifestyle pills only
+                        style: { height: 48, ...p.props.style },
                       })
                     )}
                   </Box>
                 </Box>
               ) : null}
 
-              {/* Full width buttons */}
+              {/* Full width buttons — unchanged */}
               <Box column width="100%" style={{ marginTop: 14, gap: 12 }}>
                 {/* VIEW LOCATION */}
                 <CuttingEdgeButton
