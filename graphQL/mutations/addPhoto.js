@@ -84,8 +84,6 @@ module.exports = {
       const uploadURL = result && result.uploadURL ? result.uploadURL : null;
       const id = result && result.id ? result.id : null;
 
-      console.log("what is this: ", resp.data);
-
       if (!ok || !uploadURL || !id) {
         throw new Error(
           "Cloudflare direct upload failed: " + JSON.stringify(data)

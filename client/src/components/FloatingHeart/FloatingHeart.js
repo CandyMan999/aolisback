@@ -59,7 +59,6 @@ const FloatingHeart = ({ activate, isMatch }) => {
     }, 6000);
   };
 
-
   return (
     <>
       {show &&
@@ -85,7 +84,7 @@ const FloatingHeart = ({ activate, isMatch }) => {
       {isMatch && (
         <MatchText
           initial={{ y: "100%", opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
+          animate={{ y: -100, opacity: 1 }}
           transition={{ duration: 2, ease: "easeOut" }}
           exit={{ opacity: 0, transition: { delay: 3, duration: 1 } }}
         >
