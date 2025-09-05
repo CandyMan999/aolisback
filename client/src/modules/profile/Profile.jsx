@@ -591,9 +591,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (room && isLoggedIn && room.name) {
       pills.push(
         <LabeledPill
+          labelEmoji={"💭"}
           key="room"
-          label="Live Room"
-          labelEmoji="🎥"
+          label="ChatRoom"
           accent={COLORS.vividBlue}
         >
           <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
