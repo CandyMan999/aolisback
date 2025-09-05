@@ -694,7 +694,14 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             </Box>
 
             {/* Body */}
-            <Box column style={{ padding: "10px 0px 0" }}>
+            <Box
+              column
+              style={{
+                padding: "10px 0px 0",
+                height: "fit-content",
+                backgroundColor: COLORS.black,
+              }}
+            >
               {!!introTrimmed && (
                 <Box
                   style={{
@@ -704,6 +711,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     padding: "10px 10px 6px",
                     alignItems: "start",
                     marginBottom: 0, // prevent compounded spacing below
+                    height: "fit-content",
                   }}
                 >
                   <LabeledPill
@@ -766,7 +774,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               ) : null}
 
               {/* Buttons (unchanged visuals/logic) */}
-              <Box column width="100%" style={{ marginTop: 14, gap: 12 }}>
+              <Box column width="100%" style={{ marginTop: 2, gap: 6 }}>
                 <CuttingEdgeButton
                   ring="primary"
                   ariaLabel="View location"
