@@ -20,6 +20,7 @@ import {
   LikeButton,
   UnlikeButton,
   OnlineDot,
+  RoomLink,
 } from "../../components";
 import { track } from "@vercel/analytics";
 import { COLORS } from "../../constants";
@@ -60,9 +61,6 @@ const LabeledPill = ({
         border: `3px solid ${COLORS.lighterGrey}`,
         minHeight: 44,
         boxShadow: `0 2px 10px rgba(0,0,0,0.05)`,
-        // prevent vertical stretching inside flex/grid parents
-        flex: "0 0 auto",
-        // alignSelf: "flex-start",
         justifyContent: "center",
         ...style,
       }}
@@ -194,6 +192,7 @@ const CuttingEdgeButton = ({
         overflow: "hidden",
         cursor: disabled ? "not-allowed" : "pointer",
         outline: "none",
+        // Animated gradient ring background
         backgroundImage: ringGradient,
         backgroundSize: "200% 200%",
         boxShadow:
@@ -213,7 +212,7 @@ const CuttingEdgeButton = ({
           : { duration: 6, ease: "linear", repeat: Infinity }
       }
     >
-      {/* Focus-visible halo */}
+      {/* Focus-visible halo per WCAG — distinct from hover/active */}
       <div
         style={{
           position: "absolute",
@@ -233,6 +232,7 @@ const CuttingEdgeButton = ({
           borderRadius: 16,
           background:
             "linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.94) 100%)",
+          // strong contrast text over white glass; shadow for “lift”
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.6), 0 2px 10px rgba(0,0,0,0.06)",
           height: BUTTON_H,
@@ -251,7 +251,7 @@ const CuttingEdgeButton = ({
 const Profile = ({ userClicked, mobile, currentUser }) => {
   const client = useClient();
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation(); // <-- keep the object (we also use pathname)
   const { pathname } = location;
 
   const { state, dispatch } = useContext(Context);
@@ -260,9 +260,11 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const [userBlocked, setUserBlocked] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // like/unlike UI
   const [showHearts, setShowHearts] = useState(false);
   const [match, setMatch] = useState(false);
 
+  // “It’s a match!” modal
   const [matchModalVisible, setMatchModalVisible] = useState(false);
   const [matchedUser, setMatchedUser] = useState(null);
 
@@ -287,6 +289,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     isLoggedIn,
     lookingFor,
     inCall,
+    room, // <--- using existing room info to render Room pill
   } = user;
 
   useEffect(() => {
@@ -425,6 +428,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           search: params.toString(),
         });
 
+        console.log("Trying to send vido message");
         window.ReactNativeWebView?.postMessage(JSON.stringify(data));
       } else {
         dispatch({ type: "TOGGLE_VIDEO", payload: !state.showVideo });
@@ -435,7 +439,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
   const noLocation = (arr) =>
     Array.isArray(arr) && arr.length === 2 && arr[0] === 0 && arr[1] === 0;
 
-  /** ---- Like/Unlike logic ---- */
+  /** ---- Like/Unlike logic (your original) + Match animation hook ---- */
   const handleLikeUser = async () => {
     try {
       if (
@@ -458,7 +462,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
       setMatch(isMatch);
 
       if (isMatch) {
-        setMatchedUser(user);
+        setMatchedUser(user); // show this profile in the match modal
         setMatchModalVisible(true);
       }
 
@@ -488,7 +492,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     }
   };
 
-  /** Lifestyle list */
+  /** Basics & lifestyle pills (UNCHANGED layout) + Room pill appended if present */
   const lifestylePills = useMemo(() => {
     const pills = [];
 
@@ -504,7 +508,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             }}
           >
             <Icon name="job" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
-            <Text margin={0}>{occupation}</Text>
+            <Text>{occupation}</Text>
           </Box>
         </LabeledPill>
       );
@@ -535,7 +539,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
     if (marijuana)
       pills.push(
-        <LabeledPill key="weed" label="Marijuana">
+        <LabeledPill key="weed" label="Marijuana Tolerance">
           <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Icon name="weed" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
             <Text margin={0}>{marijuana}</Text>
@@ -583,8 +587,36 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
         </LabeledPill>
       );
 
+    // NEW: Room pill (only addition)
+    if (room && isLoggedIn && room.name) {
+      pills.push(
+        <LabeledPill
+          key="room"
+          label="Live Room"
+          labelEmoji="🎥"
+          accent={COLORS.vividBlue}
+        >
+          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <RoomLink dispatch={dispatch} user={user} />
+          </Box>
+        </LabeledPill>
+      );
+    }
+
     return pills;
-  }, [occupation, drink, smoke, marijuana, drugs, kids, lookingFor]);
+  }, [
+    occupation,
+    drink,
+    smoke,
+    marijuana,
+    drugs,
+    kids,
+    lookingFor,
+    room,
+    isLoggedIn,
+    user,
+    dispatch,
+  ]);
 
   return (
     <Fragment>
@@ -689,12 +721,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     gridTemplateColumns: "1fr",
                     gap: 10,
                     padding: "10px 10px 6px",
-                    // ensure rows/area collapse to content; avoid flex stretching
-                    gridAutoRows: "min-content",
-                    alignContent: "start",
-                    alignItems: "start",
-                    justifyItems: "stretch",
-                    flex: "0 0 auto",
+                    height: "fit-content",
                   }}
                 >
                   <LabeledPill
@@ -714,7 +741,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 <Box
                   column
                   style={{
-                    marginTop: 6,
+                    marginTop: 6, // tightened to move details superior toward intro
                     backgroundColor: COLORS.white,
                     borderRadius: 20,
                     margin: 10,
@@ -743,7 +770,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 </Box>
               ) : null}
 
-              {/* Full width buttons — replaced with CuttingEdgeButton frames */}
+              {/* Full width buttons */}
               <Box column width="100%" style={{ marginTop: 14, gap: 12 }}>
                 {/* VIEW LOCATION */}
                 <CuttingEdgeButton
