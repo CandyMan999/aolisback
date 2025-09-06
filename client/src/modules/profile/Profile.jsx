@@ -697,9 +697,10 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             <Box
               column
               style={{
-                padding: "10px 0px 0",
+                padding: "5px 0px 0",
                 height: "fit-content",
-                backgroundColor: COLORS.black,
+                backgroundColor: COLORS.lightGrey,
+                rowGap: 5,
               }}
             >
               {!!introTrimmed && (
@@ -707,11 +708,10 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                   style={{
                     display: "grid",
                     gridTemplateColumns: "1fr",
-                    gap: 10,
-                    padding: "10px 10px 6px",
+                    gap: 5,
+                    padding: "10px 10px 10px",
                     alignItems: "start",
-                    marginBottom: 0, // prevent compounded spacing below
-                    height: "fit-content",
+                    margin: 0,
                   }}
                 >
                   <LabeledPill
