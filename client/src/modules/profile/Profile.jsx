@@ -661,7 +661,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                   />
                 ))}
               {showHearts && (
-                /* <Box
+                <Box
                   style={{
                     position: "absolute",
                     inset: 0,
@@ -669,9 +669,9 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     pointerEvents: "none",
                     overflow: "hidden",
                   }}
-                > */
-                <FloatingHeart activate={showHearts} isMatch={match} />
-                /* </Box> */
+                >
+                  <FloatingHeart activate={showHearts} isMatch={match} />
+                </Box>
               )}
 
               {singleTime ? <SingleSinceBadge ts={singleTime} /> : null}
@@ -712,7 +712,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
               column
               style={{
                 padding: "5px 0px 0",
-                height: "fit-content",
+
                 backgroundColor: COLORS.lightGrey,
                 rowGap: 5,
               }}
