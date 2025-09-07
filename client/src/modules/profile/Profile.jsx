@@ -661,7 +661,17 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                   />
                 ))}
               {showHearts && (
-                <FloatingHeart activate={showHearts} isMatch={match} />
+                <Box
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    zIndex: 4,
+                    pointerEvents: "none",
+                    overflow: "hidden",
+                  }}
+                >
+                  <FloatingHeart activate={showHearts} isMatch={match} />
+                </Box>
               )}
 
               {singleTime ? <SingleSinceBadge ts={singleTime} /> : null}
