@@ -63,6 +63,7 @@ const LabeledPill = ({
         minHeight: 44,
         boxShadow: `0 2px 10px rgba(0,0,0,0.05)`,
         justifyContent: "center",
+        boxSizing: "border-box",
         ...style,
       }}
     >
@@ -238,6 +239,13 @@ const CuttingEdgeButton = ({
       </div>
     </motion.div>
   );
+};
+
+const pillText = {
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  maxWidth: "100%",
 };
 
 const Profile = ({ userClicked, mobile, currentUser }) => {
@@ -495,9 +503,18 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (occupation)
       pills.push(
         <LabeledPill key="occ" label="Occupation">
-          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              minWidth: 0,
+            }}
+          >
             <Icon name="job" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
-            <Text margin={0}>{occupation}</Text>
+            <Text margin={0} style={pillText}>
+              {occupation}
+            </Text>
           </Box>
         </LabeledPill>
       );
@@ -505,11 +522,20 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (drink)
       pills.push(
         <LabeledPill key="drink" label="Drink">
-          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              minWidth: 0,
+            }}
+          >
             <Text margin={0} style={{ fontSize: 24, lineHeight: 1 }}>
               🥃
             </Text>
-            <Text margin={0}>{drink}</Text>
+            <Text margin={0} style={pillText}>
+              {drink}
+            </Text>
           </Box>
         </LabeledPill>
       );
@@ -517,11 +543,20 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (smoke)
       pills.push(
         <LabeledPill key="smoke" label="Smoke">
-          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              minWidth: 0,
+            }}
+          >
             <Text margin={0} style={{ fontSize: 24, lineHeight: 1 }}>
               🚬
             </Text>
-            <Text margin={0}>{smoke}</Text>
+            <Text margin={0} style={pillText}>
+              {smoke}
+            </Text>
           </Box>
         </LabeledPill>
       );
@@ -529,9 +564,18 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (marijuana)
       pills.push(
         <LabeledPill key="weed" label="Marijuana">
-          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              minWidth: 0,
+            }}
+          >
             <Icon name="weed" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
-            <Text margin={0}>{marijuana}</Text>
+            <Text margin={0} style={pillText}>
+              {marijuana}
+            </Text>
           </Box>
         </LabeledPill>
       );
@@ -539,9 +583,18 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (drugs)
       pills.push(
         <LabeledPill key="drugs" label="Drug Use">
-          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              minWidth: 0,
+            }}
+          >
             <Icon name="drugs" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
-            <Text margin={0}>{drugs}</Text>
+            <Text margin={0} style={pillText}>
+              {drugs}
+            </Text>
           </Box>
         </LabeledPill>
       );
@@ -549,9 +602,18 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (kids)
       pills.push(
         <LabeledPill key="kids" label="Kids">
-          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              minWidth: 0,
+            }}
+          >
             <Icon name="kid" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
-            <Text margin={0}>{kids}</Text>
+            <Text margin={0} style={pillText}>
+              {kids}
+            </Text>
           </Box>
         </LabeledPill>
       );
@@ -559,13 +621,20 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (lookingFor?.sex)
       pills.push(
         <LabeledPill key="looking" label="Looking For" labelEmoji="💍">
-          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              minWidth: 0,
+            }}
+          >
             <Icon
               name="curious"
               color={COLORS.pink}
               size={ICON_SIZES.XX_LARGE}
             />
-            <Text margin={0}>
+            <Text margin={0} style={pillText}>
               {lookingFor.sex === "Female"
                 ? "Women"
                 : lookingFor.sex === "Male"
@@ -579,7 +648,16 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
     if (room && room.name) {
       pills.push(
         <LabeledPill key="room" label="Chatroom" labelEmoji="💭">
-          <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              minWidth: 0,
+              maxWidth: "100%",
+              overflow: "hidden",
+            }}
+          >
             <RoomLink dispatch={dispatch} user={user} />
           </Box>
         </LabeledPill>
@@ -607,8 +685,8 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           width="100%"
           style={{
             background: COLORS.lightGrey,
-            maxHeight: "fit-content",
             boxSizing: "border-box",
+            // minHeight: "100%",
           }}
         >
           <Box
@@ -711,21 +789,17 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             <Box
               column
               style={{
-                padding: "5px 0px 0",
-
+                padding: "5px 0 0",
                 backgroundColor: COLORS.lightGrey,
-                rowGap: 5,
               }}
             >
               {!!introTrimmed && (
                 <Box
+                  // match Lifestyle horizontal padding
                   style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr",
-                    gap: 5,
-                    padding: "10px 10px 10px",
-                    alignItems: "start",
-                    margin: 0,
+                    display: "block",
+                    padding: "5px",
+                    margin: "0 10px 10px",
                   }}
                 >
                   <LabeledPill
@@ -753,8 +827,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 <Box
                   column
                   style={{
-                    marginTop: 0, // <— kill the extra vertical gap
-                    margin: "0 10px 10px", // <— keep original side/bottom margin
+                    margin: "0 10px 10px",
                     backgroundColor: COLORS.white,
                     borderRadius: 20,
                     padding: 5,
@@ -765,20 +838,25 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                       Basics & Lifestyle
                     </Text>
                   </Box>
+
+                  {/* Two columns via flex-wrap */}
                   <Box
                     style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr",
+                      display: "flex",
+                      flexWrap: "wrap",
                       gap: 10,
-                      alignItems: "start",
+                      alignItems: "stretch",
                     }}
                   >
                     {lifestylePills.map((p, i) =>
                       React.cloneElement(p, {
                         key: i,
-                        // normalize heights for all lifestyle pills only
                         style: {
+                          // force exactly two columns
+                          flex: "0 0 calc(50% - 10px)",
+                          maxWidth: "calc(50% - 10px)",
                           height: LIFESTYLE_PILL_HEIGHT,
+                          minWidth: 0,
                           ...p.props.style,
                         },
                       })
