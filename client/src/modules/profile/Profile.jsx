@@ -607,7 +607,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
           width="100%"
           style={{
             background: COLORS.lightGrey,
-            minHeight: "100%",
+            maxHeight: "fit-content",
             boxSizing: "border-box",
           }}
         >
@@ -660,7 +660,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     }}
                   />
                 ))}
-              {/* {showHearts && (
+              {showHearts && (
                 <Box
                   style={{
                     position: "absolute",
@@ -672,7 +672,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 >
                   <FloatingHeart activate={showHearts} isMatch={match} />
                 </Box>
-              )} */}
+              )}
 
               {singleTime ? <SingleSinceBadge ts={singleTime} /> : null}
 
