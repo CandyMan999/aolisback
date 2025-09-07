@@ -528,7 +528,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
 
     if (marijuana)
       pills.push(
-        <LabeledPill key="weed" label="Marijuana Tolerance">
+        <LabeledPill key="weed" label="Marijuana">
           <Box style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Icon name="weed" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
             <Text margin={0}>{marijuana}</Text>
@@ -660,7 +660,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     }}
                   />
                 ))}
-              {showHearts && (
+              {/* {showHearts && (
                 <Box
                   style={{
                     position: "absolute",
@@ -672,7 +672,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 >
                   <FloatingHeart activate={showHearts} isMatch={match} />
                 </Box>
-              )}
+              )} */}
 
               {singleTime ? <SingleSinceBadge ts={singleTime} /> : null}
 
@@ -762,7 +762,7 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                 >
                   <Box style={{ marginBottom: 6, paddingLeft: 2 }}>
                     <Text bold color={COLORS.grey}>
-                      Basics & lifestyle
+                      Basics & Lifestyle
                     </Text>
                   </Box>
                   <Box
