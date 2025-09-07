@@ -622,7 +622,11 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
             }}
           >
             {/* Photo + overlay */}
-            <Box width="100%" position="relative">
+            <Box
+              width="100%"
+              position="relative"
+              style={{ overflow: "hidden" }}
+            >
               <PhotoSlider
                 withDelete={_id && _id === state.currentUser._id}
                 images={pictures}
