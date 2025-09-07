@@ -660,6 +660,19 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                     }}
                   />
                 ))}
+              {showHearts && (
+                /* <Box
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    zIndex: 4,
+                    pointerEvents: "none",
+                    overflow: "hidden",
+                  }}
+                > */
+                <FloatingHeart activate={showHearts} isMatch={match} />
+                /* </Box> */
+              )}
 
               {singleTime ? <SingleSinceBadge ts={singleTime} /> : null}
 
@@ -692,19 +705,6 @@ const Profile = ({ userClicked, mobile, currentUser }) => {
                   <OnlineDot online={!!isLoggedIn} inCall={!!inCall} />
                 </Box>
               </Box>
-              {showHearts && (
-                <Box
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    zIndex: 4,
-                    pointerEvents: "none",
-                    overflow: "hidden",
-                  }}
-                >
-                  <FloatingHeart activate={showHearts} isMatch={match} />
-                </Box>
-              )}
             </Box>
 
             {/* Body */}
