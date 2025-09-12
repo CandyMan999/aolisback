@@ -246,8 +246,8 @@ const VideoChatScreen = ({
 
   const playSound = () => {
     try {
-      // const audio = new Audio(notification);
-      // audio.play();
+      const audio = new Audio(notification);
+      audio.play();
     } catch (err) {
       console.log("err playing sound:", err);
     }
@@ -256,7 +256,7 @@ const VideoChatScreen = ({
   const handleScreenshot = async () => {
     if (!api) return;
     try {
-      // playSound();
+      playSound();
       setFlash(true);
 
       // Capture from Jitsi
