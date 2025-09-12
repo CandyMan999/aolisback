@@ -142,7 +142,10 @@ const deleteOldVideos = async () => {
       )
     );
 
-    if (!uids.length) return;
+    if (!uids.length) {
+      console.log("NO UIDs");
+      return;
+    }
 
     const results = await Promise.allSettled(
       uids.map((uid) =>

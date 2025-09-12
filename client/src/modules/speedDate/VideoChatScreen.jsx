@@ -12,6 +12,7 @@ import {
   CALL_DURATION_MUTATION,
   FLAG_PHOTO_MUTATION,
   REMOVE_FROM_QUEUE,
+  DIRECT_UPLOAD_MUTATION,
 } from "../../graphql/mutations";
 import { Loading, Button, Text, FONT_SIZES, Box } from "../../components";
 import { JitsiMeeting } from "@jitsi/react-sdk";
@@ -217,63 +218,83 @@ const VideoChatScreen = ({
     }, 10000); // 10 seconds interval
   };
 
-  const handleImageUpload = async (image) => {
+  const handleImageUpload = async (image /* Blob */) => {
     try {
-      const data = new FormData();
-      data.append("file", image);
-      data.append("upload_preset", "northShoreExpress");
-      data.append("cloud_name", "aolisback");
+      // 1) Get one-time direct upload URL + Cloudflare image id
+      const { directUpload } = await client.request(DIRECT_UPLOAD_MUTATION);
+      const { uploadURL, id } = directUpload;
 
-      const res = await axios.post(
-        process.env.REACT_APP_CLOUDINARY_IMAGE,
-        data
-      );
+      // 2) Build form data (key MUST be "file"; give the Blob a filename)
+      const form = new FormData();
+      form.append("file", image, "screencap.jpg");
 
-      return { url: res.data.url, publicId: res.data.public_id };
+      // 3) POST to the direct upload URL (no manual headers)
+      const res = await fetch(uploadURL, { method: "POST", body: form });
+      if (!res.ok) throw new Error(`Direct upload failed: ${res.status}`);
+
+      // 4) Build delivery URL
+      const hash = process.env.REACT_APP_CF_ACCOUNT_HASH;
+      const variant = process.env.REACT_APP_CF_VARIANT || "public";
+      const deliveryUrl = `https://imagedelivery.net/${hash}/${id}/${variant}`;
+
+      return { url: deliveryUrl, publicId: id };
     } catch (err) {
-      console.log(err);
+      console.log("Cloudflare upload failed:", err?.message || err);
+      return { url: null, publicId: null };
     }
   };
 
   const playSound = () => {
     try {
-      const audio = new Audio(notification);
-      audio.play();
+      // const audio = new Audio(notification);
+      // audio.play();
     } catch (err) {
       console.log("err playing sound:", err);
     }
   };
 
   const handleScreenshot = async () => {
+    if (!api) return;
     try {
-      if (api) {
-        playSound();
-        setFlash(true);
+      // playSound();
+      setFlash(true);
 
-        api.captureLargeVideoScreenshot().then(async (data) => {
-          const base64Response = await fetch(data.dataURL);
-          const blob = await base64Response.blob();
+      // Capture from Jitsi
+      const result = await api.captureLargeVideoScreenshot();
+      const dataURL = result?.dataURL || result?.dataUrl || result;
+      if (!dataURL || typeof dataURL !== "string") {
+        throw new Error("No dataURL from Jitsi capture");
+      }
 
-          const { url, publicId } = await handleImageUpload(blob);
+      // Convert to Blob
+      const base64Response = await fetch(dataURL);
+      const blob = await base64Response.blob();
 
-          const variables = {
-            url,
-            publicId,
-            flaggedUserID: pairedUser._id,
-          };
+      // Upload to Cloudflare Images
+      const { url, publicId } = await handleImageUpload(blob);
+      if (!url) throw new Error("Upload returned no URL");
 
-          const { flagPhoto } = await client.request(
-            FLAG_PHOTO_MUTATION,
-            variables
-          );
-          setFlash(false);
-          if (flagPhoto) {
-            window.ReactNativeWebView.postMessage("SCREEN_SHOT_SUCCESS");
-          }
-        });
+      // Flag the other user
+      const variables = {
+        url,
+        publicId,
+        flaggedUserID: pairedUser._id,
+      };
+
+      const { flagPhoto } = await client.request(
+        FLAG_PHOTO_MUTATION,
+        variables
+      );
+
+      if (flagPhoto) {
+        try {
+          window.ReactNativeWebView?.postMessage("SCREEN_SHOT_SUCCESS");
+        } catch {}
       }
     } catch (err) {
       console.log("error with screenshot: ", err);
+    } finally {
+      setFlash(false);
     }
   };
 
