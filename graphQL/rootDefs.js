@@ -244,6 +244,17 @@ module.exports = gql`
     uid: String!
   }
 
+  type AffiliateDownload {
+    affiliateName: String!
+    downloads: Int!
+  }
+
+  type AffiliateLeaderboard {
+    reportDate: String!
+    goal: Int!
+    affiliates: [AffiliateDownload!]!
+  }
+
   type Query {
     me: User
     fetchMe(token: String!): User
@@ -265,6 +276,7 @@ module.exports = gql`
     getFlaggedVideos: [Video]
     getFlaggedPictures: [Picture]
     getRealUsers: [User]
+    getAffiliateDownloads(reportDate: String): AffiliateLeaderboard!
   }
 
   type GoogleAuth {
