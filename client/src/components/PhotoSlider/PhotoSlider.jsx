@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Box, Icon, ICON_SIZES, Loading } from ".."; // Import Spinner component
 import { COLORS } from "../../constants";
 import Slide from "./Slide";
+import NavArrow from "./NavArrow";
 
 const PhotoSlider = ({
   height,
@@ -148,8 +149,7 @@ const PhotoSlider = ({
                           borderRadius: 999,
                           backgroundColor: COLORS.white,
                           opacity: index === currentIdx ? 0.95 : 0.35,
-                          marginRight:
-                            index === pictures.length - 1 ? 0 : 6,
+                          marginRight: index === pictures.length - 1 ? 0 : 6,
                           transition: "opacity 0.3s ease",
                         }}
                       />
@@ -169,8 +169,8 @@ const PhotoSlider = ({
                     onClick={prevSlide}
                     role="button"
                     aria-label="View previous photo"
-                    style={{ zIndex: 3 }}
-                  />
+                    style={{ zIndex: 10 }}
+                  ></Box>
                   <Box
                     position="absolute"
                     top={0}
@@ -180,7 +180,7 @@ const PhotoSlider = ({
                     onClick={nextSlide}
                     role="button"
                     aria-label="View next photo"
-                    style={{ zIndex: 3 }}
+                    style={{ zIndex: 10 }}
                   />
                 </>
               )}
@@ -235,7 +235,6 @@ const PhotoSlider = ({
               )}
             </Box>
           </Box>
-
         </>
       )}
     </Box>
