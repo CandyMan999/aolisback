@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { Box, Icon, ICON_SIZES, Loading } from ".."; // Import Spinner component
 import { COLORS } from "../../constants";
 import Slide from "./Slide";
-import NavArrow from "./NavArrow";
 
 const PhotoSlider = ({
   height,
@@ -17,6 +16,105 @@ const PhotoSlider = ({
   const [pictures, setPictures] = useState([]);
   const [clickDirection, setClickDirection] = useState("right");
   const [loading, setLoading] = useState(true); // New loading state
+  const pointerOriginRef = useRef(null);
+  const ignoreClickRef = useRef(false);
+
+  const recordPointerOrigin = (event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) {
+      return;
+    }
+
+    pointerOriginRef.current = {
+      time: Date.now(),
+      x: event.clientX,
+      y: event.clientY,
+    };
+
+    if (event.currentTarget.setPointerCapture) {
+      try {
+        event.currentTarget.setPointerCapture(event.pointerId);
+      } catch (err) {
+        // ignore platforms that do not support pointer capture
+      }
+    }
+  };
+
+  const clearPointerOrigin = (event) => {
+    if (event && event.currentTarget.releasePointerCapture) {
+      try {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      } catch (err) {
+        // ignore platforms that do not support pointer capture
+      }
+    }
+
+    pointerOriginRef.current = null;
+  };
+
+  const handleTapNavigation = (clientX, currentTarget) => {
+    if (!pictures.length || pictures.length <= 1) {
+      return false;
+    }
+
+    const rect = currentTarget.getBoundingClientRect();
+
+    if (!rect.width) {
+      return false;
+    }
+
+    const relativeX = clientX - rect.left;
+
+    if (relativeX >= rect.width / 2) {
+      nextSlide();
+    } else {
+      prevSlide();
+    }
+
+    return true;
+  };
+
+  const handlePointerUp = (event) => {
+    const origin = pointerOriginRef.current;
+    clearPointerOrigin(event);
+
+    if (!origin) {
+      return;
+    }
+
+    const elapsed = Date.now() - origin.time;
+    const deltaX = Math.abs(event.clientX - origin.x);
+    const deltaY = Math.abs(event.clientY - origin.y);
+
+    if (elapsed > 350 || deltaX > 15 || deltaY > 15) {
+      return;
+    }
+
+    if (handleTapNavigation(event.clientX, event.currentTarget)) {
+      ignoreClickRef.current = true;
+      setTimeout(() => {
+        ignoreClickRef.current = false;
+      }, 0);
+
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
+  const handleClick = (event) => {
+    if (ignoreClickRef.current) {
+      ignoreClickRef.current = false;
+      return;
+    }
+
+    if (handleTapNavigation(event.clientX, event.currentTarget)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
+  const handlePointerCancel = (event) => {
+    clearPointerOrigin(event);
+  };
 
   useEffect(() => {
     const loadImages = async () => {
@@ -124,7 +222,16 @@ const PhotoSlider = ({
       ) : (
         <>
           <Box display="flex" alignItems="center" justifyContent="center">
-            <Box justifyContent="center" position="relative">
+            <Box
+              justifyContent="center"
+              position="relative"
+              onPointerDown={recordPointerOrigin}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerCancel}
+              onPointerLeave={handlePointerCancel}
+              onClick={handleClick}
+              style={{ touchAction: "manipulation" }}
+            >
               {pictures.length > 0 && (
                 <Box
                   position="absolute"
@@ -144,8 +251,8 @@ const PhotoSlider = ({
                         key={`photo-slider-indicator-${index}`}
                         style={{
                           display: "inline-block",
-                          width: 28,
-                          height: 4,
+                          width: 32,
+                          height: 5,
                           borderRadius: 999,
                           backgroundColor: COLORS.white,
                           opacity: index === currentIdx ? 0.95 : 0.35,
@@ -158,49 +265,6 @@ const PhotoSlider = ({
                 </Box>
               )}
 
-              {pictures.length > 1 && (
-                <>
-                  <Box
-                    position="absolute"
-                    top={0}
-                    bottom={0}
-                    left={0}
-                    width="50%"
-                    onClick={prevSlide}
-                    role="button"
-                    aria-label="View previous photo"
-                    style={{ zIndex: 10 }}
-                  ></Box>
-                  <Box
-                    position="absolute"
-                    top={0}
-                    bottom={0}
-                    right={0}
-                    width="50%"
-                    onClick={nextSlide}
-                    role="button"
-                    aria-label="View next photo"
-                    style={{ zIndex: 10 }}
-                  />
-                </>
-              )}
-
-              {/* <Box
-                position="absolute"
-                row
-                zIndex={10}
-                top={2}
-                left={10}
-                marginTop={2}
-                boxShadow={`2px 2px 4px 2px ${COLORS.pink}`}
-                borderRadius={30}
-                height={60}
-                width={60}
-                alignItems="center"
-                justifyContent="center"
-              >
-                👍❤️
-              </Box> */}
               {pictures.length && currentPhoto ? (
                 <Slide
                   id={currentPhoto._id}
