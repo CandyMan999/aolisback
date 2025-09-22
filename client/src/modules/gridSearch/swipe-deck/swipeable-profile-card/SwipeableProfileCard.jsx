@@ -15,6 +15,7 @@ import {
   ICON_SIZES,
   FONT_SIZES,
   OnlineDot,
+  RoomLink, // NEW: to render the room pill like Profile.jsx
 } from "../../../../components";
 import { COLORS } from "../../../../constants";
 import moment from "moment";
@@ -177,17 +178,35 @@ const SwipeableProfileCard = forwardRef(
       }
     };
 
-    const truncateText = (text, wordLimit) => {
-      if (!text) return "";
-      const words = String(text).split(" ");
-      return words.length > wordLimit
-        ? words.slice(0, wordLimit).join(" ") + "..."
-        : text;
-    };
+    const introTrimmed =
+      typeof user?.intro === "string"
+        ? user.intro.replace(/\s+$/g, "").replace(/^\s+/g, "")
+        : user?.intro;
 
     /** Build pills IDENTICAL to Profile.jsx usage */
-    const pillsColA = useMemo(() => {
+    const basicsPills = useMemo(() => {
       const pills = [];
+      if (user?.occupation)
+        pills.push(
+          <LabeledPill key="occ" label="Occupation">
+            <Box
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                minWidth: 0,
+              }}
+            >
+              <Icon name="job" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
+              <Text
+                margin={0}
+                style={{ ...pillText, fontSize: 10, fontWeight: "bold" }}
+              >
+                {user.occupation}
+              </Text>
+            </Box>
+          </LabeledPill>
+        );
       if (user?.drink)
         pills.push(
           <LabeledPill key="drink" label="Drink">
@@ -272,29 +291,6 @@ const SwipeableProfileCard = forwardRef(
             </Box>
           </LabeledPill>
         );
-      return pills;
-    }, [user]);
-
-    const pillsColB = useMemo(() => {
-      const pills = [];
-      if (user?.occupation)
-        pills.push(
-          <LabeledPill key="occ" label="Occupation">
-            <Box
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                minWidth: 0,
-              }}
-            >
-              <Icon name="job" color={COLORS.pink} size={ICON_SIZES.XX_LARGE} />
-              <Text margin={0} style={pillText}>
-                {user.occupation}
-              </Text>
-            </Box>
-          </LabeledPill>
-        );
       if (user?.kids)
         pills.push(
           <LabeledPill key="kids" label="Kids">
@@ -313,6 +309,12 @@ const SwipeableProfileCard = forwardRef(
             </Box>
           </LabeledPill>
         );
+      return pills;
+    }, [user]);
+
+    // Looking For + Room live on their own index now
+    const lookingRoomPills = useMemo(() => {
+      const pills = [];
       if (user?.lookingFor?.sex)
         pills.push(
           <LabeledPill key="looking" label="Looking For" labelEmoji="💍">
@@ -339,17 +341,38 @@ const SwipeableProfileCard = forwardRef(
             </Box>
           </LabeledPill>
         );
+
+      if (user?.room && user.room.name) {
+        pills.push(
+          <LabeledPill key="room" label="Chatroom" labelEmoji="💭">
+            <Box
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                minWidth: 0,
+                maxWidth: "100%",
+                overflow: "hidden",
+              }}
+            >
+              <RoomLink dispatch={dispatch} user={user} />
+            </Box>
+          </LabeledPill>
+        );
+      }
+
       return pills;
-    }, [user]);
+    }, [user, dispatch]);
 
-    /** Merge for the “all pills on index 1 & every odd index” */
-    const allPills = useMemo(
-      () => [...pillsColA, ...pillsColB],
-      [pillsColA, pillsColB]
-    );
-
-    const isIntroIndex = (idx) => idx % 2 === 0; // 0,2,4,...
-    const isPillsIndex = (idx) => idx % 2 === 1; // 1,3,5,...
+    // Index plan:
+    // 0: Intro (pill style)
+    // 1: All basics pills (occupation, drink, smoke, marijuana, drugs, kids)
+    // 2: Intro again
+    // 3: Looking For + Room
+    // 4: Intro ...
+    const isIntroIndex = (idx) => idx % 2 === 0; // 0,2,4,…
+    const isBasicsIndex = (idx) => idx === 1 || (idx > 3 && idx % 2 === 1); // 1,5,7,…
+    const isLookingRoomIndex = (idx) => idx === 3; // dedicated slot
 
     return (
       <Fragment>
@@ -443,31 +466,33 @@ const SwipeableProfileCard = forwardRef(
             <Box
               width="100%"
               paddingX={BODY_PAD_X}
-              style={{ flex: 1, overflowY: "auto", marginTop: 10 }}
+              style={{ flex: 1, overflowY: "auto", paddingTop: 10 }}
             >
-              {/* INTRO on even indexes */}
-              {isIntroIndex(currentSlideIndex) && (
-                <Box width="100%" padding={5} column>
-                  <Box width="100%" height="fit-content">
-                    🎙
-                    <Text
-                      marginBottom={0}
-                      style={{ marginTop: 0, marginLeft: 5 }}
-                      bold
-                      center
-                    >
-                      Intro:
-                    </Text>
-                  </Box>
-                  <Text style={{ marginTop: 0, paddingLeft: 5 }}>
-                    {truncateText(user?.intro, 60)}
+              {/* INTRO indexes — styled like Profile intro pill */}
+              {isIntroIndex(currentSlideIndex) && !!introTrimmed && (
+                <LabeledPill
+                  label="Intro"
+                  accent={COLORS.pink}
+                  style={{ padding: 14 }}
+                  labelEmoji={"🎙️"}
+                >
+                  <Text
+                    margin={0}
+                    color={COLORS.black}
+                    style={{
+                      lineHeight: 1.4,
+                      whiteSpace: "pre-wrap",
+                      wordBreak: "break-word",
+                    }}
+                  >
+                    {introTrimmed}
                   </Text>
-                </Box>
+                </LabeledPill>
               )}
 
-              {/* PILLS on odd indexes — full set */}
-              {isPillsIndex(currentSlideIndex) && (
-                <Box width="100%" paddingX={5} column marginY={5}>
+              {/* BASICS pills on index 1 (and any later odd indexes except 3) */}
+              {isBasicsIndex(currentSlideIndex) && basicsPills.length > 0 && (
+                <Box width="100%" paddingX={5} column>
                   <Box
                     style={{
                       display: "flex",
@@ -476,11 +501,10 @@ const SwipeableProfileCard = forwardRef(
                       alignItems: "stretch",
                     }}
                   >
-                    {allPills.map((p, i) =>
+                    {basicsPills.map((p, i) =>
                       React.cloneElement(p, {
                         key: i,
                         style: {
-                          // force two columns like Profile.jsx
                           flex: "0 0 calc(50% - 10px)",
                           maxWidth: "calc(50% - 10px)",
                           height: LIFESTYLE_PILL_HEIGHT,
@@ -493,7 +517,35 @@ const SwipeableProfileCard = forwardRef(
                 </Box>
               )}
 
-              {/* Distance on ALL indexes (fixed, same place as your original) */}
+              {/* LOOKING FOR + ROOM on dedicated index 3 */}
+              {isLookingRoomIndex(currentSlideIndex) &&
+                lookingRoomPills.length > 0 && (
+                  <Box width="100%" paddingX={5} column>
+                    <Box
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 10,
+                        alignItems: "stretch",
+                      }}
+                    >
+                      {lookingRoomPills.map((p, i) =>
+                        React.cloneElement(p, {
+                          key: i,
+                          style: {
+                            flex: "0 0 calc(50% - 10px)",
+                            maxWidth: "calc(50% - 10px)",
+                            height: LIFESTYLE_PILL_HEIGHT,
+                            minWidth: 0,
+                            ...p.props.style,
+                          },
+                        })
+                      )}
+                    </Box>
+                  </Box>
+                )}
+
+              {/* Distance on ALL indexes (fixed at bottom like your original) */}
               <Box
                 width="100%"
                 justifyContent="center"
