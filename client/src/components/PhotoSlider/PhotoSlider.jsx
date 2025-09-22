@@ -251,13 +251,12 @@ const PhotoSlider = ({
                         key={`photo-slider-indicator-${index}`}
                         style={{
                           display: "inline-block",
-                          width: 28,
-                          height: 4,
+                          width: 32,
+                          height: 5,
                           borderRadius: 999,
                           backgroundColor: COLORS.white,
                           opacity: index === currentIdx ? 0.95 : 0.35,
-                          marginRight:
-                            index === pictures.length - 1 ? 0 : 6,
+                          marginRight: index === pictures.length - 1 ? 0 : 6,
                           transition: "opacity 0.3s ease",
                         }}
                       />
@@ -266,22 +265,6 @@ const PhotoSlider = ({
                 </Box>
               )}
 
-              {/* <Box
-                position="absolute"
-                row
-                zIndex={10}
-                top={2}
-                left={10}
-                marginTop={2}
-                boxShadow={`2px 2px 4px 2px ${COLORS.pink}`}
-                borderRadius={30}
-                height={60}
-                width={60}
-                alignItems="center"
-                justifyContent="center"
-              >
-                👍❤️
-              </Box> */}
               {pictures.length && currentPhoto ? (
                 <Slide
                   id={currentPhoto._id}
@@ -316,7 +299,6 @@ const PhotoSlider = ({
               )}
             </Box>
           </Box>
-
         </>
       )}
     </Box>
