@@ -27,6 +27,7 @@ const CARD_W = 400;
 const SLIDER_H = 310;
 const BODY_PAD_X = 15;
 const LIFESTYLE_PILL_HEIGHT = 48; // match Profile.jsx
+const DISTANCE_BAR_H = 48; // height of the distance row (approx)
 
 /** --- LabeledPill (IDENTICAL styling to Profile.jsx) --- */
 const LabeledPill = ({
@@ -42,9 +43,9 @@ const LabeledPill = ({
         position: "relative",
         borderRadius: 14,
         background: COLORS.white,
-        border: `3px solid ${COLORS.lighterGrey}`,
+        border: `1px solid ${COLORS.lighterGrey}`,
         minHeight: 44,
-        boxShadow: `0 2px 10px rgba(0,0,0,0.05)`,
+        boxShadow: `0 3px 12px rgba(0,0,0,0.05)`,
         justifyContent: "center",
         boxSizing: "border-box",
         ...style,
@@ -468,26 +469,29 @@ const SwipeableProfileCard = forwardRef(
               paddingX={BODY_PAD_X}
               style={{ flex: 1, overflowY: "auto", paddingTop: 10 }}
             >
-              {/* INTRO indexes — styled like Profile intro pill */}
               {isIntroIndex(currentSlideIndex) && !!introTrimmed && (
-                <LabeledPill
-                  label="Intro"
-                  accent={COLORS.pink}
-                  style={{ padding: 14 }}
-                  labelEmoji={"🎙️"}
-                >
-                  <Text
-                    margin={0}
-                    color={COLORS.black}
-                    style={{
-                      lineHeight: 1.4,
-                      whiteSpace: "pre-wrap",
-                      wordBreak: "break-word",
-                    }}
+                <>
+                  <LabeledPill
+                    label="Intro"
+                    accent={COLORS.pink}
+                    style={{ padding: 14, width: "100%" }}
+                    labelEmoji={"🎙️"}
                   >
-                    {introTrimmed}
-                  </Text>
-                </LabeledPill>
+                    <Text
+                      margin={0}
+                      color={COLORS.black}
+                      style={{
+                        whiteSpace: "pre-wrap",
+                        wordBreak: "break-word",
+                      }}
+                    >
+                      {introTrimmed}
+                    </Text>
+                  </LabeledPill>
+
+                  {/* Spacer to prevent the Intro from colliding with the fixed distance bar */}
+                  <div style={{ height: DISTANCE_BAR_H + 12 }} />
+                </>
               )}
 
               {/* BASICS pills on index 1 (and any later odd indexes except 3) */}
