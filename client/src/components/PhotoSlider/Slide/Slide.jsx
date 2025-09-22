@@ -13,8 +13,6 @@ import Context from "../../../context";
 import { useClient } from "../../../client";
 
 const Slide = ({
-  countStr,
-
   id,
   url,
 
@@ -130,24 +128,10 @@ const Slide = ({
           }}
         />
       )}
-      {countStr && withDelete && (
-        <Box
-          width="100%"
-          position="absolute"
-          top={8}
-          center
-          justifyContent="center"
-        >
-          <span style={{ color: COLORS.lightGrey, fontSize: "12px" }}>
-            {countStr}
-          </span>
-        </Box>
-      )}
-
       {withDelete && (
         <Box
           width={"100%"}
-          zIndex={1}
+          zIndex={6}
           justifyContent="center"
           position="absolute"
           bottom={25}
