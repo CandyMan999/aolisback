@@ -584,3 +584,16 @@ export const GET_REAL_USERS = gql`
     }
   }
 `;
+
+export const GET_AFFILIATE_DOWNLOADS = gql`
+  query GetAffiliateDownloads($reportDate: String) {
+    getAffiliateDownloads(reportDate: $reportDate) {
+      reportDate
+      goal
+      affiliates {
+        affiliateName
+        downloads
+      }
+    }
+  }
+`;
