@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { Box, Icon, ICON_SIZES, Loading } from ".."; // Import Spinner component
 import { COLORS } from "../../constants";
 import Slide from "./Slide";
-import NavArrow from "./NavArrow";
 
 const PhotoSlider = ({
   height,
@@ -17,6 +16,105 @@ const PhotoSlider = ({
   const [pictures, setPictures] = useState([]);
   const [clickDirection, setClickDirection] = useState("right");
   const [loading, setLoading] = useState(true); // New loading state
+  const pointerOriginRef = useRef(null);
+  const ignoreClickRef = useRef(false);
+
+  const recordPointerOrigin = (event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) {
+      return;
+    }
+
+    pointerOriginRef.current = {
+      time: Date.now(),
+      x: event.clientX,
+      y: event.clientY,
+    };
+
+    if (event.currentTarget.setPointerCapture) {
+      try {
+        event.currentTarget.setPointerCapture(event.pointerId);
+      } catch (err) {
+        // ignore platforms that do not support pointer capture
+      }
+    }
+  };
+
+  const clearPointerOrigin = (event) => {
+    if (event && event.currentTarget.releasePointerCapture) {
+      try {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      } catch (err) {
+        // ignore platforms that do not support pointer capture
+      }
+    }
+
+    pointerOriginRef.current = null;
+  };
+
+  const handleTapNavigation = (clientX, currentTarget) => {
+    if (!pictures.length || pictures.length <= 1) {
+      return false;
+    }
+
+    const rect = currentTarget.getBoundingClientRect();
+
+    if (!rect.width) {
+      return false;
+    }
+
+    const relativeX = clientX - rect.left;
+
+    if (relativeX >= rect.width / 2) {
+      nextSlide();
+    } else {
+      prevSlide();
+    }
+
+    return true;
+  };
+
+  const handlePointerUp = (event) => {
+    const origin = pointerOriginRef.current;
+    clearPointerOrigin(event);
+
+    if (!origin) {
+      return;
+    }
+
+    const elapsed = Date.now() - origin.time;
+    const deltaX = Math.abs(event.clientX - origin.x);
+    const deltaY = Math.abs(event.clientY - origin.y);
+
+    if (elapsed > 350 || deltaX > 15 || deltaY > 15) {
+      return;
+    }
+
+    if (handleTapNavigation(event.clientX, event.currentTarget)) {
+      ignoreClickRef.current = true;
+      setTimeout(() => {
+        ignoreClickRef.current = false;
+      }, 0);
+
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
+  const handleClick = (event) => {
+    if (ignoreClickRef.current) {
+      ignoreClickRef.current = false;
+      return;
+    }
+
+    if (handleTapNavigation(event.clientX, event.currentTarget)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
+  const handlePointerCancel = (event) => {
+    clearPointerOrigin(event);
+  };
 
   useEffect(() => {
     const loadImages = async () => {
@@ -66,22 +164,36 @@ const PhotoSlider = ({
 
   const currentPhoto = pictures[currentIdx];
 
-  const changeSlide = (n) => {
-    const newIdx = currentIdx + n;
-    setCurrentIdx(newIdx >= 0 ? newIdx % pictures.length : pictures.length - 1);
+  const changeSlide = (offset) => {
+    if (!pictures.length) {
+      return;
+    }
+
+    const total = pictures.length;
+    const newIdx = currentIdx + offset;
+    const normalizedIdx = ((newIdx % total) + total) % total;
+
+    setCurrentIdx(normalizedIdx);
+
     if (onSlideChange) {
-      onSlideChange(
-        newIdx >= 0 ? newIdx % pictures.length : pictures.length - 1
-      );
+      onSlideChange(normalizedIdx);
     }
   };
 
   const nextSlide = () => {
+    if (pictures.length <= 1) {
+      return;
+    }
+
     setClickDirection("right");
     changeSlide(1);
   };
 
   const prevSlide = () => {
+    if (pictures.length <= 1) {
+      return;
+    }
+
     setClickDirection("left");
     changeSlide(-1);
   };
@@ -109,21 +221,51 @@ const PhotoSlider = ({
         </Box>
       ) : (
         <>
-          {pictures.length > 1 && (
-            <Box
-              position="absolute"
-              left={2}
-              column
-              justifyContent="center"
-              height={"100%"}
-              zIndex={10}
-            >
-              <NavArrow direction="left" onClick={prevSlide} />
-            </Box>
-          )}
-
           <Box display="flex" alignItems="center" justifyContent="center">
-            <Box justifyContent="center" position="relative">
+            <Box
+              justifyContent="center"
+              position="relative"
+              onPointerDown={recordPointerOrigin}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerCancel}
+              onPointerLeave={handlePointerCancel}
+              onClick={handleClick}
+              style={{ touchAction: "manipulation" }}
+            >
+              {pictures.length > 0 && (
+                <Box
+                  position="absolute"
+                  top={12}
+                  width="100%"
+                  justifyContent="center"
+                  style={{ zIndex: 4, pointerEvents: "none" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {pictures.map((_, index) => (
+                      <span
+                        key={`photo-slider-indicator-${index}`}
+                        style={{
+                          display: "inline-block",
+                          width: 28,
+                          height: 4,
+                          borderRadius: 999,
+                          backgroundColor: COLORS.white,
+                          opacity: index === currentIdx ? 0.95 : 0.35,
+                          marginRight:
+                            index === pictures.length - 1 ? 0 : 6,
+                          transition: "opacity 0.3s ease",
+                        }}
+                      />
+                    ))}
+                  </div>
+                </Box>
+              )}
+
               {/* <Box
                 position="absolute"
                 row
@@ -148,11 +290,8 @@ const PhotoSlider = ({
                   }
                   onDelete={handleDeletePhoto}
                   url={currentPhoto.url}
-                  height={height}
-                  width={width}
                   withDelete={withDelete}
                   clickDirection={clickDirection}
-                  countStr={`${currentIdx + 1} of ${pictures.length}`}
                 />
               ) : (
                 <Box
@@ -178,18 +317,6 @@ const PhotoSlider = ({
             </Box>
           </Box>
 
-          {pictures.length > 1 && (
-            <Box
-              position="absolute"
-              column
-              justifyContent="center"
-              right={2}
-              height={"100%"}
-              zIndex={10}
-            >
-              <NavArrow direction="right" onClick={nextSlide} />
-            </Box>
-          )}
         </>
       )}
     </Box>
