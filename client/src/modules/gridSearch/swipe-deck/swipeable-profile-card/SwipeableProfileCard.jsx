@@ -43,11 +43,11 @@ const LabeledPill = ({
         borderRadius: 14,
         background: COLORS.white,
         border: `1px solid ${COLORS.lighterGrey}`,
-        minHeight: 44,
+        maxHeight: 40,
         boxShadow: `0 3px 12px rgba(0,0,0,0.05)`,
         justifyContent: "center",
         boxSizing: "border-box",
-        marginTop: 5,
+        marginTop: 3,
         ...style,
       }}
     >
