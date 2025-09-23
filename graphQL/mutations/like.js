@@ -38,7 +38,9 @@ module.exports = {
       }
 
       if (user.plan.likesSent < user.plan.likes) {
-        await User.findByIdAndUpdate(likerId, { $inc: { "plan.likesSent": 1 } });
+        await User.findByIdAndUpdate(likerId, {
+          $inc: { "plan.likesSent": 1 },
+        });
       } else if (user.plan.additionalLikes > 0) {
         await User.findByIdAndUpdate(likerId, {
           $inc: { "plan.additionalLikes": -1 },
@@ -94,16 +96,6 @@ module.exports = {
         $or: [{ liked: likerId }, { target: likerId }],
       });
       await Match.deleteOne({ users: { $all: [likerId, likedId] } });
-      const user = await User.findById(likerId);
-      if (user.plan.likesSent > 0) {
-        await User.findByIdAndUpdate(likerId, {
-          $inc: { "plan.likesSent": -1 },
-        });
-      } else {
-        await User.findByIdAndUpdate(likerId, {
-          $inc: { "plan.additionalLikes": 1 },
-        });
-      }
 
       const populated = await User.findById(likerId).populate([
         "pictures",
