@@ -15,7 +15,7 @@ import {
   ICON_SIZES,
   FONT_SIZES,
   OnlineDot,
-  RoomLink, // NEW: to render the room pill like Profile.jsx
+  RoomLink, // to render the room pill like Profile.jsx
 } from "../../../../components";
 import { COLORS } from "../../../../constants";
 import moment from "moment";
@@ -27,9 +27,8 @@ const CARD_W = 400;
 const SLIDER_H = 310;
 const BODY_PAD_X = 15;
 const LIFESTYLE_PILL_HEIGHT = 48; // match Profile.jsx
-const DISTANCE_BAR_H = 48; // height of the distance row (approx)
 
-/** --- LabeledPill (IDENTICAL styling to Profile.jsx) --- */
+/** --- LabeledPill (kept for lifestyle/looking/room sections) --- */
 const LabeledPill = ({
   label,
   labelEmoji,
@@ -48,6 +47,7 @@ const LabeledPill = ({
         boxShadow: `0 3px 12px rgba(0,0,0,0.05)`,
         justifyContent: "center",
         boxSizing: "border-box",
+        marginTop: 5,
         ...style,
       }}
     >
@@ -119,6 +119,16 @@ const pillText = {
   overflow: "hidden",
   textOverflow: "ellipsis",
   maxWidth: "100%",
+};
+
+// Original word-based truncation helper (you decide the length)
+const truncateText = (text, wordLimit) => {
+  if (typeof text !== "string") return text;
+  const words = text.split(" ");
+  if (words.length > wordLimit) {
+    return words.slice(0, wordLimit).join(" ") + "...";
+  }
+  return text;
 };
 
 const SwipeableProfileCard = forwardRef(
@@ -366,7 +376,7 @@ const SwipeableProfileCard = forwardRef(
     }, [user, dispatch]);
 
     // Index plan:
-    // 0: Intro (pill style)
+    // 0: Intro (render like original, with grey bubble label only)
     // 1: All basics pills (occupation, drink, smoke, marijuana, drugs, kids)
     // 2: Intro again
     // 3: Looking For + Room
@@ -438,7 +448,7 @@ const SwipeableProfileCard = forwardRef(
                 <SingleSinceBadge ts={user.singleTime} />
               ) : null}
 
-              {/* Bottom gradient for name (gender removed) */}
+              {/* Bottom gradient for name */}
               <Box
                 column
                 style={{
@@ -469,29 +479,55 @@ const SwipeableProfileCard = forwardRef(
               paddingX={BODY_PAD_X}
               style={{ flex: 1, overflowY: "auto", paddingTop: 10 }}
             >
+              {/* INTRO indexes — revert to original handling, but add grey label bubble */}
               {isIntroIndex(currentSlideIndex) && !!introTrimmed && (
-                <>
-                  <LabeledPill
-                    label="Intro"
-                    accent={COLORS.pink}
-                    style={{ padding: 14, width: "100%" }}
-                    labelEmoji={"🎙️"}
+                <Box
+                  width="100%"
+                  padding={5}
+                  column
+                  style={{ position: "relative" }}
+                >
+                  {/* Grey bubble label exactly as requested */}
+                  <Text
+                    style={{
+                      position: "absolute",
+                      top: -18, // sit just above intro text within this section
+                      left: 12,
+                      background: COLORS.lighterGrey,
+                      padding: "0 8px",
+                      fontSize: 14,
+                      fontWeight: 700,
+                      color: COLORS.gray,
+                      borderRadius: 10,
+                      lineHeight: 1.6,
+                    }}
                   >
-                    <Text
-                      margin={0}
-                      color={COLORS.black}
-                      style={{
-                        whiteSpace: "pre-wrap",
-                        wordBreak: "break-word",
-                      }}
-                    >
-                      {introTrimmed}
-                    </Text>
-                  </LabeledPill>
+                    {"🎙️ Intro"}
+                  </Text>
 
-                  {/* Spacer to prevent the Intro from colliding with the fixed distance bar */}
-                  <div style={{ height: DISTANCE_BAR_H + 12 }} />
-                </>
+                  {/* original intro rendering with your word-based truncate */}
+                  <Text style={{ marginTop: 16, paddingLeft: 5 }}>
+                    {truncateText(introTrimmed, 60)}
+                  </Text>
+
+                  {/* Distance pinned at bottom (original behavior)
+                  <Box
+                    width="100%"
+                    justifyContent="center"
+                    alignItems="center"
+                    position="fixed"
+                    bottom={0}
+                  >
+                    <Icon
+                      name={"distance"}
+                      color={COLORS.pink}
+                      size={ICON_SIZES.LARGE}
+                    />
+                    <Text margin={0} bold>
+                      - {distance}
+                    </Text>
+                  </Box> */}
+                </Box>
               )}
 
               {/* BASICS pills on index 1 (and any later odd indexes except 3) */}
@@ -550,6 +586,7 @@ const SwipeableProfileCard = forwardRef(
                 )}
 
               {/* Distance on ALL indexes (fixed at bottom like your original) */}
+
               <Box
                 width="100%"
                 justifyContent="center"
