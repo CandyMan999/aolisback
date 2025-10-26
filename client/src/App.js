@@ -11,6 +11,7 @@ import MessageCenter from "./modules/messageCenter";
 import Message from "./modules/Message";
 import AdminPage from "./modules/admin";
 import SpeedDatePage from "./modules/speedDate";
+import LeaderboardPage from "./modules/leaderboard";
 import { Map } from "./components";
 
 import "./App.css";
@@ -29,6 +30,7 @@ class App extends React.PureComponent {
           <Route path="/message" component={Message} />
           <ProtectedRoute path="/grid-search" component={GridSearch} />
           <Route path="/speed-date" component={SpeedDatePage} />
+          <Route exact path="/leaderboard" component={LeaderboardPage} />
           <ProtectedRoute exact path="/admin" component={AdminPage} />
         </Switch>
       </Fragment>
