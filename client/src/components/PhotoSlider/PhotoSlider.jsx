@@ -11,6 +11,7 @@ const PhotoSlider = ({
   withDelete,
   isUser,
   onSlideChange,
+  forceDimensions,
 }) => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [pictures, setPictures] = useState([]);
@@ -216,7 +217,10 @@ const PhotoSlider = ({
       style={{ overflow: "hidden" }}
     >
       {loading ? ( // Show loader while loading
-        <Box height={250} width={"100%"}>
+        <Box
+          height={forceDimensions?.height ?? 250}
+          width={forceDimensions?.width ?? "100%"}
+        >
           <Loading logo />
         </Box>
       ) : (
@@ -275,6 +279,7 @@ const PhotoSlider = ({
                   url={currentPhoto.url}
                   withDelete={withDelete}
                   clickDirection={clickDirection}
+                  forceDimensions={forceDimensions}
                 />
               ) : (
                 <Box
@@ -311,6 +316,10 @@ PhotoSlider.propTypes = {
   width: PropTypes.number,
   withDelete: PropTypes.bool,
   isUser: PropTypes.bool,
+  forceDimensions: PropTypes.shape({
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  }),
 };
 
 export default PhotoSlider;

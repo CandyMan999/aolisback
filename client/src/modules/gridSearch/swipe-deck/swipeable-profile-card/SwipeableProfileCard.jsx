@@ -370,6 +370,23 @@ const SwipeableProfileCard = forwardRef(
             </Box>
           </LabeledPill>
         );
+      } else {
+        pills.push(
+          <LabeledPill key="room" label="Chatroom" labelEmoji="💭">
+            <Box
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                minWidth: 0,
+                maxWidth: "100%",
+                overflow: "hidden",
+              }}
+            >
+              <Text>Not in Room</Text>
+            </Box>
+          </LabeledPill>
+        );
       }
 
       return pills;
@@ -430,8 +447,9 @@ const SwipeableProfileCard = forwardRef(
                 withDelete={false}
                 images={user?.pictures}
                 height={SLIDER_H}
-                width={200}
+                width={CARD_W}
                 onSlideChange={setCurrentSlideIndex}
+                forceDimensions={{ height: SLIDER_H, width: CARD_W }}
               />
 
               {/* Online dot — top-left */}

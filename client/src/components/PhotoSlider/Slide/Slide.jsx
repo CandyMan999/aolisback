@@ -15,7 +15,7 @@ import { useClient } from "../../../client";
 const Slide = ({
   id,
   url,
-
+  forceDimensions,
   clickDirection,
   onDelete,
   withDelete,
@@ -28,6 +28,25 @@ const Slide = ({
   const [photoLoaded, setPhotoLoaded] = useState(false);
   const [myImage, setMyImage] = useState(null);
   const { currentUser } = state;
+
+  const toCssDimension = (value) => {
+    if (value === null || value === undefined) {
+      return undefined;
+    }
+
+    return typeof value === "number" ? `${value}px` : value;
+  };
+
+  const resolvedHeight =
+    forceDimensions && forceDimensions.height !== undefined
+      ? forceDimensions.height
+      : undefined;
+  const resolvedWidth =
+    forceDimensions && forceDimensions.width !== undefined
+      ? forceDimensions.width
+      : undefined;
+  const containerHeight = toCssDimension(resolvedHeight);
+  const containerWidth = toCssDimension(resolvedWidth);
 
   // Create a Cloudinary instance and set your cloud name.
   const cld = new Cloudinary({
@@ -77,11 +96,18 @@ const Slide = ({
   };
 
   return (
-    <Box noFlex>
+    <Box
+      noFlex
+      height={resolvedHeight}
+      width={resolvedWidth || "100%"}
+      style={{
+        overflow: resolvedHeight ? "hidden" : undefined,
+      }}
+    >
       {!!publicId ? (
         <AnimatePresence>
           {!photoLoaded && (
-            <Box height={250} width={"100%"}>
+            <Box height={resolvedHeight ?? 250} width={resolvedWidth || "100%"}>
               <Loading logo />
             </Box>
           )}
@@ -97,6 +123,10 @@ const Slide = ({
               opacity: 0,
               position: "absolute",
             }}
+            style={{
+              height: containerHeight || "100%",
+              width: containerWidth || "100%",
+            }}
           >
             {myImage && (
               <img
@@ -104,7 +134,10 @@ const Slide = ({
                 src={url}
                 style={{
                   width: "100%",
-                  height: "auto",
+                  height: containerHeight ? "100%" : "auto",
+                  maxHeight: containerHeight || undefined,
+                  objectFit: containerHeight ? "cover" : undefined,
+                  objectPosition: containerHeight ? "center" : undefined,
                   borderBottom: `solid 2px ${COLORS.vividBlue}`,
                   display: photoLoaded ? "block" : "none",
                 }}
@@ -118,11 +151,11 @@ const Slide = ({
         <Box
           style={{
             backgroundImage: `url(${url})`,
-            maxWidth: mobile ? 240 : 270,
+            maxWidth: containerWidth || (mobile ? 240 : 270),
             borderRadius: 10,
-            maxHeight: mobile ? 259 : 290,
-            height: mobile ? 259 : 290,
-            width: mobile ? 240 : 290,
+            maxHeight: containerHeight || (mobile ? 259 : 290),
+            height: containerHeight || (mobile ? 259 : 290),
+            width: containerWidth || (mobile ? 240 : 290),
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -135,6 +168,7 @@ const Slide = ({
           justifyContent="center"
           position="absolute"
           bottom={25}
+          style={{ zIndex: 1000 }}
         >
           <Button
             critical
