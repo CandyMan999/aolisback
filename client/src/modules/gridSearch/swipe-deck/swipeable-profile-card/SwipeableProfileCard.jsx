@@ -449,7 +449,11 @@ const SwipeableProfileCard = forwardRef(
                 height={SLIDER_H}
                 width={CARD_W}
                 onSlideChange={setCurrentSlideIndex}
-                forceDimensions={{ height: SLIDER_H, width: CARD_W }}
+                forceDimensions={{
+                  height: "50vh",
+                  width: `${CARD_W}px`,
+                  maxWidth: "90vw",
+                }}
               />
 
               {/* Online dot — top-left */}
