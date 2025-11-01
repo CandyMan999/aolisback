@@ -6,7 +6,6 @@ import { COLORS } from "../../constants";
 const RoomLink = ({ dispatch, video, user }) => {
   let history = useHistory();
   const handleRoomClick = (roomId) => {
-    console.log("shit is firing");
     dispatch({ type: "TOGGLE_PROFILE", paylaod: false });
     dispatch({ type: "CHANGE_ROOM", payload: roomId });
     history.push("/");
