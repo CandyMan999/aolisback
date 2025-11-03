@@ -14,6 +14,7 @@ const {
 } = require("./getFlagged");
 const { getRealUsersResolver } = require("./getRealUsers");
 const { isLikedResolver } = require("./isLiked");
+const { getAffiliateDownloadsResolver } = require("./getAffiliateDownloads");
 
 module.exports = {
   fetchMeResolver,
@@ -30,4 +31,5 @@ module.exports = {
   getFlaggedVideosResolver,
   getRealUsersResolver,
   isLikedResolver,
+  getAffiliateDownloadsResolver,
 };
